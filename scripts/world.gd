@@ -282,6 +282,10 @@ func _ready() -> void:
 	_state.set_goal("unit", "Karakterini seç. Sonra odada dolaşıp ünite notlarını topla ve rüya yolculuğunu başlat.")
 	_update_progress()
 
+	# 7. Ses sistemi — varsayılan ortam müziği
+	if ResourceLoader.exists("res://assets/audio/room_ambient.ogg"):
+		AudioManager.play_bgm("room_ambient")
+
 func _process(delta: float) -> void:
 	elapsed_time += delta
 	_animate_world_fx()
@@ -2866,6 +2870,25 @@ func _info_accent(card_kind: String) -> Color:
 
 func _show_chapter_transition(title: String, subtitle: String) -> void:
 	chapter_transition_overlay.present(title, subtitle)
+	# Ses: bölüme göre bgm değiştir (asset yoksa sessizce başarısız olur)
+	AudioManager.play_bgm(_bgm_for_chapter(title))
+
+
+func _bgm_for_chapter(chapter_title: String) -> String:
+	"""Bölüm başlığına göre bgm asset adını döndürür."""
+	match chapter_title:
+		"Bandırma Vapuru":
+			return "bgm_bandirma"
+		"Samsun Rüyası":
+			return "bgm_samsun"
+		"Havza Genelgesi":
+			return "bgm_havza"
+		"Amasya Genelgesi":
+			return "bgm_amasya"
+		"Kongreler":
+			return "bgm_kongre"
+		_:
+			return "bgm_default"
 
 func _on_transition_finished() -> void:
 	pass
