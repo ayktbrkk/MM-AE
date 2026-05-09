@@ -1,0 +1,90 @@
+[gd_scene load_steps=2 format=3 uid="uid://ce1i2yq8u1m1h"]
+
+[ext_resource type="Script" path="res://scripts/hud_bar.gd" id="1_script"]
+
+[node name="HudBar" type="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="TopPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 74.0
+grow_horizontal = 2
+
+[node name="TopMargin" type="MarginContainer" parent="TopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="TopContent" type="VBoxContainer" parent="TopPanel/TopMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="TopPanel/TopMargin/TopContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Zaman Yolcuları"
+
+[node name="ObjectiveLabel" type="Label" parent="TopPanel/TopMargin/TopContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Hedef metni"
+autowrap_mode = 3
+
+[node name="ProgressRow" type="HBoxContainer" parent="TopPanel/TopMargin/TopContent"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ProgressLabel" type="Label" parent="TopPanel/TopMargin/TopContent/ProgressRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "İlerleme"
+
+[node name="StarGroup" type="HBoxContainer" parent="TopPanel/TopMargin/TopContent/ProgressRow"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StarIcon" type="TextureRect" parent="TopPanel/TopMargin/TopContent/ProgressRow/StarGroup"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StarLabel" type="Label" parent="TopPanel/TopMargin/TopContent/ProgressRow/StarGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "x0"
+
+[node name="ChapterChip" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 300.0
+offset_bottom = 74.0
+
+[node name="ChipMargin" type="MarginContainer" parent="ChapterChip"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 10
+
+[node name="ChipLabel" type="Label" parent="ChapterChip/ChipMargin"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Sınav Gecesi"

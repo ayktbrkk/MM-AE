@@ -1,0 +1,162 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxs21h8xv4jy6"]
+
+[ext_resource type="Script" path="res://scripts/info_card_overlay.gd" id="1_script"]
+
+[node name="InfoCardOverlay" type="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.1, 0.14, 0)
+
+[node name="RewardHalo" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 230.0
+offset_top = 394.0
+offset_right = 850.0
+offset_bottom = 1090.0
+mouse_filter = 2
+color = Color(1, 0.76, 0.32, 0)
+
+[node name="SparkleA" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 214.0
+offset_top = 510.0
+offset_right = 282.0
+offset_bottom = 578.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SparkleB" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 802.0
+offset_top = 612.0
+offset_right = 872.0
+offset_bottom = 682.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SparkleC" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 748.0
+offset_top = 1030.0
+offset_right = 808.0
+offset_bottom = 1090.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InfoCard" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(900, 980)
+layout_mode = 2
+
+[node name="CardMargin" type="MarginContainer" parent="Center/InfoCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 30
+
+[node name="CardContent" type="VBoxContainer" parent="Center/InfoCard/CardMargin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="TagLabel" type="Label" parent="Center/InfoCard/CardMargin/CardContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Tarih Kartı"
+horizontal_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Center/InfoCard/CardMargin/CardContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Bilgi Kartı"
+horizontal_alignment = 1
+
+[node name="IconRow" type="CenterContainer" parent="Center/InfoCard/CardMargin/CardContent"]
+layout_mode = 2
+
+[node name="IllustrationFrame" type="PanelContainer" parent="Center/InfoCard/CardMargin/CardContent/IconRow"]
+custom_minimum_size = Vector2(220, 220)
+layout_mode = 2
+
+[node name="IllustrationMargin" type="MarginContainer" parent="Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 26
+
+[node name="IllustrationStack" type="Control" parent="Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame/IllustrationMargin"]
+custom_minimum_size = Vector2(168, 168)
+layout_mode = 2
+
+[node name="IconGlow" type="ColorRect" parent="Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame/IllustrationMargin/IllustrationStack"]
+layout_mode = 0
+offset_right = 168.0
+offset_bottom = 168.0
+color = Color(0.95, 0.75, 0.28, 0.18)
+
+[node name="IconTexture" type="TextureRect" parent="Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame/IllustrationMargin/IllustrationStack"]
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 0
+offset_left = 14.0
+offset_top = 14.0
+offset_right = 154.0
+offset_bottom = 154.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BodyLabel" type="Label" parent="Center/InfoCard/CardMargin/CardContent"]
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 28
+text = "Kısa ve anlaşılır tarih bilgisi burada görünür."
+autowrap_mode = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RewardRow" type="HBoxContainer" parent="Center/InfoCard/CardMargin/CardContent"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="RewardStar" type="TextureRect" parent="Center/InfoCard/CardMargin/CardContent/RewardRow"]
+custom_minimum_size = Vector2(54, 54)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RewardLabel" type="Label" parent="Center/InfoCard/CardMargin/CardContent/RewardRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Yeni tarih yıldızı kazandın"
+
+[node name="ContinueButton" type="Button" parent="Center/InfoCard/CardMargin/CardContent"]
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Devam Et"

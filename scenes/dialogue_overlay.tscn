@@ -1,0 +1,181 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3qt1iut1b0ie"]
+
+[ext_resource type="Script" path="res://scripts/dialogue_overlay.gd" id="1_script"]
+
+[node name="DialogueOverlay" type="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="BackdropSoft" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.05, 0.07, 0.10, 0)
+
+[node name="PanelGlow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -610.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(1, 0.72, 0.35, 0)
+
+[node name="PortraitLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="StageLightLeft" type="ColorRect" parent="PortraitLayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -632.0
+offset_right = 236.0
+offset_bottom = -392.0
+mouse_filter = 2
+color = Color(0.98, 0.56, 0.22, 0.08)
+
+[node name="StageLightRight" type="ColorRect" parent="PortraitLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -236.0
+offset_top = -632.0
+offset_right = -20.0
+offset_bottom = -392.0
+mouse_filter = 2
+color = Color(0.28, 0.50, 0.84, 0.08)
+
+[node name="LeftGlow" type="ColorRect" parent="PortraitLayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -604.0
+offset_right = 228.0
+offset_bottom = -404.0
+color = Color(0.95, 0.60, 0.28, 0.12)
+
+[node name="RightGlow" type="ColorRect" parent="PortraitLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -228.0
+offset_top = -604.0
+offset_right = -28.0
+offset_bottom = -404.0
+color = Color(0.32, 0.54, 0.78, 0.12)
+
+[node name="LeftPortrait" type="TextureRect" parent="PortraitLayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -600.0
+offset_right = 208.0
+offset_bottom = -440.0
+custom_minimum_size = Vector2(160, 160)
+expand_mode = 3
+stretch_mode = 5
+
+[node name="RightPortrait" type="TextureRect" parent="PortraitLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -208.0
+offset_top = -600.0
+offset_right = -48.0
+offset_bottom = -440.0
+custom_minimum_size = Vector2(160, 160)
+expand_mode = 3
+stretch_mode = 5
+
+[node name="BottomArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -520.0
+offset_right = -22.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DialoguePanel" type="PanelContainer" parent="BottomArea"]
+layout_mode = 2
+
+[node name="DialogueMargin" type="MarginContainer" parent="BottomArea/DialoguePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="DialogueContent" type="VBoxContainer" parent="BottomArea/DialoguePanel/DialogueMargin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HeaderRow" type="HBoxContainer" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent"]
+layout_mode = 2
+
+[node name="HeaderText" type="VBoxContainer" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ChapterLabel" type="Label" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent/HeaderRow/HeaderText"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Bandırma Vapuru"
+
+[node name="NameLabel" type="Label" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent/HeaderRow/HeaderText"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Eda"
+
+[node name="BodyText" type="RichTextLabel" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 28
+bbcode_enabled = true
+text = "Hikaye metni burada görünür."
+fit_content = true
+scroll_active = false
+
+[node name="ContinueRow" type="HBoxContainer" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent"]
+layout_mode = 2
+alignment = 2
+theme_override_constants/separation = 10
+
+[node name="ContinueIcon" type="TextureRect" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent/ContinueRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ContinueLabel" type="Label" parent="BottomArea/DialoguePanel/DialogueMargin/DialogueContent/ContinueRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Dokun ve devam et"

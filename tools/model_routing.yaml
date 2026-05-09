@@ -1,0 +1,55 @@
+# MMAE Model Yönlendirme Yapılandırması
+# =========================================
+# Maliyet optimizasyonu için farklı modlarda farklı modeller kullanılır.
+# Rutin işler → DeepSeek V4 Flash (düşük maliyet)
+# Karmaşık işler → DeepSeek V4 Pro (yüksek düşünme kapasitesi)
+
+# Varsayılan Model (tüm modlar için)
+default_model: "deepseek-chat"  # DeepSeek V4 Flash - rutin işler
+
+# Mod-Bazlı Model Yönlendirme
+mode_routing:
+  # 🧠 Karmaşık mimari/analiz gerektiren modlar → Pro
+  tech-lead:
+    model: "deepseek-reasoner"  # DeepSeek V4 Pro - yüksek thinking
+    reason: "Mimari kararlar ve kod review için yüksek düşünme kapasitesi gerekli"
+  
+  gdscript-wizard:
+    model: "deepseek-reasoner"
+    reason: "Karmaşık kod optimizasyonu ve pattern dönüşümleri için"
+  
+  developer:
+    model: "deepseek-reasoner"
+    reason: "Karmaşık oyun mantığı ve yeni özellik geliştirme için"
+
+  # 💰 Rutin/standart işler → Flash (düşük maliyet)
+  story-writer:
+    model: "deepseek-chat"
+    reason: "Hikaye metni ve data girişi için Flash yeterli"
+  
+  art-director:
+    model: "deepseek-chat"
+    reason: "Asset isimlendirme ve doku kontrolü için Flash yeterli"
+  
+  godot-scene-designer:
+    model: "deepseek-chat"
+    reason: "Sahne düzenleme ve UI yerleşimi için Flash yeterli"
+
+  # ⚖️ Orta seviye - duruma göre
+  test-qa:
+    model: "deepseek-chat"
+    reason: "Rutin testler için Flash, ama derin hata analizi için manuel Pro'a geçilebilir"
+  
+  qa-specialist:
+    model: "deepseek-chat"
+    reason: "Regression testler ve bug tracking için Flash yeterli"
+  
+  build-master:
+    model: "deepseek-chat"
+    reason: "Export ayarları ve build işlemleri için Flash yeterli"
+
+# İndirim Dönemi Notu
+discount_note: >
+  Mayıs 2026 sonuna kadar DeepSeek V4 Pro'da indirim var.
+  Karmaşık işlerde Pro kullanmaktan çekinme.
+  Ama rutin dosya okuma/yazma işlerinde Flash ile maliyeti düşür.

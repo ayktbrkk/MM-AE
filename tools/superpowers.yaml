@@ -1,0 +1,98 @@
+# MMAE Superpowers - Roo Code Özel Yetenekleri
+# ==============================================
+# Claude Superpowers 14 becerisinin MMAE projesine uyarlanması
+
+# 🧠 KATMAN 1: Bellek / Anayasa (.clinerules)
+memory:
+  file: ".clinerules"
+  purpose: "Proje anayasası - her Roo Code oturumunda otomatik yüklenir"
+
+# 📚 KATMAN 2: Bilgi / Workflow'lar (14 Skills)
+knowledge:
+  directory: "skills/"
+  workflows:
+    # 1-2 🏗️ Plan & Architect
+    - "architect-workflow.md"   # Plan + Architect
+    # 3 💻 Implement
+    - "implement.md"            # Implement (test-first)
+    # 4 🪲 Debug
+    - "debug-workflow.md"       # Debug (6 adım)
+    # 5 📜 Refactor
+    - "godot-refactor.md"       # Godot 3→4
+    - "refactor-gdscript.md"    # Kod refactor
+    # 6-7 👑 Review & Test
+    - "new-chapter.md"          # Yeni bölüm
+    - "new-decision.md"         # Yeni karar
+    - "new-scene.md"            # Yeni sahne
+    # 8 📚 Document
+    - "dialogue-sequence.md"    # Diyalog dizisi
+    # 9 🚀 Ship
+    - "android-build.md"        # Android build
+    # 10 🎨 Design
+    - "art-asset.md"            # Görsel asset
+    - "ui-auto-layout.md"       # UI düzeni
+    - "shader-expert.md"        # Shader
+    # 12 ⚡ Context Caching
+    - "context-caching.md"      # Bellek optimizasyonu
+    # Referans
+    - "superpowers-14-skills.md" # 14 beceri tablosu
+
+# 🛡️ KATMAN 3: Korkuluklar / Doğrulama
+guardrails:
+  pre_check: "tools/pre_check.gd"
+  post_validate: "tools/post_validate.gd"
+  rules:
+    - "Godot 3.x sözdizimi yasak (setget, export var, onready var)"
+    - "Statik typing zorunlu"
+    - "Fonksiyon dönüş tipleri zorunlu (-> void:)"
+    - "Performans: gereksiz _process kullanma"
+    - "Renk sabitleri merkezi tanımlı (DESIGN_/POP_/RIFT_)"
+
+# 👥 KATMAN 4: Delegasyon / 10 Custom Mode
+subagents:
+  file: ".roomodes"
+  agents:
+    - "architect"              # 🏗️ Plan + Architect (Claude #1-2)
+    - "debug"                  # 🪲 Debug (Claude #4)
+    - "tech-lead"              # 👑 Review (Claude #6)
+    - "developer"              # 💻 Implement (Claude #3)
+    - "qa-specialist"          # 🧪 Test (Claude #7)
+    - "godot-scene-designer"   # 🏗️ Design (Claude #11)
+    - "gdscript-wizard"        # 📜 Refactor (Claude #5)
+    - "story-writer"           # ✍️ Story
+    - "art-director"           # 🎨 Design
+    - "build-master"           # 🚀 Ship (Claude #9)
+
+# 🔌 MCP Sunucuları
+mcp_servers:
+  config: "tools/mcp_config.json"
+  servers:
+    - "github"       # GitHub API erişimi
+    - "godot-mcp"    # Godot Editor kontrolü
+
+# 🎯 Model Yönlendirme (Flash / Pro)
+model_routing:
+  config: "tools/model_routing.yaml"
+  strategy: >
+    Pro (karmaşık): architect, debug, tech-lead, developer, gdscript-wizard
+    Flash (rutin): qa-specialist, story-writer, art-director, scene-designer, build-master
+
+# ⚡ Context Caching
+context_caching:
+  enabled: true
+  auto_cached:
+    - ".clinerules"
+    - "scripts/world.gd"
+    - "assets/data/questions.gd"
+  strategy: >
+    Sık kullanılan referans dosyaları önbellekte tutulur.
+    Büyük .tscn dosyaları tamamen değil, ilgili bölümleri okunur.
+
+# 📦 KATMAN 5: Dağıtım / Paylaşım
+distribution:
+  setup_script: "tools/setup.ps1"
+  components:
+    - ".clinerules"
+    - ".roomodes"
+    - "skills/"
+    - "tools/"

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="860" viewBox="0 0 360 860">
+  <path d="M190 830 C138 748 110 676 142 598 C174 520 246 474 220 394 C198 326 128 286 154 202 C170 150 218 100 174 32" fill="none" stroke="#5b3f2f" stroke-width="88" stroke-linecap="round" stroke-linejoin="round" opacity=".26"/>
+  <path d="M190 830 C138 748 110 676 142 598 C174 520 246 474 220 394 C198 326 128 286 154 202 C170 150 218 100 174 32" fill="none" stroke="#f7e8c4" stroke-width="70" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M196 790 C166 730 152 678 172 622 C194 560 260 506 246 428 C232 354 164 304 186 222 C198 176 234 122 206 64" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" opacity=".28"/>
+  <g fill="#d8b778" opacity=".72">
+    <ellipse cx="172" cy="728" rx="18" ry="8"/>
+    <ellipse cx="142" cy="626" rx="14" ry="7"/>
+    <ellipse cx="224" cy="492" rx="16" ry="8"/>
+    <ellipse cx="194" cy="352" rx="15" ry="7"/>
+    <ellipse cx="158" cy="226" rx="14" ry="7"/>
+  </g>
+  <path d="M90 700 C124 690 154 694 184 720" fill="none" stroke="#c9473d" stroke-width="8" stroke-linecap="round" opacity=".38"/>
+  <path d="M184 190 C216 178 242 184 264 206" fill="none" stroke="#47b2c2" stroke-width="8" stroke-linecap="round" opacity=".42"/>
+</svg>

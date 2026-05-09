@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "list_repositories",
+        "search_repositories",
+        "get_file_contents",
+        "list_issues"
+      ]
+    },
+    "godot-mcp": {
+      "description": "Godot Editor ile doğrudan iletişim - projeyi başlatma, debug çıktılarını yakalama",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@secterm/godot-mcp-server"
+      ],
+      "env": {
+        "GODOT_PATH": "C:/Users/Aykut/Documents/Godot/mmae/Godot_v4.6.2-stable_win64.exe",
+        "GODOT_PROJECT_PATH": "C:/Users/Aykut/Documents/Godot/mmae"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "open_project",
+        "run_scene",
+        "get_scene_tree",
+        "get_editor_log"
+      ]
+    }
+  }
+}

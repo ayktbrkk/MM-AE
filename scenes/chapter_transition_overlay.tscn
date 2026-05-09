@@ -1,0 +1,112 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3l1j2atnlhm4"]
+
+[ext_resource type="Script" path="res://scripts/chapter_transition_overlay.gd" id="1_script"]
+
+[node name="ChapterTransitionOverlay" type="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.1, 0.16, 0)
+
+[node name="DreamMist" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -820.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0.27, 0.50, 0.66, 0)
+
+[node name="RouteLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RouteLine" type="ColorRect" parent="RouteLayer"]
+layout_mode = 0
+offset_left = 302.0
+offset_top = 840.0
+offset_right = 778.0
+offset_bottom = 850.0
+color = Color(0.92, 0.68, 0.34, 0)
+
+[node name="RouteDotA" type="ColorRect" parent="RouteLayer"]
+layout_mode = 0
+offset_left = 278.0
+offset_top = 818.0
+offset_right = 326.0
+offset_bottom = 866.0
+color = Color(0.95, 0.76, 0.40, 0)
+
+[node name="RouteDotB" type="ColorRect" parent="RouteLayer"]
+layout_mode = 0
+offset_left = 516.0
+offset_top = 818.0
+offset_right = 564.0
+offset_bottom = 866.0
+color = Color(0.95, 0.76, 0.40, 0)
+
+[node name="RouteDotC" type="ColorRect" parent="RouteLayer"]
+layout_mode = 0
+offset_left = 754.0
+offset_top = 818.0
+offset_right = 802.0
+offset_bottom = 866.0
+color = Color(0.95, 0.76, 0.40, 0)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TransitionPanel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(760, 280)
+layout_mode = 2
+
+[node name="PanelMargin" type="MarginContainer" parent="Center/TransitionPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="PanelContent" type="VBoxContainer" parent="Center/TransitionPanel/PanelMargin"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="ChapterLabel" type="Label" parent="Center/TransitionPanel/PanelMargin/PanelContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Bandırma Vapuru"
+horizontal_alignment = 1
+
+[node name="SubTitle" type="Label" parent="Center/TransitionPanel/PanelMargin/PanelContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Yeni bölüm başlıyor"
+horizontal_alignment = 1

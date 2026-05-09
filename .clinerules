@@ -1,0 +1,104 @@
+# MMAE - Bandırma Yolculuğu Proje Anayasası
+# =============================================
+# Bu dosya, Roo Code'un proje genelinde hatırlaması gereken tüm kuralları,
+# isimlendirme standartlarını ve mimari kararları içerir.
+
+## Senior Godot 4 GDScript Standartları
+- Tüm GDScript kodlarında **Static Typing (tip belirteci)** zorunludur:
+  `var health: int = 100`, `func heal(amount: int) -> void:`
+- **@onready var** anotasyonu tercih edilir, asla `onready var` yazılmaz
+- **Composition over Inheritance**: `extends` yerine `@onready var` ile node referansları
+- **Signal tabanlı mimari**: `signal` + `func _on_...()` otomatik bağlama
+- **Godot 3.x sözdizimi YASAK**: `setget`, `export var`, eski `onready var` gibi yapılar kullanılmaz
+- Godot 4 `@export` anotasyonu kullanılır, gereksiz editor bağlantılarından kaçınılır
+- `_process(delta)` sadece gerektiğinde kullanılır, mobile performans için minimize edilir
+
+## Proje Kimliği
+- **Oyun Adı:** "Bandırma Yolculuğu" (Zaman Yolcuları / MMAE)
+- **Motor:** Godot 4.6 (GDScript)
+- **Hedef Kitle:** 5-10 yaş (7-8 tasarım odağı)
+- **Platform:** Android (portrait 9:16, 1080×1920)
+- **Görsel Ton:** Sıcak, yarı-çizgi film, kağıt diorama stili
+
+## İsimlendirme Kuralları
+
+### Dosya & Dizin İsimleri
+- **Sahneler (tscn):** `snake_case` → `dialogue_overlay.tscn`, `main_menu.tscn`
+- **Scriptler (gd):** `snake_case` → `world.gd`, `decision_overlay.gd`
+- **Sabitler (const):** `SCREAMING_SNAKE_CASE` → `const PLAYER_SPEED := 430.0`
+- **Değişkenler:** `snake_case` → `var elapsed := 0.0`
+- **Özel değişkenler (onready):** `@onready var node_name:` → `snake_case`
+- **Sinyaller (signal):** `snake_case` → `signal continue_pressed`
+- **Fonksiyonlar:** `snake_case` → `func show_overlay()`
+
+### Asset İsimlendirme
+- **Texture/Sprite sabitleri:** `SCREAMING_SNAKE_CASE` ile `_TEXTURE` son eki
+  → `const ROOM_PAPER_WALL_TEXTURE := preload(...)`
+- **Asset dosyaları:** Klasör bazlı, anlamlı isimler
+  → `assets/art/world/samsun/paper_terrain_island.svg`
+
+### Scene Tree Yapısı
+- **Node isimleri:** `PascalCase` → `PortraitLayer`, `DialoguePanel`, `ContinueRow`
+- **Sahne dosyası içindeki kök düğümler:** Anlamlı isimler
+
+## Mimari Kurallar
+
+### Kod Organizasyonu
+- `scripts/` - Tüm GDScript dosyaları
+- `scenes/` - Tüm .tscn sahne dosyaları
+- `assets/` - Oyun varlıkları (art, data, fonts, audio)
+- `docs/` - Dokümantasyon
+- `tools/` - Geliştirme araçları
+
+### Sorumluluklar
+- `world.gd` - Ana oyun döngüsü: keşif, kararlar, destek node'ları
+- `dialogue_overlay.gd` - Diyalog katmanı (typewriter, portre, devam)
+- `decision_overlay.gd` - Karar kartları (A/B seçenekleri)
+- `main_menu.gd` - Ana menü (arkaplan, karakter seçimi, ayarlar)
+- `hud_bar.gd` - HUD göstergeleri
+- `info_card_overlay.gd` - Bilgi kartları
+- `dream_intro_overlay.gd` - Rüya giriş geçişi
+- `chapter_transition_overlay.gd` - Bölüm geçişleri
+
+### GDScript Teknik Kurallar (Godot 4.6)
+- **Static Typing**: Tüm değişkenler ve fonksiyon dönüşleri tipli olmalı
+- **@onready**: `@onready var node_ref: Node = $Path/To/Node` formatı
+- **Sinyaller**: `signal my_signal(value: int)` → `func _on_my_signal(value: int) -> void:`
+- **@export**: `@export var speed: float = 100.0` (Godot 3 `export` değil)
+- **Enumlar**: `enum State { IDLE, WALK, RUN }`
+- **Lambda**: `func` içinde `func` yerine `func()` kullan
+- **Resource**: `extends Resource` ile özel veri tipleri
+
+### Veri Yönetimi
+- `assets/data/questions.gd` - Tüm hikaye olayları ve kararlar (EVENTS dizisi)
+- Her event `kind: "story"` veya `kind: "decision"` ile etiketlenir
+- Kararlar: `option_a`, `option_b`, `correct`, `retry`, `info` alanlarını içerir
+
+### Renk Sistemi
+- **MERKEZİ RENK DOSYASI:** [`scripts/colors.gd`](scripts/colors.gd) — tüm renk sabitleri burada toplanır
+- Kullanım: `@onready var _colors := preload("res://scripts/colors.gd")`
+- **Önek kuralları:** `POP_` (pop-history), `DESIGN_` (tasarım sistemi), `ART_` (artwork analizi), `SHADOW_` (gölgeler), `UI_` (geri bildirim), `ARDA_`/`EDA_` (karakter), `THEME_` (bölüm temaları)
+- **Yasak:** Script içinde `const POP_CRIMSON := Color(...)` tekrarı — sadece `colors.gd` kullanılır
+- Renk paleti referansı: [`docs/ART_ANALYSIS.md`](docs/ART_ANALYSIS.md) ve [`docs/VISUAL_DESIGN_SYSTEM.md`](docs/VISUAL_DESIGN_SYSTEM.md)
+
+### Görsel Stil Kuralları (artwork analizine göre)
+1. **Paper Diorama stili:** Organik `path` şekilleri, katmanlı opaklık, kalın outline (`stroke-width: 8-18`)
+2. **Her asset 4 renkten fazla kullanmaz:** 1 gölge + 2 ana renk + 1 vurgu + outline
+3. **Renk doygunluğu:** Ana renkler %50-70, vurgular %70-85 arası
+4. **Portre standardı:** 520×520 px, `rx="80"`, `#f5e8d3` arkaplan
+5. **Bölüm temaları:** `THEME_ROOM`, `THEME_BANDIRMA`, `THEME_SAMSUN`, `THEME_TOWN`, `THEME_CONGRESS` — [`scripts/colors.gd`](scripts/colors.gd:205) içinde tanımlı
+6. **Referans görseller:** [`artworks/`](artworks/) klasöründeki 3 PNG, tüm sanat üretiminin renk/stil referansıdır
+
+### Tasarım Prensipleri
+1. Oyuncu Arda/Eda olarak kalır, tarihi figürlerin yerine geçmez
+2. Minimal HUD: yönlendirme çevresel (patika, ışık, landmark)
+3. Her bölüm: giriş → keşif → karar → strateji → çıkış
+4. Strateji katmanı tematik: liman=gözlem, telgraf=iletişim, halk=güven
+5. 7-8 yaş odağı: tek bakışta anlaşılır aksiyon butonu
+
+## Kalite Standartları
+- Tüm yeni kodlar mevcut pattern'leri takip etmeli
+- Gereksiz `@export` veya editor düğüm bağlantılarından kaçın
+- Performans: mobile öncelikli, gereksiz _process döngülerinden kaçın
+- Tüm metinler Türkçe (Türkiye Türkçesi)
+- Renkler: [`scripts/colors.gd`](scripts/colors.gd) merkezi dosyası kullanılır (artık `scripts/world.gd` içinde dağınık değil)
