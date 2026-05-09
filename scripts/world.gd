@@ -241,26 +241,7 @@ var samsun_goal_visuals := {}
 var samsun_open_world_overview_time_left := 0.0
 
 func _ready() -> void:
-	$CanvasLayer.layer = 10
-	_build_character_choice_identity_row()
-	_apply_ui_styles()
-	_build_minimap_hud()
-	_setup_character_outlines()
-	_enforce_world_character_z_index()
-	_build_guidance_arrow()
-	_build_route_hud()
-	_build_companion_reaction_label()
-	_builder.build_world("room", self)
-	_marker.spawn_markers("room", self)
-	_connect_ui()
-	_wave.setup(self)
-	_reset_panel_for_character_choice()
-	_set_character_choice_visible(true)
-	target_position = player.position
-	_state.set_goal("unit", "Karakterini seç. Sonra odada dolaşıp ünite notlarını topla ve rüya yolculuğunu başlat.")
-	_update_progress()
-	
-	# State başlangıç değerleri
+	# 1. State başlangıç değerleri (tüm modüllerin bağımlı olduğu temel veriler)
 	_state.set_zone_item_total("units", 3)
 	_state.set_zone_item_total("ship_clues", 2)
 	_state.set_zone_item_total("havza_clues", 2)
@@ -271,6 +252,35 @@ func _ready() -> void:
 	_state.increment_item_count("havza_clues", 0)
 	_state.increment_item_count("amasya_clues", 0)
 	_state.increment_item_count("kongre_clues", 0)
+
+	# 2. Canvas / UI temel kurulum
+	$CanvasLayer.layer = 10
+	_apply_ui_styles()
+	_build_minimap_hud()
+	_build_guidance_arrow()
+	_build_route_hud()
+	_build_companion_reaction_label()
+
+	# 3. Karakter görsel kurulum
+	_build_character_choice_identity_row()
+	_setup_character_outlines()
+	_enforce_world_character_z_index()
+
+	# 4. Modül kurulum: builder → marker → wave
+	_builder.build_world("room", self)
+	_marker.spawn_markers("room", self)
+	_wave.setup(self)
+
+	# 5. Sinyal bağlantıları
+	_builder.goal_visual_registered.connect(_on_builder_goal_visual_registered)
+	_connect_ui()
+
+	# 6. Oyun başlangıcı — karakter seçimi
+	_reset_panel_for_character_choice()
+	_set_character_choice_visible(true)
+	target_position = player.position
+	_state.set_goal("unit", "Karakterini seç. Sonra odada dolaşıp ünite notlarını topla ve rüya yolculuğunu başlat.")
+	_update_progress()
 
 func _process(delta: float) -> void:
 	elapsed_time += delta
@@ -709,641 +719,6 @@ func _add_path_ribbon(points: Array, width: float, color: Color, z_index := -2) 
 
 func _add_light_pool(center: Vector2, radius: Vector2, color: Color, to_foreground := false) -> void:
 	_add_soft_blob(center, radius, color, 20, 0.10, to_foreground, 4 if to_foreground else -1)
-
-func _add_samsun_ground_plates() -> void:
-	_add_samsun_plate(Vector2.ZERO, Vector2(WORLD_SIZE.x, WORLD_SIZE.y * 0.40), Color("#355D78"), Color("#2B4A60"), -15, "world_tiles.samsun_plate_harbor")
-	_add_samsun_plate(Vector2(WORLD_SIZE.x * 0.075, WORLD_SIZE.y * 0.32), Vector2(WORLD_SIZE.x * 0.85, WORLD_SIZE.y * 0.35), Color("#5D8F92"), Color("#4C777A"), -14, "world_tiles.samsun_plate_civic")
-	_add_samsun_plate(Vector2(WORLD_SIZE.x * 0.15, WORLD_SIZE.y * 0.68), Vector2(WORLD_SIZE.x * 0.70, WORLD_SIZE.y * 0.25), Color("#E89863"), Color("#B96E4A"), -13, "world_tiles.samsun_plate_front")
-	_add_samsun_harbor_wave_bands()
-	_add_samsun_paper_cut_edges()
-
-func _add_samsun_plate(pos: Vector2, size: Vector2, fill: Color, edge: Color, z_index: int, slot_id := "") -> void:
-	_add_room_rect(pos, size, fill, z_index, slot_id)
-	_add_room_rect(pos, Vector2(size.x, 3.0), edge, z_index + 1, "%s.top_edge" % slot_id)
-
-func _add_ship_room_plates() -> void:
-	_add_room_rect(Vector2.ZERO, WORLD_SIZE, Color("#20344F"), -18, "world_tiles.ship_deep_navy_back")
-	_add_room_rect(Vector2(0, 1180), Vector2(WORLD_SIZE.x, 1020), Color("#355D78"), -17, "world_tiles.ship_ocean_slate_lower")
-	_add_room_rect(Vector2(120, 260), Vector2(1360, 650), Color(0.31, 0.20, 0.14, 0.96), -16, "world_tiles.ship_cabin_wall")
-	_add_room_rect(Vector2(120, 910), Vector2(1360, 5), Color("#7A5A42"), -15, "world_tiles.ship_cabin_wall_edge")
-	_add_room_rect(Vector2(210, 1030), Vector2(1170, 610), Color(0.46, 0.29, 0.17, 0.96), -14, "world_tiles.ship_deck_floor")
-	_add_room_rect(Vector2(210, 1030), Vector2(1170, 5), Color(0.63, 0.45, 0.28, 0.88), -13, "world_tiles.ship_deck_floor_edge")
-	_add_room_rect(Vector2(1070, 980), Vector2(250, 640), Color(0.10, 0.36, 0.45, 0.76), -12, "world_tiles.ship_sea_window")
-	_add_room_rect(Vector2(685, 1170), Vector2(330, 176), Color("#7A5A42"), -11, "world_tiles.ship_desk_zone")
-	_add_room_rect(Vector2(0, 0), Vector2(88, WORLD_SIZE.y), Color("#1A2A3A"), 5, "world_props.ship_left_foreground_frame")
-	_add_room_rect(Vector2(WORLD_SIZE.x - 88, 0), Vector2(88, WORLD_SIZE.y), Color("#1A2A3A"), 5, "world_props.ship_right_foreground_frame")
-	_add_soft_blob(Vector2(850, 1250), Vector2(360, 170), Color(1.0, 0.78, 0.42, 0.11), 24, 0.04, false, -10)
-	_add_soft_blob(Vector2(1170, 1310), Vector2(270, 430), Color(0.52, 0.86, 0.96, 0.10), 24, 0.04, false, -10)
-
-func _add_samsun_foreground_silhouettes() -> void:
-	var silhouette := Color("#1A2A3A")
-	_add_samsun_silhouette_rect(Vector2(0, 0), Vector2(90, WORLD_SIZE.y), silhouette, "world_props.samsun_left_frame")
-	_add_samsun_silhouette_rect(Vector2(WORLD_SIZE.x - 90, 0), Vector2(90, WORLD_SIZE.y), silhouette, "world_props.samsun_right_frame")
-	_add_samsun_silhouette_rect(Vector2(0, 0), Vector2(200, 60), silhouette, "world_props.samsun_top_left_frame")
-	_add_samsun_silhouette_rect(Vector2(WORLD_SIZE.x - 200, 0), Vector2(200, 60), silhouette, "world_props.samsun_top_right_frame")
-	_add_samsun_silhouette_ellipse(Vector2(42, 108), Vector2(72, 54), silhouette, "world_props.samsun_left_crown_a")
-	_add_samsun_silhouette_ellipse(Vector2(84, 178), Vector2(58, 46), silhouette, "world_props.samsun_left_crown_b")
-	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 42, 108), Vector2(72, 54), silhouette, "world_props.samsun_right_crown_a")
-	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 84, 178), Vector2(58, 46), silhouette, "world_props.samsun_right_crown_b")
-	_add_samsun_silhouette_ellipse(Vector2(70, 1840), Vector2(190, 110), Color(0.10, 0.17, 0.22, 0.86), "world_props.samsun_front_left_hill")
-	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 70, 1805), Vector2(210, 130), Color(0.10, 0.17, 0.22, 0.78), "world_props.samsun_front_right_hill")
-	_add_samsun_silhouette_ellipse(Vector2(230, 1950), Vector2(260, 104), Color(0.10, 0.17, 0.22, 0.70), "world_props.samsun_front_left_ground")
-	_add_samsun_silhouette_ellipse(Vector2(1320, 1960), Vector2(300, 115), Color(0.10, 0.17, 0.22, 0.68), "world_props.samsun_front_right_ground")
-	_add_samsun_edge_reeds(Vector2(118, 1520), -1.0, "world_props.samsun_left_reeds")
-	_add_samsun_edge_reeds(Vector2(WORLD_SIZE.x - 126, 1480), 1.0, "world_props.samsun_right_reeds")
-	_add_samsun_edge_reeds(Vector2(165, 1870), -1.0, "world_props.samsun_front_left_reeds")
-	_add_samsun_edge_reeds(Vector2(WORLD_SIZE.x - 174, 1885), 1.0, "world_props.samsun_front_right_reeds")
-	_add_soft_blob(Vector2(70, 1220), Vector2(142, 360), Color(0.07, 0.12, 0.16, 0.18), 22, 0.03, true, 4)
-	_add_soft_blob(Vector2(WORLD_SIZE.x - 70, 1260), Vector2(150, 390), Color(0.07, 0.12, 0.16, 0.16), 22, 0.03, true, 4)
-
-func _add_samsun_silhouette_rect(pos: Vector2, size: Vector2, color: Color, slot_id := "") -> void:
-	var rect := Polygon2D.new()
-	rect.position = pos
-	rect.color = color
-	rect.z_index = 5
-	rect.polygon = PackedVector2Array([
-		Vector2.ZERO,
-		Vector2(size.x, 0),
-		size,
-		Vector2(0, size.y),
-	])
-	if slot_id != "":
-		rect.set_meta("asset_slot", slot_id)
-	foreground_props.add_child(rect)
-
-func _add_samsun_silhouette_ellipse(center: Vector2, radius: Vector2, color: Color, slot_id := "") -> void:
-	var ellipse := Polygon2D.new()
-	ellipse.position = center
-	ellipse.color = color
-	ellipse.z_index = 5
-	ellipse.polygon = _ellipse_points(radius, 24)
-	if slot_id != "":
-		ellipse.set_meta("asset_slot", slot_id)
-	foreground_props.add_child(ellipse)
-
-func _add_samsun_edge_reeds(origin: Vector2, direction: float, slot_id: String) -> void:
-	var reed_color := Color(0.08, 0.16, 0.17, 0.58)
-	for index in range(5):
-		var reed := Polygon2D.new()
-		var height := 82.0 + (float(index % 3) * 18.0)
-		var width := 12.0 + float(index % 2) * 4.0
-		reed.position = origin + Vector2(direction * float(index) * 18.0, float(index % 2) * 18.0)
-		reed.color = reed_color
-		reed.z_index = 5
-		reed.polygon = PackedVector2Array([
-			Vector2(-width * 0.5, 0),
-			Vector2(width * 0.5, 0),
-			Vector2(direction * 18.0, -height),
-		])
-		reed.set_meta("asset_slot", "%s_%02d" % [slot_id, index])
-		foreground_props.add_child(reed)
-
-func _add_samsun_path_ribbon() -> void:
-	var path_points := [
-		Vector2(800, 1740),
-		Vector2(710, 1600),
-		Vector2(590, 1490),
-		Vector2(640, 1320),
-		Vector2(760, 1190),
-		Vector2(875, 1080),
-		Vector2(800, 1000),
-	]
-	_add_path_ribbon(path_points, 52.0, Color("#7A5A42"), -12)
-	_add_path_ribbon(path_points, 48.0, Color(0.96, 0.91, 0.83, 0.70), -12)
-	_add_samsun_path_cap(Vector2(800, 1740), Vector2(116, 42), Color(0.96, 0.91, 0.83, 0.50), "world_tiles.samsun_path_entrance")
-	_add_samsun_path_cap(Vector2(800, 1000), Vector2(132, 50), Color(0.62, 0.83, 0.78, 0.42), "world_tiles.samsun_path_rift_cap")
-	_add_samsun_path_glint(path_points, "world_tiles.samsun_resource_main_path_glint")
-
-func _add_samsun_path_glint(points: Array, slot_id: String) -> void:
-	var glint := Line2D.new()
-	glint.width = 7.0
-	glint.default_color = Color(1.0, 0.92, 0.64, 0.12)
-	glint.z_index = -9
-	glint.joint_mode = Line2D.LINE_JOINT_ROUND
-	glint.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	glint.end_cap_mode = Line2D.LINE_CAP_ROUND
-	for index in range(points.size()):
-		if index % 2 == 0:
-			glint.add_point(points[index])
-	glint.set_meta("asset_slot", slot_id)
-	glint.set_meta("base_color", glint.default_color)
-	_register_samsun_goal_visual(slot_id, glint)
-	props.add_child(glint)
-
-func _add_samsun_support_paths() -> void:
-	_add_samsun_path_branch([
-		Vector2(800, 1000),
-		Vector2(640, 930),
-		Vector2(500, 850),
-		Vector2(360, 820),
-	], "world_tiles.samsun_path_to_harbor")
-	_add_samsun_path_branch([
-		Vector2(800, 1000),
-		Vector2(930, 940),
-		Vector2(1050, 860),
-		Vector2(1190, 820),
-	], "world_tiles.samsun_path_to_telegraph")
-	_add_samsun_path_branch([
-		Vector2(800, 1000),
-		Vector2(690, 1170),
-		Vector2(580, 1340),
-		Vector2(530, 1500),
-	], "world_tiles.samsun_path_to_people")
-
-func _add_samsun_path_branch(points: Array, slot_id: String) -> void:
-	var border := Line2D.new()
-	border.width = 36.0
-	border.default_color = Color(0.48, 0.32, 0.22, 0.15)
-	border.z_index = -11
-	border.joint_mode = Line2D.LINE_JOINT_ROUND
-	border.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	border.end_cap_mode = Line2D.LINE_CAP_ROUND
-	for point in points:
-		border.add_point(point)
-	border.set_meta("asset_slot", "%s.edge" % slot_id)
-	border.set_meta("base_color", border.default_color)
-	_register_samsun_goal_visual(slot_id, border)
-	props.add_child(border)
-
-	var fill := Line2D.new()
-	fill.width = 30.0
-	fill.default_color = Color(0.96, 0.91, 0.83, 0.34)
-	fill.z_index = -10
-	fill.joint_mode = Line2D.LINE_JOINT_ROUND
-	fill.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	fill.end_cap_mode = Line2D.LINE_CAP_ROUND
-	for point in points:
-		fill.add_point(point)
-	fill.set_meta("asset_slot", slot_id)
-	fill.set_meta("base_color", fill.default_color)
-	_register_samsun_goal_visual(slot_id, fill)
-	props.add_child(fill)
-
-func _add_samsun_landmark_pads() -> void:
-	_add_samsun_paper_pad(Vector2(360, 820), Vector2(245, 116), Color(0.96, 0.91, 0.83, 0.30), Color(0.35, 0.55, 0.58, 0.18), "world_tiles.samsun_harbor_pad")
-	_add_samsun_paper_pad(Vector2(1190, 820), Vector2(245, 116), Color(0.96, 0.91, 0.83, 0.28), Color(0.24, 0.42, 0.52, 0.18), "world_tiles.samsun_telegraph_pad")
-	_add_samsun_paper_pad(Vector2(530, 1500), Vector2(265, 122), Color(0.96, 0.91, 0.83, 0.30), Color(0.60, 0.38, 0.24, 0.16), "world_tiles.samsun_people_pad")
-	_add_samsun_paper_pad(Vector2(800, 1000), Vector2(280, 176), Color(0.62, 0.83, 0.78, 0.18), Color(0.96, 0.91, 0.83, 0.16), "world_tiles.samsun_rift_pad")
-
-func _add_samsun_discovery_spots() -> void:
-	_add_samsun_resource_spot(Vector2(360, 620), Color(0.95, 0.75, 0.39, 0.24), "world_tiles.samsun_resource_leadership")
-	_add_samsun_resource_spot(Vector2(1210, 1550), Color(0.74, 0.95, 0.38, 0.22), "world_tiles.samsun_resource_courage")
-
-func _add_samsun_resource_spot(center: Vector2, accent: Color, slot_id: String) -> void:
-	_add_samsun_paper_pad(center, Vector2(150, 70), Color(0.96, 0.91, 0.83, 0.20), Color(accent.r, accent.g, accent.b, 0.18), slot_id)
-	for index in range(3):
-		var angle := (-0.85 + (float(index) * 0.85))
-		var offset := Vector2(cos(angle) * 72.0, sin(angle) * 34.0)
-		var sparkle := Polygon2D.new()
-		sparkle.position = center + offset
-		sparkle.color = Color(accent.r, accent.g, accent.b, 0.32)
-		sparkle.z_index = -1
-		sparkle.polygon = PackedVector2Array([
-			Vector2(0, -13),
-			Vector2(8, 0),
-			Vector2(0, 13),
-			Vector2(-8, 0),
-		])
-		sparkle.set_meta("asset_slot", "%s.sparkle_%02d" % [slot_id, index])
-		sparkle.set_meta("base_color", sparkle.color)
-		sparkle.set_meta("ambient_bob", true)
-		sparkle.set_meta("base_pos", sparkle.position)
-		sparkle.set_meta("phase", float(index) * 0.7)
-		sparkle.set_meta("bob_amount", 1.4)
-		_register_samsun_goal_visual(slot_id, sparkle)
-		props.add_child(sparkle)
-
-func _add_samsun_paper_pad(center: Vector2, radius: Vector2, fill: Color, edge: Color, slot_id := "") -> void:
-	var pad := Polygon2D.new()
-	pad.position = center
-	pad.color = fill
-	pad.z_index = -12
-	pad.polygon = _ellipse_points(radius, 32)
-	if slot_id != "":
-		pad.set_meta("asset_slot", slot_id)
-		pad.set_meta("base_color", fill)
-		_register_samsun_goal_visual(slot_id, pad)
-	props.add_child(pad)
-
-	var rim := Line2D.new()
-	rim.width = 7.0
-	rim.default_color = edge
-	rim.z_index = -11
-	rim.joint_mode = Line2D.LINE_JOINT_ROUND
-	rim.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	rim.end_cap_mode = Line2D.LINE_CAP_ROUND
-	for index in range(33):
-		var angle := TAU * float(index) / 32.0
-		rim.add_point(center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
-	if slot_id != "":
-		rim.set_meta("asset_slot", "%s.rim" % slot_id)
-		rim.set_meta("base_color", edge)
-		_register_samsun_goal_visual(slot_id, rim)
-	props.add_child(rim)
-
-func _register_samsun_goal_visual(slot_id: String, node: CanvasItem) -> void:
-	var key := ""
-	if slot_id.contains("resource") or slot_id.contains("discovery") or slot_id.contains("leadership") or slot_id.contains("courage"):
-		key = "resource"
-	elif slot_id.contains("harbor") or slot_id.contains("telegraph") or slot_id.contains("people"):
-		key = "build_spot"
-	elif slot_id.contains("rift"):
-		key = "wave_start"
-	if key == "":
-		return
-	if not samsun_goal_visuals.has(key):
-		samsun_goal_visuals[key] = []
-	samsun_goal_visuals[key].append(node)
-
-func _add_samsun_light_pools() -> void:
-	_add_soft_blob(Vector2(360, 820), Vector2(200, 150), Color(0.95, 0.75, 0.39, 0.06), 28, 0.03, false, -11)
-	_add_soft_blob(Vector2(800, 1000), Vector2(150, 118), Color(0.62, 0.83, 0.78, 0.10), 28, 0.03, false, -11)
-	_add_soft_blob(Vector2(530, 1500), Vector2(120, 92), Color(0.96, 0.91, 0.83, 0.07), 26, 0.03, false, -11)
-
-func _add_samsun_wave_gate() -> void:
-	var center := Vector2(820, 1500)
-	_add_samsun_paper_pad(center, Vector2(188, 78), Color(0.62, 0.83, 0.78, 0.15), Color(0.68, 0.40, 1.0, 0.18), "world_tiles.samsun_wave_start_pad")
-	for index in range(2):
-		var ring := Line2D.new()
-		ring.width = 5.0 - float(index)
-		ring.default_color = Color(0.68, 0.40, 1.0, 0.15 - (float(index) * 0.04))
-		ring.z_index = -9
-		ring.joint_mode = Line2D.LINE_JOINT_ROUND
-		ring.begin_cap_mode = Line2D.LINE_CAP_ROUND
-		ring.end_cap_mode = Line2D.LINE_CAP_ROUND
-		var radius := Vector2(148 + (index * 34), 54 + (index * 18))
-		for point_index in range(30):
-			var angle := TAU * float(point_index) / 29.0
-			ring.add_point(center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
-		ring.set_meta("asset_slot", "fx.samsun_wave_start_ring_%02d" % index)
-		ring.set_meta("base_color", ring.default_color)
-		_register_samsun_goal_visual("fx.samsun_wave_start_ring", ring)
-		props.add_child(ring)
-	for index in range(4):
-		var shard := Polygon2D.new()
-		var offset := Vector2(-72 + (index * 48), -48 + (abs(1.5 - float(index)) * 12.0))
-		shard.position = center + offset
-		shard.color = Color(0.62, 0.83, 0.78, 0.26)
-		shard.z_index = 1
-		shard.polygon = PackedVector2Array([
-			Vector2(0, -18),
-			Vector2(10, 0),
-			Vector2(0, 18),
-			Vector2(-10, 0),
-		])
-		shard.set_meta("asset_slot", "fx.samsun_wave_start_shard_%02d" % index)
-		shard.set_meta("base_color", shard.color)
-		shard.set_meta("ambient_bob", true)
-		shard.set_meta("base_pos", shard.position)
-		shard.set_meta("phase", float(index) * 0.5)
-		shard.set_meta("bob_amount", 1.8)
-		_register_samsun_goal_visual("fx.samsun_wave_start_shard", shard)
-		props.add_child(shard)
-
-func _add_samsun_paper_cut_edges() -> void:
-	_add_samsun_soft_edge_line([
-		Vector2(80, 872),
-		Vector2(300, 840),
-		Vector2(560, 884),
-		Vector2(840, 850),
-		Vector2(1120, 888),
-		Vector2(1520, 852),
-	], 18.0, Color(0.96, 0.91, 0.83, 0.18), -12, "world_tiles.samsun_harbor_foam_edge")
-	_add_samsun_soft_edge_line([
-		Vector2(160, 1472),
-		Vector2(420, 1448),
-		Vector2(720, 1480),
-		Vector2(1040, 1454),
-		Vector2(1420, 1478),
-	], 14.0, Color(0.48, 0.32, 0.22, 0.15), -12, "world_tiles.samsun_civic_front_edge")
-
-func _add_samsun_soft_edge_line(points: Array, width: float, color: Color, z_index: int, slot_id := "") -> void:
-	var edge := Line2D.new()
-	edge.width = width
-	edge.default_color = color
-	edge.z_index = z_index
-	edge.joint_mode = Line2D.LINE_JOINT_ROUND
-	edge.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	edge.end_cap_mode = Line2D.LINE_CAP_ROUND
-	for point in points:
-		edge.add_point(point)
-	if slot_id != "":
-		edge.set_meta("asset_slot", slot_id)
-	if slot_id.contains("wake") or slot_id.contains("foam"):
-		edge.set_meta("ambient_bob", true)
-		edge.set_meta("base_pos", Vector2.ZERO)
-		edge.set_meta("phase", fmod(points[0].x + points[0].y, TAU))
-		edge.set_meta("bob_amount", 0.8)
-		edge.set_meta("line_pulse", true)
-		edge.set_meta("base_alpha", color.a)
-		edge.set_meta("pulse_amount", 0.012)
-	props.add_child(edge)
-
-func _add_samsun_harbor_wave_bands() -> void:
-	for index in range(3):
-		var y := 190.0 + float(index) * 185.0
-		var wave := Line2D.new()
-		wave.width = 18.0
-		wave.default_color = Color(0.75, 0.93, 1.0, 0.11)
-		wave.z_index = -14
-		wave.joint_mode = Line2D.LINE_JOINT_ROUND
-		wave.begin_cap_mode = Line2D.LINE_CAP_ROUND
-		wave.end_cap_mode = Line2D.LINE_CAP_ROUND
-		for step in range(8):
-			var x := -80.0 + float(step) * 260.0
-			wave.add_point(Vector2(x, y + sin(float(step) * 0.88 + float(index)) * 16.0))
-		wave.set_meta("asset_slot", "world_tiles.samsun_harbor_wave_%02d" % index)
-		wave.set_meta("ambient_bob", true)
-		wave.set_meta("base_pos", Vector2.ZERO)
-		wave.set_meta("phase", float(index) * 0.75)
-		wave.set_meta("bob_amount", 1.2)
-		wave.set_meta("line_pulse", true)
-		wave.set_meta("base_alpha", wave.default_color.a)
-		wave.set_meta("pulse_amount", 0.014)
-		props.add_child(wave)
-
-func _add_samsun_atmosphere_washes() -> void:
-	_add_soft_blob(Vector2(800, 490), Vector2(760, 170), Color(0.96, 0.91, 0.83, 0.055), 28, 0.02, false, -13)
-	_add_soft_blob(Vector2(815, 1070), Vector2(470, 260), Color(0.62, 0.83, 0.78, 0.045), 28, 0.03, false, -9)
-	_add_soft_blob(Vector2(535, 1540), Vector2(360, 170), Color(0.95, 0.75, 0.39, 0.040), 28, 0.03, false, -9)
-
-func _add_samsun_path_cap(center: Vector2, radius: Vector2, color: Color, slot_id := "") -> void:
-	var cap := Polygon2D.new()
-	cap.position = center
-	cap.color = color
-	cap.z_index = -10
-	cap.polygon = _ellipse_points(radius, 28)
-	if slot_id != "":
-		cap.set_meta("asset_slot", slot_id)
-	props.add_child(cap)
-
-func _add_samsun_node_shadow(center: Vector2, radius: Vector2, slot_id := "") -> void:
-	var shadow := Polygon2D.new()
-	shadow.position = center + Vector2(0, 54)
-	shadow.color = Color(0.05, 0.06, 0.07, 0.14)
-	shadow.z_index = -2
-	shadow.polygon = _ellipse_points(radius, 24)
-	if slot_id != "":
-		shadow.set_meta("asset_slot", slot_id)
-	props.add_child(shadow)
-
-func _add_samsun_environment_clusters() -> void:
-	var foliage_tint := Color(0.72, 0.94, 0.70, 0.34)
-	var warm_foliage_tint := Color(0.94, 0.76, 0.46, 0.28)
-	_add_samsun_env_prop(BLOCK_BUSH_SMALL_TEXTURE, Vector2(215, 1060), Vector2(0.78, 0.78), foliage_tint, "world_props.samsun_bush_left_a")
-	_add_samsun_env_prop(BLOCK_BUSH_LARGE_TEXTURE, Vector2(1380, 1100), Vector2(0.86, 0.86), foliage_tint, "world_props.samsun_bush_right_a")
-	_add_samsun_env_prop(BLOCK_TREE_GREEN_TEXTURE, Vector2(250, 1650), Vector2(0.80, 0.80), Color(0.78, 0.98, 0.76, 0.26), "world_props.samsun_tree_front_left")
-	_add_samsun_env_prop(BLOCK_TREE_ORANGE_TEXTURE, Vector2(1320, 1640), Vector2(-0.74, 0.74), warm_foliage_tint, "world_props.samsun_tree_front_right")
-	_add_samsun_env_prop(BLOCK_FENCE_SINGLE_TEXTURE, Vector2(1080, 1460), Vector2(0.72, 0.72), Color(1.0, 0.86, 0.62, 0.30), "world_props.samsun_small_fence_a")
-	_add_samsun_env_prop(BLOCK_FENCE_SINGLE_TEXTURE, Vector2(440, 1090), Vector2(-0.68, 0.68), Color(1.0, 0.86, 0.62, 0.26), "world_props.samsun_small_fence_b")
-
-func _add_samsun_env_prop(texture: Texture2D, pos: Vector2, scale_value: Vector2, tint: Color, slot_id := "") -> void:
-	var sprite := _add_kenney_prop(texture, pos, scale_value, tint, false, slot_id)
-	sprite.z_index = -1
-
-func _add_samsun_paper_asset_layer() -> void:
-	_add_paper_cutout_asset(SAMSUN_PAPER_SKY_LIFE_TEXTURE, Vector2(800, 360), Vector2(1.08, 1.08), Color(1, 1, 1, 0.62), -17, "paperworld.samsun_sky_life", Vector2(8.0, 0.4), -18.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_DISTANT_TOWN_TEXTURE, Vector2(800, 565), Vector2(1.05, 1.05), Color(1, 1, 1, 0.62), -16, "paperworld.samsun_distant_town", Vector2.ZERO, -13.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_SKYLINE_DEPTH_TEXTURE, Vector2(805, 615), Vector2(1.08, 1.08), Color(1, 1, 1, 0.70), -15, "paperworld.samsun_skyline_depth", Vector2(1.0, 0.1), -10.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_HARBOR_WATER_TEXTURE, Vector2(390, 760), Vector2(0.84, 0.84), Color(1, 1, 1, 0.76), -14, "paperworld.samsun_harbor_water", Vector2.ZERO, -8.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_COAST_DETAILS_TEXTURE, Vector2(790, 825), Vector2(1.0, 1.0), Color(1, 1, 1, 0.66), -13, "paperworld.samsun_coast_details", Vector2(2.2, 0.4), -6.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_HARBOR_DOCK_PROPS_TEXTURE, Vector2(392, 820), Vector2(0.96, 0.96), Color(1, 1, 1, 0.78), -7, "paperworld.samsun_harbor_dock_props", Vector2(0.8, 0.2), 2.5)
-	_add_paper_cutout_asset(SAMSUN_PAPER_COASTAL_LIFE_TEXTURE, Vector2(940, 1015), Vector2(1.02, 1.02), Color(1, 1, 1, 0.66), -7, "paperworld.samsun_coastal_life", Vector2(1.2, 0.2), 3.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_TERRAIN_TEXTURE, Vector2(794, 1114), Vector2(1.18, 1.18), Color(1, 1, 1, 0.94), -15, "paperworld.samsun_terrain_island", Vector2.ZERO, -3.5)
-	_add_paper_cutout_asset(SAMSUN_PAPER_SIDE_PATHS_TEXTURE, Vector2(760, 1160), Vector2(1.06, 1.06), Color(1, 1, 1, 0.64), -12, "paperworld.samsun_side_paths", Vector2.ZERO, -2.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_MAIN_PATH_TEXTURE, Vector2(726, 1370), Vector2(0.78, 0.78), Color(1, 1, 1, 0.86), -13, "paperworld.samsun_main_path", Vector2.ZERO, -1.5)
-	_add_paper_cutout_asset(SAMSUN_PAPER_ROUTE_BEADS_TEXTURE, Vector2(775, 1250), Vector2(1.02, 1.02), Color(1, 1, 1, 0.72), -9, "paperworld.samsun_route_beads", Vector2(1.1, 0.2), 1.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_SAFE_CLEARINGS_TEXTURE, Vector2(805, 1335), Vector2(1.0, 1.0), Color(1, 1, 1, 0.66), -8, "paperworld.samsun_safe_clearings", Vector2.ZERO, 1.5)
-	_add_paper_cutout_asset(SAMSUN_PAPER_CIVIC_CLUSTER_TEXTURE, Vector2(1015, 1360), Vector2(0.58, 0.58), Color(1, 1, 1, 0.72), -6, "paperworld.samsun_civic_cluster", Vector2.ZERO, 2.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_DISCOVERY_PROPS_TEXTURE, Vector2(795, 1110), Vector2(0.92, 0.92), Color(1, 1, 1, 0.72), -4, "paperworld.samsun_discovery_props", Vector2.ZERO, 3.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_HARBOR_BOATS_TEXTURE, Vector2(360, 650), Vector2(0.82, 0.82), Color(1, 1, 1, 0.72), -5, "paperworld.samsun_harbor_boats", Vector2.ZERO, 3.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_SIGNAL_RIDGE_TEXTURE, Vector2(1130, 660), Vector2(0.78, 0.78), Color(1, 1, 1, 0.62), -6, "paperworld.samsun_signal_ridge", Vector2.ZERO, -5.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_VISTA_FLAGS_TEXTURE, Vector2(800, 900), Vector2(0.98, 0.98), Color(1, 1, 1, 0.76), -4, "paperworld.samsun_vista_flags", Vector2(1.4, 0.25), 4.5)
-	_add_paper_cutout_asset(SAMSUN_PAPER_HARBOR_TEXTURE, Vector2(360, 760), Vector2(0.86, 0.86), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_harbor_landmark", Vector2.ZERO, 4.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_TELEGRAPH_TEXTURE, Vector2(1190, 770), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), -3, "paperworld.samsun_telegraph_landmark", Vector2.ZERO, 4.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_PEOPLE_TEXTURE, Vector2(530, 1455), Vector2(0.78, 0.78), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_people_plaza", Vector2.ZERO, 5.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_RIFT_TEXTURE, Vector2(800, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.90), -2, "paperworld.samsun_rift_core", Vector2.ZERO, 5.0)
-	_add_paper_cutout_asset(SAMSUN_PAPER_WAVE_GATE_TEXTURE, Vector2(820, 1478), Vector2(0.76, 0.76), Color(1, 1, 1, 0.86), -2, "paperworld.samsun_wave_gate", Vector2.ZERO, 5.0)
-	_add_foreground_paper_cutout_asset(SAMSUN_PAPER_FOREGROUND_FRAME_TEXTURE, Vector2(800, 1835), Vector2(1.34, 1.34), Color(1, 1, 1, 0.88), 4, "paperworld.samsun_foreground_frame", 18.0)
-
-func _add_samsun_harbor_identity() -> void:
-	_add_samsun_arrival_glow(Vector2(360, 690))
-	_add_samsun_ship_silhouette(Vector2(328, 570), 0.74, "landmarks.samsun_bandirma_silhouette")
-	_add_samsun_pier(Vector2(300, 742), "landmarks.samsun_harbor_pier")
-	_add_samsun_soft_edge_line([
-		Vector2(190, 760),
-		Vector2(300, 742),
-		Vector2(430, 768),
-		Vector2(520, 740),
-	], 10.0, Color(0.96, 0.91, 0.83, 0.22), -8, "landmarks.samsun_harbor_wake")
-
-func _add_samsun_node_identity_details() -> void:
-	_add_samsun_landmark_symbols()
-	_add_samsun_telegraph_detail(Vector2(1190, 820))
-	_add_samsun_people_plaza(Vector2(530, 1500))
-	_add_samsun_rift_focus_rings(Vector2(800, 1000))
-
-func _add_samsun_landmark_symbols() -> void:
-	_add_samsun_harbor_symbol(Vector2(360, 820))
-	_add_samsun_people_symbol(Vector2(530, 1500))
-	_add_samsun_signal_symbol(Vector2(1190, 820))
-
-func _add_samsun_harbor_symbol(center: Vector2) -> void:
-	var ink := Color(0.10, 0.15, 0.18, 0.28)
-	_add_room_rect(center + Vector2(-170, -18), Vector2(12, 96), ink, -1, "landmarks.samsun_harbor_bollard_a")
-	_add_room_rect(center + Vector2(-126, 4), Vector2(12, 74), ink, -1, "landmarks.samsun_harbor_bollard_b")
-	_add_samsun_soft_edge_line([
-		center + Vector2(-164, -4),
-		center + Vector2(-144, 24),
-		center + Vector2(-120, 18),
-	], 6.0, Color(0.96, 0.91, 0.83, 0.20), -1, "landmarks.samsun_harbor_rope")
-	var pennant := Polygon2D.new()
-	pennant.position = center + Vector2(112, -72)
-	pennant.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.42)
-	pennant.z_index = -1
-	pennant.polygon = PackedVector2Array([
-		Vector2.ZERO,
-		Vector2(72, 12),
-		Vector2(8, 34),
-	])
-	pennant.set_meta("asset_slot", "landmarks.samsun_harbor_pennant")
-	props.add_child(pennant)
-
-func _add_samsun_people_symbol(center: Vector2) -> void:
-	var dot_color := Color(0.12, 0.16, 0.19, 0.22)
-	var points := [
-		Vector2(-64, -24),
-		Vector2(-22, -44),
-		Vector2(24, -42),
-		Vector2(68, -18),
-		Vector2(0, -4),
-	]
-	for index in range(points.size()):
-		var dot := Polygon2D.new()
-		dot.position = center + points[index]
-		dot.color = dot_color
-		dot.z_index = -1
-		dot.polygon = _ellipse_points(Vector2(13, 13), 16)
-		dot.set_meta("asset_slot", "landmarks.samsun_people_silhouette_%02d" % index)
-		props.add_child(dot)
-	_add_samsun_soft_edge_line([
-		center + Vector2(-78, 10),
-		center + Vector2(-22, 32),
-		center + Vector2(34, 30),
-		center + Vector2(86, 8),
-	], 8.0, Color(0.12, 0.16, 0.19, 0.14), -1, "landmarks.samsun_people_listening_arc")
-
-func _add_samsun_signal_symbol(center: Vector2) -> void:
-	_add_samsun_ring(center + Vector2(0, -124), Vector2(62, 24), 5.0, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.16), -1, "landmarks.samsun_telegraph_signal_a")
-	_add_samsun_ring(center + Vector2(0, -124), Vector2(104, 42), 4.0, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.10), -1, "landmarks.samsun_telegraph_signal_b")
-
-func _add_samsun_telegraph_detail(center: Vector2) -> void:
-	var wire_color := Color(0.10, 0.15, 0.18, 0.34)
-	for x_offset in [-120.0, 118.0]:
-		var pole := Polygon2D.new()
-		pole.position = center + Vector2(x_offset, -18)
-		pole.color = wire_color
-		pole.z_index = -1
-		pole.polygon = PackedVector2Array([
-			Vector2(-6, -92),
-			Vector2(6, -92),
-			Vector2(6, 62),
-			Vector2(-6, 62),
-		])
-		pole.set_meta("asset_slot", "landmarks.samsun_telegraph_pole")
-		props.add_child(pole)
-	_add_samsun_soft_edge_line([
-		center + Vector2(-128, -105),
-		center + Vector2(-32, -132),
-		center + Vector2(44, -126),
-		center + Vector2(126, -104),
-	], 5.0, wire_color, -1, "landmarks.samsun_telegraph_wire")
-	_add_samsun_soft_edge_line([
-		center + Vector2(-118, -72),
-		center + Vector2(-22, -98),
-		center + Vector2(54, -92),
-		center + Vector2(118, -70),
-	], 4.0, Color(0.10, 0.15, 0.18, 0.22), -1, "landmarks.samsun_telegraph_wire_low")
-
-func _add_samsun_people_plaza(center: Vector2) -> void:
-	_add_samsun_ring(center + Vector2(0, 30), Vector2(205, 86), 13.0, Color(0.96, 0.91, 0.83, 0.18), -10, "landmarks.samsun_people_plaza_ring")
-	_add_samsun_soft_edge_line([
-		center + Vector2(-130, -26),
-		center + Vector2(-54, -54),
-		center + Vector2(36, -54),
-		center + Vector2(124, -22),
-	], 9.0, Color(0.95, 0.75, 0.39, 0.16), -1, "landmarks.samsun_people_banner_line")
-
-func _add_samsun_rift_focus_rings(center: Vector2) -> void:
-	_add_samsun_ring(center, Vector2(220, 142), 8.0, Color(0.62, 0.83, 0.78, 0.16), -9, "fx.samsun_rift_outer_ring")
-	_add_samsun_ring(center + Vector2(0, 4), Vector2(128, 82), 7.0, Color(0.96, 0.91, 0.83, 0.14), -8, "fx.samsun_rift_inner_ring")
-
-func _add_samsun_ring(center: Vector2, radius: Vector2, width: float, color: Color, z_index: int, slot_id := "") -> void:
-	var ring := Line2D.new()
-	ring.width = width
-	ring.default_color = color
-	ring.z_index = z_index
-	ring.joint_mode = Line2D.LINE_JOINT_ROUND
-	ring.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	ring.end_cap_mode = Line2D.LINE_CAP_ROUND
-	for index in range(33):
-		var angle := TAU * float(index) / 32.0
-		ring.add_point(center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
-	if slot_id != "":
-		ring.set_meta("asset_slot", slot_id)
-	ring.set_meta("line_pulse", true)
-	ring.set_meta("base_alpha", color.a)
-	ring.set_meta("phase", fmod(center.x * 0.01 + center.y * 0.013, TAU))
-	ring.set_meta("pulse_amount", 0.018)
-	props.add_child(ring)
-
-func _add_samsun_arrival_glow(center: Vector2) -> void:
-	_add_soft_blob(center, Vector2(250, 88), Color(0.95, 0.75, 0.39, 0.055), 28, 0.02, false, -9)
-	_add_soft_blob(center + Vector2(0, 28), Vector2(145, 46), Color(0.96, 0.91, 0.83, 0.050), 24, 0.02, false, -8)
-
-func _add_samsun_ship_silhouette(pos: Vector2, scale_value: float, slot_id := "") -> void:
-	var root := Node2D.new()
-	root.position = pos
-	root.z_index = -7
-	root.set_meta("ambient_bob", true)
-	root.set_meta("base_pos", pos)
-	root.set_meta("phase", 0.4)
-	root.set_meta("bob_amount", 1.4)
-	if slot_id != "":
-		root.set_meta("asset_slot", slot_id)
-
-	var ink := Color(0.12, 0.16, 0.19, 0.54)
-	var hull := Polygon2D.new()
-	hull.color = ink
-	hull.polygon = _scaled_points(PackedVector2Array([
-		Vector2(-170, 16),
-		Vector2(145, 16),
-		Vector2(92, 58),
-		Vector2(-118, 62),
-	]), scale_value)
-	root.add_child(hull)
-
-	var cabin := Polygon2D.new()
-	cabin.position = Vector2(-56, -28) * scale_value
-	cabin.color = Color(0.12, 0.16, 0.19, 0.42)
-	cabin.polygon = _scaled_points(PackedVector2Array([
-		Vector2.ZERO,
-		Vector2(112, 0),
-		Vector2(126, 44),
-		Vector2(-12, 44),
-	]), scale_value)
-	root.add_child(cabin)
-
-	var mast := Polygon2D.new()
-	mast.position = Vector2(18, -104) * scale_value
-	mast.color = ink
-	mast.polygon = _scaled_points(PackedVector2Array([
-		Vector2(-4, 0),
-		Vector2(4, 0),
-		Vector2(4, 124),
-		Vector2(-4, 124),
-	]), scale_value)
-	root.add_child(mast)
-
-	var flag := Polygon2D.new()
-	flag.position = Vector2(26, -102) * scale_value
-	flag.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.62)
-	flag.polygon = _scaled_points(PackedVector2Array([
-		Vector2.ZERO,
-		Vector2(54, 8),
-		Vector2(48, 32),
-		Vector2(0, 26),
-	]), scale_value)
-	root.add_child(flag)
-
-	props.add_child(root)
-
-func _scaled_points(points: PackedVector2Array, scale_value: float) -> PackedVector2Array:
-	var scaled := PackedVector2Array()
-	for point in points:
-		scaled.append(point * scale_value)
-	return scaled
-
-func _add_samsun_pier(center: Vector2, slot_id := "") -> void:
-	_add_samsun_soft_edge_line([
-		center + Vector2(-112, 16),
-		center + Vector2(-34, -6),
-		center + Vector2(42, 16),
-		center + Vector2(126, -2),
-	], 18.0, Color(0.48, 0.32, 0.22, 0.30), -8, "%s.deck" % slot_id)
-	for index in range(4):
-		var post := Polygon2D.new()
-		post.position = center + Vector2(-92 + index * 72, 10 + (index % 2) * 12)
-		post.color = Color(0.24, 0.19, 0.16, 0.38)
-		post.z_index = -7
-		post.polygon = PackedVector2Array([
-			Vector2(-7, -32),
-			Vector2(7, -32),
-			Vector2(7, 34),
-			Vector2(-7, 34),
-		])
-		post.set_meta("asset_slot", "%s.post_%02d" % [slot_id, index])
-		props.add_child(post)
 
 func _add_water_glints(start: Vector2, count: int, step: Vector2, color: Color) -> void:
 	for index in range(count):
@@ -2090,7 +1465,7 @@ func _update_guidance_arrow() -> void:
 		guidance_arrow.visible = false
 		return
 	var blocked: bool = character_panel.visible or dialogue_panel.visible or decision_overlay.visible or dialogue_overlay.visible or info_card_overlay.visible
-	var marker: Node2D = _current_guidance_marker()
+	var marker: Node2D = _marker.get_guidance_marker(markers, _state.current_goal_kind)
 	if blocked or marker == null:
 		guidance_arrow.visible = false
 		return
@@ -2103,18 +1478,6 @@ func _update_guidance_arrow() -> void:
 	guidance_arrow.scale = Vector2.ONE * (1.0 + 0.05 * sin(elapsed_time * 4.0))
 	guidance_arrow_icon.rotation = direction.angle() + (PI * 0.5)
 	guidance_arrow_label.text = String(marker.get_meta("title", "Hedef"))
-
-func _current_guidance_marker() -> Node2D:
-	var fallback: Node2D = null
-	for marker in markers.get_children():
-		if bool(marker.get_meta("collected", false)) or not marker.visible:
-			continue
-		var kind := String(marker.get_meta("kind", ""))
-		if kind == _state.current_goal_kind:
-			return marker
-		if fallback == null and kind != "npc":
-			fallback = marker
-	return fallback
 
 func _build_route_hud() -> void:
 	route_panel = PanelContainer.new()
@@ -2435,11 +1798,6 @@ func _build_ship() -> void:
 	_add_ship_room_plates()
 	_decorate_ship()
 
-func _build_samsun_rift() -> void:
-	_add_rect(Vector2.ZERO, WORLD_SIZE, Color(0.04, 0.11, 0.22))
-	_add_samsun_ground_plates()
-	_decorate_samsun_rift()
-
 func _build_havza_world() -> void:
 	_add_rect(Vector2.ZERO, WORLD_SIZE, Color(0.10, 0.17, 0.13))
 	_add_rect(Vector2(90, 170), Vector2(1420, 1840), Color(0.20, 0.28, 0.18))
@@ -2547,33 +1905,14 @@ func _decorate_ship() -> void:
 	_add_sprite_prop(SMOKE_TEXTURE, Vector2(1180, 1460), Vector2(0.56, 0.56), Color(0.88, 0.94, 1.0, 0.18))
 	_add_mote_cluster(Vector2(1140, 1160), Color(0.78, 0.92, 1.0, 0.14), 6)
 
-func _decorate_samsun_diorama_pilot() -> void:
-	_add_backdrop_band([BG_FLAT_HILLS_1_TEXTURE, BG_FLAT_MOUNTAIN_1_TEXTURE, BG_FLAT_HILLS_2_TEXTURE], 430.0, Vector2(1.02, 1.02), Color(0.58, 0.92, 1.0, 0.17), "samsun.diorama_horizon", -7)
-	_add_distant_town_band(590.0, Color(0.96, 0.94, 0.78, 0.16), "samsun.diorama_town")
-	_add_location_sign("Samsun", "Patikayı izle", Vector2(556, 300), 488.0, Color(POP_DEEP_TURQUOISE.r, POP_DEEP_TURQUOISE.g, POP_DEEP_TURQUOISE.b, 0.78), "samsun.location_sign")
-
-	_add_samsun_paper_asset_layer()
-	_add_samsun_atmosphere_washes()
-	_add_samsun_light_pools()
-	_add_samsun_landmark_pads()
-	_add_samsun_path_ribbon()
-	_add_samsun_support_paths()
-	_add_samsun_discovery_spots()
-	_add_samsun_wave_gate()
-	_add_samsun_environment_clusters()
-	_add_samsun_harbor_identity()
-	_add_samsun_node_identity_details()
-	_add_samsun_node_shadow(Vector2(800, 1000), Vector2(170, 46), "fx.rift_core_shadow")
+func _setup_samsun_rift_after_build() -> void:
+	"""Orchestrator-level setup after builder builds Samsun visuals."""
 	add_strategy_node(Vector2(800, 1000), "Milli İrade", RIFT_BLUE, "samsun.rift_core")
-	_add_rift_shard_cluster(Vector2(800, 1000), 6, 210.0)
 
-	_add_samsun_node_shadow(Vector2(360, 820), Vector2(140, 38), "samsun.harbor_node_shadow")
 	add_historical_landmark(Vector2(360, 820), "harbor", "Liman", "samsun.harbor_node")
 	add_prop_cluster(Vector2(360, 820), "harbor", "samsun.harbor_landmark")
-	_add_samsun_node_shadow(Vector2(1190, 820), Vector2(140, 38), "samsun.telegraph_node_shadow")
 	add_historical_landmark(Vector2(1190, 820), "telegraph", "Telgraf", "samsun.telegraph_node")
 	add_prop_cluster(Vector2(1190, 820), "telegraph", "samsun.telegraph_landmark")
-	_add_samsun_node_shadow(Vector2(530, 1500), Vector2(150, 42), "samsun.people_node_shadow")
 	add_historical_landmark(Vector2(530, 1500), "people", "Halk", "samsun.people_node")
 	add_prop_cluster(Vector2(530, 1500), "people", "samsun.people_landmark")
 
@@ -2584,7 +1923,6 @@ func _decorate_samsun_diorama_pilot() -> void:
 
 	add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
 	add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
-	_add_asset_slot_prop("interactables.companion_reaction_spot", Vector2(730, 1160), Vector2(150, 86), Color(1.0, 0.90, 0.62, 0.34), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.30), "Fark et", true)
 
 	add_companion_reaction_spot(Vector2(360, 620), 210.0, "Eda: Önce çevredeki izleri okuyalım.", "interactables.companion_reaction_spot")
 	add_companion_reaction_spot(Vector2(1190, 820), 230.0, "Eda: Telgraf, haberleri güvenli taşımak için önemli.", "interactables.companion_reaction_spot")
@@ -2593,15 +1931,6 @@ func _decorate_samsun_diorama_pilot() -> void:
 	add_companion_reaction_spot(Vector2(770, 1240), 180.0, "Eda: Yan patikalar da hikaye taşır.", "paperworld.samsun_route_beads")
 	add_companion_reaction_spot(Vector2(805, 1340), 185.0, "Arda: Güvenli açıklıklar, plan yapmak için iyi duraklar.", "paperworld.samsun_safe_clearings")
 	add_companion_reaction_spot(Vector2(820, 905), 190.0, "Eda: Ufuktaki bayraklar yolun devam ettiğini fısıldıyor.", "paperworld.samsun_vista_flags")
-
-	_add_mote_cluster(Vector2(800, 1000), Color(0.72, 0.92, 1.0, 0.14), 6)
-	_add_decorative_speckles(Rect2(Vector2(250, 520), Vector2(1080, 1120)), Color(1.0, 0.92, 0.58, 0.045), 14)
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(320, 260), Vector2(1.00, 1.00), Color(0.96, 0.86, 1.0, 0.15))
-	_add_sprite_prop(CLOUD_TEXTURE_ALT, Vector2(1260, 340), Vector2(0.92, 0.92), Color(0.72, 0.98, 1.0, 0.12))
-	_add_samsun_foreground_silhouettes()
-
-func _decorate_samsun_rift() -> void:
-	_decorate_samsun_diorama_pilot()
 
 func _decorate_havza() -> void:
 	_add_toy_world_frame(Color(0.34, 0.48, 0.25, 0.22), Color(0.96, 0.82, 0.42, 0.09))
@@ -2788,12 +2117,6 @@ func _rounded_rect_points(size: Vector2, radius: float, segments := 6) -> Packed
 			points.append(center + Vector2(cos(angle), sin(angle)) * r)
 	return points
 
-func _ellipse_points(radius: Vector2, segments := 24) -> PackedVector2Array:
-	var points := PackedVector2Array()
-	for index in range(segments):
-		var angle := TAU * float(index) / float(segments)
-		points.append(Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
-	return points
 func _move_player(delta: float) -> void:
 	var input_vector := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	if input_vector.length() > 0.01:
@@ -2892,6 +2215,21 @@ func _update_samsun_goal_visuals() -> void:
 				color.a = min(0.34, base_color.a + pulse)
 				line.default_color = color
 
+func _on_builder_goal_visual_registered(slot_id: String, node: CanvasItem) -> void:
+	"""Builder'dan gelen goal visual sinyalini kategorize edip samsun_goal_visuals dict'ine ekler."""
+	var key := ""
+	if slot_id.contains("resource") or slot_id.contains("discovery") or slot_id.contains("leadership") or slot_id.contains("courage") or slot_id.contains("glint") or slot_id.contains("rift"):
+		key = "resource"
+	elif slot_id.contains("harbor") or slot_id.contains("telegraph") or slot_id.contains("people"):
+		key = "build_spot"
+	elif slot_id.contains("wave_start"):
+		key = "wave_start"
+	if key.is_empty():
+		return
+	if not samsun_goal_visuals.has(key):
+		samsun_goal_visuals[key] = []
+	samsun_goal_visuals[key].append(node)
+
 func _animate_character_feedback() -> void:
 	var bob: float = sin(elapsed_time * 4.0) * 4.0
 	var move_amount: float = clamp(player_velocity.length() / PLAYER_SPEED, 0.0, 1.0)
@@ -2957,7 +2295,7 @@ func _update_samsun_camera_focus(delta: float) -> void:
 	if _state.current_zone == "samsun_rift" and not character_panel.visible and not dialogue_overlay.visible and not info_card_overlay.visible and not decision_overlay.visible:
 		var focus_marker := nearby_marker
 		if focus_marker == null:
-			focus_marker = _current_guidance_marker()
+			focus_marker = _marker.get_guidance_marker(markers, _state.current_goal_kind)
 		if focus_marker != null:
 			var direction := focus_marker.global_position - player.global_position
 			if direction.length() > 1.0:
@@ -3028,43 +2366,13 @@ func _update_companion_reaction() -> void:
 	companion_reaction_label.modulate.a = 0.86 + (0.10 * sin(elapsed_time * 3.0))
 
 func _update_nearby_marker() -> void:
-	nearby_marker = null
-	var nearest_distance := INF
-
-	for marker in markers.get_children():
-		if not marker.visible:
-			continue
-		var distance := player.position.distance_to(marker.position)
-		if distance < INTERACT_DISTANCE and distance < nearest_distance:
-			nearby_marker = marker
-			nearest_distance = distance
-
+	nearby_marker = _marker.update_nearby(player.position, markers, INTERACT_DISTANCE)
 	if nearby_marker == null:
 		interact_button.disabled = true
 		interact_button.text = "Yaklaş"
 	else:
 		interact_button.disabled = false
-		interact_button.text = _interact_button_text(nearby_marker)
-
-func _interact_button_text(marker: Node2D) -> String:
-	var kind := String(marker.get_meta("kind", ""))
-	match kind:
-		"unit", "ship_clue", "havza_clue", "amasya_clue", "kongre_clue":
-			return "Topla"
-		"resource":
-			return "Al"
-		"build_spot":
-			return "Kur"
-		"portal":
-			return "Aç"
-		"decision", "havza_decision", "amasya_decision", "kongre_decision":
-			return "Seç"
-		"wave_start", "havza_wave", "amasya_wave", "kongre_wave":
-			return "Başlat"
-		"npc":
-			return "Konuş"
-		_:
-			return "İncele"
+		interact_button.text = _marker.get_interact_text(nearby_marker)
 
 func _interact() -> void:
 	if nearby_marker == null:
@@ -3078,10 +2386,10 @@ func _interact() -> void:
 	elif kind == "havza_clue":
 		_collect_havza_clue(nearby_marker)
 	elif kind == "npc":
-		_show_dialogue(String(nearby_marker.get_meta("title")), _format_marker_text(String(nearby_marker.get_meta("text"))), Callable())
+		_show_dialogue(String(nearby_marker.get_meta("title")), _marker.format_marker_text(String(nearby_marker.get_meta("text")), hero_name), Callable())
 	elif kind == "portal":
 		if _state.get_item_count("units") >= _state.get_zone_item_total("units"):
-			_show_dialogue(String(nearby_marker.get_meta("title")), _format_marker_text(String(nearby_marker.get_meta("text"))), Callable(self, "_enter_bandirma"))
+			_show_dialogue(String(nearby_marker.get_meta("title")), _marker.format_marker_text(String(nearby_marker.get_meta("text")), hero_name), Callable(self, "_enter_bandirma"))
 		else:
 			_show_dialogue("Kitap Henüz Açılmadı", "Bandırma Vapuru'na geçmeden önce üç ünite notunu da toplamalısın.", Callable())
 	elif kind == "decision":
@@ -3121,55 +2429,17 @@ func _interact() -> void:
 	elif kind == "kongre_wave":
 		_wave.start_kongre_wave()
 
-func _mark_marker_collected(marker: Node2D) -> void:
-	marker.set_meta("collected", true)
-	marker.visible = false
-	_hide_visual_tree(marker)
-	_hide_nearby_collection_world_visuals(marker.position, false)
-
-func _hide_visual_tree(node: Node) -> void:
-	for child in node.get_children():
-		if child is CanvasItem:
-			(child as CanvasItem).visible = false
-		_hide_visual_tree(child)
-
-func _hide_nearby_collection_world_visuals(center: Vector2, include_reward_fx: bool) -> void:
-	for layer in [props, foreground_props]:
-		for child in layer.get_children():
-			if not (child is CanvasItem):
-				continue
-			var slot_id := String(child.get_meta("asset_slot", ""))
-			if not _is_collectible_standalone_visual(slot_id, include_reward_fx):
-				continue
-			var child_position := _visual_world_position(child)
-			if child_position.distance_to(center) <= 150.0:
-				(child as CanvasItem).visible = false
-
-func _is_collectible_standalone_visual(slot_id: String, include_reward_fx: bool) -> bool:
-	if slot_id == "":
-		return false
-	if include_reward_fx and slot_id.begins_with("reward."):
-		return true
-	return slot_id.contains("breadcrumb") or slot_id.contains("badge")
-
-func _visual_world_position(node: Node) -> Vector2:
-	if node is Node2D:
-		return (node as Node2D).global_position
-	if node is Control:
-		return (node as Control).global_position
-	return Vector2(1.0e20, 1.0e20)
-
 func _collect_unit(marker: Node2D) -> void:
 	if bool(marker.get_meta("collected")):
 		return
 
-	_mark_marker_collected(marker)
+	_marker.mark_collected(marker)
 	_state.increment_item_count("units")
 	_spawn_reward_burst(marker.position, Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.92), "reward.unit")
-	_hide_nearby_collection_world_visuals(marker.position, true)
+	_marker.hide_nearby_collection_visuals(marker.position, true, props, foreground_props)
 	_update_progress()
 	_refresh_minimap_markers()
-	_show_info_card(String(marker.get_meta("title")), _format_marker_text(String(marker.get_meta("text"))), "Yeni tarih notu bulundu", Callable(), "unit")
+	_show_info_card(String(marker.get_meta("title")), _marker.format_marker_text(String(marker.get_meta("text")), hero_name), "Yeni tarih notu bulundu", Callable(), "unit")
 
 	if _state.get_item_count("units") >= _state.get_zone_item_total("units"):
 		_set_goal("portal", "Tüm üniteler toplandı. Çalışma masasındaki Tarih Kitabı'na git.")
@@ -3178,13 +2448,13 @@ func _collect_ship_clue(marker: Node2D) -> void:
 	if bool(marker.get_meta("collected")):
 		return
 
-	_mark_marker_collected(marker)
+	_marker.mark_collected(marker)
 	_state.increment_item_count("ship_clues")
 	_spawn_reward_burst(marker.position, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.86), "reward.ship")
-	_hide_nearby_collection_world_visuals(marker.position, true)
+	_marker.hide_nearby_collection_visuals(marker.position, true, props, foreground_props)
 	_update_progress()
 	_refresh_minimap_markers()
-	_show_info_card(String(marker.get_meta("title")), _format_marker_text(String(marker.get_meta("text"))), "Yeni gemi ipucu bulundu", Callable(), "ship")
+	_show_info_card(String(marker.get_meta("title")), _marker.format_marker_text(String(marker.get_meta("text")), hero_name), "Yeni gemi ipucu bulundu", Callable(), "ship")
 
 	if _state.get_item_count("ship_clues") >= _state.get_zone_item_total("ship_clues"):
 		_set_goal("decision", "Gemi ipuçları tamamlandı. Güvertedeki Samsun Kararı işaretine git.")
@@ -3193,13 +2463,13 @@ func _collect_havza_clue(marker: Node2D) -> void:
 	if bool(marker.get_meta("collected")):
 		return
 
-	_mark_marker_collected(marker)
+	_marker.mark_collected(marker)
 	_state.increment_item_count("havza_clues")
 	_spawn_reward_burst(marker.position, Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.86), "reward.havza")
-	_hide_nearby_collection_world_visuals(marker.position, true)
+	_marker.hide_nearby_collection_visuals(marker.position, true, props, foreground_props)
 	_update_progress()
 	_refresh_minimap_markers()
-	_show_info_card(String(marker.get_meta("title")), _format_marker_text(String(marker.get_meta("text"))), "Yeni genelge ipucu bulundu", Callable(), "havza")
+	_show_info_card(String(marker.get_meta("title")), _marker.format_marker_text(String(marker.get_meta("text")), hero_name), "Yeni genelge ipucu bulundu", Callable(), "havza")
 
 	if _state.get_item_count("havza_clues") >= _state.get_zone_item_total("havza_clues"):
 		_set_goal("havza_decision", "Havza ipuçları tamamlandı. Şimdi Havza Çağrısı noktasına git.")
@@ -3208,13 +2478,13 @@ func _collect_amasya_clue(marker: Node2D) -> void:
 	if bool(marker.get_meta("collected")):
 		return
 
-	_mark_marker_collected(marker)
+	_marker.mark_collected(marker)
 	_state.increment_item_count("amasya_clues")
 	_spawn_reward_burst(marker.position, Color(1.0, 0.74, 0.34, 0.86), "reward.amasya")
-	_hide_nearby_collection_world_visuals(marker.position, true)
+	_marker.hide_nearby_collection_visuals(marker.position, true, props, foreground_props)
 	_update_progress()
 	_refresh_minimap_markers()
-	_show_info_card(String(marker.get_meta("title")), _format_marker_text(String(marker.get_meta("text"))), "Yeni bildiri ipucu bulundu", Callable(), "amasya")
+	_show_info_card(String(marker.get_meta("title")), _marker.format_marker_text(String(marker.get_meta("text")), hero_name), "Yeni bildiri ipucu bulundu", Callable(), "amasya")
 
 	if _state.get_item_count("amasya_clues") >= _state.get_zone_item_total("amasya_clues"):
 		_set_goal("amasya_decision", "Amasya ipuçları tamamlandı. Şimdi Amasya Kararı noktasına git.")
@@ -3223,13 +2493,13 @@ func _collect_kongre_clue(marker: Node2D) -> void:
 	if bool(marker.get_meta("collected")):
 		return
 
-	_mark_marker_collected(marker)
+	_marker.mark_collected(marker)
 	_state.increment_item_count("kongre_clues")
 	_spawn_reward_burst(marker.position, Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.76), "reward.kongre")
-	_hide_nearby_collection_world_visuals(marker.position, true)
+	_marker.hide_nearby_collection_visuals(marker.position, true, props, foreground_props)
 	_update_progress()
 	_refresh_minimap_markers()
-	_show_info_card(String(marker.get_meta("title")), _format_marker_text(String(marker.get_meta("text"))), "Yeni kongre ipucu bulundu", Callable(), "kongre")
+	_show_info_card(String(marker.get_meta("title")), _marker.format_marker_text(String(marker.get_meta("text")), hero_name), "Yeni kongre ipucu bulundu", Callable(), "kongre")
 
 	if _state.get_item_count("kongre_clues") >= _state.get_zone_item_total("kongre_clues"):
 		_set_goal("kongre_decision", "Kongre ipuçları tamamlandı. Şimdi Kongre Kararı noktasına git.")
@@ -3238,13 +2508,13 @@ func _collect_leadership_resource(marker: Node2D) -> void:
 	if bool(marker.get_meta("collected")):
 		return
 
-	_mark_marker_collected(marker)
+	_marker.mark_collected(marker)
 	_state.add_leadership(1)
 	_spawn_reward_burst(marker.position, Color(0.70, 1.0, 0.48, 0.86), "reward.resource")
-	_hide_nearby_collection_world_visuals(marker.position, true)
+	_marker.hide_nearby_collection_visuals(marker.position, true, props, foreground_props)
 	_update_progress()
 	_refresh_minimap_markers()
-	_show_info_card(String(marker.get_meta("title")), _format_marker_text(String(marker.get_meta("text"))), "Liderlik puani +1", Callable(), "support")
+	_show_info_card(String(marker.get_meta("title")), _marker.format_marker_text(String(marker.get_meta("text")), hero_name), "Liderlik puani +1", Callable(), "support")
 
 
 func _enter_bandirma() -> void:
@@ -3392,6 +2662,7 @@ func _enter_samsun_rift() -> void:
 func _setup_samsun_rift() -> void:
 	_builder.clear_world(self)
 	_builder.build_world("samsun_rift", self)
+	_setup_samsun_rift_after_build()
 	_marker.spawn_markers("samsun_rift", self)
 	_state.set_leadership(3)
 	_state.reset_supports()
@@ -3490,14 +2761,15 @@ func _finish_prototype() -> void:
 		Callable()
 	)
 
-func _show_dialogue(title: String, text: String, callback: Callable) -> void:
+func _show_dialogue(title: String, text: String, callback: Callable, expression: String = "idle") -> void:
 	current_dialogue_callback = callback
 	current_overlay_kind = "dialogue"
 	dialogue_overlay.present({
 		"chapter": _current_chip_text(),
 		"speaker": title,
 		"text": text,
-		"speaker_side": _speaker_side_for_title(title)
+		"speaker_side": _speaker_side_for_title(title),
+		"expression": expression,
 	})
 	interact_button.disabled = true
 
@@ -3788,8 +3060,6 @@ func _update_area_theme() -> void:
 	rift_edge_right.color = rift_edge
 	crimson_accent.color = crimson_line
 
-func _format_marker_text(text: String) -> String:
-	return text.replace("{hero}", hero_name)
 
 func _apply_ui_styles() -> void:
 	_add_panel_style(character_panel, Color(0.97, 0.95, 0.88), Color(0.20, 0.42, 0.38), 18)

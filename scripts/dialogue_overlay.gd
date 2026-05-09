@@ -2,10 +2,29 @@ extends Control
 
 signal continue_pressed
 
-const ARDA_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
-const EDA_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
+# ---------------------------------------------------------------------------
+# Portre ekspresyon texture'lari — P5: Portre ekspresyon routing
+# ---------------------------------------------------------------------------
+const ARDA_IDLE_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
+const ARDA_HAPPY_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_happy.svg")
+const ARDA_THINKING_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_thinking.svg")
+const EDA_IDLE_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
+const EDA_HAPPY_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_happy.svg")
+const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_thinking.svg")
 const CONTINUE_ICON := preload("res://kenney/kenney_ui-pack/PNG/Blue/Default/arrow_basic_e.png")
 @onready var _colors := preload("res://scripts/colors.gd")
+
+# Karakter bazli ekspresyon texture haritasi — { character: { expression: texture } }
+const ARDA_EXPRESSIONS := {
+	"idle": ARDA_IDLE_TEXTURE,
+	"happy": ARDA_HAPPY_TEXTURE,
+	"thinking": ARDA_THINKING_TEXTURE,
+}
+const EDA_EXPRESSIONS := {
+	"idle": EDA_IDLE_TEXTURE,
+	"happy": EDA_HAPPY_TEXTURE,
+	"thinking": EDA_THINKING_TEXTURE,
+}
 
 @onready var left_portrait: TextureRect = $PortraitLayer/LeftPortrait
 @onready var right_portrait: TextureRect = $PortraitLayer/RightPortrait
@@ -36,8 +55,8 @@ var stage_light_left_base_position := Vector2.ZERO
 var stage_light_right_base_position := Vector2.ZERO
 
 func _ready() -> void:
-	left_portrait.texture = ARDA_TEXTURE
-	right_portrait.texture = EDA_TEXTURE
+	left_portrait.texture = ARDA_IDLE_TEXTURE
+	right_portrait.texture = EDA_IDLE_TEXTURE
 	continue_icon.texture = CONTINUE_ICON
 	left_portrait_base_position = left_portrait.position
 	right_portrait_base_position = right_portrait.position
@@ -77,7 +96,12 @@ func present(config: Dictionary) -> void:
 	name_label.text = String(config.get("speaker", "Anlatıcı"))
 	body_label.text = String(config.get("text", ""))
 	var speaker_side := String(config.get("speaker_side", "left"))
+	var expression := String(config.get("expression", "idle"))
 	speaker_side_current = speaker_side
+
+	# Ekspresyon routing — konuşmacıya göre portre texture'ini değiştir
+	_apply_portrait_expression(speaker_side, expression)
+
 	left_portrait.modulate = Color(1, 1, 1, 1.0 if speaker_side == "left" else 0.42)
 	right_portrait.modulate = Color(1, 1, 1, 1.0 if speaker_side == "right" else 0.42)
 	left_glow.color = Color(_colors.POP_CRIMSON.r, 0.25, 0.16, 0.22 if speaker_side == "left" else 0.08)
@@ -138,3 +162,9 @@ func _apply_styles() -> void:
 	right_glow.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.12)
 	stage_light_left.color = Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.08)
 	stage_light_right.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.08)
+
+func _apply_portrait_expression(speaker_side: String, expression: String) -> void:
+	"""Konuşmacı tarafına ve ekspresyon tipine göre portre texture'ını günceller."""
+	var texture_map: Dictionary = ARDA_EXPRESSIONS if speaker_side == "left" else EDA_EXPRESSIONS
+	var target_portrait: TextureRect = left_portrait if speaker_side == "left" else right_portrait
+	target_portrait.texture = texture_map.get(expression, texture_map["idle"])

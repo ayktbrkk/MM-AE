@@ -263,7 +263,7 @@ func _add_built_support_visual(marker: Node2D, support_name: String) -> void:
 	glow.name = "BuiltSupportGlow"
 	glow.position = Vector2(0, 54)
 	glow.color = Color(accent.r, accent.g, accent.b, 0.20)
-	glow.polygon = _world._ellipse_points(Vector2(104, 38), 24)
+	glow.polygon = _ellipse_points(Vector2(104, 38), 24)
 	marker.add_child(glow)
 	marker.move_child(glow, 0)
 
@@ -271,7 +271,7 @@ func _add_built_support_visual(marker: Node2D, support_name: String) -> void:
 	shadow.name = "BuiltSupportShadow"
 	shadow.position = Vector2(0, 66)
 	shadow.color = Color(0.04, 0.06, 0.07, 0.18)
-	shadow.polygon = _world._ellipse_points(Vector2(78, 24), 20)
+	shadow.polygon = _ellipse_points(Vector2(78, 24), 20)
 	marker.add_child(shadow)
 	marker.move_child(shadow, 1)
 
@@ -334,3 +334,11 @@ func _add_built_support_visual(marker: Node2D, support_name: String) -> void:
 			Vector2(-6, 7),
 		])
 		marker.add_child(window)
+
+
+func _ellipse_points(radius: Vector2, segments := 24) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for index in range(segments):
+		var angle := TAU * float(index) / float(segments)
+		points.append(Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
+	return points

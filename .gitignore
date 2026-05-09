@@ -1,3 +1,28 @@
 # Godot 4+ specific ignores
 .godot/
-/android/
+android/
+
+# Godot engine binaries (do not commit)
+Godot_v*.exe
+godot_check.txt
+*.dmp
+
+# Unity artifacts (migration residue)
+Packages/
+ProjectSettings/
+assets/TutorialInfo/
+*.csproj
+*.sln
+
+# Kenney asset packs (download separately)
+kenney/
+
+# Temporary / generated files
+scripts/world_builder.gd_tmp
+captures/
+$($img.Width)x$($img.Height)
+ERROR
+
+# OS artifacts
+Thumbs.db
+.DS_Store

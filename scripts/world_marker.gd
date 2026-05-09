@@ -693,3 +693,109 @@ func animate_feedback(markers_node: Node, elapsed: float, nearby: Node, current_
 		var shine: Polygon2D = marker.get_meta("shine_node", null)
 		if shine != null:
 			shine.color = Color(1, 1, 1, 0.18 if (is_active_goal or is_nearby) and is_samsun_marker else 0.08 if is_samsun_marker else 0.32 if is_active_goal or is_nearby else 0.14)
+
+
+# -----------------------------------------------------------------------------
+# Marker queries — orchestrator tarafindan cagrilir
+# -----------------------------------------------------------------------------
+
+func update_nearby(player_position: Vector2, markers_node: Node, interact_distance: float = 150.0) -> Node2D:
+	"""En yakin etkilesim marker'ini bulur, yoksa null dondurur."""
+	var nearest: Node2D = null
+	var nearest_distance := INF
+	for marker in markers_node.get_children():
+		if not marker.visible:
+			continue
+		var distance := player_position.distance_to(marker.position)
+		if distance < interact_distance and distance < nearest_distance:
+			nearest = marker
+			nearest_distance = distance
+	return nearest
+
+
+func get_guidance_marker(markers_node: Node, current_goal_kind: String) -> Node2D:
+	"""Rehber oku icin hedef marker'i secer: once aktif goal kind, sonra ilk uygun."""
+	var fallback: Node2D = null
+	for marker in markers_node.get_children():
+		if bool(marker.get_meta("collected", false)) or not marker.visible:
+			continue
+		var kind := String(marker.get_meta("kind", ""))
+		if kind == current_goal_kind:
+			return marker
+		if fallback == null and kind != "npc":
+			fallback = marker
+	return fallback
+
+
+func get_interact_text(marker: Node2D) -> String:
+	"""Marker kind'ina gore etkilesim butonu metni dondurur."""
+	var kind := String(marker.get_meta("kind", ""))
+	match kind:
+		"unit", "ship_clue", "havza_clue", "amasya_clue", "kongre_clue":
+			return "Topla"
+		"resource":
+			return "Al"
+		"build_spot":
+			return "Kur"
+		"portal":
+			return "Aç"
+		"decision", "havza_decision", "amasya_decision", "kongre_decision":
+			return "Seç"
+		"wave_start", "havza_wave", "amasya_wave", "kongre_wave":
+			return "Başlat"
+		"npc":
+			return "Konuş"
+		_:
+			return "İncele"
+
+
+func format_marker_text(text: String, hero_name: String) -> String:
+	"""Marker metnindeki {hero} placeholder'ini karakter adiyla degistirir."""
+	return text.replace("{hero}", hero_name)
+
+
+func mark_collected(marker: Node2D) -> void:
+	"""Marker'i toplanmis olarak isaretler ve gorunmez yapar."""
+	marker.set_meta("collected", true)
+	marker.visible = false
+	_hide_visual_tree(marker)
+
+
+func hide_visual_tree(node: Node) -> void:
+	"""Bir node ve tum child'larini CanvasItem olarak gizler."""
+	for child in node.get_children():
+		if child is CanvasItem:
+			(child as CanvasItem).visible = false
+		hide_visual_tree(child)
+
+
+func hide_nearby_collection_visuals(center: Vector2, include_reward_fx: bool, props: Node, foreground_props: Node) -> void:
+	"""Marker pozisyonu civarindaki koleksiyon gorsellerini gizler."""
+	for layer in [props, foreground_props]:
+		for child in layer.get_children():
+			if not (child is CanvasItem):
+				continue
+			var slot_id := String(child.get_meta("asset_slot", ""))
+			if not _is_collectible_standalone_visual(slot_id, include_reward_fx):
+				continue
+			var child_position := _visual_world_position(child)
+			if child_position.distance_to(center) <= 150.0:
+				(child as CanvasItem).visible = false
+
+
+func is_collectible_standalone_visual(slot_id: String, include_reward_fx: bool) -> bool:
+	"""Verilen slot_id'nin toplanabilir bagimsiz bir gorsel olup olmadigini kontrol eder."""
+	if slot_id == "":
+		return false
+	if include_reward_fx and slot_id.begins_with("reward."):
+		return true
+	return slot_id.contains("breadcrumb") or slot_id.contains("badge")
+
+
+func visual_world_position(node: Node) -> Vector2:
+	"""Bir node'un dunya pozisyonunu dondurur (hem Node2D hem Control icin)."""
+	if node is Node2D:
+		return (node as Node2D).global_position
+	if node is Control:
+		return (node as Control).global_position
+	return Vector2(1.0e20, 1.0e20)
