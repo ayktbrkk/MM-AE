@@ -2055,3 +2055,229 @@ func _add_samsun_paper_asset_layer() -> void:
 	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_RIFT_TEXTURE, Vector2(800, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.90), -2, "paperworld.samsun_rift_core", Vector2.ZERO, 5.0)
 	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_WAVE_GATE_TEXTURE, Vector2(820, 1478), Vector2(0.76, 0.76), Color(1, 1, 1, 0.86), -2, "paperworld.samsun_wave_gate", Vector2.ZERO, 5.0)
 	_add_foreground_paper_cutout_asset(SAMSUN_PAPER_FOREGROUND_FRAME_TEXTURE, Vector2(800, 1835), Vector2(1.34, 1.34), Color(1, 1, 1, 0.88), 4, "paperworld.samsun_foreground_frame", 18.0)
+
+
+func _add_samsun_harbor_identity() -> void:
+	_add_samsun_arrival_glow(Vector2(360, 690))
+	_add_samsun_ship_silhouette(Vector2(328, 570), 0.74, "landmarks.samsun_bandirma_silhouette")
+	_add_samsun_pier(Vector2(300, 742), "landmarks.samsun_harbor_pier")
+	_add_samsun_soft_edge_line([
+		Vector2(190, 760),
+		Vector2(300, 742),
+		Vector2(430, 768),
+		Vector2(520, 740),
+	], 10.0, Color(0.96, 0.91, 0.83, 0.22), -8, "landmarks.samsun_harbor_wake")
+
+
+func _add_samsun_node_identity_details() -> void:
+	_add_samsun_landmark_symbols()
+	_add_samsun_telegraph_detail(Vector2(1190, 820))
+	_add_samsun_people_plaza(Vector2(530, 1500))
+	_add_samsun_rift_focus_rings(Vector2(800, 1000))
+
+
+func _add_samsun_landmark_symbols() -> void:
+	_add_samsun_harbor_symbol(Vector2(360, 820))
+	_add_samsun_people_symbol(Vector2(530, 1500))
+	_add_samsun_signal_symbol(Vector2(1190, 820))
+
+
+func _add_samsun_harbor_symbol(center: Vector2) -> void:
+	var ink := Color(0.10, 0.15, 0.18, 0.28)
+	_add_room_rect(_cached_world_root, center + Vector2(-170, -18), Vector2(12, 96), ink, -1, "landmarks.samsun_harbor_bollard_a")
+	_add_room_rect(_cached_world_root, center + Vector2(-126, 4), Vector2(12, 74), ink, -1, "landmarks.samsun_harbor_bollard_b")
+	_add_samsun_soft_edge_line([
+		center + Vector2(-164, -4),
+		center + Vector2(-144, 24),
+		center + Vector2(-120, 18),
+	], 6.0, Color(0.96, 0.91, 0.83, 0.20), -1, "landmarks.samsun_harbor_rope")
+	var pennant := Polygon2D.new()
+	pennant.position = center + Vector2(112, -72)
+	pennant.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.42)
+	pennant.z_index = -1
+	pennant.polygon = PackedVector2Array([
+		Vector2.ZERO,
+		Vector2(72, 12),
+		Vector2(8, 34),
+	])
+	pennant.set_meta("asset_slot", "landmarks.samsun_harbor_pennant")
+	_get_props(_cached_world_root).add_child(pennant)
+
+
+func _add_samsun_people_symbol(center: Vector2) -> void:
+	var dot_color := Color(0.12, 0.16, 0.19, 0.22)
+	var points := [
+		Vector2(-64, -24),
+		Vector2(-22, -44),
+		Vector2(24, -42),
+		Vector2(68, -18),
+		Vector2(0, -4),
+	]
+	for index in range(points.size()):
+		var dot := Polygon2D.new()
+		dot.position = center + points[index]
+		dot.color = dot_color
+		dot.z_index = -1
+		dot.polygon = _ellipse_points(Vector2(13, 13), 16)
+		dot.set_meta("asset_slot", "landmarks.samsun_people_silhouette_%02d" % index)
+		_get_props(_cached_world_root).add_child(dot)
+	_add_samsun_soft_edge_line([
+		center + Vector2(-78, 10),
+		center + Vector2(-22, 32),
+		center + Vector2(34, 30),
+		center + Vector2(86, 8),
+	], 8.0, Color(0.12, 0.16, 0.19, 0.14), -1, "landmarks.samsun_people_listening_arc")
+
+
+func _add_samsun_signal_symbol(center: Vector2) -> void:
+	_add_samsun_ring(center + Vector2(0, -124), Vector2(62, 24), 5.0, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.16), -1, "landmarks.samsun_telegraph_signal_a")
+	_add_samsun_ring(center + Vector2(0, -124), Vector2(104, 42), 4.0, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.10), -1, "landmarks.samsun_telegraph_signal_b")
+
+
+func _add_samsun_telegraph_detail(center: Vector2) -> void:
+	var wire_color := Color(0.10, 0.15, 0.18, 0.34)
+	for x_offset in [-120.0, 118.0]:
+		var pole := Polygon2D.new()
+		pole.position = center + Vector2(x_offset, -18)
+		pole.color = wire_color
+		pole.z_index = -1
+		pole.polygon = PackedVector2Array([
+			Vector2(-6, -92),
+			Vector2(6, -92),
+			Vector2(6, 62),
+			Vector2(-6, 62),
+		])
+		pole.set_meta("asset_slot", "landmarks.samsun_telegraph_pole")
+		_get_props(_cached_world_root).add_child(pole)
+	_add_samsun_soft_edge_line([
+		center + Vector2(-128, -105),
+		center + Vector2(-32, -132),
+		center + Vector2(44, -126),
+		center + Vector2(126, -104),
+	], 5.0, wire_color, -1, "landmarks.samsun_telegraph_wire")
+	_add_samsun_soft_edge_line([
+		center + Vector2(-118, -72),
+		center + Vector2(-22, -98),
+		center + Vector2(54, -92),
+		center + Vector2(118, -70),
+	], 4.0, Color(0.10, 0.15, 0.18, 0.22), -1, "landmarks.samsun_telegraph_wire_low")
+
+
+func _add_samsun_people_plaza(center: Vector2) -> void:
+	_add_samsun_ring(center + Vector2(0, 30), Vector2(205, 86), 13.0, Color(0.96, 0.91, 0.83, 0.18), -10, "landmarks.samsun_people_plaza_ring")
+	_add_samsun_soft_edge_line([
+		center + Vector2(-130, -26),
+		center + Vector2(-54, -54),
+		center + Vector2(36, -54),
+		center + Vector2(124, -22),
+	], 9.0, Color(0.95, 0.75, 0.39, 0.16), -1, "landmarks.samsun_people_banner_line")
+
+
+func _add_samsun_rift_focus_rings(center: Vector2) -> void:
+	_add_samsun_ring(center, Vector2(220, 142), 8.0, Color(0.62, 0.83, 0.78, 0.16), -9, "fx.samsun_rift_outer_ring")
+	_add_samsun_ring(center + Vector2(0, 4), Vector2(128, 82), 7.0, Color(0.96, 0.91, 0.83, 0.14), -8, "fx.samsun_rift_inner_ring")
+
+
+func _add_samsun_ring(center: Vector2, radius: Vector2, width: float, color: Color, z_index: int, slot_id := "") -> void:
+	var ring := Line2D.new()
+	ring.width = width
+	ring.default_color = color
+	ring.z_index = z_index
+	ring.joint_mode = Line2D.LINE_JOINT_ROUND
+	ring.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	ring.end_cap_mode = Line2D.LINE_CAP_ROUND
+	for index in range(33):
+		var angle := TAU * float(index) / 32.0
+		ring.add_point(center + Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
+	if slot_id != "":
+		ring.set_meta("asset_slot", slot_id)
+	ring.set_meta("line_pulse", true)
+	ring.set_meta("base_alpha", color.a)
+	ring.set_meta("phase", fmod(center.x * 0.01 + center.y * 0.013, TAU))
+	ring.set_meta("pulse_amount", 0.018)
+	_get_props(_cached_world_root).add_child(ring)
+
+
+func _add_samsun_arrival_glow(center: Vector2) -> void:
+	_add_soft_blob(_cached_world_root, center, Vector2(250, 88), Color(0.95, 0.75, 0.39, 0.055), 28, 0.02, false, -9)
+	_add_soft_blob(_cached_world_root, center + Vector2(0, 28), Vector2(145, 46), Color(0.96, 0.91, 0.83, 0.050), 24, 0.02, false, -8)
+
+
+func _add_samsun_ship_silhouette(pos: Vector2, scale_value: float, slot_id := "") -> void:
+	var root := Node2D.new()
+	root.position = pos
+	root.z_index = -7
+	root.set_meta("ambient_bob", true)
+	root.set_meta("base_pos", pos)
+	root.set_meta("phase", 0.4)
+	root.set_meta("bob_amount", 1.4)
+	if slot_id != "":
+		root.set_meta("asset_slot", slot_id)
+
+	var ink := Color(0.12, 0.16, 0.19, 0.54)
+	var hull := Polygon2D.new()
+	hull.color = ink
+	hull.polygon = _scaled_points(PackedVector2Array([
+		Vector2(-170, 16),
+		Vector2(145, 16),
+		Vector2(92, 58),
+		Vector2(-118, 62),
+	]), scale_value)
+	root.add_child(hull)
+
+	var cabin := Polygon2D.new()
+	cabin.position = Vector2(-56, -28) * scale_value
+	cabin.color = Color(0.12, 0.16, 0.19, 0.42)
+	cabin.polygon = _scaled_points(PackedVector2Array([
+		Vector2.ZERO,
+		Vector2(112, 0),
+		Vector2(126, 44),
+		Vector2(-12, 44),
+	]), scale_value)
+	root.add_child(cabin)
+
+	var mast := Polygon2D.new()
+	mast.position = Vector2(18, -104) * scale_value
+	mast.color = ink
+	mast.polygon = _scaled_points(PackedVector2Array([
+		Vector2(-4, 0),
+		Vector2(4, 0),
+		Vector2(4, 124),
+		Vector2(-4, 124),
+	]), scale_value)
+	root.add_child(mast)
+
+	var flag := Polygon2D.new()
+	flag.position = Vector2(26, -102) * scale_value
+	flag.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.62)
+	flag.polygon = _scaled_points(PackedVector2Array([
+		Vector2.ZERO,
+		Vector2(54, 8),
+		Vector2(48, 32),
+		Vector2(0, 26),
+	]), scale_value)
+	root.add_child(flag)
+
+	_get_props(_cached_world_root).add_child(root)
+
+
+func _add_samsun_pier(center: Vector2, slot_id := "") -> void:
+	_add_samsun_soft_edge_line([
+		center + Vector2(-112, 16),
+		center + Vector2(-34, -6),
+		center + Vector2(42, 16),
+		center + Vector2(126, -2),
+	], 18.0, Color(0.48, 0.32, 0.22, 0.30), -8, "%s.deck" % slot_id)
+	for index in range(4):
+		var post := Polygon2D.new()
+		post.position = center + Vector2(-92 + index * 72, 10 + (index % 2) * 12)
+		post.color = Color(0.24, 0.19, 0.16, 0.38)
+		post.z_index = -7
+		post.polygon = PackedVector2Array([
+			Vector2(-7, -32),
+			Vector2(7, -32),
+			Vector2(7, 34),
+			Vector2(-7, 34),
+		])
+		post.set_meta("asset_slot", "%s.post_%02d" % [slot_id, index])
+		_get_props(_cached_world_root).add_child(post)
