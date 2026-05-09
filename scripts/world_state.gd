@@ -150,3 +150,46 @@ func reset_supports() -> void:
 func reset_wave_attempts() -> void:
 	wave_attempts = 0
 	state_changed.emit("wave_attempts_reset", 0)
+
+
+# ---------------------------------------------------------------------------
+# P7: Save/Load serialize / deserialize
+# ---------------------------------------------------------------------------
+func to_dict() -> Dictionary:
+	"""Mevcut state'i Dictionary olarak serialize eder."""
+	return {
+		"selected_character": selected_character,
+		"current_zone": current_zone,
+		"current_goal_kind": current_goal_kind,
+		"collected_items": collected_items.duplicate(),
+		"total_items_in_zone": total_items_in_zone.duplicate(),
+		"leadership_points": leadership_points,
+		"built_supports": built_supports,
+		"required_supports": required_supports,
+		"wave_attempts": wave_attempts,
+	}
+
+
+func from_dict(data: Dictionary) -> void:
+	"""Dictionary'den state'i geri yukler."""
+	if data.is_empty():
+		return
+
+	if data.has("selected_character"):
+		selected_character = data["selected_character"]
+	if data.has("current_zone"):
+		current_zone = data["current_zone"]
+	if data.has("current_goal_kind"):
+		current_goal_kind = data["current_goal_kind"]
+	if data.has("collected_items"):
+		collected_items = data["collected_items"].duplicate()
+	if data.has("total_items_in_zone"):
+		total_items_in_zone = data["total_items_in_zone"].duplicate()
+	if data.has("leadership_points"):
+		leadership_points = data["leadership_points"]
+	if data.has("built_supports"):
+		built_supports = data["built_supports"]
+	if data.has("required_supports"):
+		required_supports = data["required_supports"]
+	if data.has("wave_attempts"):
+		wave_attempts = data["wave_attempts"]

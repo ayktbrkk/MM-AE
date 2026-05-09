@@ -275,7 +275,11 @@ func _ready() -> void:
 	_builder.goal_visual_registered.connect(_on_builder_goal_visual_registered)
 	_connect_ui()
 
-	# 6. Oyun başlangıcı — karakter seçimi
+	# 6. Oyun başlangıcı — kayıt kontrolü ve karakter seçimi
+	if SaveManager.has_save():
+		# Kayit varsa "Devam Et" butonu gosterilebilir
+		# Su an icin otomatik yukleme yapmadan karakter secim ekranina gec
+		print("[World] Kayit bulundu. Karakter secim ekrani gosteriliyor.")
 	_reset_panel_for_character_choice()
 	_set_character_choice_visible(true)
 	target_position = player.position
@@ -2872,6 +2876,8 @@ func _show_chapter_transition(title: String, subtitle: String) -> void:
 	chapter_transition_overlay.present(title, subtitle)
 	# Ses: bölüme göre bgm değiştir (asset yoksa sessizce başarısız olur)
 	AudioManager.play_bgm(_bgm_for_chapter(title))
+	# P7: Bölüm geçişinde otomatik kaydet
+	_save_game()
 
 
 func _bgm_for_chapter(chapter_title: String) -> String:
@@ -2889,6 +2895,37 @@ func _bgm_for_chapter(chapter_title: String) -> String:
 			return "bgm_kongre"
 		_:
 			return "bgm_default"
+
+
+# ---------------------------------------------------------------------------
+# P7: Save/Load
+# ---------------------------------------------------------------------------
+func _save_game() -> void:
+	"""Oyun durumunu kaydet. world_state + world ek verileri."""
+	var save_data: Dictionary = _state.to_dict()
+
+	# world.gd'ye özel ek veriler
+	save_data["hero_name"] = hero_name
+	save_data["current_chapter"] = _current_chip_text()
+
+	SaveManager.save_game(save_data)
+
+
+func _load_game() -> bool:
+	"""Kayit dosyasindan oyunu yukle. Basariliysa true dondur."""
+	var save_data: Dictionary = SaveManager.load_game()
+	if save_data.is_empty():
+		return false
+
+	# State'i geri yukle
+	_state.from_dict(save_data)
+
+	# world.gd'ye özel verileri geri yukle
+	if save_data.has("hero_name"):
+		hero_name = save_data["hero_name"]
+
+	print("[World] Oyun yuklendi: zone=%s, karakter=%s" % [_state.current_zone, _state.selected_character])
+	return true
 
 func _on_transition_finished() -> void:
 	pass
