@@ -30,3 +30,6 @@ decision_test_output.txt
 # OS artifacts
 Thumbs.db
 .DS_Store
+
+# Build artifacts (APK too large for GitHub)
+builds/
