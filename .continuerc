@@ -123,3 +123,38 @@ Bu projede aşağıdaki agent rolleri tanımlıdır (detaylar: `.roomodes` ve `s
 - Performans: mobile öncelikli, gereksiz _process döngülerinden kaçın
 - Tüm metinler Türkçe (Türkiye Türkçesi)
 - Renkler: `scripts/colors.gd` merkezi dosyası kullanılır
+
+# =============================================
+# OTOMATİK ROL ALGILAMA VE SKILL YÜKLEME
+# =============================================
+# Agent, kullanıcının mesajındaki anahtar kelimelere göre
+# otomatik olarak doğru rolü seçer ve skill dosyasını yükler.
+#
+# Slash Command'lar (hızlı rol seçimi):
+# /architect   - "Şu özelliği planla: [açıklama]"
+# /debug       - "Şu sorunu debug et: [açıklama]"
+# /develop     - "Şu kodu yaz: [açıklama]"
+# /review      - "Şu kodu review et: [dosya]"
+# /test        - "Şu özelliği test et: [açıklama]"
+# /scene       - "Şu sahneyi tasarla: [açıklama]"
+# /refactor    - "Şu kodu refactor et: [dosya]"
+# /story       - "Şu hikayeyi yaz: [açıklama]"
+# /art         - "Şu asset'i ekle: [açıklama]"
+# /build       - "Android build al"
+#
+# Anahtar Kelime -> Otomatik Rol Eşleme:
+# "planla, tasarım, mimari"          -> 🏗️ Architect
+# "hata, çalışmıyor, debug, bug"    -> 🪲 Debug
+# "yaz, kod, implement et, ekle"    -> 💻 Developer (varsayılan)
+# "review, gözden geçir, denetle"   -> 👑 Tech Lead
+# "test et, kalite kontrol"          -> 🧪 QA Specialist
+# "sahne, ui, layout, container"    -> 🏗️ Sahne Tasarımcısı
+# "refactor, dönüştür, optimize"    -> 📜 GDScript Sihirbazı
+# "hikaye, diyalog, senaryo"        -> ✍️ Hikaye Yazarı
+# "asset, görsel, svg, renk"        -> 🎨 Sanat Yönetmeni
+# "build, derle, apk, android"      -> 🚀 Build Master
+#
+# Detaylı kurallar ve trigger listesi için:
+# - .clinerules -> "OTOMATİK ROL ALGILAMA" bölümü
+# - skills/_role_dispatch.yaml (YAML tablosu)
+# - tools/activate_role.ps1 (PowerShell aktivasyon scripti)

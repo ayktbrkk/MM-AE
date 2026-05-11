@@ -102,7 +102,15 @@ func hide(type: OverlayType) -> void:
 			var prev_type: OverlayType = _overlay_stack.pop_back()
 			_active_overlay = prev_type
 			if _canvas_layers.has(prev_type):
-				_canvas_layers[prev_type].visible = true
+				# P10: Sadece overlay node'u hala görünür durumdaysa CanvasLayer'ı göster.
+				# (Bazı overlay'ler — örn. chapter_transition — kendi tween'leri bitince
+				# node.visible=false yapar, ama CanvasLayer.visible true kalırsa
+				# is_any_overlay_visible() yanlış pozitif döner ve oyuncu input'u bloke olur.)
+				var overlay_node: Node = _overlay_nodes.get(prev_type)
+				if overlay_node != null and overlay_node.visible:
+					_canvas_layers[prev_type].visible = true
+				else:
+					_canvas_layers[prev_type].visible = false
 		else:
 			_active_overlay = -1
 

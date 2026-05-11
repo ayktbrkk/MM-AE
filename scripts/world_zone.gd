@@ -588,11 +588,11 @@ func _setup_bandirma() -> void:
 	set_goal("ship_clue", "Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele.")
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition("Bandırma Vapuru", "Gece yolculugu basliyor")
-	ui_mod.show_dialogue(
-		"Bandırma Vapuru",
-		"%s gözlerini açtığında küçük bir kamaradadır. Başucunda ona uygun bir üniforma vardır. Güverteye çıkmadan önce kamaradaki ipuçlarını incele." % player_mod.hero_name,
-		Callable()
-	)
+	# P10: Event chain'i başlat — event 3 (story, Anlatıcı) dialogue'u gösterecek.
+	# Eski manuel show_dialogue() kaldırıldı: chain'deki event 3 zaten aynı içeriği
+	# (Bandırma Vapuru kamarası açıklaması) sağlıyor ve boş Callable() ile oyuncu
+	# hareket kilitlenmesine yol açıyordu.
+	trigger_event_chain()
 
 
 func _setup_samsun_rift() -> void:
