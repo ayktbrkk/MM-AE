@@ -2,7 +2,7 @@
 
 ## Current Priority
 
-**Prototype stabilizasyonu → Android Build.** Mevcut prototip 9 bölge, 31 event, 13 procedural ses ile içerik olarak tamamlandı. Sıradaki adımlar: gerçek ses dosyaları, Android build, E2E test.
+**v1.0 — First Milestone tamamlandı.** Mevcut prototip 9 bölge, 31 event, 13 procedural ses, Android APK, 22 E2E test ile ilk milestone'a ulaşıldı. Sıradaki adımlar: gerçek ses dosyaları, world art upgrade, achievement sistemi.
 
 ## Reference Player
 
@@ -84,6 +84,8 @@ Her bölümde oyuncunun stratejik bir katmanı yönetmesi beklenir:
 | Ses dosyası | 13 procedural (6 BGM + 7 SFX) |
 | Event | 31 |
 | Bölge | 9 (tümü built) |
+| Test | 22 E2E (test/) |
+| APK | builds/BandirmaYolculugu_debug.apk |
 | Autoload | 2 (AudioManager, SaveManager) |
 
 ---

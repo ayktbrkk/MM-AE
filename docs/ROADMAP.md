@@ -129,11 +129,11 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 | **M2: Örgütlenme** (havza→amasya→kongreler) | ✅ | 3 zone, 13 event |
 | **M3: Mücadele** (ankara→sakarya→final) | ✅ | 3 zone, 11 event |
 | **M4: Ses Sistemi** | ✅ | 13 procedural ses |
-| **M5: Android Build** | 📝 | Export template + keystore gerekli |
+| **M5: Android Build** | ✅ | APK başarıyla oluşturuldu |
 | **M6: World Art Upgrade** | 📝 | Toca World kalitesi |
-| **M7: E2E Test** | 📝 | Otomatize test suite |
+| **M7: E2E Test** | ✅ | 22/22 test geçti |
 
-## Current Prototype (v0.9 — Content Complete)
+## Current Prototype (v1.0 — First Milestone)
 
 **Oynanabilir İçerik:**
 - 9 bölge, 31 event, tümü built ve wired
@@ -147,6 +147,8 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 - Loading screen (10 history facts)
 - Exit confirm dialog (Android back button)
 - 13 procedural placeholder ses
+- 22 E2E test (test/ klasörü)
+- Android debug APK mevcut (builds/BandirmaYolculugu_debug.apk)
 
 **Gereksinimler:**
 - Godot 4.6.2
@@ -155,9 +157,7 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 
 **Sonraki Adımlar:**
 1. Gerçek ses dosyaları (.ogg) — placeholder'ları değiştir
-2. Android build (APK/AAB)
-3. End-to-end test (otomatize)
-4. World art upgrade (Toca World kalitesi)
-5. Achievement sistemi
-6. Oyun içi tutorial
-7. Analytics entegrasyonu
+2. World art upgrade (Toca World kalitesi)
+3. Achievement sistemi
+4. Oyun içi tutorial
+5. Analytics entegrasyonu

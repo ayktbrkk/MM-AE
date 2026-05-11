@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="780" viewBox="0 0 1600 780">
+  <!-- ============================================= -->
+  <!-- Congress Foreground Frame v2                 -->
+  <!-- Classical columns + flag silhouettes         -->
+  <!-- ============================================= -->
+  <!-- Bottom ground -->
+  <path d="M0 520 C200 480 380 520 560 600 C740 680 920 670 1100 600 C1280 530 1440 510 1600 550 V780 H0Z" fill="#1a2a3a" opacity="0.26"/>
+  <!-- Mid ground -->
+  <path d="M0 440 C180 410 320 440 480 500 C640 562 820 558 1000 500 C1160 448 1340 428 1600 460 V780 H0Z" fill="#7a5a42" opacity="0.40"/>
+  <!-- Left classical column -->
+  <g fill="#1a2a3a" opacity="0.56">
+    <path d="M0 40 C60 80 120 180 140 340 V780 H0Z"/>
+    <!-- Column fluting lines -->
+    <path d="M30 120 C50 100 70 110 80 150" stroke="#1a2a3a" stroke-width="6" stroke-linecap="round" opacity="0.40"/>
+  </g>
+  <!-- Right classical column -->
+  <g fill="#1a2a3a" opacity="0.52">
+    <path d="M1600 50 C1510 90 1430 200 1390 360 V780 H1600Z"/>
+    <path d="M1500 160 C1480 140 1460 150 1440 190" stroke="#1a2a3a" stroke-width="6" stroke-linecap="round" opacity="0.36"/>
+  </g>
+  <!-- Left flag silhouette -->
+  <g fill="none" stroke="#c84b3d" stroke-width="12" stroke-linecap="round" opacity="0.36">
+    <path d="M60 120 C60 80 60 60 60 40"/>
+    <path d="M60 60 C90 50 120 60 140 80 C120 90 90 100 60 90"/>
+  </g>
+  <!-- Right flag silhouette -->
+  <g fill="none" stroke="#c84b3d" stroke-width="12" stroke-linecap="round" opacity="0.32">
+    <path d="M1520 130 C1520 90 1520 70 1520 50"/>
+    <path d="M1520 70 C1490 60 1460 70 1440 90 C1460 100 1490 110 1520 100"/>
+  </g>
+  <!-- Decorative bunting / rope -->
+  <g stroke="#f2be63" stroke-width="6" stroke-linecap="round" opacity="0.30">
+    <path d="M140 340 C400 300 600 320 800 340 C1000 360 1200 340 1390 360"/>
+  </g>
+  <!-- Small triangle flags on bunting -->
+  <g fill="#c84b3d" opacity="0.28">
+    <polygon points="300,316 320,310 310,334"/>
+    <polygon points="500,322 520,316 510,340"/>
+    <polygon points="700,328 720,322 710,346"/>
+    <polygon points="900,334 920,328 910,352"/>
+    <polygon points="1100,336 1120,330 1110,354"/>
+  </g>
+  <!-- Gold accent dots -->
+  <g fill="#f2be63" opacity="0.32">
+    <circle cx="240" cy="580" r="14"/>
+    <circle cx="1320" cy="590" r="16"/>
+    <circle cx="800" cy="680" r="10"/>
+    <circle cx="500" cy="640" r="11"/>
+    <circle cx="1100" cy="620" r="9"/>
+  </g>
+</svg>

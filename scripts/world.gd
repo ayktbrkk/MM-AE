@@ -102,8 +102,11 @@ func _ready() -> void:
 
 	# 3. Modülleri kur (preload + new + add_child + initialize)
 	_player_mod = WorldPlayer.new()
+	_player_mod.name = "WorldPlayer"
 	_ui_mod = WorldUI.new()
+	_ui_mod.name = "WorldUI"
 	_zone_mod = WorldZone.new()
+	_zone_mod.name = "WorldZone"
 	add_child(_player_mod)
 	add_child(_ui_mod)
 	add_child(_zone_mod)

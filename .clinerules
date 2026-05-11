@@ -102,3 +102,221 @@
 - Performans: mobile öncelikli, gereksiz _process döngülerinden kaçın
 - Tüm metinler Türkçe (Türkiye Türkçesi)
 - Renkler: [`scripts/colors.gd`](scripts/colors.gd) merkezi dosyası kullanılır (artık `scripts/world.gd` içinde dağınık değil)
+
+# =============================================
+# RooCode Custom Modes (Agent Rolleri)
+# =============================================
+# Bu bölüm, `.roomodes` dosyasından taşınan özel mod tanımlarını içerir.
+# Her mod, belirli bir görev türü için optimize edilmiş agent rolüdür.
+# Detaylı workflow talimatları: `skills/` klasöründe.
+
+## Kullanılabilir Agent Rolleri
+
+### 🏗️ Architect (Mimar)
+- **Kullanım:** "Şu özelliği planla", "Sistem tasarımını çıkar"
+- **Workflow:** `skills/architect-workflow.md`
+- **Görev:** Yeni özellik eklemeden ÖNCE gereksinim analizi, sistem tasarımı (node tree, sinyaller, script\'ler), plan onayı
+- **Kurallar:** Statik typing, Composition over Inheritance, @onready, signal tabanlı mimari
+
+### 🪲 Debug (Hata Ayıklama)
+- **Kullanım:** "Hata var, debug et", "Şu özellik çalışmıyor"
+- **Workflow:** `skills/debug-workflow.md`
+- **Görev:** 6 adımlı sistematik hata ayıklama (yeniden üret -> tara -> hipotez -> test -> çözüm -> regresyon)
+
+### 👑 Tech Lead (Teknik Lider)
+- **Kullanım:** "Kodu review et", "Standartları denetle"
+- **Görev:** Mimari kararlar, kod review, proje kalitesi, Godot standartları denetimi
+- **Kurallar:** Statik typing zorunlu, Godot 3.x sözdizimi yasak
+
+### 💻 Developer (Geliştirici)
+- **Kullanım:** "Şu özelliği implement et", "Kodu yaz"
+- **Workflow:** `skills/implement.md`
+- **Görev:** Test-first GDScript geliştirme, tip belirteçli kod yazma
+
+### 🧪 QA Specialist (Test Uzmanı)
+- **Kullanım:** "Test et", "Kalite kontrol yap"
+- **Görev:** Oyun mekaniklerini test etme, hata raporlama, performans analizi, regression testleri
+
+### 🏗️ Sahne Tasarımcısı (Scene Designer)
+- **Kullanım:** "UI tasarla", "Sahne düzenle"
+- **Workflow:** `skills/ui-auto-layout.md`
+- **Görev:** .tscn sahne düzenleme, Container nesting ile responsive UI, tema yönetimi
+
+### 📜 GDScript Sihirbazı (GDScript Wizard)
+- **Kullanım:** "Kodu refactor et", "Godot 3 -> 4 dönüştür"
+- **Workflow:** `skills/refactor-gdscript.md`, `skills/godot-refactor.md`
+- **Görev:** Kod optimizasyonu, Godot 3->4 dönüşümü, state machine tasarımı
+
+### ✍️ Hikaye Yazarı (Story Writer)
+- **Kullanım:** "Hikaye yaz", "Diyalog ekle"
+- **Workflow:** `skills/dialogue-sequence.md`, `skills/new-chapter.md`, `skills/new-decision.md`, `skills/new-scene.md`
+- **Görev:** Hikaye akışı, diyaloglar, karar mekanikleri (sadece `assets/data/questions.gd` ve `docs/`)
+
+### 🎨 Sanat Yönetmeni (Art Director)
+- **Kullanım:** "Asset ekle", "Görsel düzenle"
+- **Workflow:** `skills/art-asset.md`, `skills/shader-expert.md`
+- **Görev:** Görsel asset yönetimi, SVG/PNG, renk paletleri, shader optimizasyonu
+
+### 🚀 Build Master (Build ve Dağıtım)
+- **Kullanım:** "Build al", "Android\'e dağıt"
+- **Workflow:** `skills/android-build.md`
+- **Görev:** Android export, imzalama, dağıtım konfigürasyonları
+
+## Hızlı Başvuru: Hangi Durumda Hangi Rol?
+
+| Durum | Rol | Skill Referansı |
+|-------|-----|----------------|
+| "Yeni özellik planla" | 🏗️ Architect | `skills/architect-workflow.md` |
+| "Hata var, bul" | 🪲 Debug | `skills/debug-workflow.md` |
+| "Kodu yaz" | 💻 Developer | `skills/implement.md` |
+| "Kodu gözden geçir" | 👑 Tech Lead | `.clinerules` standartları |
+| "Eski kodu dönüştür" | 📜 GDScript Sihirbazı | `skills/godot-refactor.md` |
+| "Test et" | 🧪 QA Specialist | `skills/debug-workflow.md` |
+| "Build al" | 🚀 Build Master | `skills/android-build.md` |
+| "Sahne tasarla" | 🏗️ Sahne Tasarımcısı | `skills/ui-auto-layout.md` |
+| "Hikaye yaz" | ✍️ Hikaye Yazarı | `skills/dialogue-sequence.md` |
+| "Asset ekle" | 🎨 Sanat Yönetmeni | `skills/art-asset.md` |
+
+# =============================================
+# Skills & Workflow Klasörü Referansı
+# =============================================
+# `skills/` klasörü, her görev türü için adım adım talimatlar içerir.
+# Agent, görev tanımına göre ilgili skill dosyasını otomatik yükler.
+#
+# Kullanılabilir Skill\'ler:
+# - skills/architect-workflow.md  -> Planlama ve Mimari
+# - skills/implement.md          -> Test-first Geliştirme
+# - skills/debug-workflow.md     -> Hata Ayıklama
+# - skills/refactor-gdscript.md  -> GDScript Yeniden Düzenleme
+# - skills/godot-refactor.md     -> Godot 3->4 Dönüşümü
+# - skills/new-chapter.md        -> Yeni Bölüm Ekleme
+# - skills/new-decision.md       -> Yeni Karar Mekaniği
+# - skills/new-scene.md          -> Yeni Sahne Oluşturma
+# - skills/dialogue-sequence.md  -> Diyalog Dizisi Ekleme
+# - skills/art-asset.md          -> Görsel Asset Ekleme
+# - skills/ui-auto-layout.md     -> Responsive UI Tasarımı
+# - skills/shader-expert.md      -> Shader Optimizasyonu
+# - skills/android-build.md      -> Android Build
+# - skills/context-caching.md    -> Context Önbellekleme
+# - skills/superpowers-14-skills.md -> Dönüşüm Tablosu
+# - skills/README.md             -> Skill Klasörü Dokümantasyonu
+
+## Çalışma Akışı (Önerilen Workflow)
+# 1. 🏗️ Architect: "Şu özelliği planla" -> Plan çıkar, onay al
+# 2. 💻 Developer: Planı uygula (test-first yaklaşımı)
+# 3. 👑 Tech Lead: Kod review yap, standartları denetle
+# 4. 🪲 Debug: Hata varsa sistematik olarak düzelt
+# 5. 🧪 QA Specialist: Regression test yap
+# 6. 🚀 Build Master: Build al ve dağıt
+#
+# Not: Bu rollerin detaylı açıklamaları `.roomodes` dosyasında,
+# adım adım workflow talimatları ise `skills/` klasöründe bulunur.
+
+# =============================================
+# OTOMATİK ROL ALGILAMA VE SKİLL YÜKLEME SİSTEMİ
+# =============================================
+# AŞAĞIDAKİ KURALLAR ZORUNLUDUR:
+# Agent, kullanıcının mesajını analiz ederek uygun rolü ve skill dosyasını
+# OTOMATİK olarak seçer ve yükler. Manuel rol seçimi gereksizdir.
+
+## Algılama Mantığı
+# Agent her mesajda şu sırayla analiz yapar:
+# 1. Açık rol etiketi: "🏗️ Architect: ...", "🪲 Debug: ..." vb.
+# 2. Anahtar kelime eşleşmesi (aşağıdaki tablo)
+# 3. Hiçbiri yoksa -> varsayılan 💻 Developer rolü
+
+## Anahtar Kelime -> Rol Eşleme Tablosu
+# Aşağıdaki anahtar kelimeleri içeren isteklerde OTOMATİK olarak
+# ilgili skill dosyasını yükle ve o rolün kurallarını uygula.
+
+### 🏗️ Architect (Mimar)
+# Tetikleyiciler: "planla", "tasarım", "mimari", "node tree", "sistem tasarımı",
+#   "akış şeması", "signal akışı", "gereksinim analizi", "proje planı"
+# Yapılacaklar:
+#   1. skills/architect-workflow.md oku
+#   2. Gereksinim analizi yap
+#   3. Node tree + signal flow + script sorumluluklarını çıkar
+#   4. Planı onaya sun, onay sonrası Developer'a devret
+
+### 🪲 Debug (Hata Ayıklama)
+# Tetikleyiciler: "hata", "çalışmıyor", "debug", "bug", "broken", "patlak",
+#   "düzelt", "sorun", "problem", "exception", "crash", "donma"
+# Yapılacaklar:
+#   1. skills/debug-workflow.md oku
+#   2. 6 adımlı debug sürecini başlat (yeniden üret -> tara -> hipotez -> test -> çözüm -> regresyon)
+#   3. Minimal değişiklik prensibini uygula
+
+### 💻 Developer (Geliştirici) - VARSAYILAN
+# Tetikleyiciler: "yaz", "kod", "implement et", "ekle", "oluştur",
+#   "geliştir", "yap", "function", "script", "class"
+# Yapılacaklar:
+#   1. skills/implement.md oku
+#   2. Test-first yaklaşımı: önce test tanımı, sonra imzalar, sonra uygulama
+#   3. Statik typing (var x: Type), @onready, signal tabanlı mimari ZORUNLU
+
+### 👑 Tech Lead (Teknik Lider)
+# Tetikleyiciler: "review", "gözden geçir", "denetle", "kalite kontrol",
+#   "standart", "code review", "incele"
+# Yapılacaklar:
+#   1. .clinerules standartlarını referans al
+#   2. Statik typing, Godot 3.x yasağı, @onready kullanımını denetle
+#   3. Eksik/hatalı bulguları raporla
+
+### 🧪 QA Specialist (Test Uzmanı)
+# Tetikleyiciler: "test et", "kalite kontrol", "regression",
+#   "performans testi", "doğrula", "validate"
+# Yapılacaklar:
+#   1. skills/debug-workflow.md oku (test bölümü)
+#   2. Oyun mekaniklerini test et
+#   3. Performans analizi yap
+#   4. Regression test raporu hazırla
+
+### 🏗️ Sahne Tasarımcısı (Scene Designer)
+# Tetikleyiciler: "sahne tasarla", "ui tasarla", "scene", "tscn",
+#   "layout", "container", "tema", "theme", "panel tasarla"
+# Yapılacaklar:
+#   1. skills/ui-auto-layout.md oku
+#   2. Container nesting ile responsive UI tasarla
+#   3. Node isimlerini PascalCase kullan
+
+### 📜 GDScript Sihirbazı (GDScript Wizard)
+# Tetikleyiciler: "refactor", "yeniden düzenle", "dönüştür",
+#   "optimize et", "temizle", "modernize", "Godot 3"
+# Yapılacaklar:
+#   1. skills/refactor-gdscript.md ve skills/godot-refactor.md oku
+#   2. Godot 3->4 dönüşüm kurallarını uygula
+#   3. Kod kokularını tespit et ve iyileştir
+
+### ✍️ Hikaye Yazarı (Story Writer)
+# Tetikleyiciler: "hikaye", "diyalog", "senaryo", "story",
+#   "bölüm", "karar mekaniği", "event", "questions.gd"
+# Yapılacaklar:
+#   1. skills/dialogue-sequence.md oku
+#   2. Sadece assets/data/questions.gd ve docs/ klasöründe çalış
+#   3. Hikaye akışı, diyalog ve karar mekaniklerini düzenle
+
+### 🎨 Sanat Yönetmeni (Art Director)
+# Tetikleyiciler: "asset", "görsel", "svg", "png", "renk paleti",
+#   "portre", "diorama", "shader", "artwork", "resim"
+# Yapılacaklar:
+#   1. skills/art-asset.md ve skills/shader-expert.md oku
+#   2. colors.gd renk paleti ile uyum kontrolü yap
+#   3. Paper diorama stil kurallarını uygula
+
+### 🚀 Build Master (Build ve Dağıtım)
+# Tetikleyiciler: "build", "derle", "apk", "aab", "android",
+#   "export", "dağıt", "imzala", "keystore"
+# Yapılacaklar:
+#   1. skills/android-build.md oku
+#   2. Export template'leri kontrol et
+#   3. Build al ve test et
+
+## Otomatik Yükleme Prosedürü
+# Agent, yukarıdaki eşleşmelerden birini bulduğunda:
+# 1. İlgili skill dosyasını oku (skills/[rol].md)
+# 2. Rol tanımını ve kurallarını uygula
+# 3. İşlem sonunda özet çıkar
+# 4. Gerekirse sonraki adım için başka bir role yönlendir
+#    (örn: Architect planı onaylandı -> Developer'a geç)
+#
+# Eğer hiçbir eşleşme bulunamazsa varsayılan Developer rolü kullanılır.

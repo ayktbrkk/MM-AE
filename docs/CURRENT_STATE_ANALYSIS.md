@@ -19,7 +19,11 @@
 | **Overlay Sistemi** | ✅ Tam | CanvasLayer stack (50-110), 7 overlay tipi |
 | **Texture DRY** | ✅ Tam | textures.gd merkezi dosya, ~80 sabit |
 | **Performans** | ✅ İyi | _process yok (Tween+loop), mobile-friendly |
-| **Android Build** | 📝 Hazırlık | Export template gerekli |
+| **Bug (Buton)** | ✅ Fixlendi | world_zone.gd tip bazlı node bulma |
+| **Android Build** | ✅ Başarılı | builds/BandirmaYolculugu_debug.apk |
+| **E2E Test** | ✅ 22/22 | test/ klasörü, 6 test dosyası |
+| **.gitignore** | ✅ Güncel | godot_*.txt eklendi |
+| **Case Sorunu** | ✅ Çözüldü | Assets/ → assets/ |
 | **Gerçek Ses** | 📝 Eksik | .ogg dosyaları placeholder'ları değiştirecek |
 
 ### Session'da Tamamlananlar
@@ -44,6 +48,11 @@
 | **P2-13** | Exit dialog | exit_confirm_overlay.tscn + .gd |
 | **P2-14** | Loading overlay | loading_overlay.tscn + .gd, 10 history hint |
 | **✅** | Godot headless validation | 3 test, 0 hata |
+| **✅** | Bug fix: Buton çalışmıyor | world_zone.gd tip bazlı node bulma, world.gd name ataması |
+| **✅** | Teknik borç: .gitignore | godot_*.txt, decision_test_output.txt eklendi |
+| **✅** | Teknik borç: Assets/ case | git rm --cached Assets/, assets/ (küçük harf) |
+| **✅** | Android build | export_presets.cfg + debug APK (~145 MB) |
+| **✅** | E2E Test Suite | 6 dosya, 22/22 test geçti |
 
 ---
 
@@ -254,8 +263,7 @@ World (world.gd)
 
 ### Kısa Vade (Next Sprint)
 1. **Gerçek ses dosyaları** — `.ogg` formatında BGM + SFX
-2. **Android build** — Export template + keystore + APK
-3. **E2E test** — Otomatize test suite
+2. **World art upgrade** — Toca World kalitesinde SVG diorama
 
 ### Orta Vade
 4. **World art upgrade** — Toca World kalitesinde SVG diorama

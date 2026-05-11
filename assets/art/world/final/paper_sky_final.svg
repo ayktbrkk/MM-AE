@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="800" viewBox="0 0 1500 800">
+  <!-- ============================================= -->
+  <!-- Final Sky - Victory Dawn                      -->
+  <!-- Deep blue to gold sunrise gradient            -->
+  <!-- ============================================= -->
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a5c"/>
+      <stop offset="30%" stop-color="#4a7ab5"/>
+      <stop offset="55%" stop-color="#f2a65a"/>
+      <stop offset="75%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#fff8e7"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#ffd700" stop-opacity="0.60"/>
+      <stop offset="30%" stop-color="#f2a65a" stop-opacity="0.25"/>
+      <stop offset="60%" stop-color="#f2a65a" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#f2a65a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sunCore" cx="50%" cy="45%" r="20%">
+      <stop offset="0%" stop-color="#fff8e7" stop-opacity="0.80"/>
+      <stop offset="100%" stop-color="#fff8e7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Base sky gradient -->
+  <rect width="1500" height="800" fill="url(#skyGrad)"/>
+  <!-- Sun glow -->
+  <rect width="1500" height="800" fill="url(#sunGlow)"/>
+  <!-- Sun core -->
+  <rect width="1500" height="800" fill="url(#sunCore)"/>
+  <!-- Sun disk -->
+  <circle cx="750" cy="360" r="50" fill="#fff8e7" opacity="0.60"/>
+  <circle cx="750" cy="360" r="100" fill="#ffd700" opacity="0.20"/>
+  <circle cx="750" cy="360" r="180" fill="#f2a65a" opacity="0.08"/>
+  <!-- Radiant light beams -->
+  <g stroke="#fff8e7" stroke-width="3" stroke-linecap="round" opacity="0.10">
+    <path d="M750 360 L600 100"/>
+    <path d="M750 360 L900 100"/>
+    <path d="M750 360 L480 140"/>
+    <path d="M750 360 L1020 140"/>
+    <path d="M750 360 L360 200"/>
+    <path d="M750 360 L1140 200"/>
+    <path d="M750 360 L300 280"/>
+    <path d="M750 360 L1200 280"/>
+  </g>
+  <!-- Warm atmosphere layers -->
+  <path d="M0 420 C200 390 380 410 560 376 C740 342 880 360 1060 330 C1240 300 1380 318 1500 290 V800 H0Z" fill="#ffd700" opacity="0.12"/>
+  <path d="M0 480 C250 448 420 470 600 432 C780 394 940 420 1120 386 C1280 354 1400 374 1500 346 V800 H0Z" fill="#f2a65a" opacity="0.10"/>
+  <path d="M0 540 C280 508 460 534 640 492 C820 450 960 476 1140 440 C1300 406 1420 430 1500 400 V800 H0Z" fill="#d4a017" opacity="0.08"/>
+  <!-- Distant golden haze -->
+  <g fill="#ffd700" opacity="0.10">
+    <ellipse cx="450" cy="380" rx="200" ry="28"/>
+    <ellipse cx="900" cy="400" rx="240" ry="32"/>
+    <ellipse cx="1200" cy="360" rx="180" ry="24"/>
+  </g>
+  <!-- Sparkle/light motes -->
+  <g fill="#fff8e7" opacity="0.20">
+    <circle cx="350" cy="280" r="4"/>
+    <circle cx="600" cy="240" r="3"/>
+    <circle cx="850" cy="260" r="4"/>
+    <circle cx="1100" cy="220" r="3"/>
+    <circle cx="480" cy="320" r="3"/>
+    <circle cx="950" cy="300" r="4"/>
+    <circle cx="700" cy="200" r="2"/>
+    <circle cx="1300" cy="280" r="3"/>
+  </g>
+  <!-- Distant horizon band -->
+  <path d="M0 580 C300 548 500 564 700 526 C900 488 1080 510 1500 472 V800 H0Z" fill="#d4a017" opacity="0.06"/>
+</svg>

@@ -103,6 +103,8 @@ Referans görseller: [`artworks/`](artworks/) klasöründeki 3 PNG.
 | **Full Character** | 📝 Sonraki | Animasyon + ifade geçişi |
 | **Polish** | 📝 Sonraki | Partikül + ambient |
 | **Audio** | ✅ Placeholder | 13 procedural, .ogg bekliyor |
+| **Android Build** | ✅ | builds/BandirmaYolculugu_debug.apk |
+| **E2E Test** | ✅ | 22/22 test geçti |
 
 ---
 

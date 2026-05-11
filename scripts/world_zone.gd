@@ -167,16 +167,18 @@ func set_goal(kind: String, text: String) -> void:
 
 
 func _get_player_mod() -> Node:
-	"""Player modül referansını döndür."""
-	if _world.has_node("WorldPlayer"):
-		return _world.get_node("WorldPlayer")
+	"""Player modül referansını class_name tipiyle döndür."""
+	for child in _world.get_children():
+		if child is WorldPlayer:
+			return child
 	return null
 
 
 func _get_ui_mod() -> Node:
-	"""UI modül referansını döndür."""
-	if _world.has_node("WorldUI"):
-		return _world.get_node("WorldUI")
+	"""UI modül referansını class_name tipiyle döndür."""
+	for child in _world.get_children():
+		if child is WorldUI:
+			return child
 	return null
 
 

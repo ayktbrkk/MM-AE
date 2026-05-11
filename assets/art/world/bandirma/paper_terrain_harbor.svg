@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- ============================================= -->
+  <!-- Bandirma Harbor Terrain v2                   -->
+  <!-- Warm wood + gold + turquoise palette         -->
+  <!-- ============================================= -->
+  <!-- Shadow layer -->
+  <path d="M30 490 C70 360 220 310 400 330 C580 350 730 330 780 410 C810 470 770 550 680 580 C560 610 190 600 100 560 C40 530 10 500 30 490Z" fill="#1a1510" opacity="0.22"/>
+  <!-- Deep shadow -->
+  <path d="M100 460 C140 380 270 344 420 360 C570 376 670 366 720 420 C748 450 722 510 650 536 C550 566 238 558 158 526 C96 498 74 480 100 460Z" fill="#10202d" opacity="0.12"/>
+  <!-- Base terrain - warm dock wood -->
+  <path d="M40 470 C80 340 230 290 410 310 C590 330 740 310 790 390 C820 450 780 540 690 570 C570 600 200 590 110 550 C50 520 20 490 40 470Z" fill="#7a5a42"/>
+  <!-- Mid terrain - lighter sand -->
+  <path d="M110 440 C150 340 280 310 420 330 C560 350 680 340 736 400 C766 438 736 506 664 534 C554 562 238 554 154 518 C96 490 76 466 110 440Z" fill="#dab679"/>
+  <!-- Accent layer - golden hour glow -->
+  <path d="M190 440 C230 376 340 354 440 376 C540 398 600 408 648 450 C676 478 652 520 592 542 C498 566 294 558 224 526 C170 502 154 474 190 440Z" fill="#e8a84c" opacity="0.34"/>
+  <!-- Inner water reflection -->
+  <path d="M480 350 C546 362 650 364 730 398" fill="none" stroke="#438a87" stroke-width="10" stroke-linecap="round" opacity="0.22"/>
+  <path d="M510 370 C570 382 662 384 738 412" fill="none" stroke="#5a9e9b" stroke-width="8" stroke-linecap="round" opacity="0.18"/>
+  <!-- Dock plank texture lines -->
+  <path d="M120 480 C180 450 270 430 370 440 C470 450 556 456 612 482" fill="none" stroke="#5b3f2f" stroke-width="6" stroke-linecap="round" opacity="0.28"/>
+  <path d="M144 506 C206 476 306 458 416 468 C526 478 600 492 648 518" fill="none" stroke="#5b3f2f" stroke-width="6" stroke-linecap="round" opacity="0.24"/>
+  <path d="M168 528 C234 500 340 484 456 494 C572 504 638 520 680 544" fill="none" stroke="#5b3f2f" stroke-width="5" stroke-linecap="round" opacity="0.18"/>
+  <!-- Outline -->
+  <path d="M40 470 C80 340 230 290 410 310 C590 330 740 310 790 390 C820 450 780 540 690 570 C570 600 200 590 110 550 C50 520 20 490 40 470Z" fill="none" stroke="#2b2730" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Harbor decorative dots -->
+  <g fill="#f2be63" opacity="0.32">
+    <circle cx="180" cy="410" r="9"/>
+    <circle cx="620" cy="430" r="11"/>
+    <circle cx="380" cy="520" r="7"/>
+    <circle cx="520" cy="500" r="8"/>
+  </g>
+  <!-- Turquoise sparkles -->
+  <g fill="#8bd3dc" opacity="0.28">
+    <circle cx="460" cy="360" r="6"/>
+    <circle cx="680" cy="420" r="5"/>
+    <circle cx="700" cy="480" r="4"/>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="760" viewBox="0 0 900 760">
+  <g opacity=".76">
+    <ellipse cx="444" cy="674" rx="42" ry="12" fill="#1a2a3a" opacity=".13"/>
+    <ellipse cx="482" cy="596" rx="34" ry="10" fill="#1a2a3a" opacity=".12"/>
+    <ellipse cx="438" cy="516" rx="30" ry="9" fill="#1a2a3a" opacity=".11"/>
+    <ellipse cx="492" cy="436" rx="28" ry="8" fill="#1a2a3a" opacity=".10"/>
+    <ellipse cx="426" cy="356" rx="24" ry="7" fill="#1a2a3a" opacity=".10"/>
+    <ellipse cx="520" cy="282" rx="22" ry="7" fill="#1a2a3a" opacity=".10"/>
+    <ellipse cx="382" cy="276" rx="22" ry="7" fill="#1a2a3a" opacity=".09"/>
+    <ellipse cx="314" cy="332" rx="20" ry="6" fill="#1a2a3a" opacity=".08"/>
+    <ellipse cx="604" cy="330" rx="20" ry="6" fill="#1a2a3a" opacity=".08"/>
+  </g>
+  <g stroke="#5b3f2f" stroke-width="4" stroke-linecap="round" opacity=".28">
+    <path d="M444 668 C478 614 442 560 438 516 C434 470 506 466 492 436 C474 396 408 404 426 356 C438 324 514 314 520 282"/>
+    <path d="M426 356 C386 344 344 344 314 332"/>
+    <path d="M492 436 C534 392 572 360 604 330"/>
+  </g>
+  <g fill="#f8e9c6" stroke="#7b5a3d" stroke-width="5" opacity=".92">
+    <path d="M404 646 L472 634 L498 672 L452 704 L390 690Z"/>
+    <path d="M450 574 L504 562 L526 594 L486 622 L432 610Z"/>
+    <path d="M412 494 L462 482 L480 514 L442 540 L394 528Z"/>
+    <path d="M464 414 L512 402 L530 432 L494 458 L448 446Z"/>
+    <path d="M400 336 L444 326 L462 354 L428 378 L386 366Z"/>
+    <path d="M496 262 L536 252 L554 278 L522 300 L482 290Z"/>
+    <path d="M360 258 L398 250 L414 274 L384 294 L348 286Z"/>
+    <path d="M294 314 L326 306 L342 328 L316 348 L284 340Z"/>
+    <path d="M586 312 L622 304 L638 328 L610 348 L574 340Z"/>
+  </g>
+  <g fill="#47b2c2" opacity=".54">
+    <circle cx="452" cy="670" r="7"/>
+    <circle cx="486" cy="592" r="6"/>
+    <circle cx="440" cy="514" r="5"/>
+    <circle cx="494" cy="430" r="5"/>
+    <circle cx="426" cy="354" r="5"/>
+    <circle cx="522" cy="278" r="5"/>
+  </g>
+</svg>

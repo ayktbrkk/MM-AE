@@ -1,0 +1,266 @@
+# =============================================
+# OTOMATİK ROL DAĞITIM TABLOSU
+# =============================================
+# Bu dosya, anahtar kelimelere göre hangi rolün ve skill'in
+# devreye gireceğini tanımlar.
+# 
+# Kullanım: Agent, kullanıcının mesajını bu tabloyla eşleştirir
+# ve uygun skill dosyasını otomatik yükler.
+# =============================================
+
+roles:
+  architect:
+    display: "🏗️ Architect"
+    slug: "architect"
+    description: "Sistem tasarımı ve planlama"
+    default_skill: "skills/architect-workflow.md"
+    triggers:
+      keywords:
+        - "planla"
+        - "tasarım"
+        - "mimari"
+        - "node tree"
+        - "sistem tasarımı"
+        - "akış şeması"
+        - "signal akışı"
+        - "gereksinim analizi"
+        - "proje planı"
+      patterns:
+        - "şu özelliği planla"
+        - "nasıl tasarlamalıyım"
+        - "mimari karar"
+
+  debug:
+    display: "🪲 Debug"
+    slug: "debug"
+    description: "Sistematik hata ayıklama"
+    default_skill: "skills/debug-workflow.md"
+    triggers:
+      keywords:
+        - "hata"
+        - "çalışmıyor"
+        - "debug"
+        - "bug"
+        - "broken"
+        - "patlak"
+        - "düzelt"
+        - "sorun"
+        - "problem"
+        - "exception"
+        - "crash"
+        - "donma"
+        - "null"
+      patterns:
+        - "şu özellik çalışmıyor"
+        - "hata var"
+        - "neden olmuyor"
+
+  developer:
+    display: "💻 Developer"
+    slug: "developer"
+    description: "Test-first GDScript geliştirme"
+    default_skill: "skills/implement.md"
+    is_default: true  # Hiçbir eşleşme yoksa bu kullanılır
+    triggers:
+      keywords:
+        - "yaz"
+        - "kod"
+        - "implement et"
+        - "ekle"
+        - "oluştur"
+        - "geliştir"
+        - "yap"
+        - "function"
+        - "script"
+        - "class"
+        - "değişken"
+        - "fonksiyon"
+      patterns:
+        - "şu özelliği implement et"
+        - "şu kodu yaz"
+
+  tech-lead:
+    display: "👑 Tech Lead"
+    slug: "tech-lead"
+    description: "Kod review ve standart denetimi"
+    default_skill: ""  # .clinerules standartlarını kullanır
+    triggers:
+      keywords:
+        - "review"
+        - "gözden geçir"
+        - "denetle"
+        - "kalite kontrol"
+        - "standart"
+        - "code review"
+        - "incele"
+      patterns:
+        - "kodu gözden geçir"
+        - "standartları denetle"
+
+  qa-specialist:
+    display: "🧪 QA Specialist"
+    slug: "qa-specialist"
+    description: "Test ve kalite güvence"
+    default_skill: "skills/debug-workflow.md"
+    triggers:
+      keywords:
+        - "test et"
+        - "kalite kontrol"
+        - "regression"
+        - "performans testi"
+        - "doğrula"
+        - "validate"
+        - "quality"
+      patterns:
+        - "test yap"
+        - "kaliteyi kontrol et"
+
+  scene-designer:
+    display: "🏗️ Sahne Tasarımcısı"
+    slug: "scene-designer"
+    description: ".tscn sahne ve UI tasarımı"
+    default_skill: "skills/ui-auto-layout.md"
+    triggers:
+      keywords:
+        - "sahne tasarla"
+        - "ui tasarla"
+        - "scene"
+        - "tscn"
+        - "layout"
+        - "container"
+        - "tema"
+        - "theme"
+        - "panel tasarla"
+        - "overlay"
+      patterns:
+        - "şu sahneyi düzenle"
+        - "şu ui'ı tasarla"
+
+  gdscript-wizard:
+    display: "📜 GDScript Sihirbazı"
+    slug: "gdscript-wizard"
+    description: "Kod refactoring ve modernizasyon"
+    default_skill: "skills/refactor-gdscript.md"
+    secondary_skills:
+      - "skills/godot-refactor.md"
+    triggers:
+      keywords:
+        - "refactor"
+        - "yeniden düzenle"
+        - "dönüştür"
+        - "optimize et"
+        - "temizle"
+        - "modernize"
+        - "Godot 3"
+        - "kod kokusu"
+        - "iyileştir"
+      patterns:
+        - "kodu refactor et"
+        - "Godot 3'ten 4'e dönüştür"
+
+  story-writer:
+    display: "✍️ Hikaye Yazarı"
+    slug: "story-writer"
+    description: "Hikaye, diyalog ve karar mekanikleri"
+    default_skill: "skills/dialogue-sequence.md"
+    secondary_skills:
+      - "skills/new-chapter.md"
+      - "skills/new-decision.md"
+      - "skills/new-scene.md"
+    triggers:
+      keywords:
+        - "hikaye"
+        - "diyalog"
+        - "senaryo"
+        - "story"
+        - "bölüm"
+        - "karar mekaniği"
+        - "event"
+        - "questions.gd"
+        - "konuşma"
+      patterns:
+        - "şu hikayeyi yaz"
+        - "yeni bölüm ekle"
+        - "yeni karar ekle"
+
+  art-director:
+    display: "🎨 Sanat Yönetmeni"
+    slug: "art-director"
+    description: "Görsel asset ve tasarım yönetimi"
+    default_skill: "skills/art-asset.md"
+    secondary_skills:
+      - "skills/shader-expert.md"
+    triggers:
+      keywords:
+        - "asset"
+        - "görsel"
+        - "svg"
+        - "png"
+        - "renk paleti"
+        - "portre"
+        - "diorama"
+        - "shader"
+        - "artwork"
+        - "resim"
+        - "illustrasyon"
+      patterns:
+        - "yeni asset ekle"
+        - "şu görseli düzenle"
+        - "renk paletini güncelle"
+
+  build-master:
+    display: "🚀 Build Master"
+    slug: "build-master"
+    description: "Android build ve dağıtım"
+    default_skill: "skills/android-build.md"
+    triggers:
+      keywords:
+        - "build"
+        - "derle"
+        - "apk"
+        - "aab"
+        - "android"
+        - "export"
+        - "dağıt"
+        - "imzala"
+        - "keystore"
+        - "release"
+      patterns:
+        - "build al"
+        - "android'e dağıt"
+        - "apk hazırla"
+
+# =============================================
+# ÇALIŞMA AKIŞI OTOMASYONU
+# =============================================
+# Bazı görevler birden fazla rolü zincirleme gerektirir.
+# Aşağıdaki workflow'lar otomatik rol geçişlerini tanımlar.
+
+workflows:
+  new_feature:
+    name: "Yeni Özellik Ekleme"
+    steps:
+      - role: architect
+        task: "Gereksinim analizi ve sistem tasarımı"
+      - role: developer
+        task: "Test-first implementasyon"
+      - role: tech-lead
+        task: "Kod review ve standart denetimi"
+
+  bugfix:
+    name: "Hata Düzeltme"
+    steps:
+      - role: debug
+        task: "Hata tespiti ve analizi"
+      - role: developer
+        task: "Düzeltme implementasyonu"
+      - role: qa-specialist
+        task: "Regression test"
+
+  release:
+    name: "Sürüm Hazırlama"
+    steps:
+      - role: qa-specialist
+        task: "Son test ve kalite kontrol"
+      - role: build-master
+        task: "Build alma ve dağıtım"

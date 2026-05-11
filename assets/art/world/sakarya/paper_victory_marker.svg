@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- ============================================= -->
+  <!-- Sakarya Victory Marker v1                     -->
+  <!-- Büyük Taarruz zafer sembolü                   -->
+  <!-- Colors: #8b2500, #d4694a, #f2be63             -->
+  <!-- Outline: #3c2a1e stroke-width 6              -->
+  <!-- ============================================= -->
+  <!-- Shadow -->
+  <ellipse cx="100" cy="185" rx="70" ry="12" fill="#0a0a1a" opacity="0.20"/>
+  <!-- Stone base / pedestal -->
+  <rect x="70" y="150" width="60" height="30" rx="3" fill="#6b4423" stroke="#3c2a1e" stroke-width="5"/>
+  <rect x="64" y="140" width="72" height="14" rx="2" fill="#8b7355" stroke="#3c2a1e" stroke-width="5"/>
+  <!-- Pillar -->
+  <rect x="86" y="60" width="28" height="80" rx="2" fill="#d2b48c" stroke="#3c2a1e" stroke-width="5"/>
+  <!-- Pillar decorative band -->
+  <rect x="82" y="90" width="36" height="6" fill="#c84b3d" stroke="#3c2a1e" stroke-width="3"/>
+  <!-- Star of victory -->
+  <polygon points="100,12 106,28 124,30 110,44 114,62 100,52 86,62 90,44 76,30 94,28" fill="#f2be63" stroke="#3c2a1e" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Star inner glow -->
+  <polygon points="100,18 104,30 116,32 106,42 108,54 100,48 92,54 94,42 84,32 96,30" fill="#d4694a" opacity="0.30"/>
+  <!-- Laurel wreath left -->
+  <g stroke="#6b4423" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.40">
+    <path d="M76 60 C60 50 48 42 40 52"/>
+    <path d="M72 66 C56 58 44 52 36 60"/>
+    <path d="M68 72 C52 66 40 62 32 68"/>
+  </g>
+  <!-- Laurel wreath right -->
+  <g stroke="#6b4423" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.40">
+    <path d="M124 60 C140 50 152 42 160 52"/>
+    <path d="M128 66 C144 58 156 52 164 60"/>
+    <path d="M132 72 C148 66 160 62 168 68"/>
+  </g>
+  <!-- Gold accent dots -->
+  <g fill="#f2be63" opacity="0.22">
+    <circle cx="100" cy="170" r="5"/>
+    <circle cx="88" cy="75" r="3"/>
+    <circle cx="112" cy="75" r="3"/>
+    <circle cx="100" cy="110" r="3"/>
+  </g>
+  <!-- Small sparkles around star -->
+  <g fill="#fff8e7" opacity="0.18">
+    <circle cx="130" cy="18" r="3"/>
+    <circle cx="70" cy="18" r="3"/>
+    <circle cx="100" cy="6" r="2"/>
+    <circle cx="140" cy="36" r="2"/>
+    <circle cx="60" cy="36" r="2"/>
+  </g>
+</svg>

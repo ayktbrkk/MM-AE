@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="360" viewBox="0 0 1160 360">
+  <path d="M0 264 C120 230 246 244 360 216 C490 184 608 202 736 176 C884 146 1010 172 1160 138 V360 H0Z" fill="#355d78" opacity=".18"/>
+  <path d="M0 292 C144 250 262 276 388 240 C526 202 644 232 778 202 C912 172 1020 198 1160 172 V360 H0Z" fill="#20344f" opacity=".14"/>
+  <g transform="translate(72 128)" opacity=".88">
+    <ellipse cx="504" cy="176" rx="520" ry="28" fill="#1a2a3a" opacity=".13"/>
+    <g stroke="#7a5a42" stroke-width="6" stroke-linejoin="round">
+      <path d="M34 112 H112 V170 H34Z" fill="#f5e8d3"/>
+      <path d="M50 78 H96 L120 112 H28Z" fill="#e89863"/>
+      <path d="M146 96 H228 V170 H146Z" fill="#f8e9c6"/>
+      <path d="M158 64 H214 L238 98 H136Z" fill="#47b2c2"/>
+      <path d="M266 82 H332 V170 H266Z" fill="#f7e3b2"/>
+      <path d="M276 54 H320 L344 84 H252Z" fill="#c9473d"/>
+      <path d="M374 104 H466 V170 H374Z" fill="#f5e8d3"/>
+      <path d="M388 70 H450 L482 106 H358Z" fill="#e8c55a"/>
+      <path d="M508 88 H586 V170 H508Z" fill="#f8e9c6"/>
+      <path d="M518 58 H574 L602 90 H490Z" fill="#47b2c2"/>
+      <path d="M634 106 H718 V170 H634Z" fill="#f7e3b2"/>
+      <path d="M648 72 H704 L730 108 H622Z" fill="#e89863"/>
+      <path d="M764 92 H846 V170 H764Z" fill="#f5e8d3"/>
+      <path d="M776 60 H832 L860 94 H748Z" fill="#c9473d"/>
+      <path d="M898 112 H986 V170 H898Z" fill="#f8e9c6"/>
+      <path d="M910 78 H970 L1000 114 H880Z" fill="#e8c55a"/>
+    </g>
+    <g fill="#20344f" opacity=".28">
+      <rect x="58" y="130" width="12" height="16" rx="3"/>
+      <rect x="84" y="130" width="12" height="16" rx="3"/>
+      <rect x="172" y="122" width="12" height="18" rx="3"/>
+      <rect x="202" y="122" width="12" height="18" rx="3"/>
+      <rect x="286" y="116" width="12" height="18" rx="3"/>
+      <rect x="414" y="130" width="12" height="16" rx="3"/>
+      <rect x="536" y="118" width="12" height="18" rx="3"/>
+      <rect x="672" y="132" width="12" height="16" rx="3"/>
+      <rect x="794" y="120" width="12" height="18" rx="3"/>
+      <rect x="936" y="132" width="12" height="16" rx="3"/>
+    </g>
+    <path d="M22 170 H1010" stroke="#fff8d9" stroke-width="12" stroke-linecap="round" opacity=".28"/>
+  </g>
+  <g stroke="#fff8d9" stroke-width="5" stroke-linecap="round" opacity=".36">
+    <path d="M220 92 H310"/>
+    <path d="M710 78 H806"/>
+    <path d="M890 108 H1040"/>
+  </g>
+</svg>

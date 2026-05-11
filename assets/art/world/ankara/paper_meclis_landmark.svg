@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- ============================================= -->
+  <!-- TBMM (Turkish Grand National Assembly) v1    -->
+  <!-- Ankara Meclis Binası - paper cutout style     -->
+  <!-- Colors: #8b4513, #d2b48c, #ffffff, #c84b3d   -->
+  <!-- Outline: #5c4033 stroke-width 8-12           -->
+  <!-- ============================================= -->
+  <!-- Ground shadow -->
+  <ellipse cx="300" cy="375" rx="260" ry="22" fill="#1a2a3a" opacity="0.15"/>
+  <!-- Building base / entrance steps -->
+  <path d="M120 340 H480 V360 H120Z" fill="#d2b48c" stroke="#5c4033" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M150 320 H450 V340 H150Z" fill="#f5e8d3" stroke="#5c4033" stroke-width="6" stroke-linejoin="round"/>
+  <!-- Main building body -->
+  <rect x="160" y="170" width="280" height="150" fill="#d2b48c" stroke="#5c4033" stroke-width="8"/>
+  <!-- Upper wall section (white/cream) -->
+  <rect x="180" y="160" width="240" height="90" fill="#f5e8d3" stroke="#5c4033" stroke-width="6"/>
+  <!-- Main entrance door -->
+  <rect x="268" y="250" width="64" height="70" rx="32" fill="#5b3f2f" stroke="#5c4033" stroke-width="5"/>
+  <rect x="268" y="270" width="64" height="50" fill="#5b3f2f"/>
+  <!-- Door arch detail -->
+  <path d="M276 250 C276 236 324 236 324 250" fill="none" stroke="#f2be63" stroke-width="3" stroke-linecap="round" opacity="0.40"/>
+  <!-- Side windows (left) -->
+  <rect x="188" y="238" width="28" height="40" rx="14" fill="#8bd3dc" stroke="#5c4033" stroke-width="4" opacity="0.50"/>
+  <line x1="202" y1="238" x2="202" y2="278" stroke="#5c4033" stroke-width="3" opacity="0.30"/>
+  <!-- Side windows (right) -->
+  <rect x="384" y="238" width="28" height="40" rx="14" fill="#8bd3dc" stroke="#5c4033" stroke-width="4" opacity="0.50"/>
+  <line x1="398" y1="238" x2="398" y2="278" stroke="#5c4033" stroke-width="3" opacity="0.30"/>
+  <!-- Upper windows -->
+  <rect x="210" y="178" width="22" height="32" rx="11" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <rect x="248" y="178" width="22" height="32" rx="11" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <rect x="330" y="178" width="22" height="32" rx="11" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <rect x="368" y="178" width="22" height="32" rx="11" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <!-- Decorative horizontal band -->
+  <rect x="180" y="220" width="240" height="6" fill="#8b4513" stroke="#5c4033" stroke-width="3"/>
+  <rect x="180" y="230" width="240" height="6" fill="#c84b3d" stroke="#5c4033" stroke-width="3" opacity="0.60"/>
+  <!-- Roof -->
+  <path d="M150 170 L300 90 L450 170Z" fill="#8b4513" stroke="#5c4033" stroke-width="10" stroke-linejoin="round"/>
+  <!-- Roof tile lines -->
+  <path d="M200 148 L400 148" fill="none" stroke="#5c4033" stroke-width="3" stroke-linejoin="round" opacity="0.30"/>
+  <path d="M170 162 L430 162" fill="none" stroke="#5c4033" stroke-width="3" stroke-linejoin="round" opacity="0.30"/>
+  <!-- Chimney -->
+  <rect x="370" y="60" width="24" height="50" fill="#8b4513" stroke="#5c4033" stroke-width="6"/>
+  <rect x="366" y="56" width="32" height="10" fill="#5c4033" stroke="#5c4033" stroke-width="4"/>
+  <!-- Chimney smoke wisps -->
+  <g fill="none" stroke="#d4c5a9" stroke-width="4" stroke-linecap="round" opacity="0.20">
+    <path d="M382 56 C386 42 394 36 398 26"/>
+    <path d="M388 56 C394 40 402 34 408 22"/>
+  </g>
+  <!-- Flag pole -->
+  <line x1="300" y1="90" x2="300" y2="38" stroke="#5b3f2f" stroke-width="6" stroke-linecap="round"/>
+  <!-- Turkish flag -->
+  <rect x="304" y="42" width="44" height="28" rx="2" fill="#c84b3d" stroke="#5c4033" stroke-width="4"/>
+  <!-- Flag crescent -->
+  <path d="M326 52 C332 46 346 46 350 52 C354 58 344 60 340 60 C336 60 322 56 326 52Z" fill="#fff8e7"/>
+  <circle cx="342" cy="53" r="2.5" fill="#c84b3d"/>
+  <!-- Flag star -->
+  <polygon points="332,48 334,52 338,52 335,55 336,59 332,57 328,59 329,55 326,52 330,52" fill="#fff8e7"/>
+  <!-- Side extensions - left wing -->
+  <rect x="110" y="210" width="50" height="110" fill="#d2b48c" stroke="#5c4033" stroke-width="6"/>
+  <rect x="120" y="240" width="18" height="28" rx="9" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <rect x="134" y="240" width="18" height="28" rx="9" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <!-- Side extensions - right wing -->
+  <rect x="440" y="210" width="50" height="110" fill="#d2b48c" stroke="#5c4033" stroke-width="6"/>
+  <rect x="448" y="240" width="18" height="28" rx="9" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <rect x="462" y="240" width="18" height="28" rx="9" fill="#8bd3dc" stroke="#5c4033" stroke-width="3" opacity="0.40"/>
+  <!-- Front columns -->
+  <g fill="#f5e8d3" stroke="#5c4033" stroke-width="4">
+    <rect x="200" y="232" width="16" height="88" rx="3"/>
+    <rect x="236" y="232" width="16" height="88" rx="3"/>
+    <rect x="348" y="232" width="16" height="88" rx="3"/>
+    <rect x="384" y="232" width="16" height="88" rx="3"/>
+  </g>
+  <!-- Column capitals -->
+  <g fill="#d2b48c" stroke="#5c4033" stroke-width="3">
+    <rect x="196" y="228" width="24" height="8" rx="2"/>
+    <rect x="232" y="228" width="24" height="8" rx="2"/>
+    <rect x="344" y="228" width="24" height="8" rx="2"/>
+    <rect x="380" y="228" width="24" height="8" rx="2"/>
+  </g>
+  <!-- Gold accent dots -->
+  <g fill="#f2be63" opacity="0.24">
+    <circle cx="300" cy="84" r="5"/>
+    <circle cx="180" cy="360" r="7"/>
+    <circle cx="420" cy="360" r="7"/>
+    <circle cx="300" cy="370" r="6"/>
+    <circle cx="130" cy="320" r="5"/>
+    <circle cx="470" cy="320" r="5"/>
+  </g>
+</svg>

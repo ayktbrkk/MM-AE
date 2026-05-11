@@ -1,0 +1,198 @@
+{
+  "characters.arda_portrait_idle": {
+    "target_folder": "assets/art/characters/arda",
+    "description": "Arda idle dialogue portrait for the first validated loop."
+  },
+  "characters.arda_portrait_thinking": {
+    "target_folder": "assets/art/characters/arda",
+    "description": "Arda thinking or hesitating portrait for decision feedback."
+  },
+  "characters.arda_portrait_happy": {
+    "target_folder": "assets/art/characters/arda",
+    "description": "Arda happy or relieved portrait for reward feedback."
+  },
+  "characters.eda_portrait_idle": {
+    "target_folder": "assets/art/characters/eda",
+    "description": "Eda idle dialogue portrait for the first validated loop."
+  },
+  "characters.eda_portrait_thinking": {
+    "target_folder": "assets/art/characters/eda",
+    "description": "Eda analytical thinking portrait for hints and decision feedback."
+  },
+  "characters.eda_portrait_happy": {
+    "target_folder": "assets/art/characters/eda",
+    "description": "Eda happy or satisfied portrait for reward feedback."
+  },
+  "room.study_book": {
+    "target_folder": "assets/art/world/room",
+    "description": "Open history textbook on the desk; should glow softly as the dream portal source."
+  },
+  "room.tablet": {
+    "target_folder": "assets/art/world/room",
+    "description": "Modern tablet/game device; contrasts with the history book."
+  },
+  "room.lamp": {
+    "target_folder": "assets/art/world/room",
+    "description": "Warm desk lamp or bedside reading light."
+  },
+  "room.book_portal": {
+    "target_folder": "assets/art/fx",
+    "description": "Dream portal effect emerging from the book."
+  },
+  "ship.map_table": {
+    "target_folder": "assets/art/world/ship",
+    "description": "Bandirma map table with route marks for Samsun, Havza, Amasya, and Ankara."
+  },
+  "ship.uniform_stand": {
+    "target_folder": "assets/art/world/ship",
+    "description": "Child-scaled historical uniform/accessory stand."
+  },
+  "ship.compass": {
+    "target_folder": "assets/art/world/ship",
+    "description": "Compass or navigation prop on deck."
+  },
+  "ship.dock_glow": {
+    "target_folder": "assets/art/world/ship",
+    "description": "Samsun harbor glow/dock arrival landmark."
+  },
+  "samsun.rift_core": {
+    "target_folder": "assets/art/fx",
+    "description": "Blue time-rift core for the forgiving strategy layer."
+  },
+  "samsun.harbor_node": {
+    "target_folder": "assets/art/world/samsun",
+    "description": "Harbor support node."
+  },
+  "samsun.telegraph_node": {
+    "target_folder": "assets/art/world/samsun",
+    "description": "Telegraph support node."
+  },
+  "samsun.people_node": {
+    "target_folder": "assets/art/world/samsun",
+    "description": "People/civic support node."
+  },
+  "havza.notice_board": {
+    "target_folder": "assets/art/world/havza",
+    "description": "Notice board for Havza Genelgesi."
+  },
+  "havza.telegraph_table": {
+    "target_folder": "assets/art/world/havza",
+    "description": "Telegraph desk or communication prop."
+  },
+  "havza.town_square": {
+    "target_folder": "assets/art/world/havza",
+    "description": "Town square gathering point."
+  },
+  "amasya.meeting_table": {
+    "target_folder": "assets/art/world/amasya",
+    "description": "Meeting table for shared decision-making."
+  },
+  "amasya.statement_draft": {
+    "target_folder": "assets/art/world/amasya",
+    "description": "Amasya statement draft paper prop."
+  },
+  "amasya.river_marker": {
+    "target_folder": "assets/art/world/amasya",
+    "description": "Soft river or route marker for Amasya composition."
+  },
+  "kongre.delegate_table": {
+    "target_folder": "assets/art/world/kongre",
+    "description": "Delegate table for congress scenes."
+  },
+  "kongre.unity_stage": {
+    "target_folder": "assets/art/world/kongre",
+    "description": "Unity stage or shared-decision focal prop."
+  },
+  "kongre.shared_goal_banner": {
+    "target_folder": "assets/art/world/kongre",
+    "description": "Shared goal banner for congress unity theme."
+  },
+  "world_tiles.diorama_ground_blob": {
+    "target_folder": "assets/art/world/world_tiles",
+    "description": "Large soft terrain plates for modular historical diorama areas."
+  },
+  "world_tiles.paper_path": {
+    "target_folder": "assets/art/world/world_tiles",
+    "description": "Readable main route ribbon art for portrait open-world movement."
+  },
+  "world_props.foreground_frame": {
+    "target_folder": "assets/art/world/world_props",
+    "description": "Foreground edge silhouettes that add depth without blocking the player."
+  },
+  "world_props.prop_cluster": {
+    "target_folder": "assets/art/world/world_props",
+    "description": "Small themed prop clusters around discovery and companion reaction moments."
+  },
+  "landmarks.historical_landmark": {
+    "target_folder": "assets/art/world/landmarks",
+    "description": "Large educational focal landmark for each historical unit."
+  },
+  "interactables.strategy_node": {
+    "target_folder": "assets/art/world/interactables",
+    "description": "Clean support/build/wave node art with a readable halo."
+  },
+  "interactables.companion_reaction_spot": {
+    "target_folder": "assets/art/world/interactables",
+    "description": "Subtle visual cue for short Arda/Eda contextual observations."
+  },
+  "fx.rift_focus_ring": {
+    "target_folder": "assets/art/fx",
+    "description": "Dream-rift active objective ring for decision and support nodes."
+  },
+  "samsun.harbor_landmark": {
+    "target_folder": "assets/art/world/landmarks/samsun",
+    "description": "Stylized Samsun harbor/dock landmark."
+  },
+  "samsun.telegraph_landmark": {
+    "target_folder": "assets/art/world/landmarks/samsun",
+    "description": "Stylized telegraph route or station landmark."
+  },
+  "samsun.people_landmark": {
+    "target_folder": "assets/art/world/landmarks/samsun",
+    "description": "Civic gathering square landmark for the people support node."
+  },
+  "sky.bandirma": {
+    "target_folder": "assets/art/world/bandirma",
+    "description": "Foggy harbor night sky with moon glow, warm earth layers, distant ship lights."
+  },
+  "sky.samsun": {
+    "target_folder": "assets/art/world/samsun",
+    "description": "Dawn arrival sky with golden sunrise, rift sparkles, turquoise gradient."
+  },
+  "sky.havza": {
+    "target_folder": "assets/art/world/havza",
+    "description": "Earthy dry afternoon sky with dust atmosphere, olive tan gradient."
+  },
+  "sky.amasya": {
+    "target_folder": "assets/art/world/amasya",
+    "description": "Deep navy evening sky with crescent moon, stars, distant mountain silhouettes."
+  },
+  "sky.congress": {
+    "target_folder": "assets/art/world/congress",
+    "description": "Dramatic crimson and navy sunset sky with cloud bands, sun rays, distant flag silhouettes."
+  },
+  "collectibles.star_token": {
+    "target_folder": "assets/art/world/collectibles",
+    "description": "Gold knowledge star token with cream paper body, 5-point shape, sparkle accents."
+  },
+  "collectibles.chapter_badge": {
+    "target_folder": "assets/art/world/collectibles",
+    "description": "Historical chapter badge with crimson outer ring, cream inner ring, gold center star, ribbon."
+  },
+  "collectibles.knowledge_orb": {
+    "target_folder": "assets/art/world/collectibles",
+    "description": "Rift blue energy orb with outer glow, inner rings, sparkle reflections, energy lines."
+  },
+  "effects.sparkle_burst": {
+    "target_folder": "assets/art/world/effects",
+    "description": "Collection sparkle burst with 8-point star rays, outer glow ring, sparkle dots."
+  },
+  "effects.pulse_ring": {
+    "target_folder": "assets/art/world/effects",
+    "description": "Marker pulse ring with concentric rings, cardinal accent dots, core dot."
+  },
+  "effects.path_glow": {
+    "target_folder": "assets/art/world/effects",
+    "description": "Path glow highlight with layered ellipses, core path segment, sparkle dots."
+  }
+}

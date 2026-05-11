@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="520" viewBox="0 0 520 520">
+  <rect width="520" height="520" rx="80" fill="#f5e8d3"/>
+  <circle cx="260" cy="254" r="206" fill="#9dd3c8" opacity=".24"/>
+  <path d="M150 214 C148 132 208 84 270 88 C342 92 386 148 378 226 C370 302 322 350 258 350 C194 350 152 294 150 214Z" fill="#2b2730"/>
+  <circle cx="262" cy="230" r="116" fill="#d99b72" stroke="#2b2730" stroke-width="14"/>
+  <path d="M166 214 C206 142 306 124 360 182 C324 176 292 154 250 164 C212 174 190 202 166 214Z" fill="#2b2730"/>
+  <path d="M198 236 Q226 226 252 238" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
+  <path d="M280 238 Q306 226 334 236" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
+  <path d="M238 292 Q268 276 304 292" fill="none" stroke="#7a3f32" stroke-width="9" stroke-linecap="round"/>
+  <path d="M130 458 C156 366 202 332 264 332 C330 332 376 372 404 458Z" fill="#438a87" stroke="#2b2730" stroke-width="14"/>
+  <path d="M356 126 C402 100 436 132 422 170 C414 194 388 202 366 190" fill="none" stroke="#47b2c2" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="362" cy="224" r="12" fill="#47b2c2"/>
+  <text x="260" y="494" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2b2730">EDA</text>
+</svg>

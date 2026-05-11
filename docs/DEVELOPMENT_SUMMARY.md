@@ -1,8 +1,8 @@
 # Bandırma Yolculuğu — Geliştirme Özeti
 
-## Session: UI Improvements → Full Content & Audio (2026-05-10/11)
+## Session: Full Content, Audio, Build & Test (2026-05-10/11)
 
-Bu session'da 3 ana dalgada ilerleme kaydedildi:
+Bu session'da 7 ana dalgada ilerleme kaydedildi:
 
 | Dalga | Kapsam | Durum |
 |-------|--------|-------|
@@ -10,6 +10,10 @@ Bu session'da 3 ana dalgada ilerleme kaydedildi:
 | **P1** | Texture DRY, world.gd modularizasyon, OverlayManager, Event routing, 3 eksik builder, Ses sistemi | ✅ Tamam |
 | **P2** | Empty _process cleanup, DRY icons, SVG opt., settings audio, exit dialog, loading overlay | ✅ Tamam |
 | **Doğrulama** | Godot headless: 3 test, 0 hata | ✅ Tamam |
+| **Bug Fix** | InteractButton ("topla/aç") çalışmıyor — tip bazlı node bulma | ✅ Tamam |
+| **Teknik Borç** | .gitignore + Assets/ case fix | ✅ Tamam |
+| **Android Build** | APK başarıyla oluşturuldu (builds/BandirmaYolculugu_debug.apk) | ✅ Tamam |
+| **E2E Test** | 22/22 test geçti (test/ klasörü) | ✅ Tamam |
 
 ---
 
@@ -103,16 +107,40 @@ Her bölüm için: 5-6 SVG asset + 11 builder fonksiyonu (`build_zone_*` pattern
 - **API:** `play_bgm()`, `play_sfx()`, `stop_bgm()`, `set_bgm_volume()`, `set_sfx_volume()`
 - **Bağlantılar:** main_menu.gd, world_ui.gd (dialogue/decision/info_card/chapter_transition)
 
-### 9. Godot Headless Doğrulama
+### 9. P0 Bug Fix — InteractButton Çalışmıyor
+
+**Kök neden:** `world_zone.gd`'deki `_get_player_mod()` ve `_get_ui_mod()` fonksiyonları `has_node("WorldPlayer")` ile node arıyordu ama programatik oluşturulan modüllere Godot 4'te isim atanmıyordu.
+
+**Çözüm:**
+- [`scripts/world_zone.gd`](scripts/world_zone.gd) — Tip bazlı arama (`child is WorldPlayer`)
+- [`scripts/world.gd`](scripts/world.gd) — Açık `name` ataması (`_player_mod.name = "WorldPlayer"`)
+
+### 10. Teknik Borç — .gitignore + Assets/ Case Fix
+- `.gitignore`'a `godot_*.txt` ve `decision_test_output.txt` eklendi
+- `git rm -r --cached Assets/` ile Assets/ Git'ten kaldırıldı
+- Tüm dosyalar `assets/` (küçük harf) olarak yeniden eklendi
+
+### 11. Android Build
+- [`export_presets.cfg`](export_presets.cfg) oluşturuldu
+- `builds/BandirmaYolculugu_debug.apk` (~145 MB) başarıyla oluşturuldu
+- `project.godot` — ETC2/ASTC vram compression ayarı eklendi
+
+### 12. E2E Test Suite
+- `test/` klasörü oluşturuldu
+- 6 test dosyası: `test_runner.gd`, `test_bug_fixes.gd`, `test_event_chain.gd`, `test_overlay.gd`, `test_audio.gd`, `test_save.gd`
+- `test_runner.tscn` sarmalayıcı sahne
+- **22/22 test geçti** (headless validation)
+
+### 13. Godot Headless Doğrulama
 
 ```
+
 Test 1: --headless --check-only --path . --quit     → ✅ 0 hata
 Test 2: --headless --quit --path .                   → ✅ 0 hata
 Test 3: --headless --verbose --quit --path .          → ✅ 0 hata
 ```
 
 **Toplam:** 3 test, 0 hata — proje stabil.
-
 ---
 
 ## 📁 Proje Klasör Yapısı
@@ -264,6 +292,9 @@ Her modül `initialize(self)` ile world.gd referansını alır. Sinyaller modül
 | **Event** | 31 (9 zone) |
 | **Bölüm** | 9 (tümü built) |
 | **Ses** | 13 procedural (6 BGM + 7 SFX) |
+| **Test** | 22 E2E test (6 dosya) |
+| **APK** | ~145 MB (debug) |
+| **Export** | Android, min SDK 21, portrait |
 | **Doküman** | 8 `.md` dosyası |
 
 ---
@@ -368,8 +399,7 @@ world.gd (Orchestrator)
 
 ### Kısa Vade
 1. **Gerçek ses dosyaları** — `.ogg` formatında BGM + SFX placeholder'ları değiştir
-2. **Android build** — export template + keystore + gradle build
-3. **Achievement sistemi** — Toplanabilir öğeler + başarımlar
+2. **Achievement sistemi** — Toplanabilir öğeler + başarımlar
 
 ### Orta Vade
 4. **World art upgrade** — Toca World kalitesinde SVG diorama

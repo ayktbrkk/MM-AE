@@ -23,6 +23,10 @@ captures/
 $($img.Width)x$($img.Height)
 ERROR
 
+# Test çıktıları
+godot_*.txt
+decision_test_output.txt
+
 # OS artifacts
 Thumbs.db
 .DS_Store
