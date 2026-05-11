@@ -75,10 +75,20 @@ const _questions := preload("res://assets/data/questions.gd")
 @onready var dialogue_continue: Button = $CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent/DialogueContinue
 @onready var dialogue_panel: PanelContainer = $CanvasLayer/HUD/DialoguePanel
 
+# Karakter paneli alt bileşenleri (world_wave.gd _world üzerinden erişir)
+@onready var character_title: Label = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/CharacterTitle
+@onready var character_text: Label = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/CharacterText
+@onready var arda_button: Button = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/ArdaButton
+@onready var eda_button: Button = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/EdaButton
+
 # Yeni modüller (programatik olarak _ready()'de eklenecek)
 var _player_mod: Node
 var _ui_mod: Node
 var _zone_mod: Node
+
+# WorldWave modülünün _world üzerinden eriştiği state değişkenleri
+var selected_build_marker: Node2D = null
+var panel_mode: String = "character"
 
 
 # ---------------------------------------------------------------------------
@@ -230,10 +240,18 @@ func _connect_ui() -> void:
 
 
 func _on_panel_button_pressed(choice: String) -> void:
-	"""Panel buton (karakter seçimi / destek kurma) routing."""
-	if _ui_mod.panel_mode == "character":
+	"""Panel buton (karakter seçimi / destek kurma) routing.
+	
+	panel_mode (world_wave tarafından _world üzerinden yazılır) veya
+	_ui_mod.panel_mode (world_zone tarafından ui_mod üzerinden yazılır)
+	hangisi aktifse onu kullan.
+	"""
+	var active_mode: String = panel_mode
+	if active_mode == "character":
+		active_mode = _ui_mod.panel_mode
+	if active_mode == "character":
 		_player_mod.choose_hero("eda" if choice == "b" else "arda")
-	elif _ui_mod.panel_mode == "support":
+	elif active_mode == "support":
 		_wave.build_support(choice)
 
 
@@ -253,8 +271,47 @@ func _on_decision_overlay_choice(context: String, choice: String) -> void:
 
 
 func _on_transition_finished() -> void:
-	"""Bölüm geçiş animasyonu tamamlandı."""
-	pass
+	"""Bölüm geçiş animasyonu tamamlandı — CanvasLayer'ı temizle ve event chain'i başlat.
+	
+	1. OverlayManager.hide() ile chapter transition CanvasLayer'ını kapatır.
+	   Bu, is_any_overlay_visible()'ın yanlış pozitif döndürmesini engeller.
+	2. Sadece bandirma (ship) zone'u için event chain'i başlatır.
+	   Diğer zone'lar kendi show_dialogue()'larını _setup_* içinde çağırır.
+	"""
+	_ui_mod._overlay_manager.hide(OverlayManager.OverlayType.CHAPTER_TRANSITION)
+	if _state.current_zone == "ship":
+		_zone_mod.trigger_event_chain()
+
+
+# ---------------------------------------------------------------------------
+# WORLDWAVE BRIDGE FONKSİYONLARI
+# ---------------------------------------------------------------------------
+# world_wave.gd, _world (world.gd instance) üzerinden bu fonksiyonlara erişir.
+# R5 refactoring sonrası UI/ZONE modüllerine yönlendirme yapılır.
+
+func _show_dialogue(title: String, text: String, callback: Callable) -> void:
+	"""world_wave.gd köprüsü: _world._show_dialogue → _ui_mod.show_dialogue."""
+	_ui_mod.show_dialogue(title, text, callback)
+
+
+func _update_progress() -> void:
+	"""world_wave.gd köprüsü: _world._update_progress → _ui_mod.update_progress."""
+	_ui_mod.update_progress()
+
+
+func _refresh_minimap_markers() -> void:
+	"""world_wave.gd köprüsü: _world._refresh_minimap_markers → _ui_mod.refresh_minimap_markers."""
+	_ui_mod.refresh_minimap_markers()
+
+
+func _set_goal(kind: String, text: String) -> void:
+	"""world_wave.gd köprüsü: _world._set_goal → _zone_mod.set_goal."""
+	_zone_mod.set_goal(kind, text)
+
+
+func _spawn_reward_burst(center: Vector2, tint: Color, slot_prefix: String) -> void:
+	"""world_wave.gd köprüsü: _world._spawn_reward_burst → _ui_mod.spawn_reward_burst."""
+	_ui_mod.spawn_reward_burst(center, tint, slot_prefix)
 
 
 # ---------------------------------------------------------------------------

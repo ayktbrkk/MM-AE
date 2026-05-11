@@ -585,14 +585,18 @@ func _setup_bandirma() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(520, 760), Vector2(660, 820))
 
+	# P10-FIX: State zone'u güncelle — _on_transition_finished()'da
+	# _state.current_zone == "ship" kontrolünün çalışması için.
+	state.enter_zone("ship")
 	set_goal("ship_clue", "Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele.")
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition("Bandırma Vapuru", "Gece yolculugu basliyor")
-	# P10: Event chain'i başlat — event 3 (story, Anlatıcı) dialogue'u gösterecek.
-	# Eski manuel show_dialogue() kaldırıldı: chain'deki event 3 zaten aynı içeriği
-	# (Bandırma Vapuru kamarası açıklaması) sağlıyor ve boş Callable() ile oyuncu
-	# hareket kilitlenmesine yol açıyordu.
-	trigger_event_chain()
+	# P10-FIX: Event chain chapter transition kapandıktan SONRA başlar.
+	# transition_finished sinyali world.gd _on_transition_finished()'da
+	# yakalanır, OverlayManager.hide(CHAPTER_TRANSITION) ile CanvasLayer
+	# temizlenir ve ship zone'u için trigger_event_chain() çağrılır.
+	# Bu, chapter transition CanvasLayer'ının stack'te kalıcı olarak
+	# visible kalmasını ve input blokajına yol açmasını engeller.
 
 
 func _setup_samsun_rift() -> void:
@@ -1002,7 +1006,8 @@ func _show_event_decision(event_index: int, context: String) -> void:
 
 
 func _show_samsun_decision() -> void:
-	_show_event_decision(3, "samsun")  # EVENT_DECISION_SAMSUN
+	"""Samsun kararını göster (EVENTS[5] — İlk Karar)."""
+	_show_event_decision(5, "samsun")
 
 
 func _show_havza_decision() -> void:
@@ -1161,9 +1166,9 @@ func _answer_final_decision(choice: String) -> void:
 
 
 func _answer_samsun_decision(choice: String) -> void:
-	"""Samsun kararını değerlendir."""
+	"""Samsun kararını değerlendir (EVENTS[5] — İlk Karar)."""
 	var questions := preload("res://assets/data/questions.gd")
-	var event: Dictionary = questions.EVENTS[3]  # EVENT_DECISION_SAMSUN
+	var event: Dictionary = questions.EVENTS[5]
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
