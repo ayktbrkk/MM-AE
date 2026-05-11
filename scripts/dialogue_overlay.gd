@@ -11,8 +11,9 @@ const ARDA_THINKING_TEXTURE := preload("res://assets/art/characters/arda/portrai
 const EDA_IDLE_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
 const EDA_HAPPY_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_happy.svg")
 const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_thinking.svg")
-const CONTINUE_ICON := preload("res://kenney/kenney_ui-pack/PNG/Blue/Default/arrow_basic_e.png")
+const TAU := 2.0 * PI
 @onready var _colors := preload("res://scripts/colors.gd")
+@onready var _textures := preload("res://scripts/textures.gd")
 
 # Karakter bazli ekspresyon texture haritasi — { character: { expression: texture } }
 const ARDA_EXPRESSIONS := {
@@ -42,7 +43,6 @@ const EDA_EXPRESSIONS := {
 @onready var continue_icon: TextureRect = $BottomArea/DialoguePanel/DialogueMargin/DialogueContent/ContinueRow/ContinueIcon
 @onready var continue_label: Label = $BottomArea/DialoguePanel/DialogueMargin/DialogueContent/ContinueRow/ContinueLabel
 
-var elapsed := 0.0
 var speaker_side_current := "left"
 var left_light_alpha := 0.08
 var right_light_alpha := 0.08
@@ -53,19 +53,25 @@ var left_glow_base_position := Vector2.ZERO
 var right_glow_base_position := Vector2.ZERO
 var stage_light_left_base_position := Vector2.ZERO
 var stage_light_right_base_position := Vector2.ZERO
+var _continue_row_base_x: float
+
+func get_overlay_type() -> int:
+	return OverlayManager.OverlayType.DIALOGUE
 
 func _ready() -> void:
 	left_portrait.texture = ARDA_IDLE_TEXTURE
 	right_portrait.texture = EDA_IDLE_TEXTURE
-	continue_icon.texture = CONTINUE_ICON
+	continue_icon.texture = _textures.CONTINUE_ICON
 	left_portrait_base_position = left_portrait.position
 	right_portrait_base_position = right_portrait.position
 	left_glow_base_position = left_glow.position
 	right_glow_base_position = right_glow.position
 	stage_light_left_base_position = stage_light_left.position
 	stage_light_right_base_position = stage_light_right.position
+	_continue_row_base_x = continue_row.position.x
 	_apply_styles()
 	hide_overlay()
+	_start_idle_animations()
 
 func _gui_input(event: InputEvent) -> void:
 	if not visible:
@@ -75,21 +81,45 @@ func _gui_input(event: InputEvent) -> void:
 	elif event is InputEventScreenTouch and event.pressed:
 		_advance_or_continue()
 
-func _process(delta: float) -> void:
-	if not visible:
-		return
-	elapsed += delta
-	var breath := (sin(elapsed * 1.35) + 1.0) * 0.5
-	continue_row.position.x = sin(elapsed * 2.8) * 2.0
-	left_portrait.position = left_portrait_base_position + Vector2(0.0, sin(elapsed * 2.0) * 3.0)
-	right_portrait.position = right_portrait_base_position + Vector2(0.0, sin((elapsed * 2.0) + 0.8) * 3.0)
-	left_glow.position = left_glow_base_position + Vector2(0.0, sin(elapsed * 2.0) * 2.0)
-	right_glow.position = right_glow_base_position + Vector2(0.0, sin((elapsed * 2.0) + 0.8) * 2.0)
-	stage_light_left.position = stage_light_left_base_position + Vector2(0.0, sin(elapsed * 1.5) * 4.0)
-	stage_light_right.position = stage_light_right_base_position + Vector2(0.0, sin((elapsed * 1.5) + 0.7) * 4.0)
-	stage_light_left.color.a = left_light_alpha + (breath * 0.035)
-	stage_light_right.color.a = right_light_alpha + ((1.0 - breath) * 0.035)
-	panel_glow.color.a = 0.08 + (breath * 0.035)
+func _start_idle_animations() -> void:
+	# Portreler ve glow'lar — sin(elapsed * 2.0), periyot PI
+	var tween_portraits := create_tween().set_loops()
+	tween_portraits.tween_method(
+		func(v: float) -> void:
+			left_portrait.position = left_portrait_base_position + Vector2(0.0, sin(v) * 3.0)
+			right_portrait.position = right_portrait_base_position + Vector2(0.0, sin(v + 0.8) * 3.0)
+			left_glow.position = left_glow_base_position + Vector2(0.0, sin(v) * 2.0)
+			right_glow.position = right_glow_base_position + Vector2(0.0, sin(v + 0.8) * 2.0),
+		0.0, TAU, PI
+	)
+
+	# Stage ışıkları — sin(elapsed * 1.5), periyot 2*PI/1.5
+	var tween_stage := create_tween().set_loops()
+	tween_stage.tween_method(
+		func(v: float) -> void:
+			stage_light_left.position = stage_light_left_base_position + Vector2(0.0, sin(v) * 4.0)
+			stage_light_right.position = stage_light_right_base_position + Vector2(0.0, sin(v + 0.7) * 4.0),
+		0.0, TAU, 4.18879
+	)
+
+	# Continue row — sin(elapsed * 2.8), periyot 2*PI/2.8
+	var tween_continue := create_tween().set_loops()
+	tween_continue.tween_method(
+		func(v: float) -> void:
+			continue_row.position.x = _continue_row_base_x + sin(v) * 2.0,
+		0.0, TAU, 2.244
+	)
+
+	# Glow alphaları — breath pattern (sin(elapsed * 1.35)), periyot 2*PI/1.35
+	var tween_glow := create_tween().set_loops()
+	tween_glow.tween_method(
+		func(v: float) -> void:
+			var breath := (sin(v) + 1.0) * 0.5
+			panel_glow.color.a = 0.08 + (breath * 0.035)
+			stage_light_left.color.a = left_light_alpha + (breath * 0.035)
+			stage_light_right.color.a = right_light_alpha + ((1.0 - breath) * 0.035),
+		0.0, TAU, 4.654
+	)
 
 func present(config: Dictionary) -> void:
 	chapter_label.text = String(config.get("chapter", "Bölüm"))

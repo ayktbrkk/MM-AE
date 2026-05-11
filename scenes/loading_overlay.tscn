@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3 uid="uid://loadingoverlay01"]
+
+[ext_resource type="Script" path="res://scripts/loading_overlay.gd" id="1_script"]
+
+[node name="LoadingOverlay" type="CanvasLayer"]
+layer = 11
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1080.0
+offset_bottom = 1920.0
+color = Color(0.0, 0.0, 0.0, 0.0)
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1080.0
+offset_bottom = 1920.0
+
+[node name="Panel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(480, 360)
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Bandırma Yolculuğu"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 34
+
+[node name="Spacer" type="Control" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+
+[node name="ProgressBar" type="TextureProgressBar" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(400, 28)
+value = 0.0
+max_value = 1.0
+show_percentage = false
+
+[node name="Spacer2" type="Control" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 4)
+
+[node name="HintLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Bandırma Vapuru 19 Mayıs 1919'da Samsun'a doğru yola çıktı!"
+horizontal_alignment = 1
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 20
+
+[node name="SpinnerRow" type="HBoxContainer" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="Spinner" type="TextureRect" parent="CenterContainer/Panel/Margin/VBox/SpinnerRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(32, 32)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5

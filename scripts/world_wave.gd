@@ -15,6 +15,88 @@ signal support_node_placed(node_type: String, position: Vector2)
 
 var _world: Node = null
 
+# Zone yapılandırması — DRY: Tüm zone-specific metin ve değerler tek merkezde
+const ZONE_CONFIG: Dictionary = {
+	"samsun_rift": {
+		"panel_text": "Liman, Telgraf ve Halk noktalarını güçlendirmek için destek kur. Liderlik puanı: %d",
+		"button_a": "Gözlem Noktası kur (1)",
+		"button_b": "Bağlantı Ağı kur (1)",
+		"support_a": "Gözlem Noktası",
+		"support_b": "Bağlantı Ağı",
+		"wave_kind": "wave_start",
+		"wave_text": "Destekler hazır. Şimdi Kararsızlık Dalgası'nı başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca kararsızlık dalgasını daha güvenli aşarsın.",
+		"dialogue_built": "%s kuruldu. Gözlem ve bağlantı sayesinde Samsun rüyası güçleniyor.",
+	},
+	"havza": {
+		"panel_text": "Halkı düzenli ve bilinçli tepkiye hazırlamak için destek kur. Liderlik puanı: %d",
+		"button_a": "Miting Noktası kur (1)",
+		"button_b": "Telgraf Ağı kur (1)",
+		"support_a": "Miting Noktası",
+		"support_b": "Telgraf Ağı",
+		"wave_kind": "havza_wave",
+		"wave_text": "Destekler hazır. Şimdi Sessizlik Dalgası'nı başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca sessizlik dalgasını daha güvenli aşarsın.",
+		"dialogue_built": "%s kuruldu. Sessizlik dalgasına karşı halkın ortak sesini güçlendirdin.",
+	},
+	"amasya": {
+		"panel_text": "Ortak bildiriyi güçlendirmek için destek kur. Liderlik puanı: %d",
+		"button_a": "Yazım Masası kur (1)",
+		"button_b": "Temsilci Halkası kur (1)",
+		"support_a": "Yazım Masası",
+		"support_b": "Temsilci Halkası",
+		"wave_kind": "amasya_wave",
+		"wave_text": "Destekler hazır. Şimdi Tereddüt Çemberi'ni başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca ortak bildiriyi daha güvenli tamamlarsın.",
+		"dialogue_built": "%s kuruldu. Bildirinin ortak iradesini güçlendirdin.",
+	},
+	"kongreler": {
+		"panel_text": "Dağınık yapıları ortak hedefte toplamak için destek kur. Liderlik puanı: %d",
+		"button_a": "Delegasyon Masası kur (1)",
+		"button_b": "Ortak Hedef Kürsüsü kur (1)",
+		"support_a": "Delegasyon Masası",
+		"support_b": "Ortak Hedef Kürsüsü",
+		"wave_kind": "kongre_wave",
+		"wave_text": "Destekler hazır. Şimdi Dağınıklık Dalgası'nı başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca ortak hedefi daha güvenli savunursun.",
+		"dialogue_built": "%s kuruldu. Dağınık yapıları ortak hedefte birleştirdin.",
+	},
+}
+
+# Varsayılan yapılandırma (bilinmeyen zone'lar için yedek)
+const _DEFAULT_ZONE_CONFIG: Dictionary = {
+	"panel_text": "Destekleri önceden belirlenmiş noktalara kurarsın. Liderlik puanı: %d",
+	"button_a": "Gözlem Noktası kur (1)",
+	"button_b": "Telgraf Ağı kur (1)",
+	"support_a": "Gözlem Noktası",
+	"support_b": "Telgraf Ağı",
+	"wave_kind": "wave_start",
+	"wave_text": "Destekler hazır. Şimdi Kararsızlık Dalgası'nı başlat.",
+	"dialogue_success": "%s hazır. En az %d destek kurunca kararsızlık dalgasını daha güvenli aşarsın.",
+	"dialogue_built": "%s kuruldu. Kararsızlık dalgasına karşı tarihsel akışı güçlendirdin.",
+}
+
+
+func _get_zone_config(zone: String) -> Dictionary:
+	"""Zone yapılandırmasını döndür, bulunamazsa varsayılanı kullan."""
+	return ZONE_CONFIG.get(zone, _DEFAULT_ZONE_CONFIG)
+
+
+func _wave_text_for_zone(zone: String) -> String:
+	"""Zone'a göre dalga başarı metnini döndür."""
+	return _get_zone_config(zone).get("wave_text", "Destekler hazır. Şimdi dalgayı başlat.")
+
+
+func _built_text_for_zone(zone: String, support_name: String) -> String:
+	"""Zone'a göre destek kuruldu metnini döndür."""
+	return _get_zone_config(zone).get("dialogue_built", "%s kuruldu.") % support_name
+
+
+func _success_text_for_zone(zone: String, support_name: String) -> String:
+	"""Zone'a göre başarı metnini döndür."""
+	var template: String = _get_zone_config(zone).get("dialogue_success", "%s hazır.")
+	return template % [support_name, _state.required_supports]
+
 
 func setup(world_ref: Node) -> void:
 	"""Orkestratör referansını ata (world.gd _ready içinde çağrılır)."""
@@ -44,23 +126,11 @@ func show_support_panel(marker: Node2D) -> void:
 
 	var zone: String = _state.current_zone
 	var lp: int = _state.leadership_points
+	var cfg: Dictionary = _get_zone_config(zone)
 
-	if zone == "havza":
-		_world.character_text.text = "Halkı düzenli ve bilinçli tepkiye hazırlamak için destek kur. Liderlik puanı: %d" % lp
-		_world.arda_button.text = "Miting Noktası kur (1)"
-		_world.eda_button.text = "Telgraf Ağı kur (1)"
-	elif zone == "amasya":
-		_world.character_text.text = "Ortak bildiriyi güçlendirmek için destek kur. Liderlik puanı: %d" % lp
-		_world.arda_button.text = "Yazım Masası kur (1)"
-		_world.eda_button.text = "Temsilci Halkası kur (1)"
-	elif zone == "kongreler":
-		_world.character_text.text = "Dağınık yapıları ortak hedefte toplamak için destek kur. Liderlik puanı: %d" % lp
-		_world.arda_button.text = "Delegasyon Masası kur (1)"
-		_world.eda_button.text = "Ortak Hedef Kürsüsü kur (1)"
-	else:
-		_world.character_text.text = "Destekleri önceden belirlenmiş noktalara kurarsın. Liderlik puanı: %d" % lp
-		_world.arda_button.text = "Gözlem Noktası kur (1)"
-		_world.eda_button.text = "Telgraf Ağı kur (1)"
+	_world.character_text.text = cfg.panel_text % lp
+	_world.arda_button.text = cfg.button_a
+	_world.eda_button.text = cfg.button_b
 
 	_world.character_panel.visible = true
 	_world.interact_button.visible = false
@@ -88,29 +158,18 @@ func build_support(choice: String) -> void:
 
 	var marker: Node2D = _world.selected_build_marker
 	var zone: String = _state.current_zone
+	var cfg: Dictionary = _get_zone_config(zone)
 
-	var support_name := "Gözlem Noktası" if choice == "a" else "Telgraf Ağı"
-	if zone == "havza" and choice == "a":
-		support_name = "Miting Noktası"
-	elif zone == "amasya":
-		support_name = "Yazım Masası" if choice == "a" else "Temsilci Halkası"
-	elif zone == "kongreler":
-		support_name = "Delegasyon Masası" if choice == "a" else "Ortak Hedef Kürsüsü"
+	# ZONE_CONFIG'ten support adını al
+	var support_name: String = cfg.support_a if choice == "a" else cfg.support_b
 
 	_state.add_leadership(-1)
 	_state.place_support()
 	marker.set_meta("built", true)
 	marker.set_meta("title", "%s Hazır" % support_name)
 
-	var zone_text: String
-	if zone == "havza":
-		zone_text = "%s kuruldu. Sessizlik dalgasına karşı halkın ortak sesini güçlendirdin." % support_name
-	elif zone == "amasya":
-		zone_text = "%s kuruldu. Bildirinin ortak iradesini güçlendirdin." % support_name
-	elif zone == "kongreler":
-		zone_text = "%s kuruldu. Dağınık yapıları ortak hedefte birleştirdin." % support_name
-	else:
-		zone_text = "%s kuruldu. Kararsızlık dalgasına karşı tarihsel akışı güçlendirdin." % support_name
+	# ZONE_CONFIG'ten kurulum metnini al
+	var zone_text: String = _built_text_for_zone(zone, support_name)
 	marker.set_meta("text", zone_text)
 	marker.modulate = Color(0.70, 1.0, 0.70, 1.0)
 
@@ -123,29 +182,12 @@ func build_support(choice: String) -> void:
 
 	support_node_placed.emit(support_name, marker.position)
 
+	# Destek sayısı yeterliyse dalga hedefini göster
 	if _state.built_supports >= _state.required_supports:
-		var wave_kind := "wave_start"
-		var wave_text := "Destekler hazır. Şimdi Kararsızlık Dalgası'nı başlat."
-		if zone == "havza":
-			wave_kind = "havza_wave"
-			wave_text = "Destekler hazır. Şimdi Sessizlik Dalgası'nı başlat."
-		elif zone == "amasya":
-			wave_kind = "amasya_wave"
-			wave_text = "Destekler hazır. Şimdi Tereddüt Çemberi'ni başlat."
-		elif zone == "kongreler":
-			wave_kind = "kongre_wave"
-			wave_text = "Destekler hazır. Şimdi Dağınıklık Dalgası'nı başlat."
-		_world._set_goal(wave_kind, wave_text)
+		_world._set_goal(cfg.wave_kind, cfg.wave_text)
 
-	var dialogue_text: String
-	if zone == "havza":
-		dialogue_text = "%s hazır. En az %d destek kurunca sessizlik dalgasını daha güvenli aşarsın." % [support_name, _state.required_supports]
-	elif zone == "amasya":
-		dialogue_text = "%s hazır. En az %d destek kurunca ortak bildiriyi daha güvenli tamamlarsın." % [support_name, _state.required_supports]
-	elif zone == "kongreler":
-		dialogue_text = "%s hazır. En az %d destek kurunca ortak hedefi daha güvenli savunursun." % [support_name, _state.required_supports]
-	else:
-		dialogue_text = "%s hazır. En az %d destek kurunca kararsızlık dalgasını daha güvenli aşarsın." % [support_name, _state.required_supports]
+	# ZONE_CONFIG'ten başarı diyalog metnini al
+	var dialogue_text: String = _success_text_for_zone(zone, support_name)
 	_world._show_dialogue("Destek Kuruldu", dialogue_text, Callable())
 
 
@@ -154,25 +196,44 @@ func build_support(choice: String) -> void:
 # ---------------------------------------------------------------------------
 
 func start_confusion_wave() -> void:
-	"""Samsun Kararsızlık Dalgası'nı başlat."""
+	"""Samsun Kararsızlık Dalgası'nı başlat (veya zone'a göre uygun dalgayı)."""
+	var zone: String = _state.current_zone
 	_state.increment_wave_attempts()
-	wave_started.emit("confusion")
 
-	if _state.built_supports >= _state.required_supports:
-		wave_completed.emit("confusion")
-		_world._show_dialogue(
-			"Dalga Aşıldı",
-			"Gözlem ve haberleşme desteği sayesinde Samsun'daki ilk adımlar planlı ilerledi. Bu rüya senaryosu tamamlandı; sonraki sanal dünya Havza ve Amasya görevlerini açacak.",
-			Callable(_world, "_enter_havza")
-		)
+	if zone == "samsun_rift":
+		wave_started.emit("samsun")
+		if _state.built_supports >= _state.required_supports:
+			wave_completed.emit("samsun")
+			_world._show_dialogue(
+				"Dalga Aşıldı",
+				"Gözlem noktaları ve bağlantı ağları sayesinde Samsun rüyasındaki ilk adımlar planlı ilerledi. Kararsızlık dalgası aşıldı: Havza rotası açılıyor.",
+				Callable(_world, "_enter_havza")
+			)
+		else:
+			_state.add_leadership(1)
+			_world._update_progress()
+			_world._show_dialogue(
+				"Dalga Çok Güçlü",
+				"Kararsızlık dalgası Milli İrade Merkezi'ni zorladı. +1 liderlik puanı kazandın. En az %d destek kurup yeniden dene." % _state.required_supports,
+				Callable()
+			)
 	else:
-		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
-			"Dalga Çok Güçlü",
-			"Kararsızlık dalgası Milli İrade Merkezi'ni zorladı. Oyun bitmedi: son dalgayı tekrar deneyeceksin ve +1 liderlik puanı aldın. En az %d destek kurmayı dene." % _state.required_supports,
-			Callable()
-		)
+		wave_started.emit("confusion")
+		if _state.built_supports >= _state.required_supports:
+			wave_completed.emit("confusion")
+			_world._show_dialogue(
+				"Dalga Aşıldı",
+				"Destekler sayesinde kararsızlık dalgası aşıldı.",
+				Callable()
+			)
+		else:
+			_state.add_leadership(1)
+			_world._update_progress()
+			_world._show_dialogue(
+				"Dalga Çok Güçlü",
+				"Kararsızlık dalgası güçlü kaldı. +1 liderlik puanı aldın. En az %d destek kurmayı dene." % _state.required_supports,
+				Callable()
+			)
 
 
 func start_havza_wave() -> void:

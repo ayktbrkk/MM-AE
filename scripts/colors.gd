@@ -34,6 +34,9 @@ const RIFT_BLUE := Color(0.22, 0.78, 1.0)               # #38C7FF
 ## Cel-shading outline - ana çizgi rengi
 const CEL_OUTLINE := Color(0.05, 0.07, 0.12)            # #0D121F
 
+## Dekoratif etiket alfa - görünmez etiketler (erişilebilirlik için)
+const DECORATIVE_LABEL_ALPHA := 0.0
+
 ## ====================================
 ## IKINCI PALET: DESIGN SISTEMI (VISUAL_DESIGN_SYSTEM.md)
 ## ====================================

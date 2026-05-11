@@ -4,17 +4,29 @@ extends Node
 # Orkestratordeki Markers node'una child ekleyerek calisir
 
 # -----------------------------------------------------------------------------
-# Texture sabitleri (marker iconlari icin)
+# Texture sabitleri (marker iconlari icin) — procedural olusturulur
+# Kenney placeholder'lari yerine 32x32 renkli daire texture'lari
 # -----------------------------------------------------------------------------
-const NOTE_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/notepad.svg")
-const TALK_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/pawn_table.svg")
-const PORTAL_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/flag_square.svg")
-const DECISION_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/hand_card.svg")
-const RESOURCE_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/token_add.svg")
-const SUPPORT_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/structure_watchtower.svg")
-const WAVE_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/hourglass.svg")
-const BADGE_ICON := preload("res://kenney/kenney_medals/PNG/flat_medal3.png")
-const RING_TEXTURE := preload("res://kenney/kenney_board-game-icons/Vector/Icons/ring.svg")
+
+static func _make_icon(color: Color) -> Texture2D:
+	"""32x32'lik renkli daire icon texture'i olusturur."""
+	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	var center := Vector2i(16, 16)
+	for y in 32:
+		for x in 32:
+			if center.distance_squared_to(Vector2i(x, y)) <= 196:  # radius=14
+				image.set_pixel(x, y, color)
+	return ImageTexture.create_from_image(image)
+
+static var NOTE_ICON := _make_icon(Color(0.92, 0.78, 0.48))
+static var TALK_ICON := _make_icon(Color(0.48, 0.72, 0.92))
+static var PORTAL_ICON := _make_icon(Color(0.72, 0.48, 0.92))
+static var DECISION_ICON := _make_icon(Color(0.92, 0.48, 0.58))
+static var RESOURCE_ICON := _make_icon(Color(0.48, 0.88, 0.62))
+static var SUPPORT_ICON := _make_icon(Color(0.92, 0.68, 0.42))
+static var WAVE_ICON := _make_icon(Color(0.42, 0.68, 0.92))
+static var BADGE_ICON := _make_icon(Color(0.98, 0.82, 0.38))
 
 # -----------------------------------------------------------------------------
 # Renk sistemi
@@ -758,7 +770,7 @@ func mark_collected(marker: Node2D) -> void:
 	"""Marker'i toplanmis olarak isaretler ve gorunmez yapar."""
 	marker.set_meta("collected", true)
 	marker.visible = false
-	_hide_visual_tree(marker)
+	hide_visual_tree(marker)
 
 
 func hide_visual_tree(node: Node) -> void:
@@ -776,9 +788,9 @@ func hide_nearby_collection_visuals(center: Vector2, include_reward_fx: bool, pr
 			if not (child is CanvasItem):
 				continue
 			var slot_id := String(child.get_meta("asset_slot", ""))
-			if not _is_collectible_standalone_visual(slot_id, include_reward_fx):
+			if not is_collectible_standalone_visual(slot_id, include_reward_fx):
 				continue
-			var child_position := _visual_world_position(child)
+			var child_position: Vector2 = visual_world_position(child)
 			if child_position.distance_to(center) <= 150.0:
 				(child as CanvasItem).visible = false
 

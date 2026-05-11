@@ -4,14 +4,18 @@ extends Node
 # audio_manager.gd — P6: Ses sistemi
 # ---------------------
 # Autoload singleton. Runtime'da AudioStreamPlayer node'lari olusturur.
-# BGM ve SFX kanallari ayridir. Ses asset'leri henuz yok, bu nedenle
-# tum cagrilar sessizce basarisiz olur (hata vermez).
+# BGM ve SFX kanallari ayridir.
+#
+# assets/audio/ klasoru bos oldugu surece procedural (programatik) ses
+# ureteci devreye girer. Gercek ses dosyalari eklendiginde otomatik
+# olarak oncelik kazanir.
 #
 # Kullanim:
-#   AudioManager.play_bgm("samsun_dawn")
-#   AudioManager.play_sfx("collect_paper")
+#   AudioManager.play_bgm("BGM_MENU")
+#   AudioManager.play_sfx("SFX_CLICK")
 #   AudioManager.stop_bgm()
-#   AudioManager.set_master_volume(0.8)
+#   AudioManager.set_bgm_volume(0.8)
+#   AudioManager.get_bgm_volume() -> 0.8
 # ---------------------------------------------------------------------------
 
 # Sinyaller
@@ -26,6 +30,10 @@ signal sfx_volume_changed(value: float)
 const BGM_BUS := "BGM"
 const SFX_BUS := "SFX"
 const MASTER_BUS := "Master"
+
+# Procedural ses sabitleri
+const PLACEHOLDER_SAMPLE_RATE := 22050  # Mobile performans icin dusuk kalite
+const BGM_LOOP_DURATION := 4.0  # 4 saniyelik loop
 
 # Varsayilan ses seviyeleri (0.0 - 1.0)
 var master_volume: float = 1.0:
@@ -50,8 +58,8 @@ var _bgm_player: AudioStreamPlayer
 var _sfx_players: Array[AudioStreamPlayer] = []
 var _current_bgm_name: String = ""
 
-# Geçici asset placeholder — ses dosyalari gelince preload() ile degistirilir
-var _placeholder_stream := AudioStreamWAV.new()
+# Placeholder ses cache'i — procedural sesler burada saklanir
+var _placeholder_sounds: Dictionary = {}
 
 
 func _ready() -> void:
@@ -72,12 +80,15 @@ func _ready() -> void:
 		add_child(player)
 		_sfx_players.append(player)
 
-	# Ses asset klasörünü kontrol et
+	# Placeholder sesleri olustur
+	_init_placeholder_sounds()
+
+	# Ses asset klasorunu kontrol et
 	var audio_dir := DirAccess.open("res://assets/audio")
 	if audio_dir:
 		print("[AudioManager] assets/audio/ mevcut, ses dosyalari yuklenmeye hazir.")
 	else:
-		print("[AudioManager] assets/audio/ henuz bos. Ses dosyalari eklendiginde calisir.")
+		print("[AudioManager] assets/audio/ henuz bos. Procedural placeholder sesler kullaniliyor.")
 
 
 func _ensure_audio_buses() -> void:
@@ -107,10 +118,33 @@ func _ensure_audio_buses() -> void:
 
 
 # ---------------------------------------------------------------------------
+# Public API — Volume Kontrol
+# ---------------------------------------------------------------------------
+func set_bgm_volume(value: float) -> void:
+	"""BGM ses seviyesini 0.0-1.0 arasinda ayarla."""
+	bgm_volume = value
+
+
+func get_bgm_volume() -> float:
+	"""Mevcut BGM ses seviyesini 0.0-1.0 arasinda dondur."""
+	return bgm_volume
+
+
+func set_sfx_volume(value: float) -> void:
+	"""SFX ses seviyesini 0.0-1.0 arasinda ayarla."""
+	sfx_volume = value
+
+
+func get_sfx_volume() -> float:
+	"""Mevcut SFX ses seviyesini 0.0-1.0 arasinda dondur."""
+	return sfx_volume
+
+
+# ---------------------------------------------------------------------------
 # Public API — BGM
 # ---------------------------------------------------------------------------
 func play_bgm(bgm_name: String, fade_in: float = 0.5) -> void:
-	"""BGM'yi calistir. Stream bulunamazsa sessizce basarisiz olur."""
+	"""BGM'yi calistir. Stream bulunamazsa procedural placeholder kullanir."""
 	if bgm_name == _current_bgm_name:
 		return
 
@@ -170,22 +204,28 @@ func play_sfx(sfx_name: String, volume_ratio: float = 1.0) -> void:
 
 
 # ---------------------------------------------------------------------------
-# Internal
+# Internal — Stream Yukleme
 # ---------------------------------------------------------------------------
-func _load_stream(resource_name: String) -> AudioStream:
-	"""res://assets/audio/ altinda stream dosyasini yuklemeyi dener.
-	Henuz dosya yoksa placeholder dondurur (sessiz)."""
-	var path := "res://assets/audio/%s.ogg" % resource_name
-	if ResourceLoader.exists(path):
-		return load(path) as AudioStream
-	# .wav alternatif
-	path = "res://assets/audio/%s.wav" % resource_name
-	if ResourceLoader.exists(path):
-		return load(path) as AudioStream
-	# .mp3 alternatif
-	path = "res://assets/audio/%s.mp3" % resource_name
-	if ResourceLoader.exists(path):
-		return load(path) as AudioStream
+func _load_stream(sound_name: String) -> AudioStream:
+	"""Once placeholder cache'e, sonra assets/audio/ klasorune bakar.
+	Bulamazsa talep uzerine yeni placeholder uretir."""
+	# 1. Placeholder cache kontrol
+	if _placeholder_sounds.has(sound_name):
+		return _placeholder_sounds[sound_name]
+
+	# 2. assets/audio/ klasorundeki dosyalari dene
+	for ext in [".ogg", ".wav", ".mp3"]:
+		var path := "res://assets/audio/%s%s" % [sound_name, ext]
+		if ResourceLoader.exists(path):
+			return load(path) as AudioStream
+
+	# 3. Talep uzerine placeholder uret ve cache'e ekle
+	var stream := _generate_placeholder_sound(sound_name)
+	if stream:
+		_placeholder_sounds[sound_name] = stream
+		print("[AudioManager] Placeholder ses uretildi: %s (freq=%d)" % [sound_name, _guess_frequency(sound_name)])
+		return stream
+
 	return null
 
 
@@ -198,6 +238,160 @@ func _available_sfx_player() -> AudioStreamPlayer:
 	return _sfx_players[0]
 
 
+# ---------------------------------------------------------------------------
+# Procedural Ses Uretici — Placeholder'lar
+# ---------------------------------------------------------------------------
+func _init_placeholder_sounds() -> void:
+	"""Baslica placeholder sesleri onceden olustur."""
+	# BGM'ler (looping)
+	_placeholder_sounds["BGM_MENU"] = _generate_tone(220.0, BGM_LOOP_DURATION, true)       # Sakin, ana menu
+	_placeholder_sounds["BGM_EXPLORE"] = _generate_tone(180.0, BGM_LOOP_DURATION, true)    # Yumusak, kesif
+	_placeholder_sounds["BGM_DECISION"] = _generate_tone(260.0, BGM_LOOP_DURATION, true)   # Gerilim, karar ani
+
+	# Bolum BGM'leri (farkli frekanslar)
+	_placeholder_sounds["bgm_default"] = _generate_tone(200.0, BGM_LOOP_DURATION, true)
+	_placeholder_sounds["bgm_bandirma"] = _generate_tone(165.0, BGM_LOOP_DURATION, true)   # Deniz, alcalak
+	_placeholder_sounds["bgm_samsun"] = _generate_tone(195.0, BGM_LOOP_DURATION, true)     # Umut, orta
+	_placeholder_sounds["bgm_havza"] = _generate_tone(210.0, BGM_LOOP_DURATION, true)      # Hareketli
+	_placeholder_sounds["bgm_amasya"] = _generate_tone(230.0, BGM_LOOP_DURATION, true)     # Kararli
+	_placeholder_sounds["bgm_kongre"] = _generate_tone(250.0, BGM_LOOP_DURATION, true)     # Yükselen
+
+	# SFX'ler (kisa)
+	_placeholder_sounds["SFX_CLICK"] = _generate_click()                         # Tik: 800Hz
+	_placeholder_sounds["SFX_CONFIRM"] = _generate_sweep(440.0, 880.0, 0.15)    # Onay: 440→880Hz
+	_placeholder_sounds["SFX_TRANSITION"] = _generate_tone(120.0, 0.3, false)   # Gecis: dusuk
+
+	# Oda ortami (world.gd'de kullanilan eski referans)
+	_placeholder_sounds["room_ambient"] = _generate_tone(150.0, BGM_LOOP_DURATION, true)
+
+	print("[AudioManager] %d placeholder ses olusturuldu." % _placeholder_sounds.size())
+
+
+func _generate_placeholder_sound(sound_name: String) -> AudioStreamWAV:
+	"""Bilinmeyen bir ses adi icin otomatik placeholder uret."""
+	var freq: float = _guess_frequency(sound_name)
+	var is_bgm: bool = sound_name.begins_with("BGM_") or sound_name.begins_with("bgm_")
+	return _generate_tone(freq, BGM_LOOP_DURATION if is_bgm else 0.3, is_bgm)
+
+
+func _guess_frequency(sound_name: String) -> float:
+	"""Ses adina gore mantikli bir frekans tahmini yap."""
+	if sound_name.begins_with("BGM_") or sound_name.begins_with("bgm_"):
+		# BGM'ler icin 150-300Hz arasi
+		var hash_val: int = abs(sound_name.hash())
+		return 150.0 + float(hash_val % 150)
+	# SFX'ler icin 400-900Hz arasi
+	var hash_val: int = abs(sound_name.hash())
+	return 400.0 + float(hash_val % 500)
+
+
+# ---------------------------------------------------------------------------
+# Static Yardimcilar — Ses Uretimi
+# ---------------------------------------------------------------------------
+static func _generate_tone(frequency: float, duration: float, loop: bool = false) -> AudioStreamWAV:
+	"""Belirtilen frekansta sinüs dalgasi uretir.
+	Parametreler:
+	- frequency: Hz cinsinden frekans
+	- duration: saniye cinsinden sure
+	- loop: True ise sonsuz donguye alinir (BGM icin)
+	Donus: AudioStreamWAV (16-bit, mono, 22050Hz)"""
+	var stream := AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = PLACEHOLDER_SAMPLE_RATE
+	stream.stereo = false
+
+	var sample_rate: int = PLACEHOLDER_SAMPLE_RATE
+	var total_samples: int = maxi(1, int(sample_rate * duration))
+	var data := PackedByteArray()
+	data.resize(total_samples * 2)  # 16-bit = 2 bytes per sample
+
+	var fade_samples: int = mini(200, total_samples / 4)
+
+	for i in range(total_samples):
+		var t: float = float(i) / float(sample_rate)
+		# Sinüs dalgasi
+		var sample: float = sin(2.0 * PI * frequency * t)
+
+		# Zarf (envelope) — tıklama önleme
+		var envelope: float = 1.0
+		if i < fade_samples:
+			envelope = float(i) / float(fade_samples)  # Fade in
+		elif i > total_samples - fade_samples:
+			envelope = float(total_samples - i) / float(fade_samples)  # Fade out
+
+		sample *= envelope * 0.35  # %35 maksimum amplitude (distorsiyon onlemi)
+
+		var val: int = int(clamp(sample * 32767.0, -32768.0, 32767.0))
+		data.encode_s16(i * 2, val)
+
+	stream.data = data
+
+	if loop:
+		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		stream.loop_begin = 0
+		stream.loop_end = total_samples
+
+	return stream
+
+
+static func _generate_click() -> AudioStreamWAV:
+	"""Kisa tik sesi (800Hz, 50ms). Buton tiklamalari icin."""
+	var stream := AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = PLACEHOLDER_SAMPLE_RATE
+	stream.stereo = false
+
+	var sample_rate: int = PLACEHOLDER_SAMPLE_RATE
+	var total_samples: int = int(sample_rate * 0.05)
+	var data := PackedByteArray()
+	data.resize(total_samples * 2)
+
+	for i in range(total_samples):
+		var t: float = float(i) / float(sample_rate)
+		var sample: float = sin(2.0 * PI * 800.0 * t)
+		# Hizli sönümleme
+		var envelope: float = 1.0 - (float(i) / float(total_samples))
+		sample *= envelope * 0.25
+
+		var val: int = int(clamp(sample * 32767.0, -32768.0, 32767.0))
+		data.encode_s16(i * 2, val)
+
+	stream.data = data
+	return stream
+
+
+static func _generate_sweep(start_freq: float, end_freq: float, duration: float) -> AudioStreamWAV:
+	"""Frekans kaydirmali ses (sweep). Onay efektleri icin.
+	Ornek: SFX_CONFIRM = _generate_sweep(440.0, 880.0, 0.15)"""
+	var stream := AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = PLACEHOLDER_SAMPLE_RATE
+	stream.stereo = false
+
+	var sample_rate: int = PLACEHOLDER_SAMPLE_RATE
+	var total_samples: int = maxi(1, int(sample_rate * duration))
+	var data := PackedByteArray()
+	data.resize(total_samples * 2)
+
+	for i in range(total_samples):
+		var t: float = float(i) / float(total_samples)
+		var freq: float = lerpf(start_freq, end_freq, t)
+		var phase: float = 2.0 * PI * freq * float(i) / float(sample_rate)
+		var sample: float = sin(phase)
+		# Hafif sönümleme
+		var envelope: float = 1.0 - t * 0.4
+		sample *= envelope * 0.3
+
+		var val: int = int(clamp(sample * 32767.0, -32768.0, 32767.0))
+		data.encode_s16(i * 2, val)
+
+	stream.data = data
+	return stream
+
+
+# ---------------------------------------------------------------------------
+# Internal — Fade Mekanizmasi
+# ---------------------------------------------------------------------------
 func _fade_out(player: AudioStreamPlayer, duration: float) -> void:
 	"""Player volume'unu linear 0.0'a dusur."""
 	if not is_instance_valid(player):
@@ -208,7 +402,7 @@ func _fade_out(player: AudioStreamPlayer, duration: float) -> void:
 
 
 func _fade_in(player: AudioStreamPlayer, duration: float) -> void:
-	"""Player volume'unu linear 1.0'a cikar."""
+	"""Player volume'unu linear bgm_volume'a cikar."""
 	if not is_instance_valid(player):
 		return
 	var target_volume := bgm_volume

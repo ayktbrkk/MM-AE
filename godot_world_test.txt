@@ -1,0 +1,633 @@
+﻿WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Unrecognized output string "misc2" in mapping:
+030000008a2e0000dd10000000000000,Hand Held Legend GC Ultimate,a:b0,b:b2,back:b17,dpdown:b5,dpleft:b6,dpright:b7,dpup:b4,guide:b18,leftshoulder:b10,leftstick:b8,lefttrigger:a3,leftx:a0,lefty:a1,misc1:b19,misc2:b24,paddle1:b13,paddle2:b12,rightshoulder:b11,rightstick:b9,righttrigger:a4,rightx:a2,righty:a5,start:b16,x:b1,y:b3,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000000d0f00000202000000000000,Horipad O Nintendo Switch 2 Controller,a:b1,b:b0,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,misc1:b13,misc2:b14,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b3,y:b2,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000000d0f00009601000000000000,Horipad Steam,a:b0,b:b1,back:b10,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b6,leftstick:b13,lefttrigger:b8,leftx:a0,lefty:a1,misc2:b2,paddle1:b5,paddle2:b15,paddle3:b18,paddle4:b19,rightshoulder:b7,rightstick:b14,righttrigger:b9,rightx:a3,righty:a4,start:b11,x:b3,y:b4,platform:Windows,
+Unrecognized output string "misc2" in mapping:
+030000007e0500006920000000000000,Nintendo Switch 2 Pro Controller,a:b0,b:b1,back:b14,dpdown:b8,dpleft:b10,dpright:b9,dpup:b11,guide:b16,leftshoulder:b12,leftstick:b15,lefttrigger:b13,leftx:a0,lefty:a1~,misc1:b17,misc2:b20,paddle1:b18,paddle2:b19,rightshoulder:b4,rightstick:b7,righttrigger:b5,rightx:a2,righty:a3~,start:b6,x:b2,y:b3,platform:Windows,
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 4039755037
+EDITOR API HASH: 223528947
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/audio_manager.gd
+Loading resource: res://scripts/save_manager.gd
+Loaded system CA certificates
+Loading resource: res://scenes/world.tscn
+Loading resource: res://scripts/world.gd
+Loading resource: res://assets/art/characters/arda/char_arda_world.svg
+Loading resource: res://.godot/imported/char_arda_world.svg-e7d5a1e5f309e5bdce5560e57f0245a9.ctex
+Loading resource: res://assets/art/characters/eda/char_eda_world.svg
+Loading resource: res://.godot/imported/char_eda_world.svg-edd0554fa949ea548f018d521da74a58.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/notepad.svg
+Loading resource: res://.godot/imported/notepad.svg-8942187593f205a9b99cca63e7cde457.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/pawn_table.svg
+Loading resource: res://.godot/imported/pawn_table.svg-43ec8387f8856986dbf8e1ce5345603a.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/flag_square.svg
+Loading resource: res://.godot/imported/flag_square.svg-7ae4f7915c0025c1ae255088946130d9.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/hand_card.svg
+Loading resource: res://.godot/imported/hand_card.svg-2fb4102a79a2a2466f542fc06d8275e3.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/token_add.svg
+Loading resource: res://.godot/imported/token_add.svg-862d3f19dc930f0afd22db26a5f80a5c.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/structure_watchtower.svg
+Loading resource: res://.godot/imported/structure_watchtower.svg-72b26ccd8f3df148b3308e1daa760c89.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/hourglass.svg
+Loading resource: res://.godot/imported/hourglass.svg-90d9aabeb6d0fc06d17f1bdf4947333b.ctex
+Loading resource: res://kenney/kenney_medals/PNG/flat_medal3.png
+Loading resource: res://.godot/imported/flat_medal3.png-00f38fcfac8ab5c3965d7ede62b45d3e.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/cloud3.png
+Loading resource: res://.godot/imported/cloud3.png-03f3584dff31985796dc6496fea40f22.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/cloud7.png
+Loading resource: res://.godot/imported/cloud7.png-4e823478fef166ec70e6090d6e530050.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/moon_full.png
+Loading resource: res://.godot/imported/moon_full.png-ffc2803b3f8de3272066d38dbfecd8e7.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/tree01.png
+Loading resource: res://.godot/imported/tree01.png-aff78afacb79a07cc0df535536085d8c.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/tree05.png
+Loading resource: res://.godot/imported/tree05.png-7105c136022322f0c04cf11628a27e1a.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/house_beige_front.png
+Loading resource: res://.godot/imported/house_beige_front.png-e841700e6ab27a8fc24f95c9c8c88522.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/house_grey_side.png
+Loading resource: res://.godot/imported/house_grey_side.png-c7236e3a3035d05b2ac80f005ef38de4.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/fence.png
+Loading resource: res://.godot/imported/fence.png-fe9b811c3bdd0bfa9d0a0baf2cf91ac7.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/hills1.png
+Loading resource: res://.godot/imported/hills1.png-0b5b7f78133b38a662288323f044386e.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/hills2.png
+Loading resource: res://.godot/imported/hills2.png-6444446a68145af3e0a91b926f990bc2.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/mountain1.png
+Loading resource: res://.godot/imported/mountain1.png-2251d8ca81925edd3bb8b948f79ca9a6.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/mountain2.png
+Loading resource: res://.godot/imported/mountain2.png-faee90c9c01e9d450fd9ab590645b5a3.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/pointy_mountains.png
+Loading resource: res://.godot/imported/pointy_mountains.png-061adc5c91e5ef84320ae915a305207d.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/house_front_short.png
+Loading resource: res://.godot/imported/house_front_short.png-66750cc9539ccedcb1016d3917ae3f28.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/house_front_tall.png
+Loading resource: res://.godot/imported/house_front_tall.png-e416e550ae870c984fff59e9e3780d90.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/tree03.png
+Loading resource: res://.godot/imported/tree03.png-36e597abe52546f60f7b164e9c1c9a12.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/tree08.png
+Loading resource: res://.godot/imported/tree08.png-e4b40c70dc40b43a3a1928533ebf3acd.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/hullLarge (1).png
+Loading resource: res://.godot/imported/hullLarge (1).png-fcf3053d96e0dd72cbde7fc37fd00994.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/hullLarge (3).png
+Loading resource: res://.godot/imported/hullLarge (3).png-a1df314db07e32d0fbcf362a6cb49a1f.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/sailLarge (3).png
+Loading resource: res://.godot/imported/sailLarge (3).png-47afe03a54e297e562dbf119c51d9c7a.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/sailSmall (4).png
+Loading resource: res://.godot/imported/sailSmall (4).png-5d08e00da475cb87e90ebd69e4d32d9a.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/pole.png
+Loading resource: res://.godot/imported/pole.png-c19407971852dba851cc83a32ef43b9d.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/crew (3).png
+Loading resource: res://.godot/imported/crew (3).png-8ee7d4bb88ea07170eee766cb2ec07a5.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/crew (5).png
+Loading resource: res://.godot/imported/crew (5).png-43303a36768a7d76de982207715abeba.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/flag (3).png
+Loading resource: res://.godot/imported/flag (3).png-a1d42e5543f51b611148d1a69bb34ed1.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/flag (6).png
+Loading resource: res://.godot/imported/flag (6).png-af6328ec8ef401c5b798c20e250ef5b1.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/cannonMobile.png
+Loading resource: res://.godot/imported/cannonMobile.png-926e520f209e04dea78def368c33c064.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/wood (2).png
+Loading resource: res://.godot/imported/wood (2).png-a9b846e7c17af5afa2f436fab61e8d9c.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/nest.png
+Loading resource: res://.godot/imported/nest.png-c1641e573a0ac4c9d5965708a94ac109.ctex
+Loading resource: res://kenney/kenney_smoke-particles/PNG/Black smoke/blackSmoke10.png
+Loading resource: res://.godot/imported/blackSmoke10.png-b76317461087fb286ba1a9d4917083e4.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_center_S.png
+Loading resource: res://.godot/imported/grass_center_S.png-dcadd4fdf13b98156508f8905459069a.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_path_S.png
+Loading resource: res://.godot/imported/grass_path_S.png-7cbb174be43ea149d31d2e5f3cc087f3.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_pathCrossing_S.png
+Loading resource: res://.godot/imported/grass_pathCrossing_S.png-f9708c916e858d64cd497afa7ddb313c.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_pathCorner_S.png
+Loading resource: res://.godot/imported/grass_pathCorner_S.png-1450b9a20da77fd25f3fc038316861a0.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_pathEndSquare_S.png
+Loading resource: res://.godot/imported/grass_pathEndSquare_S.png-3d9a6ef595ea68d47db73d8af866c557.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_river_S.png
+Loading resource: res://.godot/imported/grass_river_S.png-4d225f994da399cd4cdc48d37e3d570b.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_riverBend_S.png
+Loading resource: res://.godot/imported/grass_riverBend_S.png-635e1a79fc9e0bcff3aabcd265b6a44a.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_riverBridge_S.png
+Loading resource: res://.godot/imported/grass_riverBridge_S.png-99d20ae94d22f2a35c4e5e1a55cec568.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_doorBeige_S.png
+Loading resource: res://.godot/imported/building_doorBeige_S.png-52892fc1665f66259f76118259e12c68.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_windowBeige_S.png
+Loading resource: res://.godot/imported/building_windowBeige_S.png-4578c054100258c024ae2520fa798184.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_windowsBeige_S.png
+Loading resource: res://.godot/imported/building_windowsBeige_S.png-97fc02ac56f18cad4f0dff0b588aaf16.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_centerBeige_S.png
+Loading resource: res://.godot/imported/building_centerBeige_S.png-1aa8a3ead07530a751f2e3017c32bd16.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_cornerBeige_S.png
+Loading resource: res://.godot/imported/building_cornerBeige_S.png-46268903955f6b9628c827537609b582.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/box.png
+Loading resource: res://.godot/imported/box.png-ed2469028f3c9ccfa9ef20ed20aa40ad.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/box_wide.png
+Loading resource: res://.godot/imported/box_wide.png-ee97966e825e30600326299b93bd0cc3.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/cart.png
+Loading resource: res://.godot/imported/cart.png-2cb78c94823a5d7ff1c3cf4407c92029.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/cart_top.png
+Loading resource: res://.godot/imported/cart_top.png-c1ee5214748773c89c09786d2667985f.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/character_man.png
+Loading resource: res://.godot/imported/character_man.png-3cfe7e397163dbdaeb6435263018543c.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/character_woman.png
+Loading resource: res://.godot/imported/character_woman.png-1017edb28234b96d7c8367beb4d2fd07.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/character_horse.png
+Loading resource: res://.godot/imported/character_horse.png-de6c89b22f5ed9f0d977d60bb88a96a4.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/fence_single.png
+Loading resource: res://.godot/imported/fence_single.png-5f4eaa0fdd9306e8fc0015d3fb46fe1b.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/fence_double.png
+Loading resource: res://.godot/imported/fence_double.png-427daf96e66cd360d470bb99f7370b38.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageBush_large.png
+Loading resource: res://.godot/imported/foliageBush_large.png-7032881fe4e43829d081952831ba5529.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageBush_small.png
+Loading resource: res://.godot/imported/foliageBush_small.png-5af6865e4d5b219c9d3dbfd16bf973e5.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageTree_green.png
+Loading resource: res://.godot/imported/foliageTree_green.png-a3c9ff40a46c1ba323485a75503e692c.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageTree_orange.png
+Loading resource: res://.godot/imported/foliageTree_orange.png-584b31c653ad44356ecb172f25189760.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/market_stallBlue.png
+Loading resource: res://.godot/imported/market_stallBlue.png-4eb3d9b390d5be734234333f06345c6e.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/market_stallRed.png
+Loading resource: res://.godot/imported/market_stallRed.png-ab0a418c8ae203e8aa180489a698c657.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBridge.png
+Loading resource: res://.godot/imported/tileBridge.png-f0cc7c982e83711e75ce0d2a40ecd8ad.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileWater_1.png
+Loading resource: res://.godot/imported/tileWater_1.png-1243ab66b78ddc0f29b49430aec8214a.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileWood_flat.png
+Loading resource: res://.godot/imported/tileWood_flat.png-e0e9a05ff509cb4cb57cf177bfa42674.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_sand.png
+Loading resource: res://.godot/imported/tileBuilding_sand.png-a3857f3c8d4b6a02c4ba523fb1b25ee6.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_stone.png
+Loading resource: res://.godot/imported/tileBuilding_stone.png-7b383abf35968ff269140f1b6b3b2bf1.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_frame.png
+Loading resource: res://.godot/imported/tileBuilding_frame.png-9c865991b60406ebbb486e2d9cd3d96e.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_roofBlue.png
+Loading resource: res://.godot/imported/tileBuilding_roofBlue.png-707a3cf819ddf1a5b73f25416df1c43f.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_roofRed.png
+Loading resource: res://.godot/imported/tileBuilding_roofRed.png-2def9610ec47ff7421c2c7b1191a7e7a.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/door.png
+Loading resource: res://.godot/imported/door.png-ef91a2a26d39d440b241051db89d36ff.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/detail_window.png
+Loading resource: res://.godot/imported/detail_window.png-c90c6c61fe29d7fefba252681ac1a467.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_blue3.png
+Loading resource: res://.godot/imported/cardBack_blue3.png-d8feda28cdb6ecd3d306ad841da5ce89.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_red3.png
+Loading resource: res://.godot/imported/cardBack_red3.png-4406aee841e11b9f0aca0702a47a4d76.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_green3.png
+Loading resource: res://.godot/imported/cardBack_green3.png-191b81632119de5053a4af82ef35c558.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Chips/chipBlueWhite.png
+Loading resource: res://.godot/imported/chipBlueWhite.png-c910538d1e205e75fd5876d84bedea0f.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Chips/chipGreenWhite.png
+Loading resource: res://.godot/imported/chipGreenWhite.png-18ce2ee36fea069d4786042dd1d6db17.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Chips/chipRedWhite.png
+Loading resource: res://.godot/imported/chipRedWhite.png-fc2cef1b7e31c335056ef8d3b6f27f2b.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/arrowRight.png
+Loading resource: res://.godot/imported/arrowRight.png-180f8e442b2995b303499d7de9a8d4bb.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/arrowUp.png
+Loading resource: res://.godot/imported/arrowUp.png-818392c152da70eea4722225c0c961d7.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/information.png
+Loading resource: res://.godot/imported/information.png-122a4157dc6d7e419f824220d88c6844.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/checkmark.png
+Loading resource: res://.godot/imported/checkmark.png-d7a3b64d99f2fe30f6bbe10153a440b0.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/star.png
+Loading resource: res://.godot/imported/star.png-89f7adc4d497f9c3d2785fc4fa71d19f.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/target.png
+Loading resource: res://.godot/imported/target.png-bcd8423dcf135c0a6dda606e80df9aeb.ctex
+Loading resource: res://assets/art/world/samsun/paper_terrain_island.svg
+Loading resource: res://.godot/imported/paper_terrain_island.svg-b60899896c2cd6c15ff3c5dbfe74b4d2.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_landmark.svg
+Loading resource: res://.godot/imported/paper_harbor_landmark.svg-02a520bb811798a5211e63b871028c98.ctex
+Loading resource: res://assets/art/world/samsun/paper_telegraph_landmark.svg
+Loading resource: res://.godot/imported/paper_telegraph_landmark.svg-278d7b3ff4c7bf7c73ad1060cdc758be.ctex
+Loading resource: res://assets/art/world/samsun/paper_people_plaza.svg
+Loading resource: res://.godot/imported/paper_people_plaza.svg-318356fce6b157b5c211c00eadf22d08.ctex
+Loading resource: res://assets/art/world/samsun/paper_rift_core.svg
+Loading resource: res://.godot/imported/paper_rift_core.svg-0425f44c60a59e736fa9c1eb50b71f9d.ctex
+Loading resource: res://assets/art/world/samsun/paper_main_path.svg
+Loading resource: res://.godot/imported/paper_main_path.svg-bb4df818927b3c7d6491ada25ef0250c.ctex
+Loading resource: res://assets/art/world/samsun/paper_civic_cluster.svg
+Loading resource: res://.godot/imported/paper_civic_cluster.svg-17776431219848f2a06dcf499633cbfd.ctex
+Loading resource: res://assets/art/world/samsun/paper_wave_gate.svg
+Loading resource: res://.godot/imported/paper_wave_gate.svg-1fc8ddfa9acafc19c7db64c148907340.ctex
+Loading resource: res://assets/art/world/samsun/paper_distant_town.svg
+Loading resource: res://.godot/imported/paper_distant_town.svg-f99f3aece7cd6f05fbf9f3b5507c907d.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_water.svg
+Loading resource: res://.godot/imported/paper_harbor_water.svg-fb47b54ea3f14dd9da1ab194d963ba6a.ctex
+Loading resource: res://assets/art/world/samsun/paper_foreground_frame.svg
+Loading resource: res://.godot/imported/paper_foreground_frame.svg-04a1c7ab7c67cefd4eafa2ede7cd3bac.ctex
+Loading resource: res://assets/art/world/samsun/paper_side_paths.svg
+Loading resource: res://.godot/imported/paper_side_paths.svg-420caa3fc417acff25e85c50d6dfba88.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_boats.svg
+Loading resource: res://.godot/imported/paper_harbor_boats.svg-2b78b45a031f3176d147e3433e00fc51.ctex
+Loading resource: res://assets/art/world/samsun/paper_signal_ridge.svg
+Loading resource: res://.godot/imported/paper_signal_ridge.svg-da93a2b86059a4db51ef5762f32dd9bd.ctex
+Loading resource: res://assets/art/world/samsun/paper_sky_life.svg
+Loading resource: res://.godot/imported/paper_sky_life.svg-bdcdb549c4a347c5c365f4e02f7ca4c3.ctex
+Loading resource: res://assets/art/world/samsun/paper_discovery_props.svg
+Loading resource: res://.godot/imported/paper_discovery_props.svg-e091c3f3fd105a35bcf9002247483e6d.ctex
+Loading resource: res://assets/art/world/samsun/paper_coast_details.svg
+Loading resource: res://.godot/imported/paper_coast_details.svg-3a1d6a245ac60cf9bbacd146131c3c3f.ctex
+Loading resource: res://assets/art/world/samsun/paper_route_beads.svg
+Loading resource: res://.godot/imported/paper_route_beads.svg-88d0ee27dc74776d4babac4a8cf4f7c2.ctex
+Loading resource: res://assets/art/world/samsun/paper_safe_clearings.svg
+Loading resource: res://.godot/imported/paper_safe_clearings.svg-739cab17194de5c67d5490d77c53e394.ctex
+Loading resource: res://assets/art/world/samsun/paper_vista_flags.svg
+Loading resource: res://.godot/imported/paper_vista_flags.svg-675aeaf472460bfd4682a8295a640cea.ctex
+Loading resource: res://assets/art/world/samsun/paper_skyline_depth.svg
+Loading resource: res://.godot/imported/paper_skyline_depth.svg-2e3f2749671378a877032ff642d70e9d.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_dock_props.svg
+Loading resource: res://.godot/imported/paper_harbor_dock_props.svg-58c8511264875734ff7bae0acb43a902.ctex
+Loading resource: res://assets/art/world/samsun/paper_coastal_life.svg
+Loading resource: res://.godot/imported/paper_coastal_life.svg-d7c95c26dc4d567cf815727c2a602a49.ctex
+Loading resource: res://assets/art/world/room/paper_wall_window.svg
+Loading resource: res://.godot/imported/paper_wall_window.svg-cbd2526f4c93e7ceedbbf6fd7bceb51a.ctex
+Loading resource: res://assets/art/world/room/paper_study_nook.svg
+Loading resource: res://.godot/imported/paper_study_nook.svg-a76d0545a4adf5e12d495fe2b1c00224.ctex
+Loading resource: res://assets/art/world/room/paper_floor_rug.svg
+Loading resource: res://.godot/imported/paper_floor_rug.svg-831ec4349e0068bba209188a5a57b2ba.ctex
+Loading resource: res://assets/art/world/room/paper_book_portal.svg
+Loading resource: res://.godot/imported/paper_book_portal.svg-451fdb332210e529851e253a9d21ce14.ctex
+Loading resource: res://assets/art/world/room/paper_shelf.svg
+Loading resource: res://.godot/imported/paper_shelf.svg-21d6954791c052f5a00123f148d4df37.ctex
+Loading resource: res://assets/art/world/room/paper_bed.svg
+Loading resource: res://.godot/imported/paper_bed.svg-55a481b1c4977d4cb76849a3f605a3a0.ctex
+Loading resource: res://assets/art/world/room/paper_wall_story.svg
+Loading resource: res://.godot/imported/paper_wall_story.svg-a7db2b20bd5fa9a3ee6b7b35f42a4160.ctex
+Loading resource: res://assets/art/world/room/paper_foreground_frame.svg
+Loading resource: res://.godot/imported/paper_foreground_frame.svg-7f984bb7cf961a5b3ac723aed408e998.ctex
+Loading resource: res://assets/art/world/room/paper_desk_clutter.svg
+Loading resource: res://.godot/imported/paper_desk_clutter.svg-d3c691f2e6ff08fd88f9e0155be612d3.ctex
+Loading resource: res://assets/art/world/opening/paper_sky_horizon.svg
+Loading resource: res://.godot/imported/paper_sky_horizon.svg-da7f3a2cf8b704ba481b880aa0e99991.ctex
+Loading resource: res://assets/art/world/opening/paper_benchmark_world.svg
+Loading resource: res://.godot/imported/paper_benchmark_world.svg-e9cfa27c3faa923a2a64e9cb142eec27.ctex
+Loading resource: res://assets/art/world/opening/paper_terrain_island.svg
+Loading resource: res://.godot/imported/paper_terrain_island.svg-3d6d5247a94feacc99d6f85be4a0d2fc.ctex
+Loading resource: res://assets/art/world/opening/paper_main_path.svg
+Loading resource: res://.godot/imported/paper_main_path.svg-e35b7832c80ae6be5a40bb7cbcd51126.ctex
+Loading resource: res://assets/art/world/opening/paper_village_depth.svg
+Loading resource: res://.godot/imported/paper_village_depth.svg-29c97b89be81544da1cce1e5a162f05e.ctex
+Loading resource: res://assets/art/world/opening/paper_book_gate.svg
+Loading resource: res://.godot/imported/paper_book_gate.svg-cd1d6d8d3ea03063cbb5325b33182402.ctex
+Loading resource: res://assets/art/world/opening/paper_clue_stations.svg
+Loading resource: res://.godot/imported/paper_clue_stations.svg-6a443948eced7a6943135828ee3f7b9a.ctex
+Loading resource: res://assets/art/world/opening/paper_foreground_frame.svg
+Loading resource: res://.godot/imported/paper_foreground_frame.svg-6dd3c41d98957615781f02287975e9ea.ctex
+Godot_v4.6.2-stable_win64_console.exe : SCRIPT ERROR: Parse Error: Preload file "res://assets/art/world/samsun/paper_sk
+y_samsun.svg" has no resource loaders (unrecognized file extension).
+At line:1 char:1
++ & 'C:\Users\Aykut\Desktop\MM-AE-main\Godot_v4.6.2-stable_win64_consol ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (SCRIPT ERROR: P...ile extension).:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   at: GDScript::reload (res://scripts/world.gd:116)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "SAMSUN_PAPER_SKY_SAMSUN_TEXTURE" constant because the value doesn'
+t have a set type.
+   at: GDScript::reload (res://scripts/world.gd:116)
+SCRIPT ERROR: Parse Error: Preload file "res://assets/art/world/samsun/paper_map_compass.svg" has no resource loaders (
+unrecognized file extension).
+   at: GDScript::reload (res://scripts/world.gd:117)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "SAMSUN_PAPER_MAP_COMPASS_TEXTURE" constant because the value doesn
+'t have a set type.
+   at: GDScript::reload (res://scripts/world.gd:117)
+ERROR: Failed to load script "res://scripts/world.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+Loading resource: res://kenney/kenney_platformer-characters/PNG/Player/Poses/player_stand.png
+Loading resource: res://.godot/imported/player_stand.png-a25819348c4a7a57ff4d81053b8369f8.ctex
+Loading resource: res://kenney/kenney_platformer-characters/PNG/Female/Poses/female_stand.png
+Loading resource: res://.godot/imported/female_stand.png-8faf2d3ae3cc08a51145f9534bc38563.ctex
+Loading resource: res://scenes/decision_overlay.tscn
+Loading resource: res://scripts/decision_overlay.gd
+Loading resource: res://assets/art/characters/arda/portrait_arda_idle.svg
+Loading resource: res://.godot/imported/portrait_arda_idle.svg-fb8a494a6a2fccaea375c4072ecc7f90.ctex
+Loading resource: res://assets/art/characters/eda/portrait_eda_idle.svg
+Loading resource: res://.godot/imported/portrait_eda_idle.svg-29f7a2321f0c1af2345d50afd3562d86.ctex
+Loading resource: res://kenney/kenney_ui-pack/PNG/Blue/Default/arrow_decorative_e_small.png
+Loading resource: res://.godot/imported/arrow_decorative_e_small.png-b09b5fa1915750481cd23588b0dd23dd.ctex
+Loading resource: res://scenes/dialogue_overlay.tscn
+Loading resource: res://scripts/dialogue_overlay.gd
+Loading resource: res://assets/art/characters/arda/portrait_arda_happy.svg
+Loading resource: res://.godot/imported/portrait_arda_happy.svg-4662495cfb5416d3d0f50a4b922af8fc.ctex
+Loading resource: res://assets/art/characters/arda/portrait_arda_thinking.svg
+Loading resource: res://.godot/imported/portrait_arda_thinking.svg-f1377fee5d40bb27bbd8e5a7feb9319a.ctex
+Loading resource: res://assets/art/characters/eda/portrait_eda_happy.svg
+Loading resource: res://.godot/imported/portrait_eda_happy.svg-fc6a8352c42c78934f2d48d6db418bca.ctex
+Loading resource: res://assets/art/characters/eda/portrait_eda_thinking.svg
+Loading resource: res://.godot/imported/portrait_eda_thinking.svg-1be2e0675a1991e73718b4aaac5bb4a4.ctex
+Loading resource: res://kenney/kenney_ui-pack/PNG/Blue/Default/arrow_basic_e.png
+Loading resource: res://.godot/imported/arrow_basic_e.png-715ec5b0b3f1c3dd7d1c99478832c2b3.ctex
+Loading resource: res://scenes/info_card_overlay.tscn
+Loading resource: res://scripts/info_card_overlay.gd
+Loading resource: res://kenney/kenney_ui-pack/PNG/Blue/Default/star.png
+Loading resource: res://.godot/imported/star.png-b18e071e49055ec07947f8f54da06289.ctex
+Loading resource: res://kenney/kenney_medals/PNG/flat_medal3.png
+Loading resource: res://.godot/imported/flat_medal3.png-00f38fcfac8ab5c3965d7ede62b45d3e.ctex
+Loading resource: res://scenes/hud_bar.tscn
+Loading resource: res://scripts/hud_bar.gd
+Loading resource: res://scenes/chapter_transition_overlay.tscn
+Loading resource: res://scripts/chapter_transition_overlay.gd
+Loading resource: res://scripts/world_state.gd
+Loading resource: res://scripts/world_builder.gd
+Loading resource: res://assets/art/characters/arda/char_arda_world.svg
+Loading resource: res://.godot/imported/char_arda_world.svg-e7d5a1e5f309e5bdce5560e57f0245a9.ctex
+Loading resource: res://assets/art/characters/eda/char_eda_world.svg
+Loading resource: res://.godot/imported/char_eda_world.svg-edd0554fa949ea548f018d521da74a58.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/notepad.svg
+Loading resource: res://.godot/imported/notepad.svg-8942187593f205a9b99cca63e7cde457.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/pawn_table.svg
+Loading resource: res://.godot/imported/pawn_table.svg-43ec8387f8856986dbf8e1ce5345603a.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/flag_square.svg
+Loading resource: res://.godot/imported/flag_square.svg-7ae4f7915c0025c1ae255088946130d9.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/hand_card.svg
+Loading resource: res://.godot/imported/hand_card.svg-2fb4102a79a2a2466f542fc06d8275e3.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/token_add.svg
+Loading resource: res://.godot/imported/token_add.svg-862d3f19dc930f0afd22db26a5f80a5c.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/structure_watchtower.svg
+Loading resource: res://.godot/imported/structure_watchtower.svg-72b26ccd8f3df148b3308e1daa760c89.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/hourglass.svg
+Loading resource: res://.godot/imported/hourglass.svg-90d9aabeb6d0fc06d17f1bdf4947333b.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/cloud3.png
+Loading resource: res://.godot/imported/cloud3.png-03f3584dff31985796dc6496fea40f22.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/cloud7.png
+Loading resource: res://.godot/imported/cloud7.png-4e823478fef166ec70e6090d6e530050.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/moon_full.png
+Loading resource: res://.godot/imported/moon_full.png-ffc2803b3f8de3272066d38dbfecd8e7.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/tree01.png
+Loading resource: res://.godot/imported/tree01.png-aff78afacb79a07cc0df535536085d8c.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/tree05.png
+Loading resource: res://.godot/imported/tree05.png-7105c136022322f0c04cf11628a27e1a.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/house_beige_front.png
+Loading resource: res://.godot/imported/house_beige_front.png-e841700e6ab27a8fc24f95c9c8c88522.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/house_grey_side.png
+Loading resource: res://.godot/imported/house_grey_side.png-c7236e3a3035d05b2ac80f005ef38de4.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/fence.png
+Loading resource: res://.godot/imported/fence.png-fe9b811c3bdd0bfa9d0a0baf2cf91ac7.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/hills1.png
+Loading resource: res://.godot/imported/hills1.png-0b5b7f78133b38a662288323f044386e.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/hills2.png
+Loading resource: res://.godot/imported/hills2.png-6444446a68145af3e0a91b926f990bc2.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/mountain1.png
+Loading resource: res://.godot/imported/mountain1.png-2251d8ca81925edd3bb8b948f79ca9a6.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/mountain2.png
+Loading resource: res://.godot/imported/mountain2.png-faee90c9c01e9d450fd9ab590645b5a3.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/pointy_mountains.png
+Loading resource: res://.godot/imported/pointy_mountains.png-061adc5c91e5ef84320ae915a305207d.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/house_front_short.png
+Loading resource: res://.godot/imported/house_front_short.png-66750cc9539ccedcb1016d3917ae3f28.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/house_front_tall.png
+Loading resource: res://.godot/imported/house_front_tall.png-e416e550ae870c984fff59e9e3780d90.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/tree03.png
+Loading resource: res://.godot/imported/tree03.png-36e597abe52546f60f7b164e9c1c9a12.ctex
+Loading resource: res://kenney/kenney_background-elements/PNG/Flat/tree08.png
+Loading resource: res://.godot/imported/tree08.png-e4b40c70dc40b43a3a1928533ebf3acd.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/hullLarge (1).png
+Loading resource: res://.godot/imported/hullLarge (1).png-fcf3053d96e0dd72cbde7fc37fd00994.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/hullLarge (3).png
+Loading resource: res://.godot/imported/hullLarge (3).png-a1df314db07e32d0fbcf362a6cb49a1f.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/sailLarge (3).png
+Loading resource: res://.godot/imported/sailLarge (3).png-47afe03a54e297e562dbf119c51d9c7a.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/sailSmall (4).png
+Loading resource: res://.godot/imported/sailSmall (4).png-5d08e00da475cb87e90ebd69e4d32d9a.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/pole.png
+Loading resource: res://.godot/imported/pole.png-c19407971852dba851cc83a32ef43b9d.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/crew (3).png
+Loading resource: res://.godot/imported/crew (3).png-8ee7d4bb88ea07170eee766cb2ec07a5.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/crew (5).png
+Loading resource: res://.godot/imported/crew (5).png-43303a36768a7d76de982207715abeba.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/flag (3).png
+Loading resource: res://.godot/imported/flag (3).png-a1d42e5543f51b611148d1a69bb34ed1.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/flag (6).png
+Loading resource: res://.godot/imported/flag (6).png-af6328ec8ef401c5b798c20e250ef5b1.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/cannonMobile.png
+Loading resource: res://.godot/imported/cannonMobile.png-926e520f209e04dea78def368c33c064.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/wood (2).png
+Loading resource: res://.godot/imported/wood (2).png-a9b846e7c17af5afa2f436fab61e8d9c.ctex
+Loading resource: res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/nest.png
+Loading resource: res://.godot/imported/nest.png-c1641e573a0ac4c9d5965708a94ac109.ctex
+Loading resource: res://kenney/kenney_smoke-particles/PNG/Black smoke/blackSmoke10.png
+Loading resource: res://.godot/imported/blackSmoke10.png-b76317461087fb286ba1a9d4917083e4.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_center_S.png
+Loading resource: res://.godot/imported/grass_center_S.png-dcadd4fdf13b98156508f8905459069a.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_path_S.png
+Loading resource: res://.godot/imported/grass_path_S.png-7cbb174be43ea149d31d2e5f3cc087f3.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_pathCrossing_S.png
+Loading resource: res://.godot/imported/grass_pathCrossing_S.png-f9708c916e858d64cd497afa7ddb313c.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_pathCorner_S.png
+Loading resource: res://.godot/imported/grass_pathCorner_S.png-1450b9a20da77fd25f3fc038316861a0.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_pathEndSquare_S.png
+Loading resource: res://.godot/imported/grass_pathEndSquare_S.png-3d9a6ef595ea68d47db73d8af866c557.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_river_S.png
+Loading resource: res://.godot/imported/grass_river_S.png-4d225f994da399cd4cdc48d37e3d570b.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_riverBend_S.png
+Loading resource: res://.godot/imported/grass_riverBend_S.png-635e1a79fc9e0bcff3aabcd265b6a44a.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/grass_riverBridge_S.png
+Loading resource: res://.godot/imported/grass_riverBridge_S.png-99d20ae94d22f2a35c4e5e1a55cec568.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_doorBeige_S.png
+Loading resource: res://.godot/imported/building_doorBeige_S.png-52892fc1665f66259f76118259e12c68.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_windowBeige_S.png
+Loading resource: res://.godot/imported/building_windowBeige_S.png-4578c054100258c024ae2520fa798184.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_windowsBeige_S.png
+Loading resource: res://.godot/imported/building_windowsBeige_S.png-97fc02ac56f18cad4f0dff0b588aaf16.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_centerBeige_S.png
+Loading resource: res://.godot/imported/building_centerBeige_S.png-1aa8a3ead07530a751f2e3017c32bd16.ctex
+Loading resource: res://kenney/kenney_sketch-town/Tiles/building_cornerBeige_S.png
+Loading resource: res://.godot/imported/building_cornerBeige_S.png-46268903955f6b9628c827537609b582.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/box.png
+Loading resource: res://.godot/imported/box.png-ed2469028f3c9ccfa9ef20ed20aa40ad.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/box_wide.png
+Loading resource: res://.godot/imported/box_wide.png-ee97966e825e30600326299b93bd0cc3.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/cart.png
+Loading resource: res://.godot/imported/cart.png-2cb78c94823a5d7ff1c3cf4407c92029.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/cart_top.png
+Loading resource: res://.godot/imported/cart_top.png-c1ee5214748773c89c09786d2667985f.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/character_man.png
+Loading resource: res://.godot/imported/character_man.png-3cfe7e397163dbdaeb6435263018543c.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/character_woman.png
+Loading resource: res://.godot/imported/character_woman.png-1017edb28234b96d7c8367beb4d2fd07.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/character_horse.png
+Loading resource: res://.godot/imported/character_horse.png-de6c89b22f5ed9f0d977d60bb88a96a4.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/fence_single.png
+Loading resource: res://.godot/imported/fence_single.png-5f4eaa0fdd9306e8fc0015d3fb46fe1b.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/fence_double.png
+Loading resource: res://.godot/imported/fence_double.png-427daf96e66cd360d470bb99f7370b38.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageBush_large.png
+Loading resource: res://.godot/imported/foliageBush_large.png-7032881fe4e43829d081952831ba5529.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageBush_small.png
+Loading resource: res://.godot/imported/foliageBush_small.png-5af6865e4d5b219c9d3dbfd16bf973e5.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageTree_green.png
+Loading resource: res://.godot/imported/foliageTree_green.png-a3c9ff40a46c1ba323485a75503e692c.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/foliageTree_orange.png
+Loading resource: res://.godot/imported/foliageTree_orange.png-584b31c653ad44356ecb172f25189760.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/market_stallBlue.png
+Loading resource: res://.godot/imported/market_stallBlue.png-4eb3d9b390d5be734234333f06345c6e.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/market_stallRed.png
+Loading resource: res://.godot/imported/market_stallRed.png-ab0a418c8ae203e8aa180489a698c657.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBridge.png
+Loading resource: res://.godot/imported/tileBridge.png-f0cc7c982e83711e75ce0d2a40ecd8ad.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileWater_1.png
+Loading resource: res://.godot/imported/tileWater_1.png-1243ab66b78ddc0f29b49430aec8214a.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileWood_flat.png
+Loading resource: res://.godot/imported/tileWood_flat.png-e0e9a05ff509cb4cb57cf177bfa42674.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_sand.png
+Loading resource: res://.godot/imported/tileBuilding_sand.png-a3857f3c8d4b6a02c4ba523fb1b25ee6.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_stone.png
+Loading resource: res://.godot/imported/tileBuilding_stone.png-7b383abf35968ff269140f1b6b3b2bf1.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_frame.png
+Loading resource: res://.godot/imported/tileBuilding_frame.png-9c865991b60406ebbb486e2d9cd3d96e.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_roofBlue.png
+Loading resource: res://.godot/imported/tileBuilding_roofBlue.png-707a3cf819ddf1a5b73f25416df1c43f.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_roofRed.png
+Loading resource: res://.godot/imported/tileBuilding_roofRed.png-2def9610ec47ff7421c2c7b1191a7e7a.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/door.png
+Loading resource: res://.godot/imported/door.png-ef91a2a26d39d440b241051db89d36ff.ctex
+Loading resource: res://kenney/kenney_block-pack/PNG/Default (64px)/detail_window.png
+Loading resource: res://.godot/imported/detail_window.png-c90c6c61fe29d7fefba252681ac1a467.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_blue3.png
+Loading resource: res://.godot/imported/cardBack_blue3.png-d8feda28cdb6ecd3d306ad841da5ce89.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_red3.png
+Loading resource: res://.godot/imported/cardBack_red3.png-4406aee841e11b9f0aca0702a47a4d76.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_green3.png
+Loading resource: res://.godot/imported/cardBack_green3.png-191b81632119de5053a4af82ef35c558.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Chips/chipBlueWhite.png
+Loading resource: res://.godot/imported/chipBlueWhite.png-c910538d1e205e75fd5876d84bedea0f.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Chips/chipGreenWhite.png
+Loading resource: res://.godot/imported/chipGreenWhite.png-18ce2ee36fea069d4786042dd1d6db17.ctex
+Loading resource: res://kenney/kenney_boardgame-pack/PNG/Chips/chipRedWhite.png
+Loading resource: res://.godot/imported/chipRedWhite.png-fc2cef1b7e31c335056ef8d3b6f27f2b.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/arrowRight.png
+Loading resource: res://.godot/imported/arrowRight.png-180f8e442b2995b303499d7de9a8d4bb.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/arrowUp.png
+Loading resource: res://.godot/imported/arrowUp.png-818392c152da70eea4722225c0c961d7.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/information.png
+Loading resource: res://.godot/imported/information.png-122a4157dc6d7e419f824220d88c6844.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/checkmark.png
+Loading resource: res://.godot/imported/checkmark.png-d7a3b64d99f2fe30f6bbe10153a440b0.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/star.png
+Loading resource: res://.godot/imported/star.png-89f7adc4d497f9c3d2785fc4fa71d19f.ctex
+Loading resource: res://kenney/kenney_game-icons/PNG/White/2x/target.png
+Loading resource: res://.godot/imported/target.png-bcd8423dcf135c0a6dda606e80df9aeb.ctex
+Loading resource: res://assets/art/world/samsun/paper_terrain_island.svg
+Loading resource: res://.godot/imported/paper_terrain_island.svg-b60899896c2cd6c15ff3c5dbfe74b4d2.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_landmark.svg
+Loading resource: res://.godot/imported/paper_harbor_landmark.svg-02a520bb811798a5211e63b871028c98.ctex
+Loading resource: res://assets/art/world/samsun/paper_telegraph_landmark.svg
+Loading resource: res://.godot/imported/paper_telegraph_landmark.svg-278d7b3ff4c7bf7c73ad1060cdc758be.ctex
+Loading resource: res://assets/art/world/samsun/paper_people_plaza.svg
+Loading resource: res://.godot/imported/paper_people_plaza.svg-318356fce6b157b5c211c00eadf22d08.ctex
+Loading resource: res://assets/art/world/samsun/paper_rift_core.svg
+Loading resource: res://.godot/imported/paper_rift_core.svg-0425f44c60a59e736fa9c1eb50b71f9d.ctex
+Loading resource: res://assets/art/world/samsun/paper_main_path.svg
+Loading resource: res://.godot/imported/paper_main_path.svg-bb4df818927b3c7d6491ada25ef0250c.ctex
+Loading resource: res://assets/art/world/samsun/paper_civic_cluster.svg
+Loading resource: res://.godot/imported/paper_civic_cluster.svg-17776431219848f2a06dcf499633cbfd.ctex
+Loading resource: res://assets/art/world/samsun/paper_wave_gate.svg
+Loading resource: res://.godot/imported/paper_wave_gate.svg-1fc8ddfa9acafc19c7db64c148907340.ctex
+Loading resource: res://assets/art/world/samsun/paper_distant_town.svg
+Loading resource: res://.godot/imported/paper_distant_town.svg-f99f3aece7cd6f05fbf9f3b5507c907d.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_water.svg
+Loading resource: res://.godot/imported/paper_harbor_water.svg-fb47b54ea3f14dd9da1ab194d963ba6a.ctex
+Loading resource: res://assets/art/world/samsun/paper_foreground_frame.svg
+Loading resource: res://.godot/imported/paper_foreground_frame.svg-04a1c7ab7c67cefd4eafa2ede7cd3bac.ctex
+Loading resource: res://assets/art/world/samsun/paper_side_paths.svg
+Loading resource: res://.godot/imported/paper_side_paths.svg-420caa3fc417acff25e85c50d6dfba88.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_boats.svg
+Loading resource: res://.godot/imported/paper_harbor_boats.svg-2b78b45a031f3176d147e3433e00fc51.ctex
+Loading resource: res://assets/art/world/samsun/paper_signal_ridge.svg
+Loading resource: res://.godot/imported/paper_signal_ridge.svg-da93a2b86059a4db51ef5762f32dd9bd.ctex
+Loading resource: res://assets/art/world/samsun/paper_sky_life.svg
+Loading resource: res://.godot/imported/paper_sky_life.svg-bdcdb549c4a347c5c365f4e02f7ca4c3.ctex
+Loading resource: res://assets/art/world/samsun/paper_discovery_props.svg
+Loading resource: res://.godot/imported/paper_discovery_props.svg-e091c3f3fd105a35bcf9002247483e6d.ctex
+Loading resource: res://assets/art/world/samsun/paper_coast_details.svg
+Loading resource: res://.godot/imported/paper_coast_details.svg-3a1d6a245ac60cf9bbacd146131c3c3f.ctex
+Loading resource: res://assets/art/world/samsun/paper_route_beads.svg
+Loading resource: res://.godot/imported/paper_route_beads.svg-88d0ee27dc74776d4babac4a8cf4f7c2.ctex
+Loading resource: res://assets/art/world/samsun/paper_safe_clearings.svg
+Loading resource: res://.godot/imported/paper_safe_clearings.svg-739cab17194de5c67d5490d77c53e394.ctex
+Loading resource: res://assets/art/world/samsun/paper_vista_flags.svg
+Loading resource: res://.godot/imported/paper_vista_flags.svg-675aeaf472460bfd4682a8295a640cea.ctex
+Loading resource: res://assets/art/world/samsun/paper_skyline_depth.svg
+Loading resource: res://.godot/imported/paper_skyline_depth.svg-2e3f2749671378a877032ff642d70e9d.ctex
+Loading resource: res://assets/art/world/samsun/paper_harbor_dock_props.svg
+Loading resource: res://.godot/imported/paper_harbor_dock_props.svg-58c8511264875734ff7bae0acb43a902.ctex
+Loading resource: res://assets/art/world/samsun/paper_coastal_life.svg
+Loading resource: res://.godot/imported/paper_coastal_life.svg-d7c95c26dc4d567cf815727c2a602a49.ctex
+Loading resource: res://assets/art/world/room/paper_wall_window.svg
+Loading resource: res://.godot/imported/paper_wall_window.svg-cbd2526f4c93e7ceedbbf6fd7bceb51a.ctex
+Loading resource: res://assets/art/world/room/paper_study_nook.svg
+Loading resource: res://.godot/imported/paper_study_nook.svg-a76d0545a4adf5e12d495fe2b1c00224.ctex
+Loading resource: res://assets/art/world/room/paper_floor_rug.svg
+Loading resource: res://.godot/imported/paper_floor_rug.svg-831ec4349e0068bba209188a5a57b2ba.ctex
+Loading resource: res://assets/art/world/room/paper_book_portal.svg
+Loading resource: res://.godot/imported/paper_book_portal.svg-451fdb332210e529851e253a9d21ce14.ctex
+Loading resource: res://assets/art/world/room/paper_shelf.svg
+Loading resource: res://.godot/imported/paper_shelf.svg-21d6954791c052f5a00123f148d4df37.ctex
+Loading resource: res://assets/art/world/room/paper_bed.svg
+Loading resource: res://.godot/imported/paper_bed.svg-55a481b1c4977d4cb76849a3f605a3a0.ctex
+Loading resource: res://assets/art/world/room/paper_wall_story.svg
+Loading resource: res://.godot/imported/paper_wall_story.svg-a7db2b20bd5fa9a3ee6b7b35f42a4160.ctex
+Loading resource: res://assets/art/world/room/paper_foreground_frame.svg
+Loading resource: res://.godot/imported/paper_foreground_frame.svg-7f984bb7cf961a5b3ac723aed408e998.ctex
+Loading resource: res://assets/art/world/room/paper_desk_clutter.svg
+Loading resource: res://.godot/imported/paper_desk_clutter.svg-d3c691f2e6ff08fd88f9e0155be612d3.ctex
+Loading resource: res://assets/art/world/opening/paper_sky_horizon.svg
+Loading resource: res://.godot/imported/paper_sky_horizon.svg-da7f3a2cf8b704ba481b880aa0e99991.ctex
+Loading resource: res://assets/art/world/opening/paper_benchmark_world.svg
+Loading resource: res://.godot/imported/paper_benchmark_world.svg-e9cfa27c3faa923a2a64e9cb142eec27.ctex
+Loading resource: res://assets/art/world/opening/paper_terrain_island.svg
+Loading resource: res://.godot/imported/paper_terrain_island.svg-3d6d5247a94feacc99d6f85be4a0d2fc.ctex
+Loading resource: res://assets/art/world/opening/paper_main_path.svg
+Loading resource: res://.godot/imported/paper_main_path.svg-e35b7832c80ae6be5a40bb7cbcd51126.ctex
+Loading resource: res://assets/art/world/opening/paper_village_depth.svg
+Loading resource: res://.godot/imported/paper_village_depth.svg-29c97b89be81544da1cce1e5a162f05e.ctex
+Loading resource: res://assets/art/world/opening/paper_book_gate.svg
+Loading resource: res://.godot/imported/paper_book_gate.svg-cd1d6d8d3ea03063cbb5325b33182402.ctex
+Loading resource: res://assets/art/world/opening/paper_clue_stations.svg
+Loading resource: res://.godot/imported/paper_clue_stations.svg-6a443948eced7a6943135828ee3f7b9a.ctex
+Loading resource: res://assets/art/world/opening/paper_foreground_frame.svg
+Loading resource: res://.godot/imported/paper_foreground_frame.svg-6dd3c41d98957615781f02287975e9ea.ctex
+SCRIPT ERROR: Parse Error: Preload file "res://assets/art/world/samsun/paper_sky_samsun.svg" has no resource loaders (u
+nrecognized file extension).
+   at: GDScript::reload (res://scripts/world_builder.gd:134)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "SAMSUN_PAPER_SKY_SAMSUN_TEXTURE" constant because the value doesn'
+t have a set type.
+   at: GDScript::reload (res://scripts/world_builder.gd:134)
+SCRIPT ERROR: Parse Error: Preload file "res://assets/art/world/samsun/paper_map_compass.svg" has no resource loaders (
+unrecognized file extension).
+   at: GDScript::reload (res://scripts/world_builder.gd:135)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "SAMSUN_PAPER_MAP_COMPASS_TEXTURE" constant because the value doesn
+'t have a set type.
+   at: GDScript::reload (res://scripts/world_builder.gd:135)
+ERROR: Failed to load script "res://scripts/world_builder.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+Loading resource: res://scripts/world_marker.gd
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/notepad.svg
+Loading resource: res://.godot/imported/notepad.svg-8942187593f205a9b99cca63e7cde457.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/pawn_table.svg
+Loading resource: res://.godot/imported/pawn_table.svg-43ec8387f8856986dbf8e1ce5345603a.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/flag_square.svg
+Loading resource: res://.godot/imported/flag_square.svg-7ae4f7915c0025c1ae255088946130d9.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/hand_card.svg
+Loading resource: res://.godot/imported/hand_card.svg-2fb4102a79a2a2466f542fc06d8275e3.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/token_add.svg
+Loading resource: res://.godot/imported/token_add.svg-862d3f19dc930f0afd22db26a5f80a5c.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/structure_watchtower.svg
+Loading resource: res://.godot/imported/structure_watchtower.svg-72b26ccd8f3df148b3308e1daa760c89.ctex
+Loading resource: res://kenney/kenney_board-game-icons/Vector/Icons/hourglass.svg
+Loading resource: res://.godot/imported/hourglass.svg-90d9aabeb6d0fc06d17f1bdf4947333b.ctex
+Loading resource: res://scripts/world_wave.gd
+SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (W
+arning treated as error.)
+   at: GDScript::reload (res://scripts/world_wave.gd:97)
+ERROR: Failed to load script "res://scripts/world_wave.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+[AudioManager] assets/audio/ mevcut, ses dosyalari yuklenmeye hazir.

@@ -1,227 +1,163 @@
-# Zaman Yolcuları Roadmap
+# Bandırma Yolculuğu — Product Roadmap
 
 ## Core Vision
 
-Arda veya Eda sınav gecesi tarih kitabını okurken uykuya dalar ve kendini tarihsel olayların sanal rüya dünyasında bulur. Oyun; keşif, NPC konuşmaları, görev nesneleri, görsel karar kartları ve Rift Riff tarzı affedici strateji senaryolarını birleştirir.
+"Bandırma Yolculuğu" is a **pop-history educational adventure** for 5-10 year olds, covering the Turkish War of Independence (1919-1923) through a **paper diorama open world** design.
 
-Oyuncu Atatürk'ün yerine geçmez. Arda/Eda tarihsel kararları anlamaya çalışan öğrenci karakterdir. Atatürk, ileriki sürümlerde yanlış karar sonrası yolu açıklayan bilge rehber olarak konumlanır.
+> **Kuzey Yıldızı (North Star):** A child playing as Arda (or Eda) steps into key moments of the War of Independence — not as a commander, but as a **time-traveling observer** who helps people, makes ethical choices, and experiences history through everyday challenges.
+
+### Genişletilmiş Hikaye Yapısı (v2.0)
+
+- 3 Ana Perde → 9 Bölge → 31 Event ✅
+- Perde 1: Uyanış (room → bandirma → samsun) ✅
+- Perde 2: Örgütlenme (havza → amasya → kongreler) ✅
+- Perde 3: Mücadele (ankara → sakarya → final/lozan/cumhuriyet) ✅
 
 ## Product Frame
 
-- Target audience: children ages 5-10.
-- Reference design age: 7-8. The game should still be friendly for 5-6 with icons/voice later and satisfying for 9-10 through light strategy, but every prototype decision is judged against a 7-8 year old player's clarity.
-- Platform priority: Android first, iOS compatible.
-- Orientation: portrait mobile layout (9:16).
-- Visual tone: warm, colorful, semi-cartoon, safe, inspiring.
-- Story framing: the player supports and understands historical decisions instead of replacing Ataturk.
-- Reference direction: cozy narrative mobile adventure, readable educational UX, child-friendly cinematic staging.
+| Alan | Hedef 5-10 yaş | Gerçekçi MVP |
+|------|----------------|--------------|
+| UX | Tek bakışta anlaşılır | Karakter seçimi + harita +
+  diyalog + karar |
+| İçerik | 31 event | 31 event ✅ |
+| Sanat | Paper diorama, sıcak tonlar | 9 bölge SVG asset ✅ |
+| Ses | Ortam + geri bildirim | 13 procedural ses ✅ |
+| Süre | 20-30 dk oyun | ~15 dk loop |
+| Platform | Android portrait | Android 5.0+ |
 
 ## Immediate Product Discipline
 
-The art vision cannot outrun gameplay validation. Until the Samsun loop proves that a child understands why the historical decision matters, the roadmap is gated:
-
-- Do not open new historical worlds beyond the existing prototype path.
-- Do not expand the strategy system into more mechanics.
-- Do not replace broad asset sets before Arda/Eda emotional readability improves.
-- Do not optimize for 10-year-old strategic depth if it weakens 7-8-year-old comprehension.
-
-The current priority is one complete, testable loop:
-
-1. Room framing: the child understands exam anxiety and the dream setup.
-2. Bandirma setup: the child inspects 2 clues and reaches the Samsun decision.
-3. Samsun diorama: the child explores, notices companion hints, collects 2 side objects, builds support, and starts the wave.
-4. Learning payoff: the child can say, in simple words, why observing and building reliable connections was wiser than rushing.
-5. Adult review: history and child-development reviewers can approve tone, accuracy, and cognitive load.
+1. ✅ Herhangi bir anda çalıştırılabilir olmalı
+2. ✅ Static typing — tüm değişkenler tipli
+3. ✅ Compositon over Inheritance — modüler mimari
+4. ✅ Signal tabanlı iletişim — modüller arası gevşek bağlı
+5. ✅ _process sadece gerektiğinde — mobil performans
+6. ✅ Tüm metinler Türkçe (Türkiye Türkçesi)
+7. 📝 Gerçek ses dosyaları (.ogg) — placeholder'ları değiştir
 
 ## Open World Historical Diorama Direction
 
-Yeni ana dünya formülü 2D portrait mobile kalır: her tarihsel bölüm, küçük ve okunabilir bir "rüya dioraması" açık dünya dilimi olarak tasarlanır. Amaç tam 3D'ye geçmek değil; Dogwalk/Koira'nın keşif ve eşlikçi duygusunu, Rift Riff'in temiz strateji node'larını ve PaperTown'ın modüler paper-world üretim mantığını 2D Godot sahnelerine çevirmektir.
+The game's "open world" is a **horizontal scrolling diorama** where each zone represents a historical region:
 
-Her bölüm aynı okunabilir şablonu kullanır:
+1. Room → Bandırma → Samsun → Havza → Amasya → Kongreler → Ankara → Sakarya → Final
 
-- Güvenli giriş alanı.
-- 1 ana patika.
-- 2 yan keşif noktası.
-- 1 eşlikçi tepki anı.
-- 1 tarihsel landmark.
-- 1 karar/strateji node'u.
-- Yumuşak çıkış ve bilgi kartı.
+### Art Pillars (from VISUAL_DESIGN_SYSTEM.md + artwork analysis)
 
-Referansların proje karşılığı:
+- **Paper Diorama stili:** Organik path şekilleri, katmanlı opaklık, kalın outline (stroke-width: 8-18)
+- **4-renk paleti:** 1 gölge + 2 ana renk + 1 vurgu + outline
+- **Portre standardı:** 520×520px, rx=80, #f5e8d3 background
+- **Bölüm temaları:** THEME_ROOM, THEME_BANDIRMA, THEME_SAMSUN, THEME_TOWN, THEME_CONGRESS
 
-- Dogwalk: rahat keşif temposu, küçük obje toplama, başarısızlık baskısı olmayan dolaşım.
-- Koira: Arda/Eda bağını güçlendiren eşlikçi takip, kısa duygusal tepkiler ve çevre anlatımı.
-- Rift Riff: tek bakışta anlaşılan destek node'ları, aktif hedef parıltısı, minimal strateji HUD'u.
-- PaperTown: `floor`, `decoration`, `object`, `house`, `bridge` ayrımının 2D karşılığı; terrain, path, prop cluster, landmark, fx ve interactable modülleri.
+## Phase 1 — Samsun Loop Validation ✅
+- ✅ Diyalog sistemi (typewriter + portre)
+- ✅ Karar kartları (A/B seçenekleri)
+- ✅ Event zinciri (3 event: room → bandirma → samsun)
+- ✅ Temel player movement (touch/drag)
+- ✅ HUD (bölüm başlığı, ilerleme)
 
-PaperTown yerel klonda ve GitHub `LICENSE` dosyasında MIT olarak doğrulanmıştır. Yine de bu projede doğrudan 3D port yapılmaz. Mimari fikirler 2D `Node2D`, `Area2D`, `Camera2D` ve procedural helper sistemiyle yeniden kurulur. Kod veya asset doğrudan alınırsa kaynak ve lisans notu `assets/licenses/` altında tutulmalı, lisans tekrar kontrol edilmelidir.
+## Phase 2 — Existing Scene Visual Kit ✅
+- ✅ SVG world asset'leri (9 bölge, ~40 SVG)
+- ✅ Paper diorama katmanları (sky, terrain, path, landmark, foreground, character)
+- ✅ Procedural SVG generation pattern
 
-İlk pilot: `Samsun Rift`.
+## Phase 3 — Character Emotional Pass ✅
+- ✅ Arda/Eda portreleri (idle, happy, thinking)
+- ✅ Portre ekspresyon routing
+- ✅ Dialogue portrait mapping
 
-- Sahil/liman giriş alanı.
-- Telgraf yolu.
-- Halk meydanı.
-- Merkezi rüya-rift node'u.
-- 3 destek node'u: liman, telgraf, halk.
-- En az 2 yan keşif objesi.
-- En az 1 eşlikçi tepki anı.
+## Phase 4 — Unit Worlds, Locked Behind Validation ✅
+- ✅ 6 region implemented (room → kongreler) → then expanded to 9
+- ✅ Ankara/Meclis (5 SVG, 11 builder functions)
+- ✅ Sakarya/Büyük Taarruz (6 SVG, 11 builder functions)
+- ✅ Final/Lozan/Cumhuriyet (6 SVG, 11 builder functions)
+- ✅ All 9 zones fully built
 
-HUD ilkesi: açık dünyada mini harita ve rota paneli varsayılan kapalıdır. Yönlendirme çevresel olmalıdır: patika, ışık, landmark, aktif node parıltısı ve alttaki tek aksiyon butonu.
+## Phase 5 — Shared Child-Facing UX ✅
+- ✅ OverlayManager (stack-based, CanvasLayer 50-110)
+- ✅ Loading screen (10 history hints)
+- ✅ Exit confirm dialog (Android back button)
+- ✅ Settings audio sliders (BGM/SFX)
+- ✅ Touch target compliance (104×104 minimum)
 
-## Phase 1 - Samsun Loop Validation
+## Phase 6 — Mobile Visual Design System ✅
+- ✅ Renk sistemi (colors.gd — merkezi)
+- ✅ Texture DRY (textures.gd — merkezi sabitler)
+- ✅ Tween-based animation (no _process loops)
+- ✅ Performance: mobile-first, no unnecessary _process
 
-- Arda/Eda karakter seçimi.
-- Öğrenci odası keşif alanı.
-- Sınav ünite notlarını toplama.
-- Rüya geçişi: Bandırma Vapuru.
-- Samsun kararı: plansız hareket yerine gözlem ve güvenilir bağlantı.
-- Rift Riff inspired mini scenario: liderlik puanı, destek noktaları, kararsızlık dalgası.
-- Hard validation question: "Çocuk bu kararın tarihsel nedenini oyun içinde hissediyor mu?"
-- Success test: one 7-8 yaş oyuncu ilk 10 dakikada ne yapacağını bulmalı ve Samsun kararını kendi cümlesiyle açıklayabilmeli.
+## Phase 6.5 — World Art Upgrade: Toca World + Rift Riff Quality Target
 
-## Phase 2 - Existing Scene Visual Kit
-
-- Apply the visual kit only to already existing prototype scenes: room, Bandirma, Samsun, Havza, Amasya, Kongreler.
-- Do not create new historical content until the Samsun loop test passes.
-- Reduce clutter before adding detail: one path, one focus, one bottom action.
-- Make strategy nodes feel historical by tying each support to a concrete civic function: observe, communicate, gather, represent, decide.
-
-## Phase 3 - Character Emotional Pass
-
-- Move Arda/Eda custom art earlier than broad world asset replacement.
-- Minimum first deliverable:
-  - idle portrait
-  - thinking portrait
-  - happy/relieved portrait
-- Use these portraits in dialogue, decision feedback, and companion reaction moments.
-- Keep current Kenney world props as acceptable placeholders until the emotional loop reads clearly.
-
-## Phase 4 - Unit Worlds, Locked Behind Validation
-
-- Samsun Yolculuğu: rota, gözlem, liman görevleri.
-- Havza Genelgesi: halka bilinçli tepkiyi örgütleme.
-- Amasya Genelgesi: bağımsızlık fikrini tamamlayan karar kartları.
-- Erzurum ve Sivas: temsilcileri ikna etme ve birlik kurma.
-- Ankara: merkez seçimi, yolculuk ve Meclis'e hazırlık.
-- Each new world must inherit the validated loop instead of inventing a new structure.
-
-## Phase 5 - Shared Child-Facing UX
-
-- One core version for all target players instead of split age modes.
-- Very short readable text, strong icon support, and eventual full voice-over.
-- Affordances should stay consistent across scenes: explore, inspect, choose, support, continue.
-- Difficulty should adapt through softer feedback, simpler interaction pacing, and optional helper prompts, not separate scene branches.
-
-## Phase 6 - Mobile Visual Design System
-
-- Adopt a mobile-first 2D UI/UX system for portrait screens with large touch targets and safe-area compliant spacing.
-- Prioritize early-reader clarity: larger text, fewer words per screen, stronger icons, and calmer panel density.
-- Build a reusable visual language for:
-  - Main menu
-  - Dialogue scenes
-  - Choice overlays
-  - Educational info cards
-  - Minimal gameplay HUD
-- Keep the art direction colorful, warm, and semi-cartoon with soft light, ocean blues, sunset golds, and gentle historical texture.
-- Use stylized child-proportioned characters, not realism.
-- Emphasize emotional clarity through portraits, expressions, and clean panel hierarchy.
-- Create reusable Godot-friendly component scenes for buttons, cards, overlays, and chapter headers.
-- Keep all UI, character, background, and effects layers modular for export-friendly assembly.
-- Use the dedicated design spec in `docs/VISUAL_DESIGN_SYSTEM.md` as the source for upcoming UI and art implementation.
-
-## Phase 6.5 - World Art Upgrade: Toca World + Rift Riff Quality Target
-
-Goal: upgrade the current prototype from functional blockout to a polished, child-friendly, highly readable world. The target is not to copy Toca Boca or Rift Riff, but to reach their production qualities: strong silhouettes, low visual clutter, warm expressive rooms, readable interaction points, cozy environmental storytelling, and forgiving strategy surfaces.
+> 📝 Bu aşama sonraki sprint'ler için — mevcut prototip yeterli.
 
 ### Art Pillars
-
-- Big readable shapes first: every location must be understandable from a phone screen in one glance.
-- Cozy object density: use small prop clusters around story moments, not random decoration everywhere.
-- Paper-cutout depth: soft blobs, shadow plates, foreground silhouettes, and subtle parallax replace flat rectangles.
-- Neo-historical pop-history: deep turquoise sea/sky, crimson historical flag accents, golden-hour light, and clean cel-shaded outlines.
-- Magical rift language: glowing blue particles mark dream/time-travel transitions and strategy decision spaces.
-- Character-scale worlds: props should feel oversized, friendly, and tactile for ages 5-10.
-- Historical softness: Bandırma, Samsun, Havza, Amasya, and Kongreler should feel like dream-stage memories, not dark war scenes.
-- One interaction language: clue, NPC, decision, resource, support, and wave markers must stay visually distinct across all worlds.
+- Paper diorama stili (kalın outline, organik path)
+- 4 renk paleti
+- Portrait orientation 9:16 (1080×1920)
+- Sıcak, yarı-çizgi film tonu
 
 ### Production Roadmap
+- [ ] 1. Prototype Visual Kit — __mevcut__
+- [ ] 2. Character Emotion Kit — Arda/Eda portreleri __hazır__
+- [ ] 3. Asset Integration Kit — tutorials
+- [ ] 4. World Replacement Pass — higher quality diorama
+- [ ] 5. Full Character Pass — animation + expression
+- [ ] 6. Polish Pass — particles, lighting
 
-1. Visual Foundation Pass
-   - Add shared world helpers for soft blobs, route ribbons, glints, light pools, label banners, and paper shadows.
-   - Apply these helpers only to current locations so every world has depth, not only UI polish.
-   - Keep current story and game logic unchanged.
-   - Remove redundant arrows, badges, and HUD before adding new decoration.
+## Phase 7 — Education & Safety ✅
+- ✅ Tarih bilgisi kartları (info_card_overlay)
+- ✅ Doğru/yanlış geri bildirimi (decision retry)
+- ✅ Öğretici diyaloglar
 
-2. Character & Portrait Pass
-   - Produce Arda/Eda portrait states before broad environment replacement.
-   - First states: idle, thinking, happy.
-   - Use portraits to test emotional connection in the Samsun loop.
+## Phase 8 — Monetization
+> 📝 v2.0 hedefi — MVP öncelikli değil.
 
-3. Asset Replacement Pass
-   - Replace placeholder rectangles with modular room, town, harbor, and meeting-hall props.
-   - Keep Kenney as prototype-safe base because Kenney's official support page states its game assets are CC0/public domain.
-   - Add a curated external asset folder only after checking each pack's license and commercial permissions.
+## Phase 9 — Infrastructure ✅
+- ✅ Modular architecture (7 modules)
+- ✅ Audio system (procedural placeholder)
+- ✅ Save system (JSON settings)
+- ✅ Event routing (CHAPTER_EVENT_CHAINS)
+- ✅ Feature flags (BUILT_ZONES)
+- ✅ Godot headless validation (3 tests, 0 errors)
 
-4. World Composition Pass
-   - Give each historical unit a unique map silhouette:
-     - Room: warm bedroom, desk, book portal, window moonlight.
-     - Bandırma: ship deck/cabin hybrid with ocean lanes and mast silhouette.
-     - Samsun: rift-like strategic board with support nodes and harbor/telgraf/halk zones.
-     - Havza: town square with notice board, telgraf line, gathering plaza.
-     - Amasya: meeting house, writing table, river/path flow, statement route.
-     - Kongreler: assembly hall, delegate tables, unity stage, shared route.
-   - Make interactables pop through light and motion, not text density.
+---
 
-5. Full Character & Animation Pass
-   - Commission or generate Arda/Eda sprite sheets in consistent 5-10 age proportions.
-   - Add idle, walk, surprised, thinking, happy, and learning poses.
-   - Replace current generic Kenney character placeholders when the custom set is ready.
+## Milestone Durumu
 
-6. Polish & Mobile Validation
-   - Test portrait readability at 720x1280 and 1080x1920.
-   - Check that markers never hide behind HUD elements.
-   - Keep all text large enough for early readers.
-   - Profile mobile draw calls after final asset import.
+| Milestone | Durum | Notlar |
+|-----------|-------|--------|
+| **M1: Giriş Loop** (room→bandirma→samsun) | ✅ | 3 zone, 6 event |
+| **M2: Örgütlenme** (havza→amasya→kongreler) | ✅ | 3 zone, 13 event |
+| **M3: Mücadele** (ankara→sakarya→final) | ✅ | 3 zone, 11 event |
+| **M4: Ses Sistemi** | ✅ | 13 procedural ses |
+| **M5: Android Build** | 📝 | Export template + keystore gerekli |
+| **M6: World Art Upgrade** | 📝 | Toca World kalitesi |
+| **M7: E2E Test** | 📝 | Otomatize test suite |
 
-### Asset Shopping List
+## Current Prototype (v0.9 — Content Complete)
 
-- Cozy 2D top-down interiors: bedroom, desk, bookcase, rugs, lamps, school objects.
-- Cartoon harbor/ship pack: boat deck, ocean, dock props, crates, rope, map table.
-- Cozy town exterior: simple houses, paths, signs, trees, fences, plaza props.
-- Meeting/interior hall pack: tables, chairs, papers, banners, lamps.
-- UI reward pack: stars, badges, sparkles, buttons in consistent rounded style.
-- Custom character pack: Arda, Eda, student NPCs, teacher guide, historically inspired but child-proportioned uniforms.
+**Oynanabilir İçerik:**
+- 9 bölge, 31 event, tümü built ve wired
+- Karakter seçimi (Arda/Eda)
+- Dialogue + Decision + InfoCard + ChapterTransition overlay'leri
+- Typewriter metin + portre gösterimi
+- A/B karar kartları + doğru/yanlış geri bildirimi
+- Goal sistemi (zone bazlı hedefler)
+- Zone transition + chapter transition
+- Settings (BGM/SFX volume slider)
+- Loading screen (10 history facts)
+- Exit confirm dialog (Android back button)
+- 13 procedural placeholder ses
 
-### Recommended Asset Sources To Review
+**Gereksinimler:**
+- Godot 4.6.2
+- Android export template
+- Minimum 1080×1920 portrait
 
-- Kenney: safe prototype base, CC0/public domain game assets according to Kenney's own support page.
-- itch.io Godot/CC0 assets: useful for free prototype expansion, but check each pack separately.
-- RhosGFX RPG Interiors: cute high-res interiors, Godot-compatible per listing; check commercial license before use.
-- Shubibubi Cozy Interior: strong cozy style, but free and paid versions have different commercial permissions.
-- CraftPix coastal/fishing village packs: good for harbor/dock scenes; check license and style fit.
-- MODI UI packs: useful if you want faster polished mobile UI, but avoid over-glossy elements that fight the current indie softness.
-
-## Phase 7 - Education & Safety
-
-- Map each level to primary school Life Studies and Social Studies outcomes.
-- Review all historical text with a history educator.
-- Review tone, cognitive load, and feedback loops with a child development specialist.
-
-## Phase 8 - Monetization
-
-- No ads.
-- First unit free.
-- Full curriculum unlocked with a one-time purchase.
-
-## Current Prototype
-
-- `scenes/world.tscn` is the current entry scene.
-- `scripts/world.gd` builds the room, Bandırma, Samsun Rift, and Havza prototype worlds.
-- The current loop is: choose Arda/Eda -> collect room unit notes -> enter Bandirma -> inspect ship clues -> make the Samsun decision -> build supports in the Samsun Rift -> enter Havza -> gather clues -> make the Havza call -> overcome the silence wave.
-- The current visual pass adds chapter chips, dream-fade transitions, ambient prop dressing from Kenney packs, stronger marker/character feedback, a more authored Havza layout using sketch-town tiles, a staged Bandirma deck with clearer cabin and mast composition, and a reusable decision overlay scene for history-choice moments.
-- `scenes/dialogue_overlay.tscn` and `scripts/dialogue_overlay.gd` already implement the current dialogue overlay: left/right portraits, speaker name, chapter label, typewriter reveal, tap-to-continue, active speaker glow, and mobile bottom panel.
-- Dialogue's next technical milestone is not creating the overlay from scratch; it is adding portrait expression routing for `idle`, `thinking`, and `happy/relieved` states.
-- The visual target file `assets/art/source/concepts/neo_historical_bandirma_reference.png` is present and should remain the concrete art brief reference until a newer approved concept replaces it.
-- `scenes/main.tscn` remains as an older decision-panel prototype and can be reused later as a dedicated decision UI.
-- Next validation milestone: make the Samsun loop understandable without extra explanation, then test it with one 7-8 yaş child.
-- Current art milestone: improve readability and companion emotion inside the existing Samsun/room/Bandirma loop before opening more historical scope.
+**Sonraki Adımlar:**
+1. Gerçek ses dosyaları (.ogg) — placeholder'ları değiştir
+2. Android build (APK/AAB)
+3. End-to-end test (otomatize)
+4. World art upgrade (Toca World kalitesi)
+5. Achievement sistemi
+6. Oyun içi tutorial
+7. Analytics entegrasyonu

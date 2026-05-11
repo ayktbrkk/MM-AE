@@ -1,15 +1,66 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="360" viewBox="0 0 520 360">
-  <ellipse cx="260" cy="282" rx="198" ry="46" fill="#1b2630" opacity=".18"/>
-  <path d="M76 166 C148 82 334 62 438 146 C414 250 320 302 204 286 C126 276 78 230 76 166Z" fill="#f5d88f"/>
-  <path d="M92 166 C160 106 328 92 420 150 C388 228 314 266 218 254 C150 246 104 214 92 166Z" fill="#f9e7b7"/>
-  <path d="M112 164 C188 210 322 212 402 164" fill="none" stroke="#b9554a" stroke-width="11" stroke-linecap="round" opacity=".62"/>
-  <path d="M132 128 H390 L372 164 H150Z" fill="#d45248"/>
-  <path d="M140 128 H382" stroke="#5b322e" stroke-width="8" stroke-linecap="round" opacity=".35"/>
-  <g fill="#33424a">
-    <circle cx="156" cy="218" r="18"/><path d="M132 278 C136 240 176 240 182 278Z"/>
-    <circle cx="224" cy="236" r="18"/><path d="M200 296 C204 258 244 258 250 296Z"/>
-    <circle cx="294" cy="232" r="18"/><path d="M270 292 C274 254 314 254 320 292Z"/>
-    <circle cx="362" cy="214" r="18"/><path d="M338 276 C342 238 382 238 388 276Z"/>
+  <!-- ============================================= -->
+  <!-- Samsun People Plaza v3                       -->
+  <!-- Enhanced: podium + silhouettes + flags + gold-->
+  <!-- ============================================= -->
+  <!-- Shadow layer -->
+  <ellipse cx="260" cy="310" rx="210" ry="44" fill="#1b2630" opacity="0.18"/>
+  <!-- Plaza ground -->
+  <path d="M70 170 C144 80 336 60 444 148 C418 256 320 310 200 294 C118 284 66 236 70 170Z" fill="#f5d88f" stroke="#2b2730" stroke-width="6" stroke-linejoin="round"/>
+  <!-- Ground highlight -->
+  <path d="M88 170 C158 108 332 94 426 154 C392 234 314 274 214 262 C144 252 100 218 88 170Z" fill="#f9e7b7"/>
+  <!-- Plaza stone pattern -->
+  <path d="M160 204 C232 184 296 188 366 210" fill="none" stroke="#7a5a42" stroke-width="3" stroke-linecap="round" opacity="0.14"/>
+  <path d="M170 222 C240 204 304 208 370 228" fill="none" stroke="#7a5a42" stroke-width="3" stroke-linecap="round" opacity="0.12"/>
+  <!-- Plaza railing -->
+  <path d="M108 168 C184 216 326 218 406 168" fill="none" stroke="#c84b3d" stroke-width="10" stroke-linecap="round" opacity="0.56"/>
+  <!-- Railing posts -->
+  <g fill="#c84b3d" opacity="0.44">
+    <rect x="150" y="166" width="6" height="20" rx="2"/>
+    <rect x="210" y="180" width="6" height="20" rx="2"/>
+    <rect x="300" y="180" width="6" height="20" rx="2"/>
+    <rect x="360" y="166" width="6" height="20" rx="2"/>
   </g>
-  <path d="M170 186 C226 158 306 158 360 184" fill="none" stroke="#fff5cf" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+  <!-- Plaza podium -->
+  <path d="M128 130 H394 L376 168 H146Z" fill="#c84b3d" stroke="#2b2730" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M136 130 H386" stroke="#7a3f32" stroke-width="7" stroke-linecap="round" opacity="0.32"/>
+  <!-- Podium decoration -->
+  <path d="M200 148 L260 140 L320 148" fill="none" stroke="#f2be63" stroke-width="4" stroke-linecap="round" opacity="0.26"/>
+  <!-- People silhouettes -->
+  <g fill="#2b2730" opacity="0.32">
+    <!-- Person 1 -->
+    <circle cx="154" cy="222" r="18"/>
+    <path d="M130 282 C134 244 174 244 180 282Z"/>
+    <!-- Person 2 -->
+    <circle cx="222" cy="240" r="18"/>
+    <path d="M198 300 C202 262 242 262 248 300Z"/>
+    <!-- Person 3 (child) -->
+    <circle cx="268" cy="250" r="12"/>
+    <path d="M250 296 C252 268 284 268 286 296Z"/>
+    <!-- Person 4 -->
+    <circle cx="292" cy="236" r="18"/>
+    <path d="M268 296 C272 258 312 258 318 296Z"/>
+    <!-- Person 5 -->
+    <circle cx="360" cy="218" r="18"/>
+    <path d="M336 280 C340 242 380 242 386 280Z"/>
+  </g>
+  <!-- Decorative garland -->
+  <path d="M168 190 C226 162 306 162 362 188" fill="none" stroke="#f5e8d3" stroke-width="6" stroke-linecap="round" opacity="0.50"/>
+  <!-- Flag accents -->
+  <g fill="#c84b3d" opacity="0.32">
+    <path d="M128 84 L158 80 L158 104 L128 108Z"/>
+    <path d="M372 88 L402 84 L402 108 L372 112Z"/>
+  </g>
+  <!-- Flag crescent -->
+  <g fill="#fff8e7" opacity="0.28">
+    <path d="M138 88 C142 84 150 84 154 88 C150 92 142 92 138 88Z"/>
+    <path d="M382 92 C386 88 394 88 398 92 C394 96 386 96 382 92Z"/>
+  </g>
+  <!-- Warm accent dots -->
+  <g fill="#f2be63" opacity="0.28">
+    <circle cx="260" cy="318" r="8"/>
+    <circle cx="128" cy="296" r="6"/>
+    <circle cx="394" cy="296" r="6"/>
+    <circle cx="260" cy="116" r="5"/>
+  </g>
 </svg>

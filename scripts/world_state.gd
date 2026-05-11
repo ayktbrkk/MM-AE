@@ -40,8 +40,8 @@ var wave_attempts: int = 0
 # === YENİ STATE DEĞİŞKENLERİ ===
 var _active_markers: Dictionary = {}
 var _zone_marker_count: Dictionary = {}
-var _gathered_names: Array = []
-var _unit_notes_collected: Array = []
+var _gathered_names: Array[String] = []
+var _unit_notes_collected: Array[String] = []
 var _item_discovered: Dictionary = {}
 var _interacted_markers: Dictionary = {}
 var _support_nodes: Dictionary = {}

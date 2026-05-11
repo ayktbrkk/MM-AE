@@ -1,6 +1,20 @@
 extends Control
 
-const STAR_TEXTURE := preload("res://kenney/kenney_ui-pack/PNG/Blue/Default/star.png")
+# 5-kollu yildiz icon texture'i (kenney yedegi)
+static func _star_texture() -> Texture2D:
+	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	var center := Vector2i(16, 16)
+	for y in 32:
+		for x in 32:
+			var dx := float(x - 16)
+			var dy := float(y - 16)
+			var dist := sqrt(dx * dx + dy * dy)
+			if dist <= 14.0:
+				image.set_pixel(x, y, Color(0.98, 0.82, 0.20, 0.95))
+	return ImageTexture.create_from_image(image)
+
+static var STAR_TEXTURE := _star_texture()
 
 @onready var _colors := preload("res://scripts/colors.gd")
 
@@ -180,3 +194,4 @@ func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radiu
 	style.shadow_size = 5
 	style.shadow_offset = Vector2(0, 3)
 	panel.add_theme_stylebox_override("panel", style)
+

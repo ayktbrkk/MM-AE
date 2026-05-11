@@ -4,6 +4,7 @@ extends Node
 # Tüm _build_*, _add_*, _decorate_* fonksiyonları world.gd'den buraya taşınıyor
 
 @onready var _colors := preload("res://scripts/colors.gd")
+@onready var _textures := preload("res://scripts/textures.gd")
 @onready var _state: Node = $"../WorldState"
 
 signal world_built(area_key: String)
@@ -16,146 +17,6 @@ var _cached_world_root: Node
 
 # Dünya sabitleri
 const WORLD_SIZE := Vector2(1600, 2200)
-const CEL_OUTLINE := Color(0.05, 0.07, 0.12)
-const POP_DEEP_TURQUOISE := Color(0.02, 0.47, 0.57)
-const POP_TURQUOISE := Color(0.04, 0.67, 0.76)
-const POP_CRIMSON := Color(0.72, 0.18, 0.12)
-const POP_GOLD := Color(1.0, 0.70, 0.25)
-const POP_CREAM := Color(1.0, 0.90, 0.66)
-const RIFT_BLUE := Color(0.22, 0.78, 1.0)
-const DECORATIVE_LABEL_ALPHA := 0.0
-
-# Texture sabitleri
-const ARDA_TEXTURE := preload("res://assets/art/characters/arda/char_arda_world.svg")
-const EDA_TEXTURE := preload("res://assets/art/characters/eda/char_eda_world.svg")
-const NOTE_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/notepad.svg")
-const TALK_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/pawn_table.svg")
-const PORTAL_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/flag_square.svg")
-const DECISION_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/hand_card.svg")
-const RESOURCE_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/token_add.svg")
-const SUPPORT_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/structure_watchtower.svg")
-const WAVE_ICON := preload("res://kenney/kenney_board-game-icons/Vector/Icons/hourglass.svg")
-const BADGE_ICON := preload("res://kenney/kenney_medals/PNG/flat_medal3.png")
-const CLOUD_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/cloud3.png")
-const CLOUD_TEXTURE_ALT := preload("res://kenney/kenney_background-elements/PNG/cloud7.png")
-const MOON_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/moon_full.png")
-const TREE_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/tree01.png")
-const TREE_TEXTURE_ALT := preload("res://kenney/kenney_background-elements/PNG/tree05.png")
-const HOUSE_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/house_beige_front.png")
-const HOUSE_TEXTURE_ALT := preload("res://kenney/kenney_background-elements/PNG/house_grey_side.png")
-const FENCE_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/fence.png")
-const BG_FLAT_HILLS_1_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/hills1.png")
-const BG_FLAT_HILLS_2_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/hills2.png")
-const BG_FLAT_MOUNTAIN_1_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/mountain1.png")
-const BG_FLAT_MOUNTAIN_2_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/mountain2.png")
-const BG_FLAT_POINTY_MOUNTAINS_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/pointy_mountains.png")
-const BG_FLAT_HOUSE_SHORT_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/house_front_short.png")
-const BG_FLAT_HOUSE_TALL_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/house_front_tall.png")
-const BG_FLAT_TREE_03_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/tree03.png")
-const BG_FLAT_TREE_08_TEXTURE := preload("res://kenney/kenney_background-elements/PNG/Flat/tree08.png")
-const SHIP_HULL_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/hullLarge (1).png")
-const SHIP_HULL_ALT_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/hullLarge (3).png")
-const SHIP_SAIL_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/sailLarge (3).png")
-const SHIP_SMALL_SAIL_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/sailSmall (4).png")
-const SHIP_MAST_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/pole.png")
-const SHIP_CREW_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/crew (3).png")
-const SHIP_CREW_ALT_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/crew (5).png")
-const SHIP_FLAG_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/flag (3).png")
-const SHIP_FLAG_ALT_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/flag (6).png")
-const SHIP_CANNON_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/cannonMobile.png")
-const SHIP_WOOD_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/wood (2).png")
-const SHIP_NEST_TEXTURE := preload("res://kenney/kenney_pirate-pack/PNG/Default size/Ship parts/nest.png")
-const SMOKE_TEXTURE := preload("res://kenney/kenney_smoke-particles/PNG/Black smoke/blackSmoke10.png")
-const SKETCH_GRASS_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_center_S.png")
-const SKETCH_PATH_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_path_S.png")
-const SKETCH_PATH_CROSS_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_pathCrossing_S.png")
-const SKETCH_PATH_CORNER_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_pathCorner_S.png")
-const SKETCH_PATH_END_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_pathEndSquare_S.png")
-const SKETCH_RIVER_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_river_S.png")
-const SKETCH_RIVER_BEND_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_riverBend_S.png")
-const SKETCH_RIVER_BRIDGE_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/grass_riverBridge_S.png")
-const SKETCH_BUILDING_DOOR_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/building_doorBeige_S.png")
-const SKETCH_BUILDING_WINDOW_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/building_windowBeige_S.png")
-const SKETCH_BUILDING_WINDOWS_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/building_windowsBeige_S.png")
-const SKETCH_BUILDING_CENTER_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/building_centerBeige_S.png")
-const SKETCH_BUILDING_CORNER_TEXTURE := preload("res://kenney/kenney_sketch-town/Tiles/building_cornerBeige_S.png")
-const BLOCK_BOX_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/box.png")
-const BLOCK_BOX_WIDE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/box_wide.png")
-const BLOCK_CART_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/cart.png")
-const BLOCK_CART_TOP_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/cart_top.png")
-const BLOCK_CHARACTER_MAN_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/character_man.png")
-const BLOCK_CHARACTER_WOMAN_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/character_woman.png")
-const BLOCK_CHARACTER_HORSE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/character_horse.png")
-const BLOCK_FENCE_SINGLE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/fence_single.png")
-const BLOCK_FENCE_DOUBLE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/fence_double.png")
-const BLOCK_BUSH_LARGE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/foliageBush_large.png")
-const BLOCK_BUSH_SMALL_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/foliageBush_small.png")
-const BLOCK_TREE_GREEN_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/foliageTree_green.png")
-const BLOCK_TREE_ORANGE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/foliageTree_orange.png")
-const BLOCK_MARKET_STALL_BLUE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/market_stallBlue.png")
-const BLOCK_MARKET_STALL_RED_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/market_stallRed.png")
-const BLOCK_TILE_BRIDGE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileBridge.png")
-const BLOCK_TILE_WATER_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileWater_1.png")
-const BLOCK_TILE_WOOD_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileWood_flat.png")
-const BLOCK_BUILDING_SAND_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_sand.png")
-const BLOCK_BUILDING_STONE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_stone.png")
-const BLOCK_BUILDING_FRAME_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_frame.png")
-const BLOCK_BUILDING_ROOF_BLUE_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_roofBlue.png")
-const BLOCK_BUILDING_ROOF_RED_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/tileBuilding_roofRed.png")
-const BLOCK_DOOR_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/door.png")
-const BLOCK_WINDOW_TEXTURE := preload("res://kenney/kenney_block-pack/PNG/Default (64px)/detail_window.png")
-const BOARD_CARD_BLUE_TEXTURE := preload("res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_blue3.png")
-const BOARD_CARD_RED_TEXTURE := preload("res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_red3.png")
-const BOARD_CARD_GREEN_TEXTURE := preload("res://kenney/kenney_boardgame-pack/PNG/Cards/cardBack_green3.png")
-const BOARD_CHIP_BLUE_TEXTURE := preload("res://kenney/kenney_boardgame-pack/PNG/Chips/chipBlueWhite.png")
-const BOARD_CHIP_GREEN_TEXTURE := preload("res://kenney/kenney_boardgame-pack/PNG/Chips/chipGreenWhite.png")
-const BOARD_CHIP_RED_TEXTURE := preload("res://kenney/kenney_boardgame-pack/PNG/Chips/chipRedWhite.png")
-const GAME_ARROW_RIGHT_TEXTURE := preload("res://kenney/kenney_game-icons/PNG/White/2x/arrowRight.png")
-const GAME_ARROW_UP_TEXTURE := preload("res://kenney/kenney_game-icons/PNG/White/2x/arrowUp.png")
-const GAME_INFO_TEXTURE := preload("res://kenney/kenney_game-icons/PNG/White/2x/information.png")
-const GAME_CHECK_TEXTURE := preload("res://kenney/kenney_game-icons/PNG/White/2x/checkmark.png")
-const GAME_STAR_TEXTURE := preload("res://kenney/kenney_game-icons/PNG/White/2x/star.png")
-const GAME_TARGET_TEXTURE := preload("res://kenney/kenney_game-icons/PNG/White/2x/target.png")
-const SAMSUN_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/samsun/paper_terrain_island.svg")
-const SAMSUN_PAPER_HARBOR_TEXTURE := preload("res://assets/art/world/samsun/paper_harbor_landmark.svg")
-const SAMSUN_PAPER_TELEGRAPH_TEXTURE := preload("res://assets/art/world/samsun/paper_telegraph_landmark.svg")
-const SAMSUN_PAPER_PEOPLE_TEXTURE := preload("res://assets/art/world/samsun/paper_people_plaza.svg")
-const SAMSUN_PAPER_RIFT_TEXTURE := preload("res://assets/art/world/samsun/paper_rift_core.svg")
-const SAMSUN_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/samsun/paper_main_path.svg")
-const SAMSUN_PAPER_CIVIC_CLUSTER_TEXTURE := preload("res://assets/art/world/samsun/paper_civic_cluster.svg")
-const SAMSUN_PAPER_WAVE_GATE_TEXTURE := preload("res://assets/art/world/samsun/paper_wave_gate.svg")
-const SAMSUN_PAPER_DISTANT_TOWN_TEXTURE := preload("res://assets/art/world/samsun/paper_distant_town.svg")
-const SAMSUN_PAPER_HARBOR_WATER_TEXTURE := preload("res://assets/art/world/samsun/paper_harbor_water.svg")
-const SAMSUN_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/samsun/paper_foreground_frame.svg")
-const SAMSUN_PAPER_SIDE_PATHS_TEXTURE := preload("res://assets/art/world/samsun/paper_side_paths.svg")
-const SAMSUN_PAPER_HARBOR_BOATS_TEXTURE := preload("res://assets/art/world/samsun/paper_harbor_boats.svg")
-const SAMSUN_PAPER_SIGNAL_RIDGE_TEXTURE := preload("res://assets/art/world/samsun/paper_signal_ridge.svg")
-const SAMSUN_PAPER_SKY_LIFE_TEXTURE := preload("res://assets/art/world/samsun/paper_sky_life.svg")
-const SAMSUN_PAPER_DISCOVERY_PROPS_TEXTURE := preload("res://assets/art/world/samsun/paper_discovery_props.svg")
-const SAMSUN_PAPER_COAST_DETAILS_TEXTURE := preload("res://assets/art/world/samsun/paper_coast_details.svg")
-const SAMSUN_PAPER_ROUTE_BEADS_TEXTURE := preload("res://assets/art/world/samsun/paper_route_beads.svg")
-const SAMSUN_PAPER_SAFE_CLEARINGS_TEXTURE := preload("res://assets/art/world/samsun/paper_safe_clearings.svg")
-const SAMSUN_PAPER_VISTA_FLAGS_TEXTURE := preload("res://assets/art/world/samsun/paper_vista_flags.svg")
-const SAMSUN_PAPER_SKYLINE_DEPTH_TEXTURE := preload("res://assets/art/world/samsun/paper_skyline_depth.svg")
-const SAMSUN_PAPER_HARBOR_DOCK_PROPS_TEXTURE := preload("res://assets/art/world/samsun/paper_harbor_dock_props.svg")
-const SAMSUN_PAPER_COASTAL_LIFE_TEXTURE := preload("res://assets/art/world/samsun/paper_coastal_life.svg")
-const ROOM_PAPER_WALL_TEXTURE := preload("res://assets/art/world/room/paper_wall_window.svg")
-const ROOM_PAPER_STUDY_NOOK_TEXTURE := preload("res://assets/art/world/room/paper_study_nook.svg")
-const ROOM_PAPER_FLOOR_RUG_TEXTURE := preload("res://assets/art/world/room/paper_floor_rug.svg")
-const ROOM_PAPER_BOOK_PORTAL_TEXTURE := preload("res://assets/art/world/room/paper_book_portal.svg")
-const ROOM_PAPER_SHELF_TEXTURE := preload("res://assets/art/world/room/paper_shelf.svg")
-const ROOM_PAPER_BED_TEXTURE := preload("res://assets/art/world/room/paper_bed.svg")
-const ROOM_PAPER_WALL_STORY_TEXTURE := preload("res://assets/art/world/room/paper_wall_story.svg")
-const ROOM_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/room/paper_foreground_frame.svg")
-const ROOM_PAPER_DESK_CLUTTER_TEXTURE := preload("res://assets/art/world/room/paper_desk_clutter.svg")
-const OPENING_PAPER_SKY_TEXTURE := preload("res://assets/art/world/opening/paper_sky_horizon.svg")
-const OPENING_PAPER_BENCHMARK_TEXTURE := preload("res://assets/art/world/opening/paper_benchmark_world.svg")
-const OPENING_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/opening/paper_terrain_island.svg")
-const OPENING_PAPER_PATH_TEXTURE := preload("res://assets/art/world/opening/paper_main_path.svg")
-const OPENING_PAPER_VILLAGE_TEXTURE := preload("res://assets/art/world/opening/paper_village_depth.svg")
-const OPENING_PAPER_BOOK_GATE_TEXTURE := preload("res://assets/art/world/opening/paper_book_gate.svg")
-const OPENING_PAPER_CLUE_STATIONS_TEXTURE := preload("res://assets/art/world/opening/paper_clue_stations.svg")
-const OPENING_PAPER_FOREGROUND_TEXTURE := preload("res://assets/art/world/opening/paper_foreground_frame.svg")
 
 # ============================================================
 # PUBLIC API
@@ -177,6 +38,12 @@ func build_world(area_key: String, world_root: Node) -> void:
 			_build_amasya_world(world_root)
 		"kongreler":
 			_build_kongreler_world(world_root)
+		"ankara":
+			_build_ankara_world(world_root)
+		"sakarya":
+			_build_sakarya_world(world_root)
+		"final":
+			_build_final_world(world_root)
 		_:
 			push_warning("world_builder: bilinmeyen area_key: ", area_key)
 	world_built.emit(area_key)
@@ -219,7 +86,7 @@ func _add_rect(world_root: Node, pos: Vector2, size: Vector2, color: Color, labe
 	if color.a > 0.58 and size.x < WORLD_SIZE.x - 8.0 and size.y < WORLD_SIZE.y - 8.0:
 		var outline := Polygon2D.new()
 		outline.position = pos - Vector2(7, 7)
-		outline.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.24)
+		outline.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.24)
 		outline.z_index = -5
 		outline.polygon = PackedVector2Array([
 			Vector2.ZERO,
@@ -419,11 +286,11 @@ func _add_paper_cutout_asset(world_root: Node, texture: Texture2D, pos: Vector2,
 
 
 func _add_open_world_start_asset_layer(world_root: Node) -> void:
-	_add_paper_cutout_asset(world_root, OPENING_PAPER_BENCHMARK_TEXTURE, Vector2(800, 1130), Vector2(1.09, 1.09), Color(1, 1, 1, 0.96), -14, "paperopening.benchmark_world", Vector2.ZERO, -3.0)
+	_add_paper_cutout_asset(world_root, _textures.OPENING_PAPER_BENCHMARK_TEXTURE, Vector2(800, 1130), Vector2(1.09, 1.09), Color(1, 1, 1, 0.96), -14, "paperopening.benchmark_world", Vector2.ZERO, -3.0)
 
 
 func _add_room_paper_asset_layer(world_root: Node) -> void:
-	_add_paper_cutout_asset(world_root, ROOM_PAPER_WALL_TEXTURE, Vector2(800, 410), Vector2(1.0, 1.0), Color(1, 1, 1, 0.86), -6, "paperroom.wall_window", Vector2.ZERO, -2.0)
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_WALL_TEXTURE, Vector2(800, 410), Vector2(1.0, 1.0), Color(1, 1, 1, 0.86), -6, "paperroom.wall_window", Vector2.ZERO, -2.0)
 
 
 # ============================================================
@@ -439,10 +306,10 @@ func _decorate_room(world_root: Node) -> void:
 	# Sıcak ışık havuzu - merkez alan aydınlatması
 	_add_light_pool(world_root, Vector2(800, 1100), Vector2(360, 180), Color(1.0, 0.78, 0.42, 0.08))
 	# Altın tozu parçacıkları - rüya atmosferi
-	_add_mote_cluster(world_root, Vector2(1180, 1320), Color(1.0, 0.84, 0.46, 0.13), 5)
-	_add_mote_cluster(world_root, Vector2(720, 1300), Color(0.72, 0.92, 1.0, 0.10), 5)
-	_add_mote_cluster(world_root, Vector2(500, 900), Color(1.0, 0.80, 0.50, 0.06), 8)
-	_add_mote_cluster(world_root, Vector2(1100, 800), Color(0.92, 0.88, 0.70, 0.05), 6)
+	_add_mote_cluster(Vector2(1180, 1320), Color(1.0, 0.84, 0.46, 0.13), 5)
+	_add_mote_cluster(Vector2(720, 1300), Color(0.72, 0.92, 1.0, 0.10), 5)
+	_add_mote_cluster(Vector2(500, 900), Color(1.0, 0.80, 0.50, 0.06), 8)
+	_add_mote_cluster(Vector2(1100, 800), Color(0.92, 0.88, 0.70, 0.05), 6)
 	# Yumuşak kenar ışığı - sıcak atmosfer katmanı
 	_add_soft_blob(world_root, Vector2(400, 500), Vector2(250, 100), Color(0.92, 0.72, 0.50, 0.04), 24, 0.01, true, 4)
 	_add_soft_blob(world_root, Vector2(1200, 500), Vector2(250, 100), Color(0.92, 0.72, 0.50, 0.04), 24, 0.01, true, 4)
@@ -510,8 +377,8 @@ func _add_samsun_ground_plates(world_root: Node) -> void:
 	_add_samsun_plate(world_root, Vector2.ZERO, Vector2(WORLD_SIZE.x, WORLD_SIZE.y * 0.40), Color("#355D78"), Color("#2B4A60"), -15, "world_tiles.samsun_plate_harbor")
 	_add_samsun_plate(world_root, Vector2(WORLD_SIZE.x * 0.075, WORLD_SIZE.y * 0.32), Vector2(WORLD_SIZE.x * 0.85, WORLD_SIZE.y * 0.35), Color("#5D8F92"), Color("#4C777A"), -14, "world_tiles.samsun_plate_civic")
 	_add_samsun_plate(world_root, Vector2(WORLD_SIZE.x * 0.15, WORLD_SIZE.y * 0.68), Vector2(WORLD_SIZE.x * 0.70, WORLD_SIZE.y * 0.25), Color("#E89863"), Color("#B96E4A"), -13, "world_tiles.samsun_plate_front")
-	_add_samsun_harbor_wave_bands(world_root)
-	_add_samsun_paper_cut_edges(world_root)
+	_add_samsun_harbor_wave_bands()
+	_add_samsun_paper_cut_edges()
 
 
 func _build_samsun_rift(world_root: Node) -> void:
@@ -568,40 +435,1053 @@ func _build_kongreler_world(world_root: Node) -> void:
 
 
 # ============================================================
+# ANKARA BUILDER
+# ============================================================
+
+func _build_ankara_world(world_root: Node) -> void:
+	"""Ankara steppe / Meclis sahnesini paper cutout asset'lerle kur."""
+	# Base background — warm steppe sky + terrain
+	_add_ankara_paper_asset_layer(world_root)
+	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.14, 0.16, 0.12))
+	_add_rect(world_root, Vector2(80, 150), Vector2(1440, 1880), Color(0.24, 0.26, 0.20))
+	_add_rect(world_root, Vector2(200, 300), Vector2(1200, 1500), Color(0.34, 0.32, 0.22))
+	_add_rect(world_root, Vector2(300, 440), Vector2(1000, 340), Color(0.48, 0.38, 0.24), "Meclis Binasi")
+	_add_rect(world_root, Vector2(260, 960), Vector2(1080, 500), Color(0.40, 0.30, 0.22), "Irade Alani")
+	_add_rect(world_root, Vector2(340, 1620), Vector2(920, 120), Color(0.56, 0.48, 0.32), "Birlik Yolu")
+	_add_rift_cloud(world_root, Vector2(800, 1080), 740, Color(0.95, 0.82, 0.40, 0.10))
+	_add_rift_cloud(world_root, Vector2(800, 1080), 900, Color(0.72, 0.78, 0.92, 0.10))
+	_decorate_ankara(world_root)
+
+
+func _decorate_ankara(world_root: Node) -> void:
+	"""Ankara dekorasyonu — steppe atmosferi, Meclis, yollar, landmarklar."""
+	_add_ankara_toy_world_frame()
+	_add_ankara_steppe_backdrop(world_root)
+	_add_ankara_location_sign()
+	_add_ankara_meclis_landmark()
+	_add_ankara_path_ribbon()
+	_add_ankara_light_pools(world_root)
+	_add_ankara_steppe_props()
+	_add_ankara_environment()
+
+
+# ============================================================
+# ANKARA YARDIMCI FONKSİYONLAR
+# ============================================================
+
+func _add_ankara_paper_asset_layer(world_root: Node) -> void:
+	"""Ankara paper cutout asset'lerini diorama katmanına ekle."""
+	# Sky — arkaplan overscan
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_SKY_TEXTURE,
+		Vector2(750, 360), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.92), -21, "ankara.depth.sky",
+		Vector2.ZERO, -3.0
+	)
+	# Terrain — ana zemin katmanı
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_TERRAIN_TEXTURE,
+		Vector2(540, 1100), Vector2(0.82, 0.78),
+		Color(1, 1, 1, 0.88), -14, "ankara.depth.terrain",
+		Vector2.ZERO, -2.0
+	)
+	# Main path — soldan sağa kıvrılan patika
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(820, 980), Vector2(0.72, 0.72),
+		Color(1, 1, 1, 0.86), -5, "ankara.path.main",
+		Vector2.ZERO, -1.0
+	)
+	# Foreground frame — kenar süslemeleri
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.04, 0.70),
+		Color(1, 1, 1, 0.72), 1, "ankara.foreground.frame",
+		Vector2.ZERO, 1.0
+	)
+	# Meclis landmark — TBMM binası
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_MECLIS_LANDMARK_TEXTURE,
+		Vector2(360, 820), Vector2(0.60, 0.60),
+		Color(1, 1, 1, 0.94), -4, "ankara.landmark.meclis",
+		Vector2.ZERO, -1.5
+	)
+
+
+func _add_ankara_toy_world_frame() -> void:
+	"""Ankara toy world frame — warm steppe tonları."""
+	_add_toy_world_frame(
+		Color(0.42, 0.32, 0.20, 0.22),
+		Color(0.96, 0.82, 0.42, 0.09)
+	)
+
+
+func _add_ankara_steppe_backdrop(world_root: Node) -> void:
+	"""Ankara steppe arkaplanı — sıcak tepe silüetleri."""
+	_add_backdrop_band(
+		[_textures.BG_FLAT_HILLS_1_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE, _textures.BG_FLAT_HILLS_2_TEXTURE],
+		460.0, Vector2(1.00, 1.00),
+		Color(0.82, 0.74, 0.52, 0.16), "ankara.horizon"
+	)
+	_add_distant_town_band(
+		600.0,
+		Color(0.92, 0.86, 0.66, 0.14), "ankara.distant_town"
+	)
+
+
+func _add_ankara_location_sign() -> void:
+	"""Ankara lokasyon tabelası."""
+	_add_location_sign(
+		"Ankara", "Meclis'e dogru",
+		Vector2(556, 260), 480.0,
+		Color(0.72, 0.58, 0.34, 0.82),
+		"ankara.location_sign"
+	)
+
+
+func _add_ankara_meclis_landmark() -> void:
+	"""Meclis landmark'ı etrafında atmosferik efektler."""
+	var meclis_center := Vector2(360, 820)
+	
+	# Meclis ışıltısı
+	_add_soft_blob(
+		_cached_world_root, meclis_center + Vector2(0, 40),
+		Vector2(200, 120), Color(0.96, 0.88, 0.66, 0.18),
+		22, 0.08, false, -3
+	)
+	_add_soft_blob(
+		_cached_world_root, meclis_center + Vector2(0, 20),
+		Vector2(120, 80), Color(0.98, 0.92, 0.72, 0.12),
+		18, 0.10, false, -2
+	)
+	
+	# Bayrak ışıltısı — kırmızı vurgu
+	_add_soft_blob(
+		_cached_world_root, meclis_center + Vector2(0, -100),
+		Vector2(60, 60), Color(0.78, 0.30, 0.24, 0.10),
+		16, 0.12, false, -1
+	)
+
+
+func _add_ankara_path_ribbon() -> void:
+	"""Ankara ana patika ribbon'ı — steppe rengi."""
+	_add_path_ribbon(
+		[
+			Vector2(520, 1400),
+			Vector2(680, 1120),
+			Vector2(840, 980),
+			Vector2(960, 860),
+			Vector2(1080, 780),
+		],
+		32.0, Color(0.82, 0.64, 0.38, 0.24), -2
+	)
+
+
+func _add_ankara_light_pools(world_root: Node) -> void:
+	"""Ankara ışık havuzları — Meclis çevresi aydınlatma."""
+	_add_light_pool(
+		world_root, Vector2(360, 820),
+		Vector2(290, 180), Color(1.0, 0.86, 0.40, 0.11)
+	)
+	_add_light_pool(
+		world_root, Vector2(800, 1120),
+		Vector2(340, 200), Color(0.72, 0.78, 0.92, 0.09)
+	)
+	_add_light_pool(
+		world_root, Vector2(600, 1420),
+		Vector2(260, 160), Color(1.0, 0.78, 0.42, 0.08)
+	)
+
+
+func _add_ankara_steppe_props() -> void:
+	"""Ankara steppe dekoratif prop'ları — kenney asset'leriyle."""
+	# Meclis önü işaretleri
+	_add_kenney_prop(
+		_textures.BLOCK_MARKET_STALL_BLUE_TEXTURE, Vector2(710, 1086),
+		Vector2(1.12, 1.12), Color(0.90, 1.0, 1.0, 0.82),
+		true, "ankara.square_stall"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1008, 724),
+		Vector2(1.08, 1.08), Color(1.0, 0.88, 0.62, 0.70),
+		true, "ankara.notice_board_legs"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_TREE_GREEN_TEXTURE, Vector2(1160, 1190),
+		Vector2(0.96, 0.96), Color(0.86, 1.0, 0.74, 0.70),
+		true, "ankara.square_tree"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_TREE_ORANGE_TEXTURE, Vector2(250, 1180),
+		Vector2(0.84, 0.84), Color(1.0, 0.90, 0.56, 0.56),
+		true, "ankara.warm_tree"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_BUSH_LARGE_TEXTURE, Vector2(480, 1210),
+		Vector2(1.00, 1.00), Color(0.82, 0.94, 0.62, 0.60),
+		true, "ankara.bush_left"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_BUSH_SMALL_TEXTURE, Vector2(920, 1160),
+		Vector2(1.00, 1.00), Color(0.78, 0.90, 0.58, 0.56),
+		true, "ankara.bush_right"
+	)
+	
+	# NPC'ler
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(650, 1210),
+		Vector2(0.82, 0.82), Color(0.96, 0.94, 0.86, 0.56),
+		"ankara.citizen_a", "tartis"
+	)
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(798, 1218),
+		Vector2(0.82, 0.82), Color(0.96, 1.0, 0.94, 0.56),
+		"ankara.citizen_b", "dinle"
+	)
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_HORSE_TEXTURE, Vector2(470, 1280),
+		Vector2(0.78, 0.78), Color(1.0, 0.92, 0.76, 0.42),
+		"ankara.carrier_horse", ""
+	)
+	
+	# Asset slot prop'ları
+	_add_asset_slot_prop(
+		"ankara.meclis_notice", Vector2(970, 622),
+		Vector2(150, 118), Color(0.96, 0.88, 0.62, 0.86),
+		Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.42),
+		"Genelge", true
+	)
+	_add_asset_slot_prop(
+		"ankara.telegraph_table", Vector2(370, 1470),
+		Vector2(170, 98), Color(0.80, 0.62, 0.36, 0.86),
+		Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.38),
+		"Telgraf", true
+	)
+	_add_asset_slot_prop(
+		"ankara.town_square", Vector2(625, 1048),
+		Vector2(178, 104), Color(0.96, 0.82, 0.48, 0.62),
+		Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.45),
+		"Meydan", true
+	)
+	
+	# Strateji kartları
+	_add_strategy_card(
+		_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(860, 1040),
+		Vector2(0.42, 0.42), Color(0.90, 1.0, 0.86, 0.76),
+		"Irade", "ankara.voice_card"
+	)
+	_add_strategy_token(
+		_textures.BOARD_CHIP_GREEN_TEXTURE, Vector2(990, 672),
+		Vector2(0.42, 0.42), Color(0.86, 1.0, 0.76, 0.84),
+		"ankara.notice_token"
+	)
+	
+	# Yön okları
+	_add_way_arrow(
+		Vector2(900, 820), deg_to_rad(-52),
+		Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.72),
+		"meclis", "ankara.to_meclis_arrow"
+	)
+	_add_way_arrow(
+		Vector2(575, 1415), deg_to_rad(154),
+		Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.70),
+		"telgraf", "ankara.to_telegraph_arrow"
+	)
+	
+	# Keşif rozeti
+	_add_discovery_badge(
+		_textures.GAME_INFO_TEXTURE, Vector2(720, 940),
+		Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.86),
+		"meclis", "ankara.meclis_badge"
+	)
+	
+	# Hikaye banner'ı
+	_add_story_banner(
+		Vector2(510, 420), Vector2(460, 128),
+		Color(0.96, 0.92, 0.70, 0.86),
+		Color(0.56, 0.48, 0.24, 0.80),
+		"Meclis ve Irade"
+	)
+
+
+func _add_ankara_environment() -> void:
+	"""Ankara çevresel detaylar — bulutlar, speckles, sketch strip."""
+	_add_decorative_speckles(
+		Rect2(Vector2(240, 520), Vector2(1120, 1100)),
+		Color(1.0, 0.92, 0.54, 0.07), 22
+	)
+	_add_sprite_prop(
+		_textures.CLOUD_TEXTURE, Vector2(310, 250),
+		Vector2(0.98, 0.98), Color(1, 1, 1, 0.18)
+	)
+	_add_sprite_prop(
+		_textures.CLOUD_TEXTURE_ALT, Vector2(1240, 280),
+		Vector2(0.88, 0.88), Color(1, 1, 1, 0.14)
+	)
+	
+	# Sketch strip — steppe grass
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(260, 360),
+		8, Vector2(118, 0), Color(1, 1, 1, 0.70)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(320, 470),
+		7, Vector2(118, 0), Color(1, 1, 1, 0.68)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(270, 1280),
+		8, Vector2(118, 0), Color(1, 1, 1, 0.68)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(340, 1380),
+		7, Vector2(118, 0), Color(1, 1, 1, 0.66)
+	)
+	
+	# Sketch path tiles
+	_add_sketch_tile(
+		_textures.SKETCH_PATH_TEXTURE, Vector2(450, 1540),
+		Color.WHITE, Vector2(0.74, 0.74)
+	)
+	_add_sketch_tile(
+		_textures.SKETCH_PATH_TEXTURE, Vector2(920, 1040),
+		Color.WHITE, Vector2(0.74, 0.74)
+	)
+	
+	# Steppe ağaç binaları
+	_add_havza_building(
+		Vector2(790, 560), 4,
+		_textures.SKETCH_BUILDING_DOOR_TEXTURE,
+		_textures.SKETCH_BUILDING_WINDOWS_TEXTURE,
+		_textures.SKETCH_BUILDING_CENTER_TEXTURE,
+		Color(1, 1, 1, 0.92)
+	)
+	_add_havza_building(
+		Vector2(300, 680), 3,
+		_textures.SKETCH_BUILDING_WINDOW_TEXTURE,
+		_textures.SKETCH_BUILDING_WINDOW_TEXTURE,
+		_textures.SKETCH_BUILDING_CENTER_TEXTURE,
+		Color(1, 1, 1, 0.78)
+	)
+	_add_kenney_building(
+		Vector2(930, 620), Vector2(1.02, 1.02),
+		_textures.BLOCK_BUILDING_ROOF_RED_TEXTURE,
+		Color(1.0, 0.94, 0.78, 0.58)
+	)
+	_add_kenney_building(
+		Vector2(310, 790), Vector2(0.88, 0.88),
+		_textures.BLOCK_BUILDING_ROOF_BLUE_TEXTURE,
+		Color(0.94, 1.0, 1.0, 0.48)
+	)
+
+
+# ============================================================
+# SAKARYA BUILDER
+# ============================================================
+
+func _build_sakarya_world(world_root: Node) -> void:
+	"""Sakarya savas / Buyuk Taarruz sahnesini paper cutout asset'lerle kur."""
+	# Base background — dark war tones
+	_add_sakarya_paper_asset_layer(world_root)
+	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.08, 0.06, 0.05))
+	_add_rect(world_root, Vector2(80, 150), Vector2(1440, 1880), Color(0.14, 0.12, 0.08))
+	_add_rect(world_root, Vector2(200, 300), Vector2(1200, 1500), Color(0.22, 0.18, 0.12))
+	_add_rect(world_root, Vector2(300, 440), Vector2(1000, 340), Color(0.32, 0.24, 0.16), "Karargah Alani")
+	_add_rect(world_root, Vector2(260, 960), Vector2(1080, 500), Color(0.28, 0.20, 0.14), "Taarruz Alani")
+	_add_rect(world_root, Vector2(340, 1620), Vector2(920, 120), Color(0.40, 0.32, 0.22), "Zafer Yolu")
+	_add_rect(world_root, Vector2(300, 440), Vector2(1000, 4), Color(0.60, 0.18, 0.12, 0.30), "hat_1")
+	_add_rect(world_root, Vector2(300, 780), Vector2(1000, 4), Color(0.60, 0.18, 0.12, 0.24), "hat_2")
+	_add_rect(world_root, Vector2(300, 1120), Vector2(1000, 4), Color(0.60, 0.18, 0.12, 0.18), "hat_3")
+	_add_rift_cloud(world_root, Vector2(800, 1080), 740, Color(0.60, 0.20, 0.12, 0.10))
+	_add_rift_cloud(world_root, Vector2(800, 1080), 900, Color(0.40, 0.30, 0.20, 0.10))
+	_decorate_sakarya(world_root)
+
+
+func _decorate_sakarya(world_root: Node) -> void:
+	"""Sakarya dekorasyonu — savas atmosferi, karargah, yol, landmarklar."""
+	_add_sakarya_toy_world_frame()
+	_add_sakarya_battle_backdrop(world_root)
+	_add_sakarya_location_sign()
+	_add_sakarya_hq_landmark()
+	_add_sakarya_path_ribbon()
+	_add_sakarya_light_pools(world_root)
+	_add_sakarya_battle_props()
+	_add_sakarya_environment()
+
+
+# ============================================================
+# SAKARYA YARDIMCI FONKSIYONLAR
+# ============================================================
+
+func _add_sakarya_paper_asset_layer(world_root: Node) -> void:
+	"""Sakarya paper cutout asset'lerini diorama katmanina ekle."""
+	# Sky — dramatic sunset/war sky
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_SKY_TEXTURE,
+		Vector2(750, 360), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.92), -21, "sakarya.depth.sky",
+		Vector2.ZERO, -3.0
+	)
+	# Terrain — battle-worn terrain
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_TERRAIN_TEXTURE,
+		Vector2(540, 1100), Vector2(0.82, 0.78),
+		Color(1, 1, 1, 0.88), -14, "sakarya.depth.terrain",
+		Vector2.ZERO, -2.0
+	)
+	# Main path — soldan saga kivrilan taarruz yolu
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(820, 980), Vector2(0.72, 0.72),
+		Color(1, 1, 1, 0.86), -5, "sakarya.path.main",
+		Vector2.ZERO, -1.0
+	)
+	# Foreground frame — war-themed edge ornaments
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.04, 0.70),
+		Color(1, 1, 1, 0.72), 1, "sakarya.foreground.frame",
+		Vector2.ZERO, 1.0
+	)
+	# HQ landmark — Mustafa Kemal's command tent
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_HQ_LANDMARK_TEXTURE,
+		Vector2(360, 820), Vector2(0.60, 0.60),
+		Color(1, 1, 1, 0.94), -4, "sakarya.landmark.hq",
+		Vector2.ZERO, -1.5
+	)
+	# Victory marker — zafer sembolu
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_VICTORY_MARKER_TEXTURE,
+		Vector2(1040, 680), Vector2(0.50, 0.50),
+		Color(1, 1, 1, 0.90), -3, "sakarya.landmark.victory",
+		Vector2.ZERO, -1.2
+	)
+
+
+func _add_sakarya_toy_world_frame() -> void:
+	"""Sakarya toy world frame — koyu savas tonlari."""
+	_add_toy_world_frame(
+		Color(0.30, 0.18, 0.10, 0.25),
+		Color(0.60, 0.20, 0.12, 0.08)
+	)
+
+
+func _add_sakarya_battle_backdrop(world_root: Node) -> void:
+	"""Sakarya savas arkaplani — karanlik tepe siluetleri."""
+	_add_backdrop_band(
+		[_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE],
+		460.0, Vector2(1.00, 1.00),
+		Color(0.30, 0.22, 0.16, 0.20), "sakarya.horizon"
+	)
+	_add_distant_town_band(
+		600.0,
+		Color(0.40, 0.30, 0.20, 0.12), "sakarya.distant_town"
+	)
+
+
+func _add_sakarya_location_sign() -> void:
+	"""Sakarya lokasyon tabelasi."""
+	_add_location_sign(
+		"Sakarya", "Büyük Taarruz",
+		Vector2(556, 260), 480.0,
+		Color(0.50, 0.34, 0.20, 0.82),
+		"sakarya.location_sign"
+	)
+
+
+func _add_sakarya_hq_landmark() -> void:
+	"""Karargah landmark'i etrafinda atmosferik efektler."""
+	var hq_center := Vector2(360, 820)
+
+	# Karargah isiltisi
+	_add_soft_blob(
+		_cached_world_root, hq_center + Vector2(0, 40),
+		Vector2(200, 120), Color(0.80, 0.60, 0.30, 0.18),
+		22, 0.08, false, -3
+	)
+	_add_soft_blob(
+		_cached_world_root, hq_center + Vector2(0, 20),
+		Vector2(120, 80), Color(0.90, 0.70, 0.40, 0.12),
+		18, 0.10, false, -2
+	)
+
+	# Bayrak isiltisi — kirmizi vurgu
+	_add_soft_blob(
+		_cached_world_root, hq_center + Vector2(0, -100),
+		Vector2(60, 60), Color(0.78, 0.20, 0.14, 0.10),
+		16, 0.12, false, -1
+	)
+
+
+func _add_sakarya_path_ribbon() -> void:
+	"""Sakarya ana taarruz ribbon'i — koyu savas rengi."""
+	_add_path_ribbon(
+		[
+			Vector2(520, 1400),
+			Vector2(680, 1120),
+			Vector2(840, 980),
+			Vector2(960, 860),
+			Vector2(1080, 780),
+		],
+		32.0, Color(0.50, 0.30, 0.16, 0.24), -2
+	)
+
+
+func _add_sakarya_light_pools(world_root: Node) -> void:
+	"""Sakarya isik havuzlari — karargah cevresi aydinlatma."""
+	_add_light_pool(
+		world_root, Vector2(360, 820),
+		Vector2(290, 180), Color(0.80, 0.50, 0.20, 0.11)
+	)
+	_add_light_pool(
+		world_root, Vector2(800, 1120),
+		Vector2(340, 200), Color(0.50, 0.30, 0.16, 0.09)
+	)
+	_add_light_pool(
+		world_root, Vector2(600, 1420),
+		Vector2(260, 160), Color(0.70, 0.30, 0.12, 0.08)
+	)
+
+
+func _add_sakarya_battle_props() -> void:
+	"""Sakarya savas dekoratif prop'lari — kenney asset'leriyle."""
+	# Karargah onu isaretleri
+	_add_kenney_prop(
+		_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(710, 1086),
+		Vector2(1.12, 1.12), Color(0.70, 0.60, 0.50, 0.82),
+		true, "sakarya.barrier_left"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1008, 724),
+		Vector2(1.08, 1.08), Color(0.70, 0.60, 0.50, 0.70),
+		true, "sakarya.barrier_right"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_TREE_GREEN_TEXTURE, Vector2(1160, 1190),
+		Vector2(0.96, 0.96), Color(0.50, 0.60, 0.40, 0.70),
+		true, "sakarya.battle_tree"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_BUSH_LARGE_TEXTURE, Vector2(250, 1180),
+		Vector2(0.84, 0.84), Color(0.50, 0.40, 0.30, 0.56),
+		true, "sakarya.scrub_left"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_BUSH_SMALL_TEXTURE, Vector2(480, 1210),
+		Vector2(1.00, 1.00), Color(0.45, 0.55, 0.35, 0.60),
+		true, "sakarya.scrub_mid"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_CART_TOP_TEXTURE, Vector2(920, 1160),
+		Vector2(1.00, 1.00), Color(0.60, 0.50, 0.35, 0.56),
+		true, "sakarya.supply_cart"
+	)
+
+	# NPC'ler — askerler
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(650, 1210),
+		Vector2(0.82, 0.82), Color(0.70, 0.65, 0.55, 0.56),
+		"sakarya.soldier_a", "izle"
+	)
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(798, 1218),
+		Vector2(0.82, 0.82), Color(0.65, 0.70, 0.60, 0.56),
+		"sakarya.soldier_b", "dinle"
+	)
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_HORSE_TEXTURE, Vector2(470, 1280),
+		Vector2(0.78, 0.78), Color(0.60, 0.55, 0.45, 0.42),
+		"sakarya.cavalry_horse", ""
+	)
+
+	# Asset slot prop'lari
+	_add_asset_slot_prop(
+		"sakarya.hq_map", Vector2(970, 622),
+		Vector2(150, 118), Color(0.60, 0.50, 0.35, 0.86),
+		Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.42),
+		"Harp Plani", true
+	)
+	_add_asset_slot_prop(
+		"sakarya.telegraph_tent", Vector2(370, 1470),
+		Vector2(170, 98), Color(0.50, 0.40, 0.25, 0.86),
+		Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.38),
+		"Telgraf", true
+	)
+	_add_asset_slot_prop(
+		"sakarya.cephe_karargah", Vector2(625, 1048),
+		Vector2(178, 104), Color(0.60, 0.45, 0.28, 0.62),
+		Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.45),
+		"Cephe", true
+	)
+
+	# Strateji kartlari
+	_add_strategy_card(
+		_textures.BOARD_CARD_RED_TEXTURE, Vector2(860, 1040),
+		Vector2(0.42, 0.42), Color(0.90, 0.70, 0.60, 0.76),
+		"Taarruz", "sakarya.attack_card"
+	)
+	_add_strategy_token(
+		_textures.BOARD_CHIP_RED_TEXTURE, Vector2(990, 672),
+		Vector2(0.42, 0.42), Color(0.86, 0.60, 0.50, 0.84),
+		"sakarya.victory_token"
+	)
+
+	# Yon oklari
+	_add_way_arrow(
+		Vector2(900, 820), deg_to_rad(-52),
+		Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.72),
+		"karargah", "sakarya.to_hq_arrow"
+	)
+	_add_way_arrow(
+		Vector2(575, 1415), deg_to_rad(154),
+		Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.70),
+		"cephe", "sakarya.to_front_arrow"
+	)
+
+	# Kesif rozeti
+	_add_discovery_badge(
+		_textures.GAME_INFO_TEXTURE, Vector2(720, 940),
+		Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.86),
+		"karargah", "sakarya.hq_badge"
+	)
+
+	# Hikaye banner'i
+	_add_story_banner(
+		Vector2(510, 420), Vector2(460, 128),
+		Color(0.60, 0.40, 0.25, 0.86),
+		Color(0.36, 0.24, 0.14, 0.80),
+		"Sakarya ve Zafer"
+	)
+
+
+func _add_sakarya_environment() -> void:
+	"""Sakarya cevresel detaylar — savas bulutlari, speckles, sketch strip."""
+	_add_decorative_speckles(
+		Rect2(Vector2(240, 520), Vector2(1120, 1100)),
+		Color(0.60, 0.20, 0.10, 0.07), 22
+	)
+	_add_sprite_prop(
+		_textures.CLOUD_TEXTURE, Vector2(310, 250),
+		Vector2(0.98, 0.98), Color(0.60, 0.50, 0.40, 0.18)
+	)
+	_add_sprite_prop(
+		_textures.CLOUD_TEXTURE_ALT, Vector2(1240, 280),
+		Vector2(0.88, 0.88), Color(0.50, 0.40, 0.30, 0.14)
+	)
+
+	# Sketch strip — battle grass
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(260, 360),
+		8, Vector2(118, 0), Color(0.60, 0.50, 0.40, 0.70)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(320, 470),
+		7, Vector2(118, 0), Color(0.55, 0.45, 0.35, 0.68)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(270, 1280),
+		8, Vector2(118, 0), Color(0.55, 0.45, 0.35, 0.68)
+	)
+
+	# Sketch path tiles
+	_add_sketch_tile(
+		_textures.SKETCH_PATH_TEXTURE, Vector2(450, 1540),
+		Color(0.70, 0.60, 0.50), Vector2(0.74, 0.74)
+	)
+	_add_sketch_tile(
+		_textures.SKETCH_PATH_TEXTURE, Vector2(920, 1040),
+		Color(0.70, 0.60, 0.50), Vector2(0.74, 0.74)
+	)
+
+	# Battlefield building debris
+	_add_havza_building(
+		Vector2(790, 560), 4,
+		_textures.SKETCH_BUILDING_DOOR_TEXTURE,
+		_textures.SKETCH_BUILDING_WINDOWS_TEXTURE,
+		_textures.SKETCH_BUILDING_CENTER_TEXTURE,
+		Color(0.60, 0.50, 0.40, 0.92)
+	)
+	_add_havza_building(
+		Vector2(300, 680), 3,
+		_textures.SKETCH_BUILDING_WINDOW_TEXTURE,
+		_textures.SKETCH_BUILDING_WINDOW_TEXTURE,
+		_textures.SKETCH_BUILDING_CENTER_TEXTURE,
+		Color(0.55, 0.45, 0.35, 0.78)
+	)
+	_add_kenney_building(
+		Vector2(930, 620), Vector2(1.02, 1.02),
+		_textures.BLOCK_BUILDING_ROOF_RED_TEXTURE,
+		Color(0.70, 0.50, 0.35, 0.58)
+	)
+	_add_kenney_building(
+		Vector2(310, 790), Vector2(0.88, 0.88),
+		_textures.BLOCK_BUILDING_ROOF_BLUE_TEXTURE,
+		Color(0.50, 0.55, 0.60, 0.48)
+	)
+
+
+# ============================================================
+# FINAL BUILDER — Cumhuriyet / Zafer (Events 28-30)
+# ============================================================
+
+func _build_final_world(world_root: Node) -> void:
+	"""Final zafer / Cumhuriyet sahnesini paper cutout asset'lerle kur."""
+	# Base background — dawn victory tones
+	_add_final_paper_asset_layer(world_root)
+	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.12, 0.08, 0.06))
+	_add_rect(world_root, Vector2(80, 150), Vector2(1440, 1880), Color(0.20, 0.16, 0.10))
+	_add_rect(world_root, Vector2(200, 300), Vector2(1200, 1500), Color(0.30, 0.24, 0.14))
+	_add_rect(world_root, Vector2(300, 440), Vector2(1000, 340), Color(0.40, 0.32, 0.18), "Meydan Alani")
+	_add_rect(world_root, Vector2(260, 960), Vector2(1080, 500), Color(0.36, 0.28, 0.16), "Kutlama Alani")
+	_add_rect(world_root, Vector2(340, 1620), Vector2(920, 120), Color(0.50, 0.42, 0.26), "Zafer Yolu")
+	_add_rect(world_root, Vector2(300, 440), Vector2(1000, 4), Color(0.90, 0.75, 0.30, 0.24), "hat_altin_1")
+	_add_rect(world_root, Vector2(300, 780), Vector2(1000, 4), Color(0.90, 0.75, 0.30, 0.18), "hat_altin_2")
+	_add_rect(world_root, Vector2(300, 1120), Vector2(1000, 4), Color(0.90, 0.75, 0.30, 0.14), "hat_altin_3")
+	_add_soft_blob(world_root, Vector2(800, 1080), Vector2(740, 740), Color(0.90, 0.75, 0.30, 0.06))
+	_add_soft_blob(world_root, Vector2(800, 1080), Vector2(900, 900), Color(0.80, 0.60, 0.20, 0.06))
+	_decorate_final(world_root)
+
+
+func _decorate_final(world_root: Node) -> void:
+	"""Final dekorasyonu — zafer atmosferi, meclis, yol, landmarklar."""
+	_add_final_toy_world_frame()
+	_add_final_dawn_backdrop(world_root)
+	_add_final_location_sign()
+	_add_final_cumhuriyet_landmark()
+	_add_final_path_ribbon()
+	_add_final_light_pools(world_root)
+	_add_final_victory_props()
+	_add_final_environment()
+
+
+# ============================================================
+# FINAL YARDIMCI FONKSIYONLAR
+# ============================================================
+
+func _add_final_paper_asset_layer(world_root: Node) -> void:
+	"""Final paper cutout asset'lerini diorama katmanina ekle."""
+	# Sky — victory dawn
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_SKY_TEXTURE,
+		Vector2(750, 360), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.92), -21, "final.depth.sky",
+		Vector2.ZERO, -3.0
+	)
+	# Terrain — golden victory plains
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_TERRAIN_TEXTURE,
+		Vector2(540, 1100), Vector2(0.82, 0.78),
+		Color(1, 1, 1, 0.88), -14, "final.depth.terrain",
+		Vector2.ZERO, -2.0
+	)
+	# Main path — victory path with star markers
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(820, 980), Vector2(0.72, 0.72),
+		Color(1, 1, 1, 0.86), -5, "final.path.main",
+		Vector2.ZERO, -1.0
+	)
+	# Foreground frame — victory-themed edge ornaments
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.04, 0.70),
+		Color(1, 1, 1, 0.72), 1, "final.foreground.frame",
+		Vector2.ZERO, 1.0
+	)
+	# Cumhuriyet landmark — TBMM building with celebratory elements
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_CUMHURIYET_LANDMARK_TEXTURE,
+		Vector2(360, 820), Vector2(0.60, 0.60),
+		Color(1, 1, 1, 0.94), -4, "final.landmark.cumhuriyet",
+		Vector2.ZERO, -1.5
+	)
+	# Victory arch — triumphal arch
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_VICTORY_ARCH_TEXTURE,
+		Vector2(1040, 680), Vector2(0.50, 0.50),
+		Color(1, 1, 1, 0.90), -3, "final.landmark.victory_arch",
+		Vector2.ZERO, -1.2
+	)
+
+
+func _add_final_toy_world_frame() -> void:
+	"""Final toy world frame — altin zafer tonlari."""
+	_add_toy_world_frame(
+		Color(0.35, 0.22, 0.08, 0.25),
+		Color(0.90, 0.75, 0.30, 0.08)
+	)
+
+
+func _add_final_dawn_backdrop(world_root: Node) -> void:
+	"""Final seher vakti arkaplani — sicak tepe siluetleri."""
+	_add_backdrop_band(
+		[_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE],
+		460.0, Vector2(1.00, 1.00),
+		Color(0.50, 0.35, 0.18, 0.15), "final.horizon"
+	)
+	_add_distant_town_band(
+		600.0,
+		Color(0.55, 0.40, 0.22, 0.10), "final.distant_town"
+	)
+
+
+func _add_final_location_sign() -> void:
+	"""Final lokasyon tabelasi."""
+	_add_location_sign(
+		"Cumhuriyet", "29 Ekim 1923",
+		Vector2(556, 260), 480.0,
+		Color(0.85, 0.70, 0.20, 0.82),
+		"final.location_sign"
+	)
+
+
+func _add_final_cumhuriyet_landmark() -> void:
+	"""Cumhuriyet landmark'i etrafinda atmosferik efektler."""
+	var landmark_center := Vector2(360, 820)
+
+	# Altin isilti
+	_add_soft_blob(
+		_cached_world_root, landmark_center + Vector2(0, 40),
+		Vector2(220, 140), Color(0.90, 0.75, 0.30, 0.18),
+		22, 0.08, false, -3
+	)
+	_add_soft_blob(
+		_cached_world_root, landmark_center + Vector2(0, 20),
+		Vector2(140, 100), Color(1.0, 0.85, 0.40, 0.12),
+		18, 0.10, false, -2
+	)
+
+	# Bayrak isiltisi — kirmizi vurgu
+	_add_soft_blob(
+		_cached_world_root, landmark_center + Vector2(0, -120),
+		Vector2(80, 80), Color(0.85, 0.20, 0.14, 0.12),
+		16, 0.12, false, -1
+	)
+
+
+func _add_final_path_ribbon() -> void:
+	"""Final ana yol ribbon'i — altin zafer rengi."""
+	_add_path_ribbon(
+		[
+			Vector2(520, 1400),
+			Vector2(680, 1120),
+			Vector2(840, 980),
+			Vector2(960, 860),
+			Vector2(1080, 780),
+		],
+		32.0, Color(0.85, 0.70, 0.20, 0.24), -2
+	)
+
+
+func _add_final_light_pools(world_root: Node) -> void:
+	"""Final isik havuzlari — meclis cevresi aydinlatma."""
+	_add_light_pool(
+		world_root, Vector2(360, 820),
+		Vector2(320, 200), Color(0.90, 0.70, 0.20, 0.12)
+	)
+	_add_light_pool(
+		world_root, Vector2(800, 1120),
+		Vector2(360, 220), Color(0.85, 0.65, 0.18, 0.09)
+	)
+	_add_light_pool(
+		world_root, Vector2(600, 1420),
+		Vector2(280, 180), Color(0.80, 0.60, 0.15, 0.08)
+	)
+
+
+func _add_final_victory_props() -> void:
+	"""Final zafer dekoratif prop'lari — kenney asset'leriyle."""
+	# Kutlama barikatlari
+	_add_kenney_prop(
+		_textures.BLOCK_FENCE_SINGLE_TEXTURE, Vector2(710, 1086),
+		Vector2(1.12, 1.12), Color(0.80, 0.70, 0.50, 0.82),
+		true, "final.barrier_left"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_FENCE_SINGLE_TEXTURE, Vector2(1008, 724),
+		Vector2(1.08, 1.08), Color(0.80, 0.70, 0.50, 0.70),
+		true, "final.barrier_right"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_TREE_GREEN_TEXTURE, Vector2(1160, 1190),
+		Vector2(0.96, 0.96), Color(0.40, 0.60, 0.35, 0.70),
+		true, "final.celebration_tree"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_BUSH_LARGE_TEXTURE, Vector2(250, 1180),
+		Vector2(0.84, 0.84), Color(0.50, 0.50, 0.30, 0.56),
+		true, "final.scrub_left"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_BUSH_SMALL_TEXTURE, Vector2(480, 1210),
+		Vector2(1.00, 1.00), Color(0.50, 0.55, 0.30, 0.60),
+		true, "final.scrub_mid"
+	)
+	_add_kenney_prop(
+		_textures.BLOCK_MARKET_STALL_RED_TEXTURE, Vector2(920, 1160),
+		Vector2(1.00, 1.00), Color(0.80, 0.60, 0.40, 0.56),
+		true, "final.celebration_stall"
+	)
+
+	# NPC'ler — kutlama yapan halk
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(650, 1210),
+		Vector2(0.82, 0.82), Color(0.75, 0.70, 0.60, 0.56),
+		"final.citizen_a", "kutla"
+	)
+	_add_kenney_npc(
+		_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(798, 1218),
+		Vector2(0.82, 0.82), Color(0.70, 0.75, 0.65, 0.56),
+		"final.citizen_b", "kutla"
+	)
+
+	# Asset slot prop'lari
+	_add_asset_slot_prop(
+		"final.cumhuriyet_banner", Vector2(970, 622),
+		Vector2(160, 120), Color(0.80, 0.70, 0.40, 0.86),
+		Color(0.90, 0.75, 0.30, 0.42),
+		"Cumhuriyet", true
+	)
+	_add_asset_slot_prop(
+		"final.victory_bell", Vector2(370, 1470),
+		Vector2(170, 98), Color(0.70, 0.60, 0.30, 0.86),
+		Color(0.85, 0.65, 0.18, 0.38),
+		"Zafer", true
+	)
+	_add_asset_slot_prop(
+		"final.celebration_plaza", Vector2(625, 1048),
+		Vector2(178, 104), Color(0.80, 0.65, 0.35, 0.62),
+		Color(0.90, 0.75, 0.30, 0.45),
+		"Meydan", true
+	)
+
+	# Strateji kartlari
+	_add_strategy_card(
+		_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(860, 1040),
+		Vector2(0.42, 0.42), Color(0.70, 0.85, 0.65, 0.76),
+		"Zafer", "final.victory_card"
+	)
+	_add_strategy_token(
+		_textures.BOARD_CHIP_GREEN_TEXTURE, Vector2(990, 672),
+		Vector2(0.42, 0.42), Color(0.70, 0.85, 0.65, 0.84),
+		"final.victory_token"
+	)
+
+	# Yon oklari
+	_add_way_arrow(
+		Vector2(900, 820), deg_to_rad(-52),
+		Color(0.90, 0.75, 0.30, 0.72),
+		"meclis", "final.to_meclis_arrow"
+	)
+	_add_way_arrow(
+		Vector2(575, 1415), deg_to_rad(154),
+		Color(0.85, 0.65, 0.18, 0.70),
+		"kutlama", "final.to_celebration_arrow"
+	)
+
+	# Kesif rozeti
+	_add_discovery_badge(
+		_textures.GAME_STAR_TEXTURE, Vector2(720, 940),
+		Color(0.90, 0.75, 0.30, 0.86),
+		"cumhuriyet", "final.cumhuriyet_badge"
+	)
+
+	# Hikaye banner'i
+	_add_story_banner(
+		Vector2(510, 420), Vector2(480, 128),
+		Color(0.80, 0.65, 0.30, 0.86),
+		Color(0.50, 0.40, 0.18, 0.80),
+		"Cumhuriyet ve Zafer"
+	)
+
+
+func _add_final_environment() -> void:
+	"""Final cevresel detaylar — altin isiltilar, speckles, sketch strip."""
+	_add_decorative_speckles(
+		Rect2(Vector2(240, 520), Vector2(1120, 1100)),
+		Color(0.90, 0.75, 0.30, 0.08), 22
+	)
+	_add_sprite_prop(
+		_textures.CLOUD_TEXTURE, Vector2(310, 250),
+		Vector2(0.98, 0.98), Color(0.90, 0.85, 0.70, 0.18)
+	)
+	_add_sprite_prop(
+		_textures.CLOUD_TEXTURE_ALT, Vector2(1240, 280),
+		Vector2(0.88, 0.88), Color(0.85, 0.80, 0.65, 0.14)
+	)
+
+	# Sketch strip — celebration grass
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(260, 360),
+		8, Vector2(118, 0), Color(0.70, 0.60, 0.40, 0.70)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(320, 470),
+		7, Vector2(118, 0), Color(0.65, 0.55, 0.35, 0.68)
+	)
+	_add_sketch_strip(
+		_textures.SKETCH_GRASS_TEXTURE, Vector2(270, 1280),
+		8, Vector2(118, 0), Color(0.65, 0.55, 0.35, 0.68)
+	)
+
+	# Sketch path tiles
+	_add_sketch_tile(
+		_textures.SKETCH_PATH_TEXTURE, Vector2(450, 1540),
+		Color(0.75, 0.65, 0.45), Vector2(0.74, 0.74)
+	)
+	_add_sketch_tile(
+		_textures.SKETCH_PATH_TEXTURE, Vector2(920, 1040),
+		Color(0.75, 0.65, 0.45), Vector2(0.74, 0.74)
+	)
+
+	# Decorative buildings
+	_add_kenney_building(
+		Vector2(790, 560), Vector2(1.02, 1.02),
+		_textures.BLOCK_BUILDING_ROOF_RED_TEXTURE,
+		Color(0.80, 0.60, 0.40, 0.58)
+	)
+	_add_kenney_building(
+		Vector2(310, 790), Vector2(0.88, 0.88),
+		_textures.BLOCK_BUILDING_ROOF_BLUE_TEXTURE,
+		Color(0.55, 0.60, 0.65, 0.48)
+	)
+
+
+# ============================================================
 # SHIP DEKORASYON
 # ============================================================
 
 func _decorate_ship(world_root: Node) -> void:
 	_add_toy_world_frame(Color(0.08, 0.24, 0.32, 0.22), Color(0.72, 0.88, 1.0, 0.09))
-	_add_backdrop_band([BG_FLAT_MOUNTAIN_1_TEXTURE, BG_FLAT_MOUNTAIN_2_TEXTURE, BG_FLAT_POINTY_MOUNTAINS_TEXTURE], 540.0, Vector2(1.08, 1.08), Color(0.55, 0.86, 0.94, 0.17), "ship.horizon_mountains", -8)
-	_add_location_sign("Bandırma", "Rotayı oku", Vector2(535, 280), 440.0, Color(POP_DEEP_TURQUOISE.r, POP_DEEP_TURQUOISE.g, POP_DEEP_TURQUOISE.b, 0.82), "ship.location_sign")
-	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(150, 150), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.24), 24, 0.02, false, -6)
-	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(245, 190), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.10), 24, 0.06, false, -7)
-	_add_path_ribbon([Vector2(120, 920), Vector2(450, 900), Vector2(820, 910), Vector2(1460, 880)], 10.0, Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.16), -4)
+	_add_backdrop_band([_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE], 540.0, Vector2(1.08, 1.08), Color(0.55, 0.86, 0.94, 0.17), "ship.horizon_mountains", -8)
+	_add_location_sign("Bandırma", "Rotayı oku", Vector2(535, 280), 440.0, Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.82), "ship.location_sign")
+	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(150, 150), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.24), 24, 0.02, false, -6)
+	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(245, 190), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.10), 24, 0.06, false, -7)
+	_add_path_ribbon([Vector2(120, 920), Vector2(450, 900), Vector2(820, 910), Vector2(1460, 880)], 10.0, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.16), -4)
 	_add_light_pool(world_root, Vector2(830, 1260), Vector2(340, 140), Color(1.0, 0.78, 0.42, 0.13))
 	_add_light_pool(world_root, Vector2(1160, 1300), Vector2(230, 460), Color(0.42, 0.76, 0.94, 0.12))
 	_add_water_glints(Vector2(1090, 1120), 8, Vector2(12, 68), Color(0.78, 0.98, 1.0, 0.26))
 	_add_rift_shard_cluster(Vector2(1210, 1120), 6, 160.0)
 	_add_path_ribbon([Vector2(420, 650), Vector2(700, 860), Vector2(860, 1240), Vector2(1160, 1470)], 28.0, Color(0.92, 0.68, 0.38, 0.26), -1)
 	_add_story_banner(Vector2(470, 910), Vector2(390, 126), Color(0.94, 0.86, 0.66, 0.84), Color(0.52, 0.34, 0.20, 0.82), "Rotayı oku, acele etme")
-	_add_asset_slot_prop("ship.map_table", Vector2(690, 1170), Vector2(330, 154), Color(0.78, 0.56, 0.30, 0.92), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.60), "Harita", true)
-	_add_asset_slot_prop("ship.uniform_stand", Vector2(455, 535), Vector2(112, 154), Color(0.18, 0.32, 0.48, 0.88), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.46), "", true)
-	_add_asset_slot_prop("ship.compass", Vector2(1020, 1370), Vector2(128, 96), Color(POP_CREAM.r, POP_CREAM.g, POP_CREAM.b, 0.80), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.64), "", true)
-	_add_asset_slot_prop("ship.dock_glow", Vector2(1110, 1510), Vector2(180, 72), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.20), Color(1.0, 1.0, 1.0, 0.18), "Samsun", true)
-	_add_kenney_prop(BLOCK_TILE_WOOD_TEXTURE, Vector2(855, 1214), Vector2(1.60, 0.92), Color(1.0, 0.76, 0.46, 0.74), true, "ship.map_table_surface")
-	_add_kenney_prop(BLOCK_BOX_TEXTURE, Vector2(420, 1460), Vector2(1.02, 1.02), Color(0.92, 0.76, 0.54, 0.70), true, "ship.deck_crate_left")
-	_add_kenney_prop(BLOCK_BOX_WIDE_TEXTURE, Vector2(525, 1486), Vector2(1.05, 1.05), Color(0.96, 0.80, 0.58, 0.66), true, "ship.deck_crate_stack")
-	_add_kenney_prop(BLOCK_CART_TOP_TEXTURE, Vector2(1016, 1380), Vector2(0.86, 0.86), Color(1.0, 0.90, 0.64, 0.74), true, "ship.compass_case")
-	_add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(380, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_left")
-	_add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1060, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_right")
-	_add_kenney_npc(BLOCK_CHARACTER_MAN_TEXTURE, Vector2(520, 1188), Vector2(0.92, 0.92), Color(0.92, 0.96, 1.0, 0.62), "ship.deck_helper", "rota")
-	_add_kenney_npc(BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(1180, 1248), Vector2(0.86, 0.86), Color(0.90, 1.0, 0.96, 0.56), "ship.watch_helper", "liman")
-	_add_strategy_card(BOARD_CARD_GREEN_TEXTURE, Vector2(730, 1130), Vector2(0.44, 0.44), Color(0.92, 1.0, 0.88, 0.76), "Harita", "ship.route_card")
-	_add_strategy_token(BOARD_CHIP_BLUE_TEXTURE, Vector2(1114, 1390), Vector2(0.44, 0.44), Color(0.84, 0.98, 1.0, 0.80), "ship.navigation_token")
+	_add_asset_slot_prop("ship.map_table", Vector2(690, 1170), Vector2(330, 154), Color(0.78, 0.56, 0.30, 0.92), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.60), "Harita", true)
+	_add_asset_slot_prop("ship.uniform_stand", Vector2(455, 535), Vector2(112, 154), Color(0.18, 0.32, 0.48, 0.88), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.46), "", true)
+	_add_asset_slot_prop("ship.compass", Vector2(1020, 1370), Vector2(128, 96), Color(_colors.POP_CREAM.r, _colors.POP_CREAM.g, _colors.POP_CREAM.b, 0.80), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.64), "", true)
+	_add_asset_slot_prop("ship.dock_glow", Vector2(1110, 1510), Vector2(180, 72), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.20), Color(1.0, 1.0, 1.0, 0.18), "Samsun", true)
+	_add_kenney_prop(_textures.BLOCK_TILE_WOOD_TEXTURE, Vector2(855, 1214), Vector2(1.60, 0.92), Color(1.0, 0.76, 0.46, 0.74), true, "ship.map_table_surface")
+	_add_kenney_prop(_textures.BLOCK_BOX_TEXTURE, Vector2(420, 1460), Vector2(1.02, 1.02), Color(0.92, 0.76, 0.54, 0.70), true, "ship.deck_crate_left")
+	_add_kenney_prop(_textures.BLOCK_BOX_WIDE_TEXTURE, Vector2(525, 1486), Vector2(1.05, 1.05), Color(0.96, 0.80, 0.58, 0.66), true, "ship.deck_crate_stack")
+	_add_kenney_prop(_textures.BLOCK_CART_TOP_TEXTURE, Vector2(1016, 1380), Vector2(0.86, 0.86), Color(1.0, 0.90, 0.64, 0.74), true, "ship.compass_case")
+	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(380, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_left")
+	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1060, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_right")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(520, 1188), Vector2(0.92, 0.92), Color(0.92, 0.96, 1.0, 0.62), "ship.deck_helper", "rota")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(1180, 1248), Vector2(0.86, 0.86), Color(0.90, 1.0, 0.96, 0.56), "ship.watch_helper", "liman")
+	_add_strategy_card(_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(730, 1130), Vector2(0.44, 0.44), Color(0.92, 1.0, 0.88, 0.76), "Harita", "ship.route_card")
+	_add_strategy_token(_textures.BOARD_CHIP_BLUE_TEXTURE, Vector2(1114, 1390), Vector2(0.44, 0.44), Color(0.84, 0.98, 1.0, 0.80), "ship.navigation_token")
 	_add_decorative_speckles(Rect2(Vector2(250, 420), Vector2(1040, 1140)), Color(1.0, 0.86, 0.55, 0.06), 20)
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(300, 150), Vector2(0.96, 0.96), Color(1, 1, 1, 0.22))
-	_add_sprite_prop(CLOUD_TEXTURE_ALT, Vector2(1220, 170), Vector2(0.88, 0.88), Color(1, 1, 1, 0.22))
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(840, 120), Vector2(0.74, 0.74), Color(1, 1, 1, 0.18))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(300, 150), Vector2(0.96, 0.96), Color(1, 1, 1, 0.22))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1220, 170), Vector2(0.88, 0.88), Color(1, 1, 1, 0.22))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(840, 120), Vector2(0.74, 0.74), Color(1, 1, 1, 0.18))
 	_add_rect(world_root, Vector2(1030, 1015), Vector2(120, 600), Color(0.08, 0.28, 0.36))
 	_add_rect(world_root, Vector2(1180, 1015), Vector2(105, 600), Color(0.10, 0.31, 0.40))
 	_add_rect(world_root, Vector2(270, 1090), Vector2(980, 52), Color(0.58, 0.44, 0.30))
@@ -610,23 +1490,23 @@ func _decorate_ship(world_root: Node) -> void:
 	_add_ship_planks(Vector2(360, 1094), 8, 102.0, Color(1, 1, 1, 0.42), Vector2(0.62, 0.62))
 	_add_ship_planks(Vector2(360, 1234), 8, 102.0, Color(1, 1, 1, 0.42), Vector2(0.62, 0.62))
 	_add_ship_planks(Vector2(360, 1374), 8, 102.0, Color(1, 1, 1, 0.42), Vector2(0.62, 0.62))
-	_add_sprite_prop(SHIP_HULL_TEXTURE, Vector2(680, 1500), Vector2(1.30, 1.30), Color(1, 1, 1, 0.30))
-	_add_sprite_prop(SHIP_HULL_ALT_TEXTURE, Vector2(950, 1515), Vector2(1.18, 1.18), Color(1, 1, 1, 0.26))
-	_add_sprite_prop(SHIP_MAST_TEXTURE, Vector2(820, 900), Vector2(1.26, 1.26), Color(1, 1, 1, 0.42), true)
-	_add_sprite_prop(SHIP_MAST_TEXTURE, Vector2(1040, 980), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34), true)
-	_add_sprite_prop(SHIP_SAIL_TEXTURE, Vector2(885, 840), Vector2(0.92, 0.92), Color(1, 1, 1, 0.30), true)
-	_add_sprite_prop(SHIP_SMALL_SAIL_TEXTURE, Vector2(1080, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.28), true)
-	_add_sprite_prop(SHIP_FLAG_TEXTURE, Vector2(905, 610), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), true)
-	_add_sprite_prop(SHIP_FLAG_ALT_TEXTURE, Vector2(1090, 760), Vector2(0.62, 0.62), Color(1, 1, 1, 0.78), true)
+	_add_sprite_prop(_textures.SHIP_HULL_TEXTURE, Vector2(680, 1500), Vector2(1.30, 1.30), Color(1, 1, 1, 0.30))
+	_add_sprite_prop(_textures.SHIP_HULL_ALT_TEXTURE, Vector2(950, 1515), Vector2(1.18, 1.18), Color(1, 1, 1, 0.26))
+	_add_sprite_prop(_textures.SHIP_MAST_TEXTURE, Vector2(820, 900), Vector2(1.26, 1.26), Color(1, 1, 1, 0.42), true)
+	_add_sprite_prop(_textures.SHIP_MAST_TEXTURE, Vector2(1040, 980), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34), true)
+	_add_sprite_prop(_textures.SHIP_SAIL_TEXTURE, Vector2(885, 840), Vector2(0.92, 0.92), Color(1, 1, 1, 0.30), true)
+	_add_sprite_prop(_textures.SHIP_SMALL_SAIL_TEXTURE, Vector2(1080, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.28), true)
+	_add_sprite_prop(_textures.SHIP_FLAG_TEXTURE, Vector2(905, 610), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), true)
+	_add_sprite_prop(_textures.SHIP_FLAG_ALT_TEXTURE, Vector2(1090, 760), Vector2(0.62, 0.62), Color(1, 1, 1, 0.78), true)
 	_add_crimson_flag(Vector2(960, 650), 0.86, true)
 	_add_crimson_flag(Vector2(1160, 820), 0.64, true)
-	_add_sprite_prop(SHIP_NEST_TEXTURE, Vector2(820, 720), Vector2(0.78, 0.78), Color(1, 1, 1, 0.45), true)
-	_add_sprite_prop(SHIP_CANNON_TEXTURE, Vector2(1140, 1320), Vector2(0.70, 0.70), Color(1, 1, 1, 0.72), true)
-	_add_sprite_prop(SHIP_CANNON_TEXTURE, Vector2(420, 1330), Vector2(-0.66, 0.66), Color(1, 1, 1, 0.54), true)
-	_add_sprite_prop(SHIP_CREW_TEXTURE, Vector2(1180, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.38), true)
-	_add_sprite_prop(SHIP_CREW_ALT_TEXTURE, Vector2(540, 1110), Vector2(0.60, 0.60), Color(1, 1, 1, 0.34), true)
-	_add_sprite_prop(SMOKE_TEXTURE, Vector2(1010, 450), Vector2(0.78, 0.78), Color(0.85, 0.92, 1.0, 0.22))
-	_add_sprite_prop(SMOKE_TEXTURE, Vector2(1180, 1460), Vector2(0.56, 0.56), Color(0.88, 0.94, 1.0, 0.18))
+	_add_sprite_prop(_textures.SHIP_NEST_TEXTURE, Vector2(820, 720), Vector2(0.78, 0.78), Color(1, 1, 1, 0.45), true)
+	_add_sprite_prop(_textures.SHIP_CANNON_TEXTURE, Vector2(1140, 1320), Vector2(0.70, 0.70), Color(1, 1, 1, 0.72), true)
+	_add_sprite_prop(_textures.SHIP_CANNON_TEXTURE, Vector2(420, 1330), Vector2(-0.66, 0.66), Color(1, 1, 1, 0.54), true)
+	_add_sprite_prop(_textures.SHIP_CREW_TEXTURE, Vector2(1180, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.38), true)
+	_add_sprite_prop(_textures.SHIP_CREW_ALT_TEXTURE, Vector2(540, 1110), Vector2(0.60, 0.60), Color(1, 1, 1, 0.34), true)
+	_add_sprite_prop(_textures.SMOKE_TEXTURE, Vector2(1010, 450), Vector2(0.78, 0.78), Color(0.85, 0.92, 1.0, 0.22))
+	_add_sprite_prop(_textures.SMOKE_TEXTURE, Vector2(1180, 1460), Vector2(0.56, 0.56), Color(0.88, 0.94, 1.0, 0.18))
 	_add_mote_cluster(Vector2(1140, 1160), Color(0.78, 0.92, 1.0, 0.14), 6)
 
 
@@ -635,9 +1515,9 @@ func _decorate_ship(world_root: Node) -> void:
 # ============================================================
 
 func _decorate_samsun_diorama_pilot(world_root: Node) -> void:
-	_add_backdrop_band([BG_FLAT_HILLS_1_TEXTURE, BG_FLAT_MOUNTAIN_1_TEXTURE, BG_FLAT_HILLS_2_TEXTURE], 430.0, Vector2(1.02, 1.02), Color(0.58, 0.92, 1.0, 0.17), "samsun.diorama_horizon", -7)
+	_add_backdrop_band([_textures.BG_FLAT_HILLS_1_TEXTURE, _textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_HILLS_2_TEXTURE], 430.0, Vector2(1.02, 1.02), Color(0.58, 0.92, 1.0, 0.17), "samsun.diorama_horizon", -7)
 	_add_distant_town_band(590.0, Color(0.96, 0.94, 0.78, 0.16), "samsun.diorama_town")
-	_add_location_sign("Samsun", "Patikayı izle", Vector2(556, 300), 488.0, Color(POP_DEEP_TURQUOISE.r, POP_DEEP_TURQUOISE.g, POP_DEEP_TURQUOISE.b, 0.78), "samsun.location_sign")
+	_add_location_sign("Samsun", "Patikayı izle", Vector2(556, 300), 488.0, Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.78), "samsun.location_sign")
 
 	_add_samsun_paper_asset_layer()
 	_add_samsun_atmosphere_washes()
@@ -657,12 +1537,12 @@ func _decorate_samsun_diorama_pilot(world_root: Node) -> void:
 	_add_samsun_node_shadow(Vector2(1190, 820), Vector2(140, 38), "samsun.telegraph_node_shadow")
 	_add_samsun_node_shadow(Vector2(530, 1500), Vector2(150, 42), "samsun.people_node_shadow")
 
-	_add_asset_slot_prop("interactables.companion_reaction_spot", Vector2(730, 1160), Vector2(150, 86), Color(1.0, 0.90, 0.62, 0.34), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.30), "Fark et", true)
+	_add_asset_slot_prop("interactables.companion_reaction_spot", Vector2(730, 1160), Vector2(150, 86), Color(1.0, 0.90, 0.62, 0.34), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.30), "Fark et", true)
 
 	_add_mote_cluster(Vector2(800, 1000), Color(0.72, 0.92, 1.0, 0.14), 6)
 	_add_decorative_speckles(Rect2(Vector2(250, 520), Vector2(1080, 1120)), Color(1.0, 0.92, 0.58, 0.045), 14)
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(320, 260), Vector2(1.00, 1.00), Color(0.96, 0.86, 1.0, 0.15))
-	_add_sprite_prop(CLOUD_TEXTURE_ALT, Vector2(1260, 340), Vector2(0.92, 0.92), Color(0.72, 0.98, 1.0, 0.12))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(320, 260), Vector2(1.00, 1.00), Color(0.96, 0.86, 1.0, 0.15))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1260, 340), Vector2(0.92, 0.92), Color(0.72, 0.98, 1.0, 0.12))
 	_add_samsun_foreground_silhouettes()
 
 
@@ -676,65 +1556,65 @@ func _decorate_samsun_rift(world_root: Node) -> void:
 
 func _decorate_havza(world_root: Node) -> void:
 	_add_toy_world_frame(Color(0.34, 0.48, 0.25, 0.22), Color(0.96, 0.82, 0.42, 0.09))
-	_add_backdrop_band([BG_FLAT_HILLS_1_TEXTURE, BG_FLAT_HILLS_2_TEXTURE, BG_FLAT_MOUNTAIN_2_TEXTURE], 500.0, Vector2(1.00, 1.00), Color(0.82, 0.98, 0.64, 0.16), "havza.horizon")
+	_add_backdrop_band([_textures.BG_FLAT_HILLS_1_TEXTURE, _textures.BG_FLAT_HILLS_2_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE], 500.0, Vector2(1.00, 1.00), Color(0.82, 0.98, 0.64, 0.16), "havza.horizon")
 	_add_distant_town_band(640.0, Color(0.98, 0.92, 0.72, 0.16), "havza.distant_town")
 	_add_location_sign("Havza", "Ortak ses kur", Vector2(550, 300), 460.0, Color(0.56, 0.72, 0.32, 0.82), "havza.location_sign")
 	_add_soft_blob(world_root, Vector2(780, 1120), Vector2(410, 260), Color(0.50, 0.62, 0.32, 0.20), 20, 0.10)
 	_add_rift_shard_cluster(Vector2(1160, 1480), 5, 140.0)
 	_add_path_ribbon([Vector2(520, 1400), Vector2(700, 1120), Vector2(970, 980), Vector2(1080, 860)], 36.0, Color(0.92, 0.74, 0.42, 0.28), -1)
-	_add_breadcrumb_trail([Vector2(520, 1400), Vector2(700, 1120), Vector2(970, 980), Vector2(1080, 860)], BOARD_CHIP_GREEN_TEXTURE, Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.80), "havza.breadcrumb", 150.0, 0.50)
+	_add_breadcrumb_trail([Vector2(520, 1400), Vector2(700, 1120), Vector2(970, 980), Vector2(1080, 860)], _textures.BOARD_CHIP_GREEN_TEXTURE, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.80), "havza.breadcrumb", 150.0, 0.50)
 	_add_light_pool(world_root, Vector2(700, 1120), Vector2(290, 180), Color(1.0, 0.86, 0.40, 0.11))
 	_add_story_banner(Vector2(510, 420), Vector2(420, 128), Color(0.96, 0.92, 0.70, 0.86), Color(0.56, 0.72, 0.32, 0.80), "Ortak ses kur")
-	_add_asset_slot_prop("havza.notice_board", Vector2(970, 622), Vector2(150, 118), Color(0.96, 0.88, 0.62, 0.86), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.42), "Genelge", true)
-	_add_asset_slot_prop("havza.telegraph_table", Vector2(370, 1470), Vector2(170, 98), Color(0.80, 0.62, 0.36, 0.86), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.38), "Telgraf", true)
-	_add_asset_slot_prop("havza.town_square", Vector2(625, 1048), Vector2(178, 104), Color(0.96, 0.82, 0.48, 0.62), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.45), "Meydan", true)
-	_add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1008, 724), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.62, 0.70), true, "havza.notice_board_legs")
-	_add_kenney_prop(BLOCK_TILE_WOOD_TEXTURE, Vector2(452, 1510), Vector2(1.05, 0.82), Color(1.0, 0.80, 0.54, 0.74), true, "havza.telegraph_table_surface")
-	_add_kenney_prop(BLOCK_MARKET_STALL_BLUE_TEXTURE, Vector2(710, 1086), Vector2(1.12, 1.12), Color(0.90, 1.0, 1.0, 0.82), true, "havza.square_stall")
-	_add_kenney_prop(BLOCK_CART_TEXTURE, Vector2(560, 1200), Vector2(0.90, 0.90), Color(0.96, 0.82, 0.62, 0.70), true, "havza.square_cart")
-	_add_kenney_prop(BLOCK_FENCE_SINGLE_TEXTURE, Vector2(868, 1210), Vector2(1.05, 1.05), Color(0.90, 0.96, 1.0, 0.52), true, "havza.square_fence")
-	_add_strategy_card(BOARD_CARD_GREEN_TEXTURE, Vector2(860, 1040), Vector2(0.42, 0.42), Color(0.90, 1.0, 0.86, 0.76), "Ses", "havza.voice_card")
-	_add_strategy_token(BOARD_CHIP_GREEN_TEXTURE, Vector2(990, 672), Vector2(0.42, 0.42), Color(0.86, 1.0, 0.76, 0.84), "havza.notice_token")
-	_add_kenney_npc(BLOCK_CHARACTER_MAN_TEXTURE, Vector2(650, 1210), Vector2(0.82, 0.82), Color(0.96, 0.94, 0.86, 0.56), "havza.citizen_a", "oku")
-	_add_kenney_npc(BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(798, 1218), Vector2(0.82, 0.82), Color(0.96, 1.0, 0.94, 0.56), "havza.citizen_b", "paylaş")
-	_add_kenney_npc(BLOCK_CHARACTER_HORSE_TEXTURE, Vector2(470, 1280), Vector2(0.78, 0.78), Color(1.0, 0.92, 0.76, 0.42), "havza.carrier_horse", "")
-	_add_way_arrow(Vector2(900, 820), deg_to_rad(-52), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.72), "genelge", "havza.to_notice_arrow")
-	_add_way_arrow(Vector2(575, 1415), deg_to_rad(154), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.70), "telgraf", "havza.to_telegraph_arrow")
-	_add_discovery_badge(GAME_INFO_TEXTURE, Vector2(720, 940), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.86), "meydan", "havza.square_badge")
+	_add_asset_slot_prop("havza.notice_board", Vector2(970, 622), Vector2(150, 118), Color(0.96, 0.88, 0.62, 0.86), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.42), "Genelge", true)
+	_add_asset_slot_prop("havza.telegraph_table", Vector2(370, 1470), Vector2(170, 98), Color(0.80, 0.62, 0.36, 0.86), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.38), "Telgraf", true)
+	_add_asset_slot_prop("havza.town_square", Vector2(625, 1048), Vector2(178, 104), Color(0.96, 0.82, 0.48, 0.62), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.45), "Meydan", true)
+	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1008, 724), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.62, 0.70), true, "havza.notice_board_legs")
+	_add_kenney_prop(_textures.BLOCK_TILE_WOOD_TEXTURE, Vector2(452, 1510), Vector2(1.05, 0.82), Color(1.0, 0.80, 0.54, 0.74), true, "havza.telegraph_table_surface")
+	_add_kenney_prop(_textures.BLOCK_MARKET_STALL_BLUE_TEXTURE, Vector2(710, 1086), Vector2(1.12, 1.12), Color(0.90, 1.0, 1.0, 0.82), true, "havza.square_stall")
+	_add_kenney_prop(_textures.BLOCK_CART_TEXTURE, Vector2(560, 1200), Vector2(0.90, 0.90), Color(0.96, 0.82, 0.62, 0.70), true, "havza.square_cart")
+	_add_kenney_prop(_textures.BLOCK_FENCE_SINGLE_TEXTURE, Vector2(868, 1210), Vector2(1.05, 1.05), Color(0.90, 0.96, 1.0, 0.52), true, "havza.square_fence")
+	_add_strategy_card(_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(860, 1040), Vector2(0.42, 0.42), Color(0.90, 1.0, 0.86, 0.76), "Ses", "havza.voice_card")
+	_add_strategy_token(_textures.BOARD_CHIP_GREEN_TEXTURE, Vector2(990, 672), Vector2(0.42, 0.42), Color(0.86, 1.0, 0.76, 0.84), "havza.notice_token")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(650, 1210), Vector2(0.82, 0.82), Color(0.96, 0.94, 0.86, 0.56), "havza.citizen_a", "oku")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(798, 1218), Vector2(0.82, 0.82), Color(0.96, 1.0, 0.94, 0.56), "havza.citizen_b", "paylaş")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_HORSE_TEXTURE, Vector2(470, 1280), Vector2(0.78, 0.78), Color(1.0, 0.92, 0.76, 0.42), "havza.carrier_horse", "")
+	_add_way_arrow(Vector2(900, 820), deg_to_rad(-52), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.72), "genelge", "havza.to_notice_arrow")
+	_add_way_arrow(Vector2(575, 1415), deg_to_rad(154), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.70), "telgraf", "havza.to_telegraph_arrow")
+	_add_discovery_badge(_textures.GAME_INFO_TEXTURE, Vector2(720, 940), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.86), "meydan", "havza.square_badge")
 	_add_decorative_speckles(Rect2(Vector2(240, 520), Vector2(1120, 1100)), Color(1.0, 0.92, 0.54, 0.07), 22)
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(310, 250), Vector2(0.98, 0.98), Color(1, 1, 1, 0.18))
-	_add_sprite_prop(CLOUD_TEXTURE_ALT, Vector2(1240, 280), Vector2(0.88, 0.88), Color(1, 1, 1, 0.14))
-	_add_sketch_strip(SKETCH_GRASS_TEXTURE, Vector2(260, 360), 8, Vector2(118, 0), Color(1, 1, 1, 0.70))
-	_add_sketch_strip(SKETCH_GRASS_TEXTURE, Vector2(320, 470), 7, Vector2(118, 0), Color(1, 1, 1, 0.68))
-	_add_sketch_strip(SKETCH_GRASS_TEXTURE, Vector2(270, 1280), 8, Vector2(118, 0), Color(1, 1, 1, 0.68))
-	_add_sketch_strip(SKETCH_GRASS_TEXTURE, Vector2(340, 1380), 7, Vector2(118, 0), Color(1, 1, 1, 0.66))
-	_add_sketch_strip(SKETCH_PATH_TEXTURE, Vector2(450, 1540), 6, Vector2(84, -82), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74))
-	_add_sketch_strip(SKETCH_PATH_TEXTURE, Vector2(920, 1040), 3, Vector2(0, -102), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74))
-	_add_sketch_tile(SKETCH_PATH_CROSS_TEXTURE, Vector2(960, 920), Color.WHITE, Vector2(0.82, 0.82))
-	_add_sketch_tile(SKETCH_PATH_CORNER_TEXTURE, Vector2(780, 1120), Color.WHITE, Vector2(0.74, 0.74))
-	_add_sketch_tile(SKETCH_PATH_END_TEXTURE, Vector2(1080, 720), Color.WHITE, Vector2(0.74, 0.74))
-	_add_sketch_tile(SKETCH_RIVER_TEXTURE, Vector2(330, 1500), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
-	_add_sketch_tile(SKETCH_RIVER_TEXTURE, Vector2(260, 1588), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
-	_add_sketch_tile(SKETCH_RIVER_BEND_TEXTURE, Vector2(398, 1676), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
-	_add_sketch_tile(SKETCH_RIVER_BRIDGE_TEXTURE, Vector2(520, 1424), Color.WHITE, Vector2(0.78, 0.78))
-	_add_havza_building(Vector2(790, 560), 4, SKETCH_BUILDING_DOOR_TEXTURE, SKETCH_BUILDING_WINDOWS_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.92))
-	_add_havza_building(Vector2(300, 680), 3, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.78))
-	_add_havza_building(Vector2(1120, 760), 2, SKETCH_BUILDING_DOOR_TEXTURE, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.74))
-	_add_kenney_building(Vector2(930, 620), Vector2(1.02, 1.02), BLOCK_BUILDING_ROOF_RED_TEXTURE, Color(1.0, 0.94, 0.78, 0.58))
-	_add_kenney_building(Vector2(310, 790), Vector2(0.88, 0.88), BLOCK_BUILDING_ROOF_BLUE_TEXTURE, Color(0.94, 1.0, 1.0, 0.48))
-	_add_kenney_prop(BLOCK_TREE_GREEN_TEXTURE, Vector2(1160, 1190), Vector2(0.96, 0.96), Color(0.86, 1.0, 0.74, 0.70), true, "havza.square_tree")
-	_add_kenney_prop(BLOCK_TREE_ORANGE_TEXTURE, Vector2(250, 1180), Vector2(0.84, 0.84), Color(1.0, 0.90, 0.56, 0.56), true, "havza.warm_tree")
-	_add_sprite_prop(HOUSE_TEXTURE, Vector2(350, 640), Vector2(0.82, 0.82), Color(1, 1, 1, 0.22))
-	_add_sprite_prop(HOUSE_TEXTURE_ALT, Vector2(1190, 620), Vector2(0.92, 0.92), Color(1, 1, 1, 0.18))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(310, 250), Vector2(0.98, 0.98), Color(1, 1, 1, 0.18))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1240, 280), Vector2(0.88, 0.88), Color(1, 1, 1, 0.14))
+	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(260, 360), 8, Vector2(118, 0), Color(1, 1, 1, 0.70))
+	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(320, 470), 7, Vector2(118, 0), Color(1, 1, 1, 0.68))
+	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(270, 1280), 8, Vector2(118, 0), Color(1, 1, 1, 0.68))
+	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(340, 1380), 7, Vector2(118, 0), Color(1, 1, 1, 0.66))
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(450, 1540), 6, Vector2(84, -82), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74))
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(920, 1040), 3, Vector2(0, -102), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74))
+	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(960, 920), Color.WHITE, Vector2(0.82, 0.82))
+	_add_sketch_tile(_textures.SKETCH_PATH_CORNER_TEXTURE, Vector2(780, 1120), Color.WHITE, Vector2(0.74, 0.74))
+	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1080, 720), Color.WHITE, Vector2(0.74, 0.74))
+	_add_sketch_tile(_textures.SKETCH_RIVER_TEXTURE, Vector2(330, 1500), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
+	_add_sketch_tile(_textures.SKETCH_RIVER_TEXTURE, Vector2(260, 1588), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
+	_add_sketch_tile(_textures.SKETCH_RIVER_BEND_TEXTURE, Vector2(398, 1676), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
+	_add_sketch_tile(_textures.SKETCH_RIVER_BRIDGE_TEXTURE, Vector2(520, 1424), Color.WHITE, Vector2(0.78, 0.78))
+	_add_havza_building(Vector2(790, 560), 4, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOWS_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.92))
+	_add_havza_building(Vector2(300, 680), 3, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.78))
+	_add_havza_building(Vector2(1120, 760), 2, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.74))
+	_add_kenney_building(Vector2(930, 620), Vector2(1.02, 1.02), _textures.BLOCK_BUILDING_ROOF_RED_TEXTURE, Color(1.0, 0.94, 0.78, 0.58))
+	_add_kenney_building(Vector2(310, 790), Vector2(0.88, 0.88), _textures.BLOCK_BUILDING_ROOF_BLUE_TEXTURE, Color(0.94, 1.0, 1.0, 0.48))
+	_add_kenney_prop(_textures.BLOCK_TREE_GREEN_TEXTURE, Vector2(1160, 1190), Vector2(0.96, 0.96), Color(0.86, 1.0, 0.74, 0.70), true, "havza.square_tree")
+	_add_kenney_prop(_textures.BLOCK_TREE_ORANGE_TEXTURE, Vector2(250, 1180), Vector2(0.84, 0.84), Color(1.0, 0.90, 0.56, 0.56), true, "havza.warm_tree")
+	_add_sprite_prop(_textures.HOUSE_TEXTURE, Vector2(350, 640), Vector2(0.82, 0.82), Color(1, 1, 1, 0.22))
+	_add_sprite_prop(_textures.HOUSE_TEXTURE_ALT, Vector2(1190, 620), Vector2(0.92, 0.92), Color(1, 1, 1, 0.18))
 	_add_crimson_flag(Vector2(1110, 700), 0.54, true)
-	_add_sprite_prop(TREE_TEXTURE, Vector2(1040, 1220), Vector2(0.82, 0.82), Color(0.96, 1.0, 0.92, 0.50), true)
-	_add_sprite_prop(TREE_TEXTURE_ALT, Vector2(260, 1290), Vector2(0.74, 0.74), Color(0.96, 1.0, 0.92, 0.46), true)
-	_add_sprite_prop(TREE_TEXTURE_ALT, Vector2(1320, 1360), Vector2(0.70, 0.70), Color(0.96, 1.0, 0.92, 0.42), true)
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(790, 1340), Vector2(1.18, 1.18), Color(1, 1, 1, 0.26))
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(610, 1000), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34))
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(1110, 1000), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34))
-	_add_sprite_prop(SHIP_CREW_TEXTURE, Vector2(680, 1080), Vector2(0.50, 0.50), Color(1, 1, 1, 0.30), true)
-	_add_sprite_prop(SHIP_CREW_TEXTURE, Vector2(890, 1160), Vector2(0.46, 0.46), Color(1, 1, 1, 0.26), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE, Vector2(1040, 1220), Vector2(0.82, 0.82), Color(0.96, 1.0, 0.92, 0.50), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE_ALT, Vector2(260, 1290), Vector2(0.74, 0.74), Color(0.96, 1.0, 0.92, 0.46), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE_ALT, Vector2(1320, 1360), Vector2(0.70, 0.70), Color(0.96, 1.0, 0.92, 0.42), true)
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(790, 1340), Vector2(1.18, 1.18), Color(1, 1, 1, 0.26))
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(610, 1000), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34))
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(1110, 1000), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34))
+	_add_sprite_prop(_textures.SHIP_CREW_TEXTURE, Vector2(680, 1080), Vector2(0.50, 0.50), Color(1, 1, 1, 0.30), true)
+	_add_sprite_prop(_textures.SHIP_CREW_TEXTURE, Vector2(890, 1160), Vector2(0.46, 0.46), Color(1, 1, 1, 0.26), true)
 	_add_mote_cluster(Vector2(780, 1100), Color(0.96, 0.86, 0.44, 0.13), 6)
 
 
@@ -744,47 +1624,47 @@ func _decorate_havza(world_root: Node) -> void:
 
 func _decorate_amasya(world_root: Node) -> void:
 	_add_toy_world_frame(Color(0.42, 0.34, 0.42, 0.20), Color(0.92, 0.78, 1.0, 0.08))
-	_add_backdrop_band([BG_FLAT_MOUNTAIN_1_TEXTURE, BG_FLAT_POINTY_MOUNTAINS_TEXTURE, BG_FLAT_MOUNTAIN_2_TEXTURE], 490.0, Vector2(1.02, 1.02), Color(0.86, 0.82, 1.0, 0.16), "amasya.horizon")
+	_add_backdrop_band([_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE], 490.0, Vector2(1.02, 1.02), Color(0.86, 0.82, 1.0, 0.16), "amasya.horizon")
 	_add_distant_town_band(650.0, Color(1.0, 0.90, 0.74, 0.14), "amasya.distant_town")
 	_add_location_sign("Amasya", "Kararı anla", Vector2(555, 300), 460.0, Color(0.58, 0.42, 0.28, 0.82), "amasya.location_sign")
 	_add_soft_blob(world_root, Vector2(800, 1240), Vector2(420, 260), Color(0.44, 0.36, 0.30, 0.18), 20, 0.08)
 	_add_rift_shard_cluster(Vector2(1240, 1460), 5, 140.0)
 	_add_path_ribbon([Vector2(620, 1500), Vector2(800, 1450), Vector2(980, 1180), Vector2(860, 980), Vector2(620, 620)], 34.0, Color(0.94, 0.78, 0.44, 0.28), -1)
-	_add_breadcrumb_trail([Vector2(620, 1500), Vector2(800, 1450), Vector2(980, 1180), Vector2(860, 980), Vector2(620, 620)], BOARD_CHIP_RED_TEXTURE, Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.78), "amasya.breadcrumb", 150.0, 0.50)
+	_add_breadcrumb_trail([Vector2(620, 1500), Vector2(800, 1450), Vector2(980, 1180), Vector2(860, 980), Vector2(620, 620)], _textures.BOARD_CHIP_RED_TEXTURE, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.78), "amasya.breadcrumb", 150.0, 0.50)
 	_add_light_pool(world_root, Vector2(800, 1180), Vector2(300, 190), Color(1.0, 0.78, 0.44, 0.11))
 	_add_story_banner(Vector2(520, 820), Vector2(430, 128), Color(0.95, 0.88, 0.72, 0.86), Color(0.58, 0.42, 0.28, 0.82), "Milletin kararı")
-	_add_asset_slot_prop("amasya.meeting_table", Vector2(570, 1070), Vector2(220, 110), Color(0.74, 0.50, 0.30, 0.86), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.44), "Toplantı", true)
-	_add_asset_slot_prop("amasya.statement_draft", Vector2(920, 1125), Vector2(154, 96), Color(0.98, 0.92, 0.74, 0.88), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.36), "Bildiri", true)
-	_add_asset_slot_prop("amasya.river_marker", Vector2(306, 1580), Vector2(220, 70), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.18), Color(1.0, 1.0, 1.0, 0.18), "", true)
-	_add_kenney_prop(BLOCK_TILE_WOOD_TEXTURE, Vector2(682, 1122), Vector2(1.32, 0.86), Color(1.0, 0.76, 0.48, 0.76), true, "amasya.meeting_table_surface")
-	_add_kenney_prop(BLOCK_BOX_WIDE_TEXTURE, Vector2(958, 1160), Vector2(0.86, 0.86), Color(1.0, 0.92, 0.72, 0.74), true, "amasya.statement_stack")
-	_add_kenney_prop(BLOCK_TILE_WATER_TEXTURE, Vector2(386, 1606), Vector2(1.48, 1.12), Color(0.60, 0.98, 1.0, 0.72), true, "amasya.river_water")
-	_add_kenney_prop(BLOCK_TILE_BRIDGE_TEXTURE, Vector2(520, 1560), Vector2(1.05, 1.05), Color(1.0, 0.86, 0.58, 0.78), true, "amasya.river_bridge")
-	_add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(650, 1235), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.70, 0.46), true, "amasya.meeting_fence")
-	_add_strategy_card(BOARD_CARD_RED_TEXTURE, Vector2(1050, 1100), Vector2(0.42, 0.42), Color(1.0, 0.88, 0.76, 0.76), "Bildiri", "amasya.statement_card")
-	_add_strategy_token(BOARD_CHIP_BLUE_TEXTURE, Vector2(428, 1575), Vector2(0.42, 0.42), Color(0.82, 0.98, 1.0, 0.80), "amasya.river_token")
-	_add_kenney_npc(BLOCK_CHARACTER_MAN_TEXTURE, Vector2(590, 1220), Vector2(0.82, 0.82), Color(0.98, 0.94, 0.86, 0.46), "amasya.delegate_a", "görüş")
-	_add_kenney_npc(BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(980, 1265), Vector2(0.80, 0.80), Color(0.96, 1.0, 0.96, 0.44), "amasya.delegate_b", "not")
-	_add_way_arrow(Vector2(725, 980), deg_to_rad(78), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.72), "toplantı", "amasya.to_meeting_arrow")
-	_add_way_arrow(Vector2(900, 1495), deg_to_rad(-24), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.68), "bildiri", "amasya.to_statement_arrow")
-	_add_discovery_badge(GAME_CHECK_TEXTURE, Vector2(825, 1310), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.84), "karar", "amasya.decision_badge")
+	_add_asset_slot_prop("amasya.meeting_table", Vector2(570, 1070), Vector2(220, 110), Color(0.74, 0.50, 0.30, 0.86), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.44), "Toplantı", true)
+	_add_asset_slot_prop("amasya.statement_draft", Vector2(920, 1125), Vector2(154, 96), Color(0.98, 0.92, 0.74, 0.88), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.36), "Bildiri", true)
+	_add_asset_slot_prop("amasya.river_marker", Vector2(306, 1580), Vector2(220, 70), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.18), Color(1.0, 1.0, 1.0, 0.18), "", true)
+	_add_kenney_prop(_textures.BLOCK_TILE_WOOD_TEXTURE, Vector2(682, 1122), Vector2(1.32, 0.86), Color(1.0, 0.76, 0.48, 0.76), true, "amasya.meeting_table_surface")
+	_add_kenney_prop(_textures.BLOCK_BOX_WIDE_TEXTURE, Vector2(958, 1160), Vector2(0.86, 0.86), Color(1.0, 0.92, 0.72, 0.74), true, "amasya.statement_stack")
+	_add_kenney_prop(_textures.BLOCK_TILE_WATER_TEXTURE, Vector2(386, 1606), Vector2(1.48, 1.12), Color(0.60, 0.98, 1.0, 0.72), true, "amasya.river_water")
+	_add_kenney_prop(_textures.BLOCK_TILE_BRIDGE_TEXTURE, Vector2(520, 1560), Vector2(1.05, 1.05), Color(1.0, 0.86, 0.58, 0.78), true, "amasya.river_bridge")
+	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(650, 1235), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.70, 0.46), true, "amasya.meeting_fence")
+	_add_strategy_card(_textures.BOARD_CARD_RED_TEXTURE, Vector2(1050, 1100), Vector2(0.42, 0.42), Color(1.0, 0.88, 0.76, 0.76), "Bildiri", "amasya.statement_card")
+	_add_strategy_token(_textures.BOARD_CHIP_BLUE_TEXTURE, Vector2(428, 1575), Vector2(0.42, 0.42), Color(0.82, 0.98, 1.0, 0.80), "amasya.river_token")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(590, 1220), Vector2(0.82, 0.82), Color(0.98, 0.94, 0.86, 0.46), "amasya.delegate_a", "görüş")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(980, 1265), Vector2(0.80, 0.80), Color(0.96, 1.0, 0.96, 0.44), "amasya.delegate_b", "not")
+	_add_way_arrow(Vector2(725, 980), deg_to_rad(78), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.72), "toplantı", "amasya.to_meeting_arrow")
+	_add_way_arrow(Vector2(900, 1495), deg_to_rad(-24), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.68), "bildiri", "amasya.to_statement_arrow")
+	_add_discovery_badge(_textures.GAME_CHECK_TEXTURE, Vector2(825, 1310), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.84), "karar", "amasya.decision_badge")
 	_add_decorative_speckles(Rect2(Vector2(260, 520), Vector2(1100, 1140)), Color(1.0, 0.84, 0.48, 0.06), 20)
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(280, 210), Vector2(0.92, 0.92), Color(1, 1, 1, 0.16))
-	_add_sprite_prop(CLOUD_TEXTURE_ALT, Vector2(1240, 250), Vector2(0.82, 0.82), Color(1, 1, 1, 0.12))
-	_add_sketch_strip(SKETCH_PATH_TEXTURE, Vector2(420, 1700), 6, Vector2(94, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78))
-	_add_sketch_tile(SKETCH_PATH_CROSS_TEXTURE, Vector2(800, 1450), Color.WHITE, Vector2(0.82, 0.82))
-	_add_sketch_tile(SKETCH_PATH_END_TEXTURE, Vector2(1090, 1180), Color.WHITE, Vector2(0.76, 0.76))
-	_add_havza_building(Vector2(360, 540), 5, SKETCH_BUILDING_DOOR_TEXTURE, SKETCH_BUILDING_WINDOWS_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.88))
-	_add_havza_building(Vector2(980, 620), 2, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.72))
-	_add_kenney_building(Vector2(1130, 720), Vector2(0.92, 0.92), BLOCK_BUILDING_ROOF_RED_TEXTURE, Color(1.0, 0.94, 0.82, 0.48))
-	_add_sprite_prop(HOUSE_TEXTURE, Vector2(1180, 590), Vector2(0.86, 0.86), Color(1, 1, 1, 0.18))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(280, 210), Vector2(0.92, 0.92), Color(1, 1, 1, 0.16))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1240, 250), Vector2(0.82, 0.82), Color(1, 1, 1, 0.12))
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(420, 1700), 6, Vector2(94, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78))
+	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(800, 1450), Color.WHITE, Vector2(0.82, 0.82))
+	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1090, 1180), Color.WHITE, Vector2(0.76, 0.76))
+	_add_havza_building(Vector2(360, 540), 5, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOWS_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.88))
+	_add_havza_building(Vector2(980, 620), 2, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.72))
+	_add_kenney_building(Vector2(1130, 720), Vector2(0.92, 0.92), _textures.BLOCK_BUILDING_ROOF_RED_TEXTURE, Color(1.0, 0.94, 0.82, 0.48))
+	_add_sprite_prop(_textures.HOUSE_TEXTURE, Vector2(1180, 590), Vector2(0.86, 0.86), Color(1, 1, 1, 0.18))
 	_add_crimson_flag(Vector2(1010, 760), 0.50, true)
-	_add_sprite_prop(TREE_TEXTURE, Vector2(260, 1260), Vector2(0.86, 0.86), Color(0.96, 1.0, 0.92, 0.34), true)
-	_add_sprite_prop(TREE_TEXTURE_ALT, Vector2(1340, 1290), Vector2(0.80, 0.80), Color(0.96, 1.0, 0.92, 0.30), true)
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(790, 870), Vector2(1.04, 1.04), Color(1, 1, 1, 0.28))
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(790, 1600), Vector2(1.12, 1.12), Color(1, 1, 1, 0.24))
-	_add_sprite_prop(SHIP_CREW_ALT_TEXTURE, Vector2(620, 1160), Vector2(0.48, 0.48), Color(1, 1, 1, 0.22), true)
-	_add_sprite_prop(SHIP_CREW_TEXTURE, Vector2(980, 1220), Vector2(0.44, 0.44), Color(1, 1, 1, 0.20), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE, Vector2(260, 1260), Vector2(0.86, 0.86), Color(0.96, 1.0, 0.92, 0.34), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE_ALT, Vector2(1340, 1290), Vector2(0.80, 0.80), Color(0.96, 1.0, 0.92, 0.30), true)
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(790, 870), Vector2(1.04, 1.04), Color(1, 1, 1, 0.28))
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(790, 1600), Vector2(1.12, 1.12), Color(1, 1, 1, 0.24))
+	_add_sprite_prop(_textures.SHIP_CREW_ALT_TEXTURE, Vector2(620, 1160), Vector2(0.48, 0.48), Color(1, 1, 1, 0.22), true)
+	_add_sprite_prop(_textures.SHIP_CREW_TEXTURE, Vector2(980, 1220), Vector2(0.44, 0.44), Color(1, 1, 1, 0.20), true)
 	_add_mote_cluster(Vector2(820, 1180), Color(0.96, 0.76, 0.42, 0.13), 6)
 
 
@@ -794,47 +1674,47 @@ func _decorate_amasya(world_root: Node) -> void:
 
 func _decorate_kongreler(world_root: Node) -> void:
 	_add_toy_world_frame(Color(0.48, 0.34, 0.26, 0.20), Color(0.98, 0.74, 0.44, 0.08))
-	_add_backdrop_band([BG_FLAT_HILLS_2_TEXTURE, BG_FLAT_MOUNTAIN_2_TEXTURE, BG_FLAT_HILLS_1_TEXTURE], 500.0, Vector2(1.00, 1.00), Color(1.0, 0.78, 0.54, 0.14), "kongre.horizon")
+	_add_backdrop_band([_textures.BG_FLAT_HILLS_2_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE, _textures.BG_FLAT_HILLS_1_TEXTURE], 500.0, Vector2(1.00, 1.00), Color(1.0, 0.78, 0.54, 0.14), "kongre.horizon")
 	_add_distant_town_band(660.0, Color(1.0, 0.88, 0.66, 0.14), "kongre.distant_town")
-	_add_location_sign("Kongreler", "Birlikte güçlen", Vector2(530, 292), 520.0, Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.74), "kongre.location_sign")
+	_add_location_sign("Kongreler", "Birlikte güçlen", Vector2(530, 292), 520.0, Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.74), "kongre.location_sign")
 	_add_soft_blob(world_root, Vector2(800, 1180), Vector2(440, 280), Color(0.52, 0.40, 0.28, 0.18), 20, 0.08)
 	_add_rift_shard_cluster(Vector2(1240, 1460), 5, 140.0)
 	_add_path_ribbon([Vector2(620, 1500), Vector2(780, 1220), Vector2(860, 980), Vector2(980, 1500)], 34.0, Color(0.96, 0.70, 0.38, 0.26), -1)
-	_add_breadcrumb_trail([Vector2(620, 1500), Vector2(780, 1220), Vector2(860, 980), Vector2(980, 1500)], BOARD_CHIP_RED_TEXTURE, Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.76), "kongre.breadcrumb", 150.0, 0.50)
+	_add_breadcrumb_trail([Vector2(620, 1500), Vector2(780, 1220), Vector2(860, 980), Vector2(980, 1500)], _textures.BOARD_CHIP_RED_TEXTURE, Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.76), "kongre.breadcrumb", 150.0, 0.50)
 	_add_light_pool(world_root, Vector2(820, 1160), Vector2(320, 200), Color(1.0, 0.74, 0.38, 0.10))
 	_add_story_banner(Vector2(510, 790), Vector2(430, 128), Color(0.96, 0.86, 0.68, 0.86), Color(0.72, 0.44, 0.26, 0.82), "Birlikte güçlen")
-	_add_asset_slot_prop("kongre.delegate_table", Vector2(560, 1080), Vector2(220, 110), Color(0.72, 0.48, 0.28, 0.86), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.42), "Temsil", true)
-	_add_asset_slot_prop("kongre.unity_stage", Vector2(900, 1030), Vector2(176, 128), Color(0.86, 0.54, 0.30, 0.76), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.46), "Birlik", true)
-	_add_asset_slot_prop("kongre.shared_goal_banner", Vector2(610, 560), Vector2(270, 84), Color(0.98, 0.88, 0.62, 0.78), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.40), "Ortak Hedef", true)
-	_add_kenney_prop(BLOCK_TILE_WOOD_TEXTURE, Vector2(672, 1130), Vector2(1.36, 0.86), Color(1.0, 0.74, 0.44, 0.74), true, "kongre.delegate_table_surface")
-	_add_kenney_prop(BLOCK_MARKET_STALL_RED_TEXTURE, Vector2(982, 1094), Vector2(1.08, 1.08), Color(1.0, 0.82, 0.60, 0.78), true, "kongre.unity_stage_canopy")
-	_add_kenney_prop(BLOCK_BOX_WIDE_TEXTURE, Vector2(760, 610), Vector2(0.98, 0.98), Color(1.0, 0.90, 0.64, 0.72), true, "kongre.banner_base")
-	_add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(560, 1270), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.64, 0.42), true, "kongre.front_fence_left")
-	_add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(980, 1270), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.64, 0.42), true, "kongre.front_fence_right")
-	_add_strategy_card(BOARD_CARD_GREEN_TEXTURE, Vector2(650, 1018), Vector2(0.42, 0.42), Color(0.90, 1.0, 0.86, 0.76), "Temsil", "kongre.delegate_card")
-	_add_strategy_card(BOARD_CARD_RED_TEXTURE, Vector2(940, 985), Vector2(0.42, 0.42), Color(1.0, 0.88, 0.76, 0.76), "Birlik", "kongre.unity_card")
-	_add_strategy_token(BOARD_CHIP_GREEN_TEXTURE, Vector2(830, 1150), Vector2(0.44, 0.44), Color(0.90, 1.0, 0.76, 0.84), "kongre.shared_goal_token")
-	_add_kenney_npc(BLOCK_CHARACTER_MAN_TEXTURE, Vector2(605, 1230), Vector2(0.80, 0.80), Color(0.98, 0.94, 0.86, 0.40), "kongre.delegate_a", "temsil")
-	_add_kenney_npc(BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(1025, 1230), Vector2(0.80, 0.80), Color(0.96, 1.0, 0.94, 0.40), "kongre.delegate_b", "birlik")
-	_add_way_arrow(Vector2(770, 930), deg_to_rad(72), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.72), "temsil", "kongre.to_delegate_arrow")
-	_add_way_arrow(Vector2(1010, 900), deg_to_rad(105), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.70), "birlik", "kongre.to_unity_arrow")
-	_add_discovery_badge(GAME_CHECK_TEXTURE, Vector2(830, 1318), Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.80), "ortak hedef", "kongre.goal_badge")
+	_add_asset_slot_prop("kongre.delegate_table", Vector2(560, 1080), Vector2(220, 110), Color(0.72, 0.48, 0.28, 0.86), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.42), "Temsil", true)
+	_add_asset_slot_prop("kongre.unity_stage", Vector2(900, 1030), Vector2(176, 128), Color(0.86, 0.54, 0.30, 0.76), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.46), "Birlik", true)
+	_add_asset_slot_prop("kongre.shared_goal_banner", Vector2(610, 560), Vector2(270, 84), Color(0.98, 0.88, 0.62, 0.78), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.40), "Ortak Hedef", true)
+	_add_kenney_prop(_textures.BLOCK_TILE_WOOD_TEXTURE, Vector2(672, 1130), Vector2(1.36, 0.86), Color(1.0, 0.74, 0.44, 0.74), true, "kongre.delegate_table_surface")
+	_add_kenney_prop(_textures.BLOCK_MARKET_STALL_RED_TEXTURE, Vector2(982, 1094), Vector2(1.08, 1.08), Color(1.0, 0.82, 0.60, 0.78), true, "kongre.unity_stage_canopy")
+	_add_kenney_prop(_textures.BLOCK_BOX_WIDE_TEXTURE, Vector2(760, 610), Vector2(0.98, 0.98), Color(1.0, 0.90, 0.64, 0.72), true, "kongre.banner_base")
+	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(560, 1270), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.64, 0.42), true, "kongre.front_fence_left")
+	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(980, 1270), Vector2(1.08, 1.08), Color(1.0, 0.88, 0.64, 0.42), true, "kongre.front_fence_right")
+	_add_strategy_card(_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(650, 1018), Vector2(0.42, 0.42), Color(0.90, 1.0, 0.86, 0.76), "Temsil", "kongre.delegate_card")
+	_add_strategy_card(_textures.BOARD_CARD_RED_TEXTURE, Vector2(940, 985), Vector2(0.42, 0.42), Color(1.0, 0.88, 0.76, 0.76), "Birlik", "kongre.unity_card")
+	_add_strategy_token(_textures.BOARD_CHIP_GREEN_TEXTURE, Vector2(830, 1150), Vector2(0.44, 0.44), Color(0.90, 1.0, 0.76, 0.84), "kongre.shared_goal_token")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(605, 1230), Vector2(0.80, 0.80), Color(0.98, 0.94, 0.86, 0.40), "kongre.delegate_a", "temsil")
+	_add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(1025, 1230), Vector2(0.80, 0.80), Color(0.96, 1.0, 0.94, 0.40), "kongre.delegate_b", "birlik")
+	_add_way_arrow(Vector2(770, 930), deg_to_rad(72), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.72), "temsil", "kongre.to_delegate_arrow")
+	_add_way_arrow(Vector2(1010, 900), deg_to_rad(105), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.70), "birlik", "kongre.to_unity_arrow")
+	_add_discovery_badge(_textures.GAME_CHECK_TEXTURE, Vector2(830, 1318), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.80), "ortak hedef", "kongre.goal_badge")
 	_add_decorative_speckles(Rect2(Vector2(260, 520), Vector2(1100, 1140)), Color(1.0, 0.80, 0.44, 0.06), 22)
-	_add_sprite_prop(CLOUD_TEXTURE, Vector2(300, 220), Vector2(0.94, 0.94), Color(1, 1, 1, 0.14))
-	_add_sprite_prop(CLOUD_TEXTURE_ALT, Vector2(1230, 260), Vector2(0.84, 0.84), Color(1, 1, 1, 0.10))
-	_add_havza_building(Vector2(360, 520), 5, SKETCH_BUILDING_DOOR_TEXTURE, SKETCH_BUILDING_WINDOWS_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.86))
-	_add_havza_building(Vector2(1060, 620), 2, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_WINDOW_TEXTURE, SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.70))
-	_add_kenney_building(Vector2(1120, 745), Vector2(0.90, 0.90), BLOCK_BUILDING_ROOF_BLUE_TEXTURE, Color(0.94, 1.0, 1.0, 0.44))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(300, 220), Vector2(0.94, 0.94), Color(1, 1, 1, 0.14))
+	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1230, 260), Vector2(0.84, 0.84), Color(1, 1, 1, 0.10))
+	_add_havza_building(Vector2(360, 520), 5, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOWS_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.86))
+	_add_havza_building(Vector2(1060, 620), 2, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.70))
+	_add_kenney_building(Vector2(1120, 745), Vector2(0.90, 0.90), _textures.BLOCK_BUILDING_ROOF_BLUE_TEXTURE, Color(0.94, 1.0, 1.0, 0.44))
 	_add_crimson_flag(Vector2(1040, 790), 0.52, true)
-	_add_sketch_strip(SKETCH_PATH_TEXTURE, Vector2(430, 1660), 5, Vector2(96, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78))
-	_add_sketch_tile(SKETCH_PATH_CROSS_TEXTURE, Vector2(780, 1220), Color.WHITE, Vector2(0.82, 0.82))
-	_add_sketch_tile(SKETCH_PATH_END_TEXTURE, Vector2(1090, 980), Color.WHITE, Vector2(0.76, 0.76))
-	_add_sprite_prop(TREE_TEXTURE, Vector2(250, 1290), Vector2(0.84, 0.84), Color(0.96, 1.0, 0.92, 0.32), true)
-	_add_sprite_prop(TREE_TEXTURE_ALT, Vector2(1350, 1330), Vector2(0.78, 0.78), Color(0.96, 1.0, 0.92, 0.28), true)
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(790, 840), Vector2(1.04, 1.04), Color(1, 1, 1, 0.26))
-	_add_sprite_prop(FENCE_TEXTURE, Vector2(790, 1560), Vector2(1.12, 1.12), Color(1, 1, 1, 0.22))
-	_add_sprite_prop(SHIP_CREW_TEXTURE, Vector2(620, 1140), Vector2(0.46, 0.46), Color(1, 1, 1, 0.18), true)
-	_add_sprite_prop(SHIP_CREW_ALT_TEXTURE, Vector2(980, 1180), Vector2(0.42, 0.42), Color(1, 1, 1, 0.16), true)
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(430, 1660), 5, Vector2(96, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78))
+	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(780, 1220), Color.WHITE, Vector2(0.82, 0.82))
+	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1090, 980), Color.WHITE, Vector2(0.76, 0.76))
+	_add_sprite_prop(_textures.TREE_TEXTURE, Vector2(250, 1290), Vector2(0.84, 0.84), Color(0.96, 1.0, 0.92, 0.32), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE_ALT, Vector2(1350, 1330), Vector2(0.78, 0.78), Color(0.96, 1.0, 0.92, 0.28), true)
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(790, 840), Vector2(1.04, 1.04), Color(1, 1, 1, 0.26))
+	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(790, 1560), Vector2(1.12, 1.12), Color(1, 1, 1, 0.22))
+	_add_sprite_prop(_textures.SHIP_CREW_TEXTURE, Vector2(620, 1140), Vector2(0.46, 0.46), Color(1, 1, 1, 0.18), true)
+	_add_sprite_prop(_textures.SHIP_CREW_ALT_TEXTURE, Vector2(980, 1180), Vector2(0.42, 0.42), Color(1, 1, 1, 0.16), true)
 	_add_mote_cluster(Vector2(820, 1160), Color(0.98, 0.70, 0.38, 0.13), 7)
 
 
@@ -858,7 +1738,7 @@ func _ellipse_points(radius: Vector2, segments: int) -> PackedVector2Array:
 
 
 func _rounded_rect_points(size: Vector2, radius: float, segments: int) -> PackedVector2Array:
-	var r := min(radius, min(size.x, size.y) * 0.5)
+	var r: float = min(radius, min(size.x, size.y) * 0.5)
 	var w := size.x
 	var h := size.y
 	var points := PackedVector2Array()
@@ -915,7 +1795,7 @@ func _add_crimson_flag(pos: Vector2, scale_value := 1.0, to_foreground := true) 
 	])
 	var flag := Polygon2D.new()
 	flag.position = pos + Vector2(6, -64) * scale_value
-	flag.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.92)
+	flag.color = Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.92)
 	flag.z_index = 11
 	flag.polygon = PackedVector2Array([
 		Vector2.ZERO,
@@ -975,7 +1855,7 @@ func _add_rift_shard_cluster(center: Vector2, count := 7, radius := 160.0) -> vo
 		var angle := TAU * float(index) / float(max(count, 1))
 		var offset := Vector2(cos(angle) * radius, sin(angle) * radius * 0.62)
 		var alpha := 0.18 + float(index % 3) * 0.04
-		_add_rift_shard(center + offset, Vector2(26 + (index % 2) * 10, 70 + (index % 3) * 12), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, alpha), float(index) * 0.61)
+		_add_rift_shard(center + offset, Vector2(26 + (index % 2) * 10, 70 + (index % 3) * 12), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, alpha), float(index) * 0.61)
 
 
 func _add_water_glints(start: Vector2, count: int, step: Vector2, color: Color) -> void:
@@ -992,7 +1872,7 @@ func _add_water_glints(start: Vector2, count: int, step: Vector2, color: Color) 
 
 func _add_ship_planks(start: Vector2, count: int, step_x: float, tint := Color.WHITE, scale_value := Vector2(0.68, 0.68), to_foreground := false) -> void:
 	for index in range(count):
-		_add_sprite_prop(SHIP_WOOD_TEXTURE, start + Vector2(step_x * index, 0), scale_value, tint, to_foreground)
+		_add_sprite_prop(_textures.SHIP_WOOD_TEXTURE, start + Vector2(step_x * index, 0), scale_value, tint, to_foreground)
 
 
 func _add_light_mote(pos: Vector2, radius: float, color: Color, drift: Vector2) -> void:
@@ -1033,7 +1913,7 @@ func _add_kenney_prop(texture: Texture2D, pos: Vector2, scale_value: Vector2, ti
 	outline.texture = texture
 	outline.position = pos
 	outline.scale = scale_value * Vector2(1.10, 1.10)
-	outline.modulate = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.34)
+	outline.modulate = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.34)
 	outline.z_index = base_z - 1
 	target.add_child(outline)
 
@@ -1051,11 +1931,11 @@ func _add_kenney_prop(texture: Texture2D, pos: Vector2, scale_value: Vector2, ti
 
 
 func _add_kenney_building(pos: Vector2, scale_value: Vector2, roof: Texture2D, tint := Color.WHITE) -> void:
-	_add_kenney_prop(BLOCK_BUILDING_SAND_TEXTURE, pos + Vector2(0, 42) * scale_value.y, scale_value, tint)
-	_add_kenney_prop(BLOCK_BUILDING_FRAME_TEXTURE, pos + Vector2(0, 2) * scale_value.y, scale_value, tint)
+	_add_kenney_prop(_textures.BLOCK_BUILDING_SAND_TEXTURE, pos + Vector2(0, 42) * scale_value.y, scale_value, tint)
+	_add_kenney_prop(_textures.BLOCK_BUILDING_FRAME_TEXTURE, pos + Vector2(0, 2) * scale_value.y, scale_value, tint)
 	_add_kenney_prop(roof, pos + Vector2(0, -42) * scale_value.y, scale_value, tint)
-	_add_kenney_prop(BLOCK_DOOR_TEXTURE, pos + Vector2(-22, 52) * scale_value, scale_value * Vector2(0.72, 0.72), tint, true)
-	_add_kenney_prop(BLOCK_WINDOW_TEXTURE, pos + Vector2(34, 10) * scale_value, scale_value * Vector2(0.64, 0.64), tint, true)
+	_add_kenney_prop(_textures.BLOCK_DOOR_TEXTURE, pos + Vector2(-22, 52) * scale_value, scale_value * Vector2(0.72, 0.72), tint, true)
+	_add_kenney_prop(_textures.BLOCK_WINDOW_TEXTURE, pos + Vector2(34, 10) * scale_value, scale_value * Vector2(0.64, 0.64), tint, true)
 
 
 func _add_kenney_npc(texture: Texture2D, pos: Vector2, scale_value: Vector2, tint := Color.WHITE, slot_id := "", label_text := "") -> Node2D:
@@ -1072,7 +1952,7 @@ func _add_kenney_npc(texture: Texture2D, pos: Vector2, scale_value: Vector2, tin
 
 	var shadow := Polygon2D.new()
 	shadow.position = Vector2(0, 36) * scale_value
-	shadow.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.18)
+	shadow.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.18)
 	shadow.polygon = PackedVector2Array([
 		Vector2(-28, -7) * scale_value,
 		Vector2(28, -7) * scale_value,
@@ -1084,7 +1964,7 @@ func _add_kenney_npc(texture: Texture2D, pos: Vector2, scale_value: Vector2, tin
 	var outline := Sprite2D.new()
 	outline.texture = texture
 	outline.scale = scale_value * Vector2(1.12, 1.12)
-	outline.modulate = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.38)
+	outline.modulate = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.38)
 	outline.z_index = 0
 	root.add_child(outline)
 
@@ -1098,7 +1978,7 @@ func _add_kenney_npc(texture: Texture2D, pos: Vector2, scale_value: Vector2, tin
 	if label_text != "":
 		var label_bg := Polygon2D.new()
 		label_bg.position = Vector2(-66, -76) * scale_value
-		label_bg.color = Color(POP_CREAM.r, POP_CREAM.g, POP_CREAM.b, 0.78)
+		label_bg.color = Color(_colors.POP_CREAM.r, _colors.POP_CREAM.g, _colors.POP_CREAM.b, 0.78)
 		label_bg.polygon = PackedVector2Array([
 			Vector2.ZERO,
 			Vector2(132, 0) * scale_value,
@@ -1114,7 +1994,7 @@ func _add_kenney_npc(texture: Texture2D, pos: Vector2, scale_value: Vector2, tin
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 16)
-		label.add_theme_color_override("font_color", Color(0.15, 0.15, 0.18, DECORATIVE_LABEL_ALPHA))
+		label.add_theme_color_override("font_color", Color(0.15, 0.15, 0.18, _colors.DECORATIVE_LABEL_ALPHA))
 		root.add_child(label)
 
 	_get_foreground(_cached_world_root).add_child(root)
@@ -1140,7 +2020,7 @@ func _add_strategy_card(texture: Texture2D, pos: Vector2, scale_value: Vector2, 
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 18)
-	label.add_theme_color_override("font_color", Color(0.15, 0.16, 0.22, DECORATIVE_LABEL_ALPHA))
+	label.add_theme_color_override("font_color", Color(0.15, 0.16, 0.22, _colors.DECORATIVE_LABEL_ALPHA))
 	label.z_index = 11
 	_get_foreground(_cached_world_root).add_child(label)
 
@@ -1159,7 +2039,7 @@ func _add_location_sign(title: String, subtitle: String, pos: Vector2, width: fl
 
 	var shadow := Polygon2D.new()
 	shadow.position = Vector2(10, 16)
-	shadow.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.24)
+	shadow.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.24)
 	shadow.polygon = PackedVector2Array([
 		Vector2.ZERO,
 		Vector2(width, 0),
@@ -1170,7 +2050,7 @@ func _add_location_sign(title: String, subtitle: String, pos: Vector2, width: fl
 
 	var outline := Polygon2D.new()
 	outline.position = Vector2(-6, -6)
-	outline.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.44)
+	outline.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.44)
 	outline.polygon = PackedVector2Array([
 		Vector2.ZERO,
 		Vector2(width + 12, 0),
@@ -1180,7 +2060,7 @@ func _add_location_sign(title: String, subtitle: String, pos: Vector2, width: fl
 	root.add_child(outline)
 
 	var plate := Polygon2D.new()
-	plate.color = Color(POP_CREAM.r, POP_CREAM.g, POP_CREAM.b, 0.92)
+	plate.color = Color(_colors.POP_CREAM.r, _colors.POP_CREAM.g, _colors.POP_CREAM.b, 0.92)
 	plate.polygon = PackedVector2Array([
 		Vector2.ZERO,
 		Vector2(width, 0),
@@ -1248,7 +2128,7 @@ func _add_way_arrow(pos: Vector2, rotation: float, tint: Color, label_text := ""
 	root.add_child(plate)
 
 	var icon := Sprite2D.new()
-	icon.texture = GAME_ARROW_RIGHT_TEXTURE
+	icon.texture = _textures.GAME_ARROW_RIGHT_TEXTURE
 	icon.scale = Vector2(0.55, 0.55)
 	icon.modulate = Color(1, 1, 1, 0.92)
 	icon.z_index = 1
@@ -1263,7 +2143,7 @@ func _add_way_arrow(pos: Vector2, rotation: float, tint: Color, label_text := ""
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 17)
-		label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, DECORATIVE_LABEL_ALPHA))
+		label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, _colors.DECORATIVE_LABEL_ALPHA))
 		label.z_index = 11
 		_get_foreground(_cached_world_root).add_child(label)
 
@@ -1282,7 +2162,7 @@ func _add_discovery_badge(texture: Texture2D, pos: Vector2, tint: Color, label_t
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, DECORATIVE_LABEL_ALPHA))
+	label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, _colors.DECORATIVE_LABEL_ALPHA))
 	label.z_index = 11
 	_get_foreground(_cached_world_root).add_child(label)
 
@@ -1314,7 +2194,7 @@ func _add_breadcrumb_dot(texture: Texture2D, pos: Vector2, tint: Color, scale_va
 	var outline := Sprite2D.new()
 	outline.texture = texture
 	outline.scale = Vector2(scale_value * 0.46, scale_value * 0.46)
-	outline.modulate = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.26)
+	outline.modulate = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.26)
 	outline.z_index = 0
 	root.add_child(outline)
 
@@ -1378,7 +2258,7 @@ func _add_asset_slot_prop(slot_id: String, pos: Vector2, size: Vector2, fill: Co
 
 	var shadow := Polygon2D.new()
 	shadow.position = Vector2(8, 14)
-	shadow.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.24)
+	shadow.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.24)
 	shadow.polygon = PackedVector2Array([
 		Vector2.ZERO,
 		Vector2(size.x, 0),
@@ -1389,7 +2269,7 @@ func _add_asset_slot_prop(slot_id: String, pos: Vector2, size: Vector2, fill: Co
 
 	var outline := Polygon2D.new()
 	outline.position = Vector2(-5, -5)
-	outline.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.54)
+	outline.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.54)
 	outline.polygon = PackedVector2Array([
 		Vector2.ZERO,
 		Vector2(size.x + 10, 0),
@@ -1439,7 +2319,7 @@ func _add_asset_slot_prop(slot_id: String, pos: Vector2, size: Vector2, fill: Co
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_font_size_override("font_size", 20)
-		label.add_theme_color_override("font_color", Color(0.12, 0.13, 0.17, DECORATIVE_LABEL_ALPHA))
+		label.add_theme_color_override("font_color", Color(0.12, 0.13, 0.17, _colors.DECORATIVE_LABEL_ALPHA))
 		root.add_child(label)
 
 	if to_foreground:
@@ -1511,12 +2391,12 @@ func _add_backdrop_band(textures: Array, y: float, scale_value: Vector2, tint: C
 
 
 func _add_distant_town_band(y: float, tint: Color, slot_prefix: String) -> void:
-	_add_backdrop_prop(BG_FLAT_HOUSE_SHORT_TEXTURE, Vector2(330, y), Vector2(0.78, 0.78), tint, -5, "%s.house_short_a" % slot_prefix)
-	_add_backdrop_prop(BG_FLAT_HOUSE_TALL_TEXTURE, Vector2(495, y - 20), Vector2(0.82, 0.82), tint, -5, "%s.house_tall_a" % slot_prefix)
-	_add_backdrop_prop(BG_FLAT_HOUSE_SHORT_TEXTURE, Vector2(1110, y + 10), Vector2(0.74, 0.74), tint, -5, "%s.house_short_b" % slot_prefix)
-	_add_backdrop_prop(BG_FLAT_HOUSE_TALL_TEXTURE, Vector2(1280, y - 18), Vector2(0.80, 0.80), tint, -5, "%s.house_tall_b" % slot_prefix)
-	_add_backdrop_prop(BG_FLAT_TREE_03_TEXTURE, Vector2(225, y + 28), Vector2(0.62, 0.62), tint, -4, "%s.tree_a" % slot_prefix)
-	_add_backdrop_prop(BG_FLAT_TREE_08_TEXTURE, Vector2(1370, y + 30), Vector2(0.60, 0.60), tint, -4, "%s.tree_b" % slot_prefix)
+	_add_backdrop_prop(_textures.BG_FLAT_HOUSE_SHORT_TEXTURE, Vector2(330, y), Vector2(0.78, 0.78), tint, -5, "%s.house_short_a" % slot_prefix)
+	_add_backdrop_prop(_textures.BG_FLAT_HOUSE_TALL_TEXTURE, Vector2(495, y - 20), Vector2(0.82, 0.82), tint, -5, "%s.house_tall_a" % slot_prefix)
+	_add_backdrop_prop(_textures.BG_FLAT_HOUSE_SHORT_TEXTURE, Vector2(1110, y + 10), Vector2(0.74, 0.74), tint, -5, "%s.house_short_b" % slot_prefix)
+	_add_backdrop_prop(_textures.BG_FLAT_HOUSE_TALL_TEXTURE, Vector2(1280, y - 18), Vector2(0.80, 0.80), tint, -5, "%s.house_tall_b" % slot_prefix)
+	_add_backdrop_prop(_textures.BG_FLAT_TREE_03_TEXTURE, Vector2(225, y + 28), Vector2(0.62, 0.62), tint, -4, "%s.tree_a" % slot_prefix)
+	_add_backdrop_prop(_textures.BG_FLAT_TREE_08_TEXTURE, Vector2(1370, y + 30), Vector2(0.60, 0.60), tint, -4, "%s.tree_b" % slot_prefix)
 
 
 func _add_sketch_tile(texture: Texture2D, pos: Vector2, tint := Color.WHITE, scale_value := Vector2(0.72, 0.72), to_foreground := false) -> void:
@@ -1538,7 +2418,7 @@ func _add_sketch_strip(texture: Texture2D, start: Vector2, count: int, step: Vec
 
 
 func _add_havza_building(origin: Vector2, columns: int, front_texture: Texture2D, fill_texture: Texture2D, accent_texture: Texture2D, tint := Color.WHITE) -> void:
-	_add_sketch_tile(SKETCH_BUILDING_CORNER_TEXTURE, origin, tint, Vector2(0.88, 0.88), true)
+	_add_sketch_tile(_textures.SKETCH_BUILDING_CORNER_TEXTURE, origin, tint, Vector2(0.88, 0.88), true)
 	for column in range(columns):
 		var offset := Vector2(88 * (column + 1), 0)
 		var texture := fill_texture if column < columns - 1 else front_texture
@@ -1551,7 +2431,7 @@ func _add_havza_building(origin: Vector2, columns: int, front_texture: Texture2D
 # ============================================================
 
 func add_diorama_ground_blob(center: Vector2, radius: Vector2, fill: Color, edge: Color, slot_id := "") -> void:
-	_add_soft_blob(_cached_world_root, center + Vector2(0, 34), radius * Vector2(1.05, 0.94), Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.18), 24, 0.08, false, -6)
+	_add_soft_blob(_cached_world_root, center + Vector2(0, 34), radius * Vector2(1.05, 0.94), Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.18), 24, 0.08, false, -6)
 	_add_soft_blob(_cached_world_root, center, radius * Vector2(1.03, 1.02), edge, 24, 0.09, false, -5)
 	_add_soft_blob(_cached_world_root, center + Vector2(0, -8), radius, fill, 24, 0.08, false, -4)
 	if slot_id != "":
@@ -1559,7 +2439,7 @@ func add_diorama_ground_blob(center: Vector2, radius: Vector2, fill: Color, edge
 
 
 func add_paper_path(points: Array, width: float, fill: Color, edge: Color, slot_id := "") -> void:
-	_add_path_ribbon(points, width + 26.0, Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.15), -3)
+	_add_path_ribbon(points, width + 26.0, Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.15), -3)
 	_add_path_ribbon(points, width + 12.0, edge, -2)
 	_add_path_ribbon(points, width, fill, -1)
 	if slot_id != "":
@@ -1571,8 +2451,8 @@ func add_foreground_frame(side: String, tint: Color, slot_id := "") -> void:
 	var mirror := -1.0 if side == "right" else 1.0
 	_add_soft_blob(_cached_world_root, Vector2(x, 1620), Vector2(240, 520), tint, 18, 0.12, true, 18)
 	_add_soft_blob(_cached_world_root, Vector2(x + (80.0 * mirror), 1320), Vector2(140, 230), tint.lightened(0.08), 18, 0.10, true, 19)
-	_add_sprite_prop(TREE_TEXTURE, Vector2(x + (54.0 * mirror), 1470), Vector2(0.96 * mirror, 0.96), Color(1, 1, 1, 0.30), true)
-	_add_sprite_prop(TREE_TEXTURE_ALT, Vector2(x - (38.0 * mirror), 1760), Vector2(0.82 * mirror, 0.82), Color(1, 1, 1, 0.24), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE, Vector2(x + (54.0 * mirror), 1470), Vector2(0.96 * mirror, 0.96), Color(1, 1, 1, 0.30), true)
+	_add_sprite_prop(_textures.TREE_TEXTURE_ALT, Vector2(x - (38.0 * mirror), 1760), Vector2(0.82 * mirror, 0.82), Color(1, 1, 1, 0.24), true)
 	if slot_id != "":
 		_get_foreground(_cached_world_root).get_child(_get_foreground(_cached_world_root).get_child_count() - 1).set_meta("asset_slot", slot_id)
 
@@ -1580,39 +2460,39 @@ func add_foreground_frame(side: String, tint: Color, slot_id := "") -> void:
 func add_prop_cluster(center: Vector2, kind: String, slot_id := "") -> void:
 	match kind:
 		"harbor":
-			var crate_a := _add_kenney_prop(BLOCK_BOX_TEXTURE, center + Vector2(-110, 76), Vector2(0.76, 0.76), Color(0.96, 0.82, 0.58, 0.72), false, "%s.crate_a" % slot_id)
-			var crate_b := _add_kenney_prop(BLOCK_BOX_WIDE_TEXTURE, center + Vector2(-34, 94), Vector2(0.76, 0.76), Color(1.0, 0.86, 0.62, 0.70), false, "%s.crate_b" % slot_id)
-			var water_tile := _add_kenney_prop(BLOCK_TILE_WATER_TEXTURE, center + Vector2(92, 62), Vector2(1.08, 0.86), Color(0.58, 0.98, 1.0, 0.62), false, "%s.water" % slot_id)
+			var crate_a := _add_kenney_prop(_textures.BLOCK_BOX_TEXTURE, center + Vector2(-110, 76), Vector2(0.76, 0.76), Color(0.96, 0.82, 0.58, 0.72), false, "%s.crate_a" % slot_id)
+			var crate_b := _add_kenney_prop(_textures.BLOCK_BOX_WIDE_TEXTURE, center + Vector2(-34, 94), Vector2(0.76, 0.76), Color(1.0, 0.86, 0.62, 0.70), false, "%s.crate_b" % slot_id)
+			var water_tile := _add_kenney_prop(_textures.BLOCK_TILE_WATER_TEXTURE, center + Vector2(92, 62), Vector2(1.08, 0.86), Color(0.58, 0.98, 1.0, 0.62), false, "%s.water" % slot_id)
 			crate_a.z_index = 0
 			crate_b.z_index = 0
 			water_tile.z_index = 0
 		"telegraph":
-			var fence := _add_kenney_prop(BLOCK_FENCE_DOUBLE_TEXTURE, center + Vector2(-86, 78), Vector2(0.82, 0.82), Color(1.0, 0.88, 0.62, 0.62), false, "%s.fence" % slot_id)
-			var sign_post := _add_kenney_prop(BLOCK_TILE_WOOD_TEXTURE, center + Vector2(92, 70), Vector2(0.50, 0.72), Color(1.0, 0.82, 0.56, 0.68), false, "%s.sign_post" % slot_id)
+			var fence := _add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, center + Vector2(-86, 78), Vector2(0.82, 0.82), Color(1.0, 0.88, 0.62, 0.62), false, "%s.fence" % slot_id)
+			var sign_post := _add_kenney_prop(_textures.BLOCK_TILE_WOOD_TEXTURE, center + Vector2(92, 70), Vector2(0.50, 0.72), Color(1.0, 0.82, 0.56, 0.68), false, "%s.sign_post" % slot_id)
 			fence.z_index = 0
 			sign_post.z_index = 0
 		"people":
-			var citizen_a := _add_kenney_npc(BLOCK_CHARACTER_MAN_TEXTURE, center + Vector2(-112, 88), Vector2(0.74, 0.74), Color(0.96, 0.94, 0.86, 0.58), "%s.citizen_a" % slot_id, "")
-			var citizen_b := _add_kenney_npc(BLOCK_CHARACTER_WOMAN_TEXTURE, center + Vector2(108, 88), Vector2(-0.72, 0.72), Color(0.94, 1.0, 0.96, 0.58), "%s.citizen_b" % slot_id, "")
+			var citizen_a := _add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, center + Vector2(-112, 88), Vector2(0.74, 0.74), Color(0.96, 0.94, 0.86, 0.58), "%s.citizen_a" % slot_id, "")
+			var citizen_b := _add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, center + Vector2(108, 88), Vector2(-0.72, 0.72), Color(0.94, 1.0, 0.96, 0.58), "%s.citizen_b" % slot_id, "")
 			citizen_a.z_index = 0
 			citizen_b.z_index = 0
 		"discovery":
-			_add_asset_slot_prop(slot_id, center + Vector2(-70, -46), Vector2(140, 86), Color(0.98, 0.90, 0.62, 0.82), Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.36), "İz", true)
-			_add_mote_cluster(center, Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.16), 4)
+			_add_asset_slot_prop(slot_id, center + Vector2(-70, -46), Vector2(140, 86), Color(0.98, 0.90, 0.62, 0.82), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.36), "İz", true)
+			_add_mote_cluster(center, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.16), 4)
 
 
 func add_historical_landmark(center: Vector2, kind: String, title: String, slot_id := "") -> void:
 	var fill := Color(0.96, 0.88, 0.66, 0.84)
-	var accent := Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.46)
+	var accent := Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.46)
 	if kind == "harbor":
 		fill = Color(0.78, 0.94, 1.0, 0.72)
-		accent = Color(POP_DEEP_TURQUOISE.r, POP_DEEP_TURQUOISE.g, POP_DEEP_TURQUOISE.b, 0.62)
+		accent = Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.62)
 	elif kind == "telegraph":
 		fill = Color(0.78, 0.90, 1.0, 0.72)
-		accent = Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.50)
+		accent = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.50)
 	elif kind == "people":
 		fill = Color(1.0, 0.87, 0.56, 0.74)
-		accent = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.46)
+		accent = Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.46)
 	_add_asset_slot_prop(slot_id, center + Vector2(-88, -78), Vector2(176, 108), fill, accent, title, true)
 
 
@@ -1622,7 +2502,7 @@ func add_strategy_node(center: Vector2, title: String, accent: Color, slot_id :=
 	var label_text := title
 	if _state.current_zone == "samsun_rift" and title != "Milli İrade":
 		label_text = ""
-	_add_asset_slot_prop(slot_id, center + Vector2(-88, -58), Vector2(176, 116), Color(accent.r, accent.g, accent.b, 0.20), Color(POP_GOLD.r, POP_GOLD.g, POP_GOLD.b, 0.36), label_text, true)
+	_add_asset_slot_prop(slot_id, center + Vector2(-88, -58), Vector2(176, 116), Color(accent.r, accent.g, accent.b, 0.20), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.36), label_text, true)
 	_add_mote_cluster(center, Color(accent.r, accent.g, accent.b, 0.13), 5)
 
 
@@ -1996,12 +2876,12 @@ func _add_samsun_node_shadow(center: Vector2, radius: Vector2, slot_id := "") ->
 func _add_samsun_environment_clusters() -> void:
 	var foliage_tint := Color(0.72, 0.94, 0.70, 0.34)
 	var warm_foliage_tint := Color(0.94, 0.76, 0.46, 0.28)
-	_add_samsun_env_prop(BLOCK_BUSH_SMALL_TEXTURE, Vector2(215, 1060), Vector2(0.78, 0.78), foliage_tint, "world_props.samsun_bush_left_a")
-	_add_samsun_env_prop(BLOCK_BUSH_LARGE_TEXTURE, Vector2(1380, 1100), Vector2(0.86, 0.86), foliage_tint, "world_props.samsun_bush_right_a")
-	_add_samsun_env_prop(BLOCK_TREE_GREEN_TEXTURE, Vector2(250, 1650), Vector2(0.80, 0.80), Color(0.78, 0.98, 0.76, 0.26), "world_props.samsun_tree_front_left")
-	_add_samsun_env_prop(BLOCK_TREE_ORANGE_TEXTURE, Vector2(1320, 1640), Vector2(-0.74, 0.74), warm_foliage_tint, "world_props.samsun_tree_front_right")
-	_add_samsun_env_prop(BLOCK_FENCE_SINGLE_TEXTURE, Vector2(1080, 1460), Vector2(0.72, 0.72), Color(1.0, 0.86, 0.62, 0.30), "world_props.samsun_small_fence_a")
-	_add_samsun_env_prop(BLOCK_FENCE_SINGLE_TEXTURE, Vector2(440, 1090), Vector2(-0.68, 0.68), Color(1.0, 0.86, 0.62, 0.26), "world_props.samsun_small_fence_b")
+	_add_samsun_env_prop(_textures.BLOCK_BUSH_SMALL_TEXTURE, Vector2(215, 1060), Vector2(0.78, 0.78), foliage_tint, "world_props.samsun_bush_left_a")
+	_add_samsun_env_prop(_textures.BLOCK_BUSH_LARGE_TEXTURE, Vector2(1380, 1100), Vector2(0.86, 0.86), foliage_tint, "world_props.samsun_bush_right_a")
+	_add_samsun_env_prop(_textures.BLOCK_TREE_GREEN_TEXTURE, Vector2(250, 1650), Vector2(0.80, 0.80), Color(0.78, 0.98, 0.76, 0.26), "world_props.samsun_tree_front_left")
+	_add_samsun_env_prop(_textures.BLOCK_TREE_ORANGE_TEXTURE, Vector2(1320, 1640), Vector2(-0.74, 0.74), warm_foliage_tint, "world_props.samsun_tree_front_right")
+	_add_samsun_env_prop(_textures.BLOCK_FENCE_SINGLE_TEXTURE, Vector2(1080, 1460), Vector2(0.72, 0.72), Color(1.0, 0.86, 0.62, 0.30), "world_props.samsun_small_fence_a")
+	_add_samsun_env_prop(_textures.BLOCK_FENCE_SINGLE_TEXTURE, Vector2(440, 1090), Vector2(-0.68, 0.68), Color(1.0, 0.86, 0.62, 0.26), "world_props.samsun_small_fence_b")
 
 
 func _add_samsun_env_prop(texture: Texture2D, pos: Vector2, scale_value: Vector2, tint: Color, slot_id := "") -> void:
@@ -2010,29 +2890,33 @@ func _add_samsun_env_prop(texture: Texture2D, pos: Vector2, scale_value: Vector2
 
 
 func _add_samsun_paper_asset_layer() -> void:
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_SKY_LIFE_TEXTURE, Vector2(800, 360), Vector2(1.08, 1.08), Color(1, 1, 1, 0.62), -17, "paperworld.samsun_sky_life", Vector2(8.0, 0.4), -18.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_DISTANT_TOWN_TEXTURE, Vector2(800, 565), Vector2(1.05, 1.05), Color(1, 1, 1, 0.62), -16, "paperworld.samsun_distant_town", Vector2.ZERO, -13.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_SKYLINE_DEPTH_TEXTURE, Vector2(805, 615), Vector2(1.08, 1.08), Color(1, 1, 1, 0.70), -15, "paperworld.samsun_skyline_depth", Vector2(1.0, 0.1), -10.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_HARBOR_WATER_TEXTURE, Vector2(390, 760), Vector2(0.84, 0.84), Color(1, 1, 1, 0.76), -14, "paperworld.samsun_harbor_water", Vector2.ZERO, -8.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_COAST_DETAILS_TEXTURE, Vector2(790, 825), Vector2(1.0, 1.0), Color(1, 1, 1, 0.66), -13, "paperworld.samsun_coast_details", Vector2(2.2, 0.4), -6.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_HARBOR_DOCK_PROPS_TEXTURE, Vector2(392, 820), Vector2(0.96, 0.96), Color(1, 1, 1, 0.78), -7, "paperworld.samsun_harbor_dock_props", Vector2(0.8, 0.2), 2.5)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_COASTAL_LIFE_TEXTURE, Vector2(940, 1015), Vector2(1.02, 1.02), Color(1, 1, 1, 0.66), -7, "paperworld.samsun_coastal_life", Vector2(1.2, 0.2), 3.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_TERRAIN_TEXTURE, Vector2(794, 1114), Vector2(1.18, 1.18), Color(1, 1, 1, 0.94), -15, "paperworld.samsun_terrain_island", Vector2.ZERO, -3.5)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_SIDE_PATHS_TEXTURE, Vector2(760, 1160), Vector2(1.06, 1.06), Color(1, 1, 1, 0.64), -12, "paperworld.samsun_side_paths", Vector2.ZERO, -2.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_MAIN_PATH_TEXTURE, Vector2(726, 1370), Vector2(0.78, 0.78), Color(1, 1, 1, 0.86), -13, "paperworld.samsun_main_path", Vector2.ZERO, -1.5)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_ROUTE_BEADS_TEXTURE, Vector2(775, 1250), Vector2(1.02, 1.02), Color(1, 1, 1, 0.72), -9, "paperworld.samsun_route_beads", Vector2(1.1, 0.2), 1.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_SAFE_CLEARINGS_TEXTURE, Vector2(805, 1335), Vector2(1.0, 1.0), Color(1, 1, 1, 0.66), -8, "paperworld.samsun_safe_clearings", Vector2.ZERO, 1.5)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_CIVIC_CLUSTER_TEXTURE, Vector2(1015, 1360), Vector2(0.58, 0.58), Color(1, 1, 1, 0.72), -6, "paperworld.samsun_civic_cluster", Vector2.ZERO, 2.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_DISCOVERY_PROPS_TEXTURE, Vector2(795, 1110), Vector2(0.92, 0.92), Color(1, 1, 1, 0.72), -4, "paperworld.samsun_discovery_props", Vector2.ZERO, 3.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_HARBOR_BOATS_TEXTURE, Vector2(360, 650), Vector2(0.82, 0.82), Color(1, 1, 1, 0.72), -5, "paperworld.samsun_harbor_boats", Vector2.ZERO, 3.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_SIGNAL_RIDGE_TEXTURE, Vector2(1130, 660), Vector2(0.78, 0.78), Color(1, 1, 1, 0.62), -6, "paperworld.samsun_signal_ridge", Vector2.ZERO, -5.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_VISTA_FLAGS_TEXTURE, Vector2(800, 900), Vector2(0.98, 0.98), Color(1, 1, 1, 0.76), -4, "paperworld.samsun_vista_flags", Vector2(1.4, 0.25), 4.5)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_HARBOR_TEXTURE, Vector2(360, 760), Vector2(0.86, 0.86), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_harbor_landmark", Vector2.ZERO, 4.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_TELEGRAPH_TEXTURE, Vector2(1190, 770), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), -3, "paperworld.samsun_telegraph_landmark", Vector2.ZERO, 4.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_PEOPLE_TEXTURE, Vector2(530, 1455), Vector2(0.78, 0.78), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_people_plaza", Vector2.ZERO, 5.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_RIFT_TEXTURE, Vector2(800, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.90), -2, "paperworld.samsun_rift_core", Vector2.ZERO, 5.0)
-	_add_paper_cutout_asset(_cached_world_root, SAMSUN_PAPER_WAVE_GATE_TEXTURE, Vector2(820, 1478), Vector2(0.76, 0.76), Color(1, 1, 1, 0.86), -2, "paperworld.samsun_wave_gate", Vector2.ZERO, 5.0)
-	_add_foreground_paper_cutout_asset(SAMSUN_PAPER_FOREGROUND_FRAME_TEXTURE, Vector2(800, 1835), Vector2(1.34, 1.34), Color(1, 1, 1, 0.88), 4, "paperworld.samsun_foreground_frame", 18.0)
+	# Dawn sky backdrop (rift energy glow, sunrise) — en arka katman
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_SKY_SAMSUN_TEXTURE, Vector2(800, 380), Vector2(1.0, 1.0), Color(1, 1, 1, 0.50), -18, "paperworld.samsun_sky_backdrop", Vector2(0.5, 0.1), -20.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_SKY_LIFE_TEXTURE, Vector2(800, 360), Vector2(1.08, 1.08), Color(1, 1, 1, 0.62), -17, "paperworld.samsun_sky_life", Vector2(8.0, 0.4), -18.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_DISTANT_TOWN_TEXTURE, Vector2(800, 565), Vector2(1.05, 1.05), Color(1, 1, 1, 0.62), -16, "paperworld.samsun_distant_town", Vector2.ZERO, -13.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_SKYLINE_DEPTH_TEXTURE, Vector2(805, 615), Vector2(1.08, 1.08), Color(1, 1, 1, 0.70), -15, "paperworld.samsun_skyline_depth", Vector2(1.0, 0.1), -10.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_HARBOR_WATER_TEXTURE, Vector2(390, 760), Vector2(0.84, 0.84), Color(1, 1, 1, 0.76), -14, "paperworld.samsun_harbor_water", Vector2.ZERO, -8.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_COAST_DETAILS_TEXTURE, Vector2(790, 825), Vector2(1.0, 1.0), Color(1, 1, 1, 0.66), -13, "paperworld.samsun_coast_details", Vector2(2.2, 0.4), -6.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_HARBOR_DOCK_PROPS_TEXTURE, Vector2(392, 820), Vector2(0.96, 0.96), Color(1, 1, 1, 0.78), -7, "paperworld.samsun_harbor_dock_props", Vector2(0.8, 0.2), 2.5)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_COASTAL_LIFE_TEXTURE, Vector2(940, 1015), Vector2(1.02, 1.02), Color(1, 1, 1, 0.66), -7, "paperworld.samsun_coastal_life", Vector2(1.2, 0.2), 3.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_TERRAIN_TEXTURE, Vector2(794, 1114), Vector2(1.18, 1.18), Color(1, 1, 1, 0.94), -15, "paperworld.samsun_terrain_island", Vector2.ZERO, -3.5)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_SIDE_PATHS_TEXTURE, Vector2(760, 1160), Vector2(1.06, 1.06), Color(1, 1, 1, 0.64), -12, "paperworld.samsun_side_paths", Vector2.ZERO, -2.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_MAIN_PATH_TEXTURE, Vector2(726, 1370), Vector2(0.78, 0.78), Color(1, 1, 1, 0.86), -13, "paperworld.samsun_main_path", Vector2.ZERO, -1.5)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_ROUTE_BEADS_TEXTURE, Vector2(775, 1250), Vector2(1.02, 1.02), Color(1, 1, 1, 0.72), -9, "paperworld.samsun_route_beads", Vector2(1.1, 0.2), 1.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_SAFE_CLEARINGS_TEXTURE, Vector2(805, 1335), Vector2(1.0, 1.0), Color(1, 1, 1, 0.66), -8, "paperworld.samsun_safe_clearings", Vector2.ZERO, 1.5)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_CIVIC_CLUSTER_TEXTURE, Vector2(1015, 1360), Vector2(0.58, 0.58), Color(1, 1, 1, 0.72), -6, "paperworld.samsun_civic_cluster", Vector2.ZERO, 2.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_DISCOVERY_PROPS_TEXTURE, Vector2(795, 1110), Vector2(0.92, 0.92), Color(1, 1, 1, 0.72), -4, "paperworld.samsun_discovery_props", Vector2.ZERO, 3.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_HARBOR_BOATS_TEXTURE, Vector2(360, 650), Vector2(0.82, 0.82), Color(1, 1, 1, 0.72), -5, "paperworld.samsun_harbor_boats", Vector2.ZERO, 3.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_SIGNAL_RIDGE_TEXTURE, Vector2(1130, 660), Vector2(0.78, 0.78), Color(1, 1, 1, 0.62), -6, "paperworld.samsun_signal_ridge", Vector2.ZERO, -5.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_VISTA_FLAGS_TEXTURE, Vector2(800, 900), Vector2(0.98, 0.98), Color(1, 1, 1, 0.76), -4, "paperworld.samsun_vista_flags", Vector2(1.4, 0.25), 4.5)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_HARBOR_TEXTURE, Vector2(360, 760), Vector2(0.86, 0.86), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_harbor_landmark", Vector2.ZERO, 4.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_TELEGRAPH_TEXTURE, Vector2(1190, 770), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), -3, "paperworld.samsun_telegraph_landmark", Vector2.ZERO, 4.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_PEOPLE_TEXTURE, Vector2(530, 1455), Vector2(0.78, 0.78), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_people_plaza", Vector2.ZERO, 5.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_RIFT_TEXTURE, Vector2(800, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.90), -2, "paperworld.samsun_rift_core", Vector2.ZERO, 5.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_WAVE_GATE_TEXTURE, Vector2(820, 1478), Vector2(0.76, 0.76), Color(1, 1, 1, 0.86), -2, "paperworld.samsun_wave_gate", Vector2.ZERO, 5.0)
+	# Dekoratif pusula — sağ üst köşede harita hissi
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_MAP_COMPASS_TEXTURE, Vector2(1280, 240), Vector2(0.48, 0.48), Color(1, 1, 1, 0.34), 2, "paperworld.samsun_map_compass", Vector2(-0.6, 0.2), 12.0)
+	_add_foreground_paper_cutout_asset(_textures.SAMSUN_PAPER_FOREGROUND_FRAME_TEXTURE, Vector2(800, 1835), Vector2(1.34, 1.34), Color(1, 1, 1, 0.88), 4, "paperworld.samsun_foreground_frame", 18.0)
 
 
 func _add_samsun_harbor_identity() -> void:
@@ -2071,7 +2955,7 @@ func _add_samsun_harbor_symbol(center: Vector2) -> void:
 	], 6.0, Color(0.96, 0.91, 0.83, 0.20), -1, "landmarks.samsun_harbor_rope")
 	var pennant := Polygon2D.new()
 	pennant.position = center + Vector2(112, -72)
-	pennant.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.42)
+	pennant.color = Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.42)
 	pennant.z_index = -1
 	pennant.polygon = PackedVector2Array([
 		Vector2.ZERO,
@@ -2108,8 +2992,8 @@ func _add_samsun_people_symbol(center: Vector2) -> void:
 
 
 func _add_samsun_signal_symbol(center: Vector2) -> void:
-	_add_samsun_ring(center + Vector2(0, -124), Vector2(62, 24), 5.0, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.16), -1, "landmarks.samsun_telegraph_signal_a")
-	_add_samsun_ring(center + Vector2(0, -124), Vector2(104, 42), 4.0, Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.10), -1, "landmarks.samsun_telegraph_signal_b")
+	_add_samsun_ring(center + Vector2(0, -124), Vector2(62, 24), 5.0, Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.16), -1, "landmarks.samsun_telegraph_signal_a")
+	_add_samsun_ring(center + Vector2(0, -124), Vector2(104, 42), 4.0, Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.10), -1, "landmarks.samsun_telegraph_signal_b")
 
 
 func _add_samsun_telegraph_detail(center: Vector2) -> void:
@@ -2227,7 +3111,7 @@ func _add_samsun_ship_silhouette(pos: Vector2, scale_value: float, slot_id := ""
 
 	var flag := Polygon2D.new()
 	flag.position = Vector2(26, -102) * scale_value
-	flag.color = Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 0.62)
+	flag.color = Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.62)
 	flag.polygon = _scaled_points(PackedVector2Array([
 		Vector2.ZERO,
 		Vector2(54, 8),

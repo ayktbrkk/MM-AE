@@ -1,0 +1,26 @@
+﻿Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+[AudioManager] assets/audio/ mevcut, ses dosyalari yuklenmeye hazir.
+Godot_v4.6.2-stable_win64_console.exe : ERROR: No loader found for resource: res://assets/art/world/samsun/paper_sky_sa
+msun.svg (expected type: unknown)
+At line:1 char:1
++ & 'C:\Users\Aykut\Desktop\MM-AE-main\Godot_v4.6.2-stable_win64_consol ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: No loade... type: unknown):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   at: _load (core/io/resource_loader.cpp:358)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/world_builder.gd:134)
+ERROR: No loader found for resource: res://assets/art/world/samsun/paper_map_compass.svg (expected type: unknown)
+   at: _load (core/io/resource_loader.cpp:358)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/world_builder.gd:135)
+ERROR: No loader found for resource: res://assets/art/world/samsun/paper_sky_samsun.svg (expected type: unknown)
+   at: _load (core/io/resource_loader.cpp:358)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/world.gd:116)
+ERROR: No loader found for resource: res://assets/art/world/samsun/paper_map_compass.svg (expected type: unknown)
+   at: _load (core/io/resource_loader.cpp:358)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/world.gd:117)

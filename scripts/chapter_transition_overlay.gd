@@ -14,24 +14,54 @@ signal transition_finished
 @onready var chapter_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/ChapterLabel
 @onready var subtitle_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/SubTitle
 
-var elapsed := 0.0
+const TAU := 2.0 * PI
 var rift_shards: Array[Polygon2D] = []
+var _dream_mist_base_y: float
+
+func get_overlay_type() -> int:
+	return OverlayManager.OverlayType.CHAPTER_TRANSITION
 
 func _ready() -> void:
 	_apply_styles()
 	_build_rift_fx()
+	_dream_mist_base_y = dream_mist.position.y
 	visible = false
+	_start_idle_animations()
 
-func _process(delta: float) -> void:
-	if not visible:
-		return
-	elapsed += delta
-	var drift := sin(elapsed * 1.4)
-	dream_mist.position.y = drift * 6.0
-	route_dot_a.scale = Vector2.ONE * (0.92 + (0.06 * sin(elapsed * 4.0)))
-	route_dot_b.scale = Vector2.ONE * (0.92 + (0.06 * sin((elapsed * 4.0) + 0.7)))
-	route_dot_c.scale = Vector2.ONE * (0.92 + (0.06 * sin((elapsed * 4.0) + 1.4)))
-	_animate_rift_fx()
+func _start_idle_animations() -> void:
+	# Dream mist drift — sin(elapsed * 1.4), periyot 2*PI/1.4
+	var tween_mist := create_tween().set_loops()
+	tween_mist.tween_method(
+		func(v: float) -> void:
+			dream_mist.position.y = _dream_mist_base_y + sin(v) * 6.0,
+		0.0, TAU, 4.48799
+	)
+
+	# Route dot scale pulse — sin(elapsed * 4.0), periyot 2*PI/4.0
+	var tween_dots := create_tween().set_loops()
+	tween_dots.tween_method(
+		func(v: float) -> void:
+			route_dot_a.scale = Vector2.ONE * (0.92 + (0.06 * sin(v)))
+			route_dot_b.scale = Vector2.ONE * (0.92 + (0.06 * sin(v + 0.7)))
+			route_dot_c.scale = Vector2.ONE * (0.92 + (0.06 * sin(v + 1.4))),
+		0.0, TAU, 1.57080
+	)
+
+	# Rift shard drift — çoklu frekans (0.9/0.7/0.8) tek tween'de
+	var tween_rift := create_tween().set_loops()
+	tween_rift.tween_method(
+		func(v: float) -> void:
+			for shard in rift_shards:
+				var base: Vector2 = shard.get_meta("base_position")
+				var phase: float = shard.get_meta("phase")
+				# v: 0→TAU, freq=0.8 base; scale others relative
+				shard.position = base + Vector2(
+					sin(v * 1.125 + phase) * 14.0,
+					cos(v * 0.875 + phase) * 16.0
+				)
+				shard.rotation = sin(v + phase) * 0.12,
+		0.0, TAU, 7.85398
+	)
 
 func present(chapter: String, subtitle: String) -> void:
 	chapter_label.text = chapter
@@ -102,13 +132,6 @@ func _build_rift_fx() -> void:
 		add_child(shard)
 		move_child(shard, 3)
 		rift_shards.append(shard)
-
-func _animate_rift_fx() -> void:
-	for shard in rift_shards:
-		var base_position: Vector2 = shard.get_meta("base_position")
-		var phase: float = shard.get_meta("phase")
-		shard.position = base_position + Vector2(sin(elapsed * 0.9 + phase) * 14.0, cos(elapsed * 0.7 + phase) * 16.0)
-		shard.rotation = sin(elapsed * 0.8 + phase) * 0.12
 
 func _apply_styles() -> void:
 	var style := StyleBoxFlat.new()

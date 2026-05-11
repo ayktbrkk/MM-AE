@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="60" viewBox="0 0 200 60">
+  <!-- ============================================= -->
+  <!-- Companion Shadow Pad v2                      -->
+  <!-- Reusable ground marker for Arda/Eda          -->
+  <!-- ============================================= -->
+  <!-- Outer soft glow -->
+  <ellipse cx="100" cy="44" rx="90" ry="24" fill="#10202d" opacity="0.08"/>
+  <!-- Wide shadow -->
+  <ellipse cx="100" cy="40" rx="80" ry="20" fill="#1a1510" opacity="0.16"/>
+  <!-- Main shadow pad -->
+  <ellipse cx="100" cy="36" rx="70" ry="18" fill="#1a2a3a" opacity="0.20"/>
+  <!-- Inner pad -->
+  <ellipse cx="100" cy="34" rx="56" ry="14" fill="#1a1510" opacity="0.14"/>
+  <!-- Core highlight -->
+  <ellipse cx="100" cy="32" rx="42" ry="10" fill="#1a2a3a" opacity="0.08"/>
+  <!-- Rim light -->
+  <ellipse cx="100" cy="34" rx="74" ry="18" fill="none" stroke="#f5e8d3" stroke-width="3" stroke-linecap="round" opacity="0.10"/>
+  <!-- Inner rim -->
+  <ellipse cx="100" cy="34" rx="60" ry="14" fill="none" stroke="#f5e8d3" stroke-width="2" stroke-linecap="round" opacity="0.06"/>
+</svg>

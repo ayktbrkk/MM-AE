@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- Tarihi Rozet - Historical Chapter Badge -->
+  <!-- Shadow -->
+  <circle cx="42" cy="42" r="34" fill="#10202d" opacity="0.20"/>
+  <!-- Outer ring -->
+  <circle cx="40" cy="40" r="34" fill="#c84b3d" stroke="#0d121f" stroke-width="4"/>
+  <!-- Inner ring - cream -->
+  <circle cx="40" cy="40" r="26" fill="#f5e8d3" stroke="#0d121f" stroke-width="3"/>
+  <!-- Center star -->
+  <path d="M40 18 L44 30 L56 30 L46 38 L50 50 L40 42 L30 50 L34 38 L24 30 L36 30Z" fill="#f2be63" stroke="#0d121f" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Ribbon at bottom -->
+  <path d="M28 62 L36 56 L40 68 L44 56 L52 62 L48 72 L40 76 L32 72Z" fill="#d6674b" stroke="#0d121f" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Ribbon fold lines -->
+  <path d="M34 58 L32 70" stroke="#0d121f" stroke-width="2" opacity="0.5"/>
+  <path d="M46 58 L48 70" stroke="#0d121f" stroke-width="2" opacity="0.5"/>
+  <!-- Highlight -->
+  <circle cx="32" cy="32" r="6" fill="#fff8d9" opacity="0.30"/>
+</svg>

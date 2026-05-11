@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760">
+  <!-- Bandirma Sky - Foggy Harbor Night -->
+  <rect width="1500" height="760" fill="#292c39"/>
+  <!-- Moon glow behind fog -->
+  <circle cx="1020" cy="140" r="54" fill="#f2be63" opacity=".24"/>
+  <circle cx="1020" cy="140" r="110" fill="#f2be63" opacity=".10"/>
+  <!-- Distant fog layers -->
+  <path d="M0 440 C180 380 320 410 480 354 C640 300 780 344 960 284 C1140 226 1320 254 1500 204 V760 H0Z" fill="#7a5a42" opacity=".14"/>
+  <path d="M0 520 C210 460 380 496 540 434 C720 368 880 420 1060 358 C1240 300 1380 334 1500 284 V760 H0Z" fill="#856536" opacity=".22"/>
+  <path d="M0 594 C220 536 400 578 580 516 C768 456 940 500 1120 440 C1280 390 1400 416 1500 382 V760 H0Z" fill="#5d8f92" opacity=".10"/>
+  <!-- Fog wisps -->
+  <g fill="#f5e8d3" opacity=".08">
+    <ellipse cx="300" cy="280" rx="200" ry="30"/>
+    <ellipse cx="600" cy="320" rx="160" ry="24"/>
+    <ellipse cx="1050" cy="260" rx="180" ry="28"/>
+  </g>
+  <!-- Distant ship lights -->
+  <g fill="#f2be63" opacity=".28">
+    <circle cx="280" cy="380" r="6"/>
+    <circle cx="310" cy="376" r="4"/>
+    <circle cx="1180" cy="350" r="5"/>
+  </g>
+  <!-- Water reflection hints -->
+  <g stroke="#5d8f92" stroke-width="6" stroke-linecap="round" opacity=".16">
+    <path d="M140 640 H380"/>
+    <path d="M680 608 H860"/>
+    <path d="M1060 568 H1300"/>
+  </g>
+</svg>

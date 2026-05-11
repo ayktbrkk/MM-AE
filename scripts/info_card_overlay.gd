@@ -2,10 +2,8 @@ extends Control
 
 signal continue_pressed
 
-const STAR_TEXTURE := preload("res://kenney/kenney_ui-pack/PNG/Blue/Default/star.png")
-const BADGE_TEXTURE := preload("res://kenney/kenney_medals/PNG/flat_medal3.png")
-const CONTINUE_ICON := preload("res://kenney/kenney_ui-pack/PNG/Blue/Default/arrow_decorative_e_small.png")
 @onready var _colors := preload("res://scripts/colors.gd")
+@onready var _textures := preload("res://scripts/textures.gd")
 
 @onready var backdrop: ColorRect = $Backdrop
 @onready var reward_halo: ColorRect = $RewardHalo
@@ -23,15 +21,19 @@ const CONTINUE_ICON := preload("res://kenney/kenney_ui-pack/PNG/Blue/Default/arr
 @onready var reward_label: Label = $Center/InfoCard/CardMargin/CardContent/RewardRow/RewardLabel
 @onready var continue_button: Button = $Center/InfoCard/CardMargin/CardContent/ContinueButton
 
-var elapsed := 0.0
+# Idle tween referansları
+var _idle_tweens: Array[Tween] = []
+
+func get_overlay_type() -> int:
+	return OverlayManager.OverlayType.INFO_CARD
 
 func _ready() -> void:
-	icon_texture.texture = BADGE_TEXTURE
-	reward_star.texture = STAR_TEXTURE
+	icon_texture.texture = _textures.BADGE_TEXTURE
+	reward_star.texture = _textures.STAR_TEXTURE
 	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
-		sparkle.texture = STAR_TEXTURE
+		sparkle.texture = _textures.STAR_TEXTURE
 		sparkle.modulate = Color(1, 1, 1, 0.0)
-	continue_button.icon = CONTINUE_ICON
+	continue_button.icon = _textures.CONTINUE_ICON
 	continue_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_styles()
 	continue_button.pressed.connect(func() -> void:
@@ -39,25 +41,87 @@ func _ready() -> void:
 	)
 	visible = false
 
-func _process(delta: float) -> void:
-	if not visible:
-		return
-	elapsed += delta
-	var shimmer := (sin(elapsed * 1.8) + 1.0) * 0.5
-	reward_halo.color.a = 0.10 + (shimmer * 0.045)
-	reward_star.scale = Vector2.ONE * (1.0 + (0.06 * sin(elapsed * 4.2)))
-	icon_texture.rotation = sin(elapsed * 1.8) * 0.04
-	icon_glow.scale = Vector2.ONE * (1.0 + (0.03 * sin(elapsed * 2.6)))
-	_animate_sparkle(sparkle_a, 0.0, 5.2)
-	_animate_sparkle(sparkle_b, 0.8, 4.6)
-	_animate_sparkle(sparkle_c, 1.45, 4.9)
+func _start_idle_animations() -> void:
+	_stop_idle_animations()
+
+	# 1. reward_halo alpha shimmer (sin(elapsed * 1.8))
+	var t1 := create_tween().set_loops()
+	t1.tween_method(
+		func(v: float) -> void:
+			reward_halo.color.a = 0.1225 + sin(v) * 0.0225,
+		0.0, TAU, TAU / 1.8
+	)
+	_idle_tweens.append(t1)
+
+	# 2. reward_star scale pulse (sin(elapsed * 4.2))
+	var t2 := create_tween().set_loops()
+	t2.tween_method(
+		func(v: float) -> void:
+			reward_star.scale = Vector2.ONE * (1.0 + sin(v) * 0.06),
+		0.0, TAU, TAU / 4.2
+	)
+	_idle_tweens.append(t2)
+
+	# 3. icon_texture rotation (sin(elapsed * 1.8))
+	var t3 := create_tween().set_loops()
+	t3.tween_method(
+		func(v: float) -> void:
+			icon_texture.rotation = sin(v) * 0.04,
+		0.0, TAU, TAU / 1.8
+	)
+	_idle_tweens.append(t3)
+
+	# 4. icon_glow scale pulse (sin(elapsed * 2.6))
+	var t4 := create_tween().set_loops()
+	t4.tween_method(
+		func(v: float) -> void:
+			icon_glow.scale = Vector2.ONE * (1.0 + sin(v) * 0.03),
+		0.0, TAU, TAU / 2.6
+	)
+	_idle_tweens.append(t4)
+
+	# 5-7. Sparkle animasyonları (scale + rotation + alpha)
+	_tween_sparkle(sparkle_a, 0.0, 5.2)
+	_tween_sparkle(sparkle_b, 0.8, 4.6)
+	_tween_sparkle(sparkle_c, 1.45, 4.9)
+
+func _tween_sparkle(sparkle: TextureRect, phase: float, speed: float) -> void:
+	# Scale + modulate.a: sin((elapsed + phase) * speed)
+	# pulse = (sin(...) + 1) * 0.5 → center 0.5, amp 0.5
+	# scale = 0.74 + pulse * 0.18 = 0.83 + sin(...) * 0.09
+	# modulate.a = 0.36 + pulse * 0.28 = 0.5 + sin(...) * 0.14
+	var t_scale := create_tween().set_loops()
+	t_scale.tween_method(
+		func(v: float) -> void:
+			var sv := sin(v + phase * speed)
+			sparkle.scale = Vector2.ONE * (0.83 + sv * 0.09)
+			sparkle.modulate.a = 0.5 + sv * 0.14,
+		0.0, TAU, TAU / speed
+	)
+	_idle_tweens.append(t_scale)
+
+	# Rotation: sin((elapsed + phase) * 1.9) * 0.18
+	var t_rot := create_tween().set_loops()
+	t_rot.tween_method(
+		func(v: float) -> void:
+			sparkle.rotation = sin(v + phase * 1.9) * 0.18,
+		0.0, TAU, TAU / 1.9
+	)
+	_idle_tweens.append(t_rot)
+
+func _stop_idle_animations() -> void:
+	for t in _idle_tweens:
+		if is_instance_valid(t):
+			t.kill()
+	_idle_tweens.clear()
 
 func present(config: Dictionary) -> void:
+	_stop_idle_animations()
 	tag_label.text = String(config.get("tag_text", "Tarih Kartı"))
 	title_label.text = String(config.get("title", "Bilgi Kartı"))
 	body_label.text = String(config.get("text", ""))
 	reward_label.text = String(config.get("reward_text", "Yeni tarih yıldızı kazandın"))
-	icon_texture.texture = config.get("icon_texture", BADGE_TEXTURE)
+	icon_texture.texture = config.get("icon_texture", _textures.BADGE_TEXTURE)
 	icon_glow.color = Color(config.get("accent_color", Color(0.95, 0.75, 0.28, 0.18)))
 	visible = true
 	backdrop.color = Color(0.08, 0.10, 0.14, 0.0)
@@ -83,15 +147,11 @@ func present(config: Dictionary) -> void:
 	tween.parallel().tween_property(sparkle_a, "modulate:a", 0.72, 0.22)
 	tween.parallel().tween_property(sparkle_b, "modulate:a", 0.58, 0.24)
 	tween.parallel().tween_property(sparkle_c, "modulate:a", 0.48, 0.26)
+	tween.finished.connect(_start_idle_animations)
 
 func hide_overlay() -> void:
 	visible = false
-
-func _animate_sparkle(sparkle: TextureRect, phase: float, speed: float) -> void:
-	var pulse := (sin((elapsed + phase) * speed) + 1.0) * 0.5
-	sparkle.scale = Vector2.ONE * (0.74 + (pulse * 0.18))
-	sparkle.rotation = sin((elapsed + phase) * 1.9) * 0.18
-	sparkle.modulate.a = 0.36 + (pulse * 0.28)
+	_stop_idle_animations()
 
 func _apply_styles() -> void:
 	var style := StyleBoxFlat.new()

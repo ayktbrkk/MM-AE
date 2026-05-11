@@ -150,5 +150,49 @@
   "samsun.people_landmark": {
     "target_folder": "assets/art/world/landmarks/samsun",
     "description": "Civic gathering square landmark for the people support node."
+  },
+  "sky.bandirma": {
+    "target_folder": "assets/art/world/bandirma",
+    "description": "Foggy harbor night sky with moon glow, warm earth layers, distant ship lights."
+  },
+  "sky.samsun": {
+    "target_folder": "assets/art/world/samsun",
+    "description": "Dawn arrival sky with golden sunrise, rift sparkles, turquoise gradient."
+  },
+  "sky.havza": {
+    "target_folder": "assets/art/world/havza",
+    "description": "Earthy dry afternoon sky with dust atmosphere, olive tan gradient."
+  },
+  "sky.amasya": {
+    "target_folder": "assets/art/world/amasya",
+    "description": "Deep navy evening sky with crescent moon, stars, distant mountain silhouettes."
+  },
+  "sky.congress": {
+    "target_folder": "assets/art/world/congress",
+    "description": "Dramatic crimson and navy sunset sky with cloud bands, sun rays, distant flag silhouettes."
+  },
+  "collectibles.star_token": {
+    "target_folder": "assets/art/world/collectibles",
+    "description": "Gold knowledge star token with cream paper body, 5-point shape, sparkle accents."
+  },
+  "collectibles.chapter_badge": {
+    "target_folder": "assets/art/world/collectibles",
+    "description": "Historical chapter badge with crimson outer ring, cream inner ring, gold center star, ribbon."
+  },
+  "collectibles.knowledge_orb": {
+    "target_folder": "assets/art/world/collectibles",
+    "description": "Rift blue energy orb with outer glow, inner rings, sparkle reflections, energy lines."
+  },
+  "effects.sparkle_burst": {
+    "target_folder": "assets/art/world/effects",
+    "description": "Collection sparkle burst with 8-point star rays, outer glow ring, sparkle dots."
+  },
+  "effects.pulse_ring": {
+    "target_folder": "assets/art/world/effects",
+    "description": "Marker pulse ring with concentric rings, cardinal accent dots, core dot."
+  },
+  "effects.path_glow": {
+    "target_folder": "assets/art/world/effects",
+    "description": "Path glow highlight with layered ellipses, core path segment, sparkle dots."
   }
 }

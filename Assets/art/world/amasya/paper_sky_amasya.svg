@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760">
+  <!-- Amasya Sky - Deep Navy Evening, Congress Anticipation -->
+  <rect width="1500" height="760" fill="#292c39"/>
+  <!-- Crescent moon -->
+  <path d="M1140 140 A44 44 0 1 1 1220 100 A36 36 0 1 0 1140 140Z" fill="#f2be63" opacity=".30"/>
+  <circle cx="1160" cy="120" r="60" fill="#f2be63" opacity=".06"/>
+  <!-- Evening sky layers -->
+  <path d="M0 450 C180 390 320 416 480 364 C640 310 780 350 960 296 C1140 240 1320 264 1500 216 V760 H0Z" fill="#20344f" opacity=".24"/>
+  <path d="M0 520 C210 462 380 496 540 438 C720 380 880 428 1060 374 C1240 320 1380 350 1500 304 V760 H0Z" fill="#c84b3d" opacity=".12"/>
+  <path d="M0 586 C220 530 400 568 580 514 C768 458 940 500 1120 446 C1280 398 1400 424 1500 390 V760 H0Z" fill="#f5e8d3" opacity=".14"/>
+  <!-- Stars -->
+  <g fill="#fff8d9" opacity=".30">
+    <circle cx="120" cy="70" r="4"/>
+    <circle cx="280" cy="130" r="3"/>
+    <circle cx="460" cy="60" r="5"/>
+    <circle cx="620" cy="160" r="3"/>
+    <circle cx="800" cy="80" r="4"/>
+    <circle cx="1380" cy="100" r="5"/>
+    <circle cx="1460" cy="180" r="3"/>
+  </g>
+  <!-- Distant mountain silhouettes -->
+  <path d="M0 400 L120 280 L240 340 L360 240 L480 310 L540 260 L600 320 L720 380 L800 290 L920 350 L1040 260 L1160 330 L1280 280 L1400 340 L1500 300 V760 H0Z" fill="#1a2a3a" opacity=".28"/>
+  <!-- Gold accent dots -->
+  <g fill="#f2be63" opacity=".22">
+    <circle cx="240" cy="620" r="14"/>
+    <circle cx="1180" cy="600" r="12"/>
+  </g>
+</svg>

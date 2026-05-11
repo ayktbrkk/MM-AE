@@ -2,11 +2,7 @@ extends Control
 
 signal intro_finished
 
-const POP_DEEP_TURQUOISE := Color(0.02, 0.47, 0.57)
-# Artwork analizine göre güncellendi: #B82E1F (eski: 0.86, 0.05, 0.12)
-const POP_CRIMSON := Color(0.72, 0.18, 0.12)
-const POP_GOLD := Color(1.0, 0.70, 0.25)
-const RIFT_BLUE := Color(0.22, 0.78, 1.0)
+@onready var _colors := preload("res://scripts/colors.gd")
 
 @onready var dimmer: ColorRect = $Dimmer
 @onready var glow: ColorRect = $Glow
@@ -17,9 +13,13 @@ const RIFT_BLUE := Color(0.22, 0.78, 1.0)
 @onready var body_label: Label = $CenterWrap/Panel/Margin/Content/Body
 @onready var hint_label: Label = $CenterWrap/Panel/Margin/Content/Hint
 
-var is_playing := false
-var elapsed := 0.0
 var rift_shards: Array[Polygon2D] = []
+
+# Idle tween referansları
+var _idle_tweens: Array[Tween] = []
+
+func get_overlay_type() -> int:
+	return OverlayManager.OverlayType.DREAM_INTRO
 
 func _ready() -> void:
 	_apply_styles()
@@ -32,8 +32,7 @@ func _notification(what: int) -> void:
 		_sync_layout()
 
 func present(title: String, body: String) -> void:
-	is_playing = true
-	elapsed = 0.0
+	_stop_idle_animations()
 	title_label.text = title
 	body_label.text = body
 	_sync_layout()
@@ -48,6 +47,7 @@ func present(title: String, body: String) -> void:
 	book_glow.color.a = 0.0
 
 	var tween := create_tween()
+	_start_idle_animations()
 	tween.tween_property(dimmer, "color:a", 0.78, 0.28)
 	tween.parallel().tween_property(glow, "color:a", 0.34, 0.38)
 	for shard in rift_shards:
@@ -66,18 +66,89 @@ func present(title: String, body: String) -> void:
 		tween.parallel().tween_property(shard, "color:a", 0.0, 0.18)
 	tween.tween_callback(_finish_intro)
 
-func _process(delta: float) -> void:
-	if not visible:
-		return
-	elapsed += delta
-	book_glow.scale.x = 1.0 + (sin(elapsed * 2.0) * 0.025)
-	var color := book_glow.color
-	color.a = max(color.a, 0.12 + (sin(elapsed * 2.4) * 0.04))
-	book_glow.color = color
-	_animate_rift_fx()
+func _start_idle_animations() -> void:
+	_stop_idle_animations()
+
+	# 1. book_glow scale.x pulse (sin(elapsed * 2.0))
+	var t1 := create_tween().set_loops()
+	t1.tween_method(
+		func(v: float) -> void:
+			book_glow.scale.x = 1.0 + sin(v) * 0.025,
+		0.0, TAU, TAU / 2.0
+	)
+	_idle_tweens.append(t1)
+
+	# 2. book_glow color.a pulse (sin(elapsed * 2.4))
+	var t2 := create_tween().set_loops()
+	t2.tween_method(
+		func(v: float) -> void:
+			book_glow.color.a = 0.12 + sin(v) * 0.04,
+		0.0, TAU, TAU / 2.4
+	)
+	_idle_tweens.append(t2)
+
+	# 3-6. Rift shard animasyonları (4 frekans grubu)
+	_tween_rift_pos_x()
+	_tween_rift_pos_y()
+	_tween_rift_rotation()
+	_tween_rift_scale()
+
+func _tween_rift_pos_x() -> void:
+	# X pozisyon: sin(elapsed * 0.9 + phase) * 16.0
+	var t := create_tween().set_loops()
+	t.tween_method(
+		func(v: float) -> void:
+			for shard in rift_shards:
+				var phase: float = shard.get_meta("phase")
+				shard.position.x = shard.get_meta("base_position").x + sin(v + phase) * 16.0,
+		0.0, TAU, TAU / 0.9
+	)
+	_idle_tweens.append(t)
+
+func _tween_rift_pos_y() -> void:
+	# Y pozisyon: cos(elapsed * 0.7 + phase) * 18.0
+	var t := create_tween().set_loops()
+	t.tween_method(
+		func(v: float) -> void:
+			for shard in rift_shards:
+				var phase: float = shard.get_meta("phase")
+				shard.position.y = shard.get_meta("base_position").y + cos(v + phase) * 18.0,
+		0.0, TAU, TAU / 0.7
+	)
+	_idle_tweens.append(t)
+
+func _tween_rift_rotation() -> void:
+	# Rotation: sin(elapsed * 0.8 + phase) * 0.12
+	var t := create_tween().set_loops()
+	t.tween_method(
+		func(v: float) -> void:
+			for shard in rift_shards:
+				var phase: float = shard.get_meta("phase")
+				shard.rotation = sin(v + phase) * 0.12,
+		0.0, TAU, TAU / 0.8
+	)
+	_idle_tweens.append(t)
+
+func _tween_rift_scale() -> void:
+	# Scale: 0.94 + sin(elapsed * 1.3 + phase) * 0.05
+	var t := create_tween().set_loops()
+	t.tween_method(
+		func(v: float) -> void:
+			for shard in rift_shards:
+				var phase: float = shard.get_meta("phase")
+				shard.scale = Vector2.ONE * (0.94 + sin(v + phase) * 0.05),
+		0.0, TAU, TAU / 1.3
+	)
+	_idle_tweens.append(t)
+
+func _stop_idle_animations() -> void:
+	for t in _idle_tweens:
+		if is_instance_valid(t):
+			t.kill()
+	_idle_tweens.clear()
 
 func hide_overlay() -> void:
-	is_playing = false
+	_stop_idle_animations()
 	visible = false
 
 func _sync_layout() -> void:
@@ -113,7 +184,7 @@ func _build_rift_fx() -> void:
 		var shard := Polygon2D.new()
 		var size := Vector2(28 + (index % 2) * 10, 82 + (index % 3) * 12)
 		shard.position = centers[index]
-		shard.color = Color(RIFT_BLUE.r, RIFT_BLUE.g, RIFT_BLUE.b, 0.0)
+		shard.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.0)
 		shard.z_index = 2
 		shard.polygon = PackedVector2Array([
 			Vector2(0, -size.y * 0.5),
@@ -127,24 +198,16 @@ func _build_rift_fx() -> void:
 		move_child(shard, 2)
 		rift_shards.append(shard)
 
-func _animate_rift_fx() -> void:
-	for shard in rift_shards:
-		var base_position: Vector2 = shard.get_meta("base_position")
-		var phase: float = shard.get_meta("phase")
-		shard.position = base_position + Vector2(sin(elapsed * 0.9 + phase) * 16.0, cos(elapsed * 0.7 + phase) * 18.0)
-		shard.rotation = sin(elapsed * 0.8 + phase) * 0.12
-		shard.scale = Vector2.ONE * (0.94 + (sin(elapsed * 1.3 + phase) * 0.05))
-
 func _apply_styles() -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.97, 0.94, 0.86, 0.95)
-	style.border_color = POP_DEEP_TURQUOISE
+	style.border_color = _colors.POP_DEEP_TURQUOISE
 	style.set_border_width_all(4)
 	style.set_corner_radius_all(30)
 	style.shadow_color = Color(0.03, 0.05, 0.08, 0.30)
 	style.shadow_size = 12
 	style.shadow_offset = Vector2(0, 8)
 	panel.add_theme_stylebox_override("panel", style)
-	title_label.add_theme_color_override("font_color", POP_CRIMSON)
+	title_label.add_theme_color_override("font_color", _colors.POP_CRIMSON)
 	body_label.add_theme_color_override("font_color", Color(0.19, 0.21, 0.28))
-	hint_label.add_theme_color_override("font_color", POP_DEEP_TURQUOISE)
+	hint_label.add_theme_color_override("font_color", _colors.POP_DEEP_TURQUOISE)

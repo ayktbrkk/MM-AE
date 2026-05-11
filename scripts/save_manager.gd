@@ -2,6 +2,7 @@ extends Node
 
 # ---------------------------------------------------------------------------
 # save_manager.gd — P7: Save/Load sistemi
+# Autoload singleton. JSON tabanli save/load mekanizmasi.
 # ---------------------
 # Autoload singleton. JSON tabanli save/load mekanizmasi.
 # Kayitlar user://savegame.json dosyasina yazilir.
@@ -14,12 +15,14 @@ extends Node
 # ---------------------------------------------------------------------------
 
 const SAVE_PATH := "user://savegame.json"
+const SETTINGS_PATH := "user://settings.json"
 const SAVE_VERSION := 1
 
 signal game_saved(path: String)
 signal game_loaded(path: String)
 signal save_deleted()
 signal save_corrupted(path: String, error_message: String)
+signal settings_changed(key: String, value: Variant)
 
 
 func save_game(data: Dictionary) -> bool:
@@ -110,3 +113,52 @@ func get_save_version() -> int:
 	if data.is_empty():
 		return 0
 	return data.get("version", 0)
+
+
+# ---------------------------------------------------------------------------
+# Settings API
+# ---------------------------------------------------------------------------
+func save_setting(key: String, value: Variant) -> void:
+	"""Tek bir ayar degerini user://settings.json dosyasina kaydeder."""
+	var settings: Dictionary = load_settings()
+	settings[key] = value
+	_write_settings(settings)
+	settings_changed.emit(key, value)
+
+
+func load_setting(key: String, default_value: Variant = null) -> Variant:
+	"""Belirtilen ayar degerini dondurur, yoksa default_value."""
+	var settings: Dictionary = load_settings()
+	if settings.has(key):
+		return settings[key]
+	return default_value
+
+
+func load_settings() -> Dictionary:
+	"""Tum ayarlari Dictionary olarak dondurur."""
+	if not FileAccess.file_exists(SETTINGS_PATH):
+		return {}
+
+	var file := FileAccess.open(SETTINGS_PATH, FileAccess.READ)
+	if not file:
+		return {}
+
+	var json_string := file.get_as_text()
+	file.close()
+
+	var json := JSON.new()
+	var parse_result := json.parse(json_string)
+	if parse_result != OK:
+		return {}
+	return json.data
+
+
+func _write_settings(settings: Dictionary) -> void:
+	"""settings.json dosyasina yazar."""
+	var json_string := JSON.stringify(settings, "\t")
+	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
+	if not file:
+		push_error("[SaveManager] Ayarlar dosyasi acilamadi")
+		return
+	file.store_string(json_string)
+	file.close()

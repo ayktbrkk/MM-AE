@@ -15,6 +15,11 @@ run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AudioManager="*res://scripts/audio_manager.gd"
+SaveManager="*res://scripts/save_manager.gd"
+
 [display]
 
 window/size/viewport_width=1080
@@ -26,11 +31,6 @@ window/handheld/orientation=1
 [physics]
 
 3d/physics_engine="Jolt Physics"
-
-[autoload]
-
-AudioManager="*res://scripts/audio_manager.gd"
-SaveManager="*res://scripts/save_manager.gd"
 
 [rendering]
 

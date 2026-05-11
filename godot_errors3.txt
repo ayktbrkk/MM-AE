@@ -1,0 +1,70 @@
+SCRIPT ERROR: Parse Error: Function "_add_ship_room_plates()" not found in base self.
+   at: GDScript::reload (res://scripts/world.gd:1806)
+ERROR: Failed to load script "res://scripts/world.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+SCRIPT ERROR: Parse Error: Too many arguments for "_add_mote_cluster()" call. Expected at most 3 but received 4.
+   at: GDScript::reload (res://scripts/world_builder.gd:442)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 1 should be "Vector2" but is "Node".
+   at: GDScript::reload (res://scripts/world_builder.gd:442)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Vector2" as "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:442)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 2 should be "Color" but is "Vector2".
+   at: GDScript::reload (res://scripts/world_builder.gd:442)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Color" as "int".
+   at: GDScript::reload (res://scripts/world_builder.gd:442)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 3 should be "int" but is "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:442)
+SCRIPT ERROR: Parse Error: Too many arguments for "_add_mote_cluster()" call. Expected at most 3 but received 4.
+   at: GDScript::reload (res://scripts/world_builder.gd:443)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 1 should be "Vector2" but is "Node".
+   at: GDScript::reload (res://scripts/world_builder.gd:443)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Vector2" as "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:443)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 2 should be "Color" but is "Vector2".
+   at: GDScript::reload (res://scripts/world_builder.gd:443)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Color" as "int".
+   at: GDScript::reload (res://scripts/world_builder.gd:443)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 3 should be "int" but is "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:443)
+SCRIPT ERROR: Parse Error: Too many arguments for "_add_mote_cluster()" call. Expected at most 3 but received 4.
+   at: GDScript::reload (res://scripts/world_builder.gd:444)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 1 should be "Vector2" but is "Node".
+   at: GDScript::reload (res://scripts/world_builder.gd:444)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Vector2" as "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:444)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 2 should be "Color" but is "Vector2".
+   at: GDScript::reload (res://scripts/world_builder.gd:444)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Color" as "int".
+   at: GDScript::reload (res://scripts/world_builder.gd:444)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 3 should be "int" but is "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:444)
+SCRIPT ERROR: Parse Error: Too many arguments for "_add_mote_cluster()" call. Expected at most 3 but received 4.
+   at: GDScript::reload (res://scripts/world_builder.gd:445)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 1 should be "Vector2" but is "Node".
+   at: GDScript::reload (res://scripts/world_builder.gd:445)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Vector2" as "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:445)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 2 should be "Color" but is "Vector2".
+   at: GDScript::reload (res://scripts/world_builder.gd:445)
+SCRIPT ERROR: Parse Error: Cannot pass a value of type "Color" as "int".
+   at: GDScript::reload (res://scripts/world_builder.gd:445)
+SCRIPT ERROR: Parse Error: Invalid argument for "_add_mote_cluster()" function: argument 3 should be "int" but is "Color".
+   at: GDScript::reload (res://scripts/world_builder.gd:445)
+SCRIPT ERROR: Parse Error: Too many arguments for "_add_samsun_harbor_wave_bands()" call. Expected at most 0 but received 1.
+   at: GDScript::reload (res://scripts/world_builder.gd:513)
+SCRIPT ERROR: Parse Error: Too many arguments for "_add_samsun_paper_cut_edges()" call. Expected at most 0 but received 1.
+   at: GDScript::reload (res://scripts/world_builder.gd:514)
+SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)
+   at: GDScript::reload (res://scripts/world_builder.gd:861)
+ERROR: Failed to load script "res://scripts/world_builder.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+SCRIPT ERROR: Parse Error: Function "_hide_visual_tree()" not found in base self.
+   at: GDScript::reload (res://scripts/world_marker.gd:760)
+SCRIPT ERROR: Parse Error: Function "_is_collectible_standalone_visual()" not found in base self.
+   at: GDScript::reload (res://scripts/world_marker.gd:778)
+SCRIPT ERROR: Parse Error: Function "_visual_world_position()" not found in base self.
+   at: GDScript::reload (res://scripts/world_marker.gd:780)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "child_position" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/world_marker.gd:780)
+ERROR: Failed to load script "res://scripts/world_marker.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2907)

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- ============================================= -->
+  <!-- Room Terrain - Cozy floor ground blobs v2    -->
+  <!-- Paper Diorama Style                          -->
+  <!-- ============================================= -->
+  <!-- Shadow layer -->
+  <path d="M50 430 C90 320 240 290 400 310 C560 330 700 310 760 380 C790 430 750 520 670 550 C560 590 180 580 100 540 C40 510 20 480 50 430Z" fill="#1a2a3a" opacity="0.16"/>
+  <!-- Deep shadow accent -->
+  <path d="M120 450 C160 380 280 350 410 370 C540 390 640 380 700 420 C730 446 700 490 630 518 C540 546 220 540 155 510 C100 486 86 470 120 450Z" fill="#1a1510" opacity="0.10"/>
+  <!-- Base terrain - warm cream paper -->
+  <path d="M60 410 C100 310 250 280 410 300 C570 320 710 300 770 370 C800 420 760 510 680 540 C570 580 190 570 110 530 C50 500 30 470 60 410Z" fill="#f5e8d3"/>
+  <!-- Mid terrain - warm tan -->
+  <path d="M120 380 C160 300 290 270 420 290 C550 310 660 300 720 360 C750 396 720 470 650 498 C550 530 230 522 160 492 C100 466 86 440 120 380Z" fill="#e8d5b8"/>
+  <!-- Accent layer - soft amber rug -->
+  <path d="M180 390 C220 340 330 320 430 340 C530 360 590 360 630 400 C654 426 640 466 580 486 C490 514 270 508 214 480 C170 458 152 432 180 390Z" fill="#e89863" opacity="0.32"/>
+  <!-- Inner glow - sunset gold -->
+  <path d="M240 426 C274 400 340 392 400 406 C460 420 492 428 514 448 C528 464 506 480 466 490 C408 504 312 498 276 476 C250 460 238 444 240 426Z" fill="#f2be63" opacity="0.26"/>
+  <!-- Outline -->
+  <path d="M60 410 C100 310 250 280 410 300 C570 320 710 300 770 370 C800 420 760 510 680 540 C570 580 190 570 110 530 C50 500 30 470 60 410Z" fill="none" stroke="#2b2730" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Rug pattern - decorative stripes -->
+  <path d="M300 400 C320 390 345 388 370 396" fill="none" stroke="#d6674b" stroke-width="6" stroke-linecap="round" opacity="0.20"/>
+  <path d="M400 410 C424 402 450 404 474 414" fill="none" stroke="#d6674b" stroke-width="6" stroke-linecap="round" opacity="0.18"/>
+  <path d="M340 450 C362 442 388 440 414 448" fill="none" stroke="#d6674b" stroke-width="5" stroke-linecap="round" opacity="0.15"/>
+  <!-- Wood plank lines -->
+  <path d="M140 388 C200 370 310 356 420 366" fill="none" stroke="#7a5a42" stroke-width="4" stroke-linecap="round" opacity="0.12"/>
+  <path d="M160 420 C220 404 340 396 450 404" fill="none" stroke="#7a5a42" stroke-width="4" stroke-linecap="round" opacity="0.10"/>
+  <!-- Warm glow dots -->
+  <g fill="#f2be63" opacity="0.35">
+    <circle cx="160" cy="420" r="10"/>
+    <circle cx="620" cy="430" r="12"/>
+    <circle cx="320" cy="470" r="8"/>
+    <circle cx="510" cy="476" r="9"/>
+    <circle cx="440" cy="360" r="6"/>
+  </g>
+  <!-- Sparkle highlights -->
+  <g fill="#fff8e7" opacity="0.40">
+    <circle cx="380" cy="350" r="4"/>
+    <circle cx="550" cy="400" r="3"/>
+    <circle cx="200" cy="460" r="3"/>
+  </g>
+</svg>

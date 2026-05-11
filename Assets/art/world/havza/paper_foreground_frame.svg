@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="780" viewBox="0 0 1600 780">
+  <!-- ============================================= -->
+  <!-- Havza Foreground Frame v2                    -->
+  <!-- Tree branches + building silhouettes         -->
+  <!-- ============================================= -->
+  <!-- Bottom ground silhouette -->
+  <path d="M0 560 C220 520 390 560 560 632 C742 708 920 690 1100 616 C1286 540 1428 524 1600 580 V780 H0Z" fill="#7a5a42" opacity="0.44"/>
+  <!-- Mid ground terrain -->
+  <path d="M0 480 C160 440 286 454 424 510 C514 548 640 560 806 540 C1010 518 1170 460 1600 490 V780 H0Z" fill="#20344f" opacity="0.22"/>
+  <!-- Left tree silhouette 1 -->
+  <g fill="#1a2a3a" opacity="0.58">
+    <path d="M0 60 C80 98 140 180 170 320 V780 H0Z"/>
+    <!-- Branches -->
+    <path d="M60 180 C120 150 180 170 220 210" stroke="#1a2a3a" stroke-width="12" stroke-linecap="round" opacity="0.50"/>
+    <path d="M40 260 C100 230 160 240 200 280" stroke="#1a2a3a" stroke-width="10" stroke-linecap="round" opacity="0.46"/>
+    <path d="M80 140 C130 120 170 130 190 160" stroke="#1a2a3a" stroke-width="8" stroke-linecap="round" opacity="0.42"/>
+  </g>
+  <!-- Right building silhouette -->
+  <g fill="#1a2a3a" opacity="0.54">
+    <path d="M1600 70 C1460 110 1380 220 1350 370 V780 H1600Z"/>
+    <!-- Rooftop line -->
+    <path d="M1480 160 C1470 140 1460 130 1440 140" stroke="#1a2a3a" stroke-width="8" stroke-linecap="round" opacity="0.48"/>
+  </g>
+  <!-- Left tree silhouette 2 (smaller) -->
+  <g fill="#20344f" opacity="0.42">
+    <path d="M0 200 C40 230 80 300 100 420 V780 H0Z"/>
+    <path d="M30 300 C70 280 120 290 150 320" stroke="#20344f" stroke-width="8" stroke-linecap="round" opacity="0.38"/>
+  </g>
+  <!-- Decorative vine/branch elements -->
+  <g stroke="#5d8f92" stroke-width="14" stroke-linecap="round" opacity="0.52">
+    <path d="M120 590 C150 526 180 486 214 450"/>
+    <path d="M1468 604 C1438 538 1406 492 1370 450"/>
+    <path d="M250 668 C332 628 422 626 512 666"/>
+    <path d="M1110 666 C1218 612 1332 620 1464 660"/>
+  </g>
+  <!-- Light branch overlay -->
+  <g stroke="#8db572" stroke-width="8" stroke-linecap="round" opacity="0.30">
+    <path d="M80 560 C130 520 180 500 230 520"/>
+    <path d="M1540 570 C1480 530 1420 510 1370 530"/>
+  </g>
+  <!-- Gold accent dots -->
+  <g fill="#f2be63" opacity="0.34">
+    <circle cx="220" cy="604" r="16"/>
+    <circle cx="1360" cy="610" r="18"/>
+    <circle cx="1240" cy="686" r="12"/>
+    <circle cx="380" cy="580" r="10"/>
+    <circle cx="1020" cy="640" r="11"/>
+  </g>
+</svg>

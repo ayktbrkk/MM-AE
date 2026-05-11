@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- Bilgi Küresi - Knowledge Orb (Rift Energy) -->
+  <!-- Outer glow -->
+  <circle cx="40" cy="40" r="38" fill="#38c7ff" opacity="0.10"/>
+  <circle cx="40" cy="40" r="30" fill="#38c7ff" opacity="0.18"/>
+  <!-- Shadow -->
+  <ellipse cx="42" cy="42" rx="28" ry="28" fill="#10202d" opacity="0.20"/>
+  <!-- Main orb body -->
+  <circle cx="40" cy="40" r="28" fill="#067078" stroke="#0d121f" stroke-width="4"/>
+  <!-- Inner glow ring -->
+  <circle cx="40" cy="40" r="20" fill="none" stroke="#0aacc2" stroke-width="3" opacity="0.60"/>
+  <!-- Core highlight -->
+  <circle cx="40" cy="40" r="12" fill="#8be6ff" opacity="0.24"/>
+  <circle cx="36" cy="36" r="6" fill="#38c7ff" opacity="0.40"/>
+  <!-- Sparkle reflections -->
+  <g fill="#fff8d9" opacity="0.50">
+    <circle cx="32" cy="30" r="3"/>
+    <circle cx="48" cy="46" r="2.5"/>
+    <circle cx="50" cy="32" r="2"/>
+  </g>
+  <!-- Inner energy lines -->
+  <g stroke="#8be6ff" stroke-width="2" stroke-linecap="round" opacity="0.30">
+    <path d="M30 44 C34 50 46 50 50 44"/>
+    <path d="M30 36 C34 30 46 30 50 36"/>
+  </g>
+</svg>

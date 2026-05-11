@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="900" viewBox="0 0 920 900">
+  <!-- ============================================= -->
+  <!-- Final Main Path v1 - Victory Path             -->
+  <!-- Golden path leading to republic               -->
+  <!-- ============================================= -->
+  <!-- Shadow layer -->
+  <path d="M460 840 C440 700 420 600 390 510 C360 420 380 340 420 280 C460 220 470 170 460 110" fill="none" stroke="#0a1a0a" stroke-width="86" stroke-linecap="round" stroke-linejoin="round" opacity="0.16"/>
+  <!-- Main path - cream -->
+  <path d="M460 840 C440 700 420 600 390 510 C360 420 380 340 420 280 C460 220 470 170 460 110" fill="none" stroke="#f5e8d3" stroke-width="58" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
+  <!-- Path inner - gold -->
+  <path d="M460 840 C440 700 420 600 390 510 C360 420 380 340 420 280 C460 220 470 170 460 110" fill="none" stroke="#d4a017" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity="0.24"/>
+  <!-- Branch path - left (to Meclis) -->
+  <path d="M390 510 C310 470 220 460 120 510" fill="none" stroke="#0a1a0a" stroke-width="56" stroke-linecap="round" opacity="0.10"/>
+  <path d="M390 510 C310 470 220 460 120 510" fill="none" stroke="#f5e8d3" stroke-width="38" stroke-linecap="round" opacity="0.82"/>
+  <path d="M390 510 C310 470 220 460 120 510" fill="none" stroke="#d4a017" stroke-width="14" stroke-linecap="round" opacity="0.20"/>
+  <!-- Branch path - right (to celebration) -->
+  <path d="M420 280 C520 260 620 280 710 350" fill="none" stroke="#0a1a0a" stroke-width="56" stroke-linecap="round" opacity="0.10"/>
+  <path d="M420 280 C520 260 620 280 710 350" fill="none" stroke="#f5e8d3" stroke-width="38" stroke-linecap="round" opacity="0.80"/>
+  <path d="M420 280 C520 260 620 280 710 350" fill="none" stroke="#d4a017" stroke-width="14" stroke-linecap="round" opacity="0.18"/>
+  <!-- Star markers along path (victory stars) -->
+  <g fill="#f2be63" opacity="0.50">
+    <polygon points="430,660 434,672 448,672 436,680 440,694 430,684 420,694 424,680 412,672 426,672" stroke="#3c2a1e" stroke-width="3"/>
+    <polygon points="405,520 409,532 423,532 411,540 415,554 405,544 395,554 399,540 387,532 401,532" stroke="#3c2a1e" stroke-width="3"/>
+    <polygon points="410,390 414,402 428,402 416,410 420,424 410,414 400,424 404,410 392,402 406,402" stroke="#3c2a1e" stroke-width="3"/>
+    <polygon points="455,250 459,262 473,262 461,270 465,284 455,274 445,284 449,270 437,262 451,262" stroke="#3c2a1e" stroke-width="3"/>
+    <polygon points="200,510 204,522 218,522 206,530 210,544 200,534 190,544 194,530 182,522 196,522" stroke="#3c2a1e" stroke-width="2.5"/>
+    <polygon points="560,300 564,312 578,312 566,320 570,334 560,324 550,334 554,320 542,312 556,312" stroke="#3c2a1e" stroke-width="2.5"/>
+  </g>
+  <!-- Shadow pads / stepping stones -->
+  <g fill="#0a1a0a" opacity="0.16">
+    <ellipse cx="445" cy="750" rx="30" ry="10"/>
+    <ellipse cx="425" cy="630" rx="28" ry="10"/>
+    <ellipse cx="395" cy="510" rx="26" ry="9"/>
+    <ellipse cx="395" cy="390" rx="28" ry="10"/>
+    <ellipse cx="455" cy="290" rx="26" ry="9"/>
+    <ellipse cx="510" cy="190" rx="24" ry="8"/>
+    <ellipse cx="230" cy="490" rx="22" ry="8"/>
+    <ellipse cx="570" cy="310" rx="20" ry="7"/>
+  </g>
+  <!-- Golden wheat dots along path -->
+  <g fill="#d4a017" opacity="0.28">
+    <circle cx="440" cy="710" r="8"/>
+    <circle cx="415" cy="570" r="7"/>
+    <circle cx="390" cy="450" r="6"/>
+    <circle cx="435" cy="350" r="7"/>
+    <circle cx="475" cy="250" r="6"/>
+    <circle cx="190" cy="490" r="5"/>
+    <circle cx="590" cy="320" r="5"/>
+  </g>
+  <!-- Warm sparkles -->
+  <g fill="#fff8e7" opacity="0.32">
+    <circle cx="430" cy="670" r="5"/>
+    <circle cx="405" cy="530" r="4"/>
+    <circle cx="415" cy="330" r="5"/>
+    <circle cx="475" cy="220" r="4"/>
+    <circle cx="160" cy="500" r="3"/>
+  </g>
+  <!-- Decorative gold accent dots -->
+  <g fill="#f2be63" opacity="0.16">
+    <circle cx="450" cy="800" r="6"/>
+    <circle cx="460" cy="100" r="6"/>
+    <circle cx="350" cy="450" r="4"/>
+    <circle cx="480" cy="160" r="4"/>
+  </g>
+</svg>
