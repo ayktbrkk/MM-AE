@@ -17,6 +17,8 @@ extends Node
 # ====================================
 const ARDA_TEXTURE := preload("res://assets/art/characters/arda/char_arda_world.svg")
 const EDA_TEXTURE := preload("res://assets/art/characters/eda/char_eda_world.svg")
+const ARDA_PORTRAIT_IDLE_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
+const EDA_PORTRAIT_IDLE_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
 
 # ====================================
 # İKON TEXTURE'LARI (kenney_board-game-icons)

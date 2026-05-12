@@ -102,7 +102,7 @@ func build_character_choice_identity_row() -> void:
 
 	var row := HBoxContainer.new()
 	row.name = "CharacterIdentityRow"
-	row.custom_minimum_size = Vector2(0, 204)
+	row.custom_minimum_size = Vector2(0, 220)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 24)
 	character_content.add_child(row)
@@ -110,15 +110,15 @@ func build_character_choice_identity_row() -> void:
 	var arda_btn: Button = _world.get_node("CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/ArdaButton")
 	character_content.move_child(row, arda_btn.get_index())
 
-	row.add_child(_create_character_identity_card("ArdaIdentityCard", "ARDA", "Cesur, Meraklı", _textures.ARDA_TEXTURE, Color(0.84, 0.40, 0.29, 0.40)))
-	row.add_child(_create_character_identity_card("EdaIdentityCard", "EDA", "Akıllı, Sakin", _textures.EDA_TEXTURE, Color(0.26, 0.54, 0.53, 0.40)))
+	row.add_child(_create_character_identity_card("ArdaIdentityCard", "ARDA", "Cesur, Meraklı", _textures.ARDA_PORTRAIT_IDLE_TEXTURE, Color(0.84, 0.40, 0.29, 0.40)))
+	row.add_child(_create_character_identity_card("EdaIdentityCard", "EDA", "Akıllı, Sakin", _textures.EDA_PORTRAIT_IDLE_TEXTURE, Color(0.26, 0.54, 0.53, 0.40)))
 
 
 func _create_character_identity_card(card_name: String, character_name: String, descriptor: String, texture: Texture2D, accent: Color) -> PanelContainer:
 	"""Tek bir karakter kimlik kartı oluştur."""
 	var card := PanelContainer.new()
 	card.name = card_name
-	card.custom_minimum_size = Vector2(0, 204)
+	card.custom_minimum_size = Vector2(0, 220)
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.set_meta("identity_accent", accent)
 
@@ -136,22 +136,22 @@ func _create_character_identity_card(card_name: String, character_name: String, 
 
 	var circle := PanelContainer.new()
 	circle.name = "IdentityCircle"
-	circle.custom_minimum_size = Vector2(142, 142)
+	circle.custom_minimum_size = Vector2(156, 156)
 	circle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	circle.set_meta("identity_accent", accent)
 	column.add_child(circle)
 
 	var circle_margin := MarginContainer.new()
-	circle_margin.add_theme_constant_override("margin_left", 12)
-	circle_margin.add_theme_constant_override("margin_top", 12)
-	circle_margin.add_theme_constant_override("margin_right", 12)
-	circle_margin.add_theme_constant_override("margin_bottom", 12)
+	circle_margin.add_theme_constant_override("margin_left", 8)
+	circle_margin.add_theme_constant_override("margin_top", 8)
+	circle_margin.add_theme_constant_override("margin_right", 8)
+	circle_margin.add_theme_constant_override("margin_bottom", 8)
 	circle.add_child(circle_margin)
 
 	var portrait := TextureRect.new()
 	portrait.name = "Portrait"
 	portrait.texture = texture
-	portrait.custom_minimum_size = Vector2(118, 118)
+	portrait.custom_minimum_size = Vector2(140, 140)
 	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.set_meta("character_choice_portrait", true)
