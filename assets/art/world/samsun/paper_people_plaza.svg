@@ -1,66 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="520" height="360" viewBox="0 0 520 360">
-  <!-- ============================================= -->
-  <!-- Samsun People Plaza v3                       -->
-  <!-- Enhanced: podium + silhouettes + flags + gold-->
-  <!-- ============================================= -->
-  <!-- Shadow layer -->
-  <ellipse cx="260" cy="310" rx="210" ry="44" fill="#1b2630" opacity="0.18"/>
-  <!-- Plaza ground -->
-  <path d="M70 170 C144 80 336 60 444 148 C418 256 320 310 200 294 C118 284 66 236 70 170Z" fill="#f5d88f" stroke="#2b2730" stroke-width="6" stroke-linejoin="round"/>
-  <!-- Ground highlight -->
-  <path d="M88 170 C158 108 332 94 426 154 C392 234 314 274 214 262 C144 252 100 218 88 170Z" fill="#f9e7b7"/>
-  <!-- Plaza stone pattern -->
-  <path d="M160 204 C232 184 296 188 366 210" fill="none" stroke="#7a5a42" stroke-width="3" stroke-linecap="round" opacity="0.14"/>
-  <path d="M170 222 C240 204 304 208 370 228" fill="none" stroke="#7a5a42" stroke-width="3" stroke-linecap="round" opacity="0.12"/>
-  <!-- Plaza railing -->
-  <path d="M108 168 C184 216 326 218 406 168" fill="none" stroke="#c84b3d" stroke-width="10" stroke-linecap="round" opacity="0.56"/>
-  <!-- Railing posts -->
-  <g fill="#c84b3d" opacity="0.44">
-    <rect x="150" y="166" width="6" height="20" rx="2"/>
-    <rect x="210" y="180" width="6" height="20" rx="2"/>
-    <rect x="300" y="180" width="6" height="20" rx="2"/>
-    <rect x="360" y="166" width="6" height="20" rx="2"/>
-  </g>
-  <!-- Plaza podium -->
-  <path d="M128 130 H394 L376 168 H146Z" fill="#c84b3d" stroke="#2b2730" stroke-width="5" stroke-linejoin="round"/>
-  <path d="M136 130 H386" stroke="#7a3f32" stroke-width="7" stroke-linecap="round" opacity="0.32"/>
-  <!-- Podium decoration -->
-  <path d="M200 148 L260 140 L320 148" fill="none" stroke="#f2be63" stroke-width="4" stroke-linecap="round" opacity="0.26"/>
-  <!-- People silhouettes -->
-  <g fill="#2b2730" opacity="0.32">
-    <!-- Person 1 -->
-    <circle cx="154" cy="222" r="18"/>
-    <path d="M130 282 C134 244 174 244 180 282Z"/>
-    <!-- Person 2 -->
-    <circle cx="222" cy="240" r="18"/>
-    <path d="M198 300 C202 262 242 262 248 300Z"/>
-    <!-- Person 3 (child) -->
-    <circle cx="268" cy="250" r="12"/>
-    <path d="M250 296 C252 268 284 268 286 296Z"/>
-    <!-- Person 4 -->
-    <circle cx="292" cy="236" r="18"/>
-    <path d="M268 296 C272 258 312 258 318 296Z"/>
-    <!-- Person 5 -->
-    <circle cx="360" cy="218" r="18"/>
-    <path d="M336 280 C340 242 380 242 386 280Z"/>
-  </g>
-  <!-- Decorative garland -->
-  <path d="M168 190 C226 162 306 162 362 188" fill="none" stroke="#f5e8d3" stroke-width="6" stroke-linecap="round" opacity="0.50"/>
-  <!-- Flag accents -->
-  <g fill="#c84b3d" opacity="0.32">
-    <path d="M128 84 L158 80 L158 104 L128 108Z"/>
-    <path d="M372 88 L402 84 L402 108 L372 112Z"/>
-  </g>
-  <!-- Flag crescent -->
-  <g fill="#fff8e7" opacity="0.28">
-    <path d="M138 88 C142 84 150 84 154 88 C150 92 142 92 138 88Z"/>
-    <path d="M382 92 C386 88 394 88 398 92 C394 96 386 96 382 92Z"/>
-  </g>
-  <!-- Warm accent dots -->
-  <g fill="#f2be63" opacity="0.28">
-    <circle cx="260" cy="318" r="8"/>
-    <circle cx="128" cy="296" r="6"/>
-    <circle cx="394" cy="296" r="6"/>
-    <circle cx="260" cy="116" r="5"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="600" viewBox="0 0 700 600">
+  <metadata><slot_id>samsun.people_plaza</slot_id></metadata>
+  <!-- Shadow layer: ground shadows under statue pedestal, bench, tree base -->
+  <path d="M 280 510 L 420 510 L 430 525 L 270 525 Z M 440 515 L 560 515 L 565 525 L 435 525 Z M 120 505 L 240 505 L 248 525 L 112 525 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Scene: statue (pedestal+figure) + bench + tree — combined cream layer -->
+  <path d="M 305 490 L 395 490 L 395 468 L 382 468 L 382 428 L 370 428 L 370 408 L 362 408 L 358 388 C 354 368 350 348 354 326 C 358 306 368 294 352 272 C 342 256 330 260 324 276 C 316 296 320 318 326 338 L 328 362 L 322 382 L 318 408 L 308 408 L 308 428 L 295 428 L 295 468 L 282 468 L 282 490 Z M 448 492 L 558 492 L 558 480 L 552 480 L 552 458 L 454 458 L 454 480 L 448 480 Z M 552 468 L 568 468 L 568 492 L 552 492 Z M 448 468 L 464 468 L 464 492 L 448 492 Z M 130 448 C 128 388 148 336 178 304 C 198 282 220 276 232 282 C 248 290 254 314 248 344 C 242 370 226 392 220 418 L 214 448 Z M 178 304 C 172 282 182 260 194 254 C 206 248 218 256 222 268 C 230 284 226 306 218 318 C 206 334 188 328 182 316 Z M 222 268 C 234 252 250 246 262 252 C 274 260 274 278 266 290 C 254 304 236 300 228 288 Z M 136 448 L 226 448 L 230 468 L 132 468 Z" fill="#F5E8D3"/>
+  <!-- Statue gold accent: head glow + raised arm highlight -->
+  <path d="M 324 276 C 318 264 320 252 330 248 C 340 246 348 256 344 268 C 340 280 330 284 324 276 Z M 354 326 C 348 314 352 300 362 296 C 372 292 378 304 374 316 C 370 328 360 332 354 326 Z" fill="#FFB340" opacity="0.82"/>
+  <!-- NPC silhouette 1 — standing figure, left side of plaza -->
+  <path d="M 82 530 L 82 490 C 82 476 84 464 86 454 C 88 444 90 438 86 430 C 82 422 76 420 74 412 C 72 402 78 392 88 390 C 98 388 106 396 106 406 C 106 414 102 420 98 428 C 94 438 96 450 98 462 L 100 490 L 100 530 Z" fill="#2B2730"/>
+  <!-- NPC silhouette 2 — standing figure, right side of plaza -->
+  <path d="M 598 530 L 598 490 C 598 476 600 464 602 454 C 604 444 606 438 602 430 C 598 422 592 420 590 412 C 588 402 594 392 604 390 C 614 388 622 396 622 406 C 622 414 618 420 614 428 C 610 438 612 450 614 462 L 616 490 L 616 530 Z" fill="#2B2730"/>
 </svg>

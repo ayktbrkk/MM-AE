@@ -1,17 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="280" viewBox="0 0 420 280">
-  <ellipse cx="210" cy="226" rx="142" ry="30" fill="#111c2a" opacity=".20"/>
-  <path d="M74 188 C118 96 300 96 346 188 C300 238 124 238 74 188Z" fill="#d9c7ff" opacity=".34"/>
-  <path d="M102 178 C138 118 282 118 318 178" fill="none" stroke="#7f5ad8" stroke-width="16" stroke-linecap="round" opacity=".48"/>
-  <path d="M130 176 C158 142 262 142 290 176" fill="none" stroke="#8be6ff" stroke-width="12" stroke-linecap="round" opacity=".55"/>
-  <path d="M102 178 C156 218 264 218 318 178" fill="none" stroke="#f3cd63" stroke-width="10" stroke-linecap="round" opacity=".52"/>
-  <g fill="#74d2ee" opacity=".82">
-    <path d="M128 70 L150 112 L124 150 L102 110Z"/>
-    <path d="M292 70 L318 108 L296 150 L270 112Z"/>
-    <path d="M206 44 L236 96 L210 150 L180 96Z"/>
-  </g>
-  <g fill="#fff3bf" opacity=".76">
-    <circle cx="102" cy="176" r="10"/>
-    <circle cx="318" cy="176" r="10"/>
-    <circle cx="210" cy="152" r="9"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- Layer 1: Shadow -->
+  <path d="M 155 390 L 155 200 C 155 80 445 80 445 200 L 445 390 L 415 390 L 415 210 C 415 115 185 115 185 210 L 185 390 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Layer 2: Left and right pillars + arch (main turquoise shape) -->
+  <path d="M 140 390 L 140 195 C 140 60 460 60 460 195 L 460 390 L 420 390 L 420 205 C 420 105 180 105 180 205 L 180 390 Z" fill="#067078"/>
+  <!-- Layer 3: Wave decoration on arch top -->
+  <path d="M 180 205 C 180 105 420 105 420 205 C 420 185 390 175 360 185 C 330 195 310 175 300 170 C 290 175 270 195 240 185 C 210 175 180 185 180 205 Z" fill="#F5E8D3" opacity="0.72"/>
+  <!-- Layer 4: Gold accent band on pillar tops -->
+  <path d="M 140 195 L 180 195 L 180 215 L 140 215 Z M 420 195 L 460 195 L 460 215 L 420 215 Z" fill="#FFB340" opacity="0.85"/>
+  <!-- Layer 5: Outline -->
+  <path d="M 140 390 L 140 195 C 140 60 460 60 460 195 L 460 390 L 420 390 L 420 205 C 420 105 180 105 180 205 L 180 390 Z" fill="none" stroke="#2B2730" stroke-width="10"/>
 </svg>

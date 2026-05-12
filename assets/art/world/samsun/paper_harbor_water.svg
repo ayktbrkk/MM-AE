@@ -1,13 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360">
-  <path d="M34 132 C146 54 302 64 414 90 C524 116 604 82 688 126 L688 286 C520 326 226 326 34 274Z" fill="#72cddb" opacity=".58"/>
-  <path d="M44 150 C158 104 282 110 414 132 C530 150 602 128 674 152" fill="none" stroke="#effcfa" stroke-width="14" stroke-linecap="round" opacity=".42"/>
-  <path d="M58 210 C176 176 294 182 418 202 C520 218 604 204 660 214" fill="none" stroke="#effcfa" stroke-width="11" stroke-linecap="round" opacity=".34"/>
-  <path d="M92 258 C222 284 430 286 618 258" fill="none" stroke="#1d6c7b" stroke-width="12" stroke-linecap="round" opacity=".22"/>
-  <g fill="#fff8d9" opacity=".72">
-    <ellipse cx="168" cy="154" rx="28" ry="7"/>
-    <ellipse cx="322" cy="126" rx="34" ry="8"/>
-    <ellipse cx="520" cy="170" rx="30" ry="7"/>
-    <ellipse cx="260" cy="236" rx="28" ry="7"/>
-    <ellipse cx="464" cy="242" rx="36" ry="8"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <!-- Katman 1: Gölge — koyu deniz tabanı -->
+  <path d="M0 0 L900 0 L900 600 L0 600 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Katman 2: Derin su bandı — en altta, en opak -->
+  <path d="M0 320 C150 295 300 310 450 300 C600 290 750 305 900 295 L900 600 L0 600 Z" fill="#067078" opacity="0.80"/>
+  <!-- Katman 3: Orta su bandı -->
+  <path d="M0 200 C120 180 250 195 400 185 C550 175 700 190 900 178 L900 420 C750 432 600 418 450 428 C300 438 150 422 0 435 Z" fill="#067078" opacity="0.60"/>
+  <!-- Katman 4: Yüzey bandı — en üstte, en şeffaf -->
+  <path d="M0 80 C100 60 220 75 360 65 C500 55 660 70 900 58 L900 260 C660 272 500 257 360 267 C220 277 100 262 0 275 Z" fill="#067078" opacity="0.40"/>
+  <!-- Katman 5: Dalga vurgusu — yüzey parıltısı -->
+  <path d="M0 120 C80 108 180 116 300 110 C420 104 540 112 660 106 C760 101 840 108 900 104 L900 130 C840 134 760 127 660 133 C540 139 420 131 300 137 C180 143 80 135 0 142 Z" fill="#F5E8D3" opacity="0.18"/>
 </svg>

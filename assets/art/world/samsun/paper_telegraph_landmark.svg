@@ -1,15 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="380" height="360" viewBox="0 0 380 360">
-  <ellipse cx="190" cy="302" rx="126" ry="30" fill="#1b2630" opacity=".18"/>
-  <path d="M164 72 H216 L206 292 H174Z" fill="#7b5a3d"/>
-  <path d="M158 72 H222" stroke="#2b2723" stroke-width="12" stroke-linecap="round" opacity=".38"/>
-  <path d="M94 112 H286" stroke="#60442e" stroke-width="18" stroke-linecap="round"/>
-  <path d="M112 138 H268" stroke="#ead39a" stroke-width="10" stroke-linecap="round"/>
-  <path d="M76 112 C126 42 254 42 304 112" fill="none" stroke="#58bfe0" stroke-width="8" stroke-linecap="round" opacity=".55"/>
-  <path d="M76 112 C132 174 246 174 304 112" fill="none" stroke="#58bfe0" stroke-width="7" stroke-linecap="round" opacity=".35"/>
-  <circle cx="96" cy="112" r="18" fill="#f7e5b1" stroke="#443529" stroke-width="7"/>
-  <circle cx="284" cy="112" r="18" fill="#f7e5b1" stroke="#443529" stroke-width="7"/>
-  <path d="M142 292 H238 L264 324 H116Z" fill="#f1d89d"/>
-  <path d="M144 292 H236" stroke="#3a2f28" stroke-width="9" stroke-linecap="round" opacity=".35"/>
-  <path d="M190 42 C214 56 230 76 238 100" fill="none" stroke="#eac85d" stroke-width="7" stroke-linecap="round" opacity=".75"/>
-  <path d="M190 28 C232 52 254 82 264 122" fill="none" stroke="#eac85d" stroke-width="5" stroke-linecap="round" opacity=".45"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="600" viewBox="0 0 500 600">
+  <metadata><slot_id>samsun.telegraph_landmark</slot_id></metadata>
+  <!-- Shadow: telegraph pole shadow + building shadow + flagpole shadow -->
+  <path d="M 178 580 L 198 580 L 198 40 L 178 40 Z M 260 580 L 430 580 L 430 390 L 345 345 L 260 390 Z M 440 580 L 452 580 L 452 310 L 440 310 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Telegraph pole: tall shaft y=20..580 (height=560), three crossarms with insulator knobs -->
+  <path d="M 155 580 L 175 580 L 175 20 L 155 20 Z M 120 95 L 210 95 L 210 85 L 120 85 Z M 120 90 L 125 90 L 125 80 L 120 80 Z M 205 90 L 210 90 L 210 80 L 205 80 Z M 120 175 L 210 175 L 210 165 L 120 165 Z M 120 170 L 125 170 L 125 160 L 120 160 Z M 205 170 L 210 170 L 210 160 L 205 160 Z M 120 255 L 210 255 L 210 245 L 120 245 Z M 120 250 L 125 250 L 125 240 L 120 240 Z M 205 250 L 210 250 L 210 240 L 205 240 Z M 163 20 L 163 85 Z M 163 95 L 163 165 Z M 163 175 L 163 245 Z" fill="#2B2730"/>
+  <!-- Small building: height=200px (max 50% of 560=280), base at y=380..580, width 170px -->
+  <path d="M 240 580 L 410 580 L 410 380 L 325 335 L 240 380 Z M 280 580 L 280 440 L 310 440 L 310 580 Z M 340 580 L 340 440 L 370 440 L 370 580 Z M 248 392 L 402 392 L 402 380 L 248 380 Z M 290 460 L 300 460 L 300 480 L 290 480 Z M 350 460 L 360 460 L 360 480 L 350 480 Z" fill="#F5E8D3" stroke="#2B2730" stroke-width="10"/>
+  <!-- Flagpole: shaft y=310..580 (height=270, shorter than pole), flag pennant -->
+  <path d="M 425 580 L 437 580 L 437 310 L 425 310 Z M 437 310 L 490 332 L 437 354 Z" fill="#067078"/>
 </svg>

@@ -1,22 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="620" height="360" viewBox="0 0 620 360">
-  <path d="M54 224 C146 132 274 116 386 154 C464 180 522 178 574 146 L574 302 L54 302Z" fill="#d7dca8" opacity=".52"/>
-  <path d="M72 220 C160 162 272 148 380 174 C458 194 520 190 560 164" fill="none" stroke="#fff8d9" stroke-width="13" stroke-linecap="round" opacity=".42"/>
-  <g stroke="#4d382b" stroke-width="9" stroke-linecap="round">
-    <path d="M174 140 V274"/>
-    <path d="M330 120 V274"/>
-    <path d="M482 132 V274"/>
-  </g>
-  <g stroke="#4d382b" stroke-width="12" stroke-linecap="round" opacity=".68">
-    <path d="M138 166 H210"/>
-    <path d="M294 146 H366"/>
-    <path d="M446 158 H518"/>
-  </g>
-  <path d="M138 166 C220 96 398 92 518 158" fill="none" stroke="#58bfe0" stroke-width="7" stroke-linecap="round" opacity=".54"/>
-  <path d="M138 166 C236 236 412 232 518 158" fill="none" stroke="#58bfe0" stroke-width="6" stroke-linecap="round" opacity=".32"/>
-  <g fill="#eac85d" opacity=".70">
-    <circle cx="174" cy="118" r="8"/>
-    <circle cx="330" cy="98" r="8"/>
-    <circle cx="482" cy="110" r="8"/>
-  </g>
-  <path d="M92 300 C220 328 432 326 564 300" fill="none" stroke="#5b3f2f" stroke-width="10" stroke-linecap="round" opacity=".16"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400">
+  <!-- Layer 1: Shadow base -->
+  <path d="M 0 400 L 0 280 C 40 275 80 265 120 258 C 160 251 200 248 240 245 C 280 242 320 240 360 238 C 400 236 440 235 500 234 L 500 400 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Layer 2: Distant ridge silhouette -->
+  <path d="M 0 400 L 0 290 C 30 282 60 272 100 264 C 130 258 160 252 200 248 C 230 245 255 242 280 238 C 310 233 340 228 370 224 C 400 220 440 218 500 216 L 500 400 Z" fill="#067078" opacity="0.50"/>
+  <!-- Layer 3: Signal/telegraph tower on ridge peak -->
+  <path d="M 278 238 L 274 180 L 272 140 L 270 100 L 268 140 L 266 180 L 262 238 Z M 270 100 L 255 130 L 270 125 Z M 270 100 L 285 130 L 270 125 Z M 258 160 L 282 160 L 282 165 L 258 165 Z M 260 185 L 280 185 L 280 190 L 260 190 Z" fill="#2B2730" opacity="0.62"/>
+  <!-- Layer 4: Highlight accent on ridge crest -->
+  <path d="M 180 252 C 210 246 240 242 270 238 C 300 234 330 230 360 226 C 390 222 430 220 480 218 L 500 216 L 500 222 C 460 224 420 226 390 230 C 360 234 330 238 300 242 C 270 246 240 250 210 254 C 195 257 185 258 180 258 Z" fill="#F5E8D3" opacity="0.40"/>
 </svg>

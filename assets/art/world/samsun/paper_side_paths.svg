@@ -1,21 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="720" viewBox="0 0 900 720">
-  <path d="M452 560 C416 470 396 394 430 312 C456 248 506 216 492 150" fill="none" stroke="#5b3f2f" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/>
-  <path d="M452 560 C416 470 396 394 430 312 C456 248 506 216 492 150" fill="none" stroke="#f8e9c6" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" opacity=".74"/>
-  <path d="M430 312 C340 274 236 270 132 316" fill="none" stroke="#5b3f2f" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" opacity=".16"/>
-  <path d="M430 312 C340 274 236 270 132 316" fill="none" stroke="#f7e3b2" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" opacity=".70"/>
-  <path d="M456 268 C560 228 664 228 768 286" fill="none" stroke="#5b3f2f" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" opacity=".16"/>
-  <path d="M456 268 C560 228 664 228 768 286" fill="none" stroke="#f7e3b2" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" opacity=".70"/>
-  <path d="M430 424 C348 464 290 526 250 620" fill="none" stroke="#5b3f2f" stroke-width="46" stroke-linecap="round" opacity=".15"/>
-  <path d="M430 424 C348 464 290 526 250 620" fill="none" stroke="#f9e8bf" stroke-width="34" stroke-linecap="round" opacity=".68"/>
-  <g fill="#d8b778" opacity=".66">
-    <ellipse cx="330" cy="290" rx="18" ry="7"/>
-    <ellipse cx="610" cy="244" rx="18" ry="7"/>
-    <ellipse cx="358" cy="494" rx="16" ry="7"/>
-    <ellipse cx="424" cy="372" rx="15" ry="7"/>
-  </g>
-  <g fill="#fff8d9" opacity=".46">
-    <ellipse cx="180" cy="310" rx="24" ry="6"/>
-    <ellipse cx="750" cy="280" rx="26" ry="6"/>
-    <ellipse cx="262" cy="606" rx="22" ry="6"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <!-- Shadow layer: path network shadow -->
+  <path d="M600 600 C580 520 548 460 510 400 C472 340 440 290 420 220 C400 150 410 90 430 30 M420 220 C360 200 280 196 200 220 C140 238 80 270 20 300 M510 400 C460 420 390 450 320 490 C260 524 200 560 140 600 M510 400 C570 420 650 440 730 460 C810 480 900 490 1000 480 C1080 472 1140 450 1180 420" fill="none" stroke="#10202d" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" opacity="0.22"/>
+  <!-- Main path: central winding dirt road -->
+  <path d="M600 600 C580 520 548 460 510 400 C472 340 440 290 420 220 C400 150 410 90 430 30" fill="none" stroke="#F5E8D3" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" opacity="0.86"/>
+  <!-- Branch left: side path branching left toward coast -->
+  <path d="M420 220 C360 200 280 196 200 220 C140 238 80 270 20 300" fill="none" stroke="#F5E8D3" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" opacity="0.72"/>
+  <!-- Branch lower-left: path descending toward harbor -->
+  <path d="M510 400 C460 420 390 450 320 490 C260 524 200 560 140 600" fill="none" stroke="#F5E8D3" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" opacity="0.68"/>
+  <!-- Branch right: path branching toward telegraph ridge -->
+  <path d="M510 400 C570 420 650 440 730 460 C810 480 900 490 1000 480 C1080 472 1140 450 1180 420" fill="none" stroke="#F5E8D3" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" opacity="0.64"/>
 </svg>

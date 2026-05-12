@@ -1,28 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="620" height="420" viewBox="0 0 620 420">
-  <ellipse cx="310" cy="354" rx="240" ry="42" fill="#1a2a3a" opacity=".18"/>
-  <path d="M80 250 C140 182 250 158 360 174 C464 190 536 238 554 306 C420 346 210 342 80 250Z" fill="#f2dfb0" opacity=".72"/>
-  <g stroke="#26343d" stroke-width="8" stroke-linejoin="round" opacity=".32">
-    <path d="M112 236 L180 178 L248 236 Z" fill="#e9c780"/>
-    <path d="M236 220 L312 152 L390 220 Z" fill="#dfd5a4"/>
-    <path d="M394 244 L466 184 L538 244 Z" fill="#e7b96f"/>
-  </g>
-  <g>
-    <path d="M126 236 H236 V316 H126Z" fill="#f8e9c6"/>
-    <path d="M254 220 H374 V318 H254Z" fill="#f6e2b7"/>
-    <path d="M412 244 H526 V318 H412Z" fill="#f9e6bc"/>
-    <path d="M112 236 L180 178 L248 236Z" fill="#c9473d"/>
-    <path d="M236 220 L312 152 L390 220Z" fill="#47b2c2"/>
-    <path d="M394 244 L466 184 L538 244Z" fill="#d99b45"/>
-  </g>
-  <g fill="#30434a" opacity=".72">
-    <rect x="158" y="266" width="24" height="50" rx="4"/>
-    <rect x="300" y="252" width="28" height="64" rx="4"/>
-    <rect x="456" y="272" width="24" height="44" rx="4"/>
-  </g>
-  <g fill="#b7d99b">
-    <circle cx="90" cy="244" r="28"/><rect x="84" y="260" width="12" height="44" rx="4" fill="#7b5a3d"/>
-    <circle cx="556" cy="252" r="30"/><rect x="550" y="268" width="12" height="42" rx="4" fill="#7b5a3d"/>
-    <circle cx="374" cy="136" r="22"/><rect x="369" y="150" width="10" height="36" rx="4" fill="#7b5a3d"/>
-  </g>
-  <path d="M116 334 C226 364 410 364 526 332" fill="none" stroke="#fff5cf" stroke-width="10" stroke-linecap="round" opacity=".48"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400">
+  <!-- Shadow layer -->
+  <path d="M 60 390 L 60 220 L 110 220 L 110 190 L 140 190 L 140 160 L 170 160 L 170 190 L 200 190 L 200 220 L 230 220 L 230 390 Z M 240 390 L 240 230 L 290 230 L 290 200 L 320 200 L 320 170 L 340 150 L 360 170 L 360 200 L 390 200 L 390 230 L 440 230 L 440 390 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Left civic building — rectangular Ottoman-style with flat parapet -->
+  <path d="M 70 385 L 70 225 L 115 225 L 115 195 L 145 195 L 145 165 L 175 165 L 175 195 L 205 195 L 205 225 L 225 225 L 225 385 Z" fill="#F5E8D3"/>
+  <!-- Right civic building — taller with pointed arch roofline -->
+  <path d="M 250 385 L 250 235 L 295 235 L 295 205 L 325 205 L 325 175 L 345 155 L 365 175 L 365 205 L 395 205 L 395 235 L 435 235 L 435 385 Z" fill="#F5E8D3"/>
+  <!-- Accent details — windows and door arches on both buildings -->
+  <path d="M 100 340 L 100 300 Q 115 285 130 300 L 130 340 Z M 165 340 L 165 300 Q 180 285 195 300 L 195 340 Z M 280 345 L 280 305 Q 295 290 310 305 L 310 345 Z M 370 345 L 370 305 Q 385 290 400 305 L 400 345 Z M 320 235 L 320 200 Q 345 185 370 200 L 370 235 Z" fill="#067078" opacity="0.55"/>
+  <!-- Ink outline for both buildings -->
+  <path d="M 70 385 L 70 225 L 115 225 L 115 195 L 145 195 L 145 165 L 175 165 L 175 195 L 205 195 L 205 225 L 225 225 L 225 385 M 250 385 L 250 235 L 295 235 L 295 205 L 325 205 L 325 175 L 345 155 L 365 175 L 365 205 L 395 205 L 395 235 L 435 235 L 435 385" fill="none" stroke="#2B2730" stroke-width="9"/>
 </svg>

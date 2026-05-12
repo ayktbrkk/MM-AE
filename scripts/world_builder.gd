@@ -63,6 +63,21 @@ func clear_world(world_root: Node) -> void:
 	for child in world_root.get_node("Markers").get_children():
 		child.queue_free()
 	
+	# Gereksinim 13.5: "paperworld.samsun_" önekiyle set_meta("asset_slot", ...) ile
+	# işaretlenmiş Samsun node'larını queue_free() ile serbest bırak.
+	# Yukarıdaki döngüler tüm çocukları temizlediğinden bu node'lar zaten serbest
+	# bırakılmaktadır. Aşağıdaki blok, bu gereksinimi açıkça karşılamak için
+	# ek bir güvenlik katmanı olarak çalışır (örn. node'lar farklı bir parent
+	# altında olsa bile).
+	var samsun_containers: Array[Node] = [props, foreground_props, world_root.get_node("Markers")]
+	for container in samsun_containers:
+		for child in container.get_children():
+			if child.has_meta("asset_slot"):
+				var slot: String = child.get_meta("asset_slot")
+				if slot.begins_with("paperworld.samsun_"):
+					if not child.is_queued_for_deletion():
+						child.queue_free()
+	
 	world_cleared.emit()
 
 
@@ -382,9 +397,9 @@ func _add_samsun_ground_plates(world_root: Node) -> void:
 
 
 func _build_samsun_rift(world_root: Node) -> void:
-	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.04, 0.11, 0.22))
-	_add_samsun_ground_plates(world_root)
+	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, _colors.THEME_SAMSUN["bg"])
 	_decorate_samsun_rift(world_root)
+	emit_signal("world_built", "samsun_rift")
 
 
 # ============================================================
@@ -1545,9 +1560,18 @@ func _decorate_samsun_diorama_pilot(world_root: Node) -> void:
 	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1260, 340), Vector2(0.92, 0.92), Color(0.72, 0.98, 1.0, 0.12))
 	_add_samsun_foreground_silhouettes()
 
+	# Harbor landmark — başlangıç noktası (POP_GOLD)
+	_add_soft_blob(_cached_world_root, Vector2(360, 760), Vector2(100, 60), _colors.POP_GOLD, 20, 0.0, false, -2)
+	# Telegraph landmark — durak noktası (RIFT_BLUE)
+	_add_soft_blob(_cached_world_root, Vector2(1190, 770), Vector2(100, 60), _colors.RIFT_BLUE, 20, 0.0, false, -2)
+	# People plaza — görev noktası (POP_CRIMSON)
+	_add_soft_blob(_cached_world_root, Vector2(530, 1455), Vector2(110, 65), _colors.POP_CRIMSON, 20, 0.0, false, -2)
+
 
 func _decorate_samsun_rift(world_root: Node) -> void:
 	_decorate_samsun_diorama_pilot(world_root)
+	# Rift core ışıltısı — paper_rift_core.svg konumu (800, 980), statik glow
+	_add_soft_blob(_cached_world_root, Vector2(800, 980), Vector2(120, 80), _colors.RIFT_BLUE, 20, 0.0, false, -2)
 
 
 # ============================================================

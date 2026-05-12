@@ -1,20 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" viewBox="0 0 760 520">
-  <g transform="translate(78 60)">
-    <ellipse cx="112" cy="150" rx="94" ry="24" fill="#1a2a3a" opacity=".14"/>
-    <path d="M52 82 H156 L176 142 H36Z" fill="#e8c55a"/>
-    <path d="M58 76 H150 L166 96 H42Z" fill="#f8e9c6"/>
-    <path d="M76 50 H136 L152 78 H60Z" fill="#c9473d"/>
-    <path d="M76 108 H136" stroke="#5b3f2f" stroke-width="8" stroke-linecap="round" opacity=".34"/>
-    <circle cx="64" cy="144" r="12" fill="#47b2c2"/>
-    <circle cx="154" cy="144" r="12" fill="#47b2c2"/>
-  </g>
-  <g transform="translate(472 282)">
-    <ellipse cx="92" cy="136" rx="86" ry="22" fill="#1a2a3a" opacity=".14"/>
-    <path d="M44 72 C72 40 124 42 148 76 L132 132 H58Z" fill="#b7d99b"/>
-    <path d="M66 52 C84 34 112 34 130 54" fill="none" stroke="#fff8d9" stroke-width="8" stroke-linecap="round" opacity=".48"/>
-    <path d="M92 42 V126" stroke="#7b5a3d" stroke-width="10" stroke-linecap="round"/>
-    <path d="M58 104 C82 116 112 116 136 104" fill="none" stroke="#c9473d" stroke-width="8" stroke-linecap="round" opacity=".55"/>
-    <circle cx="136" cy="80" r="10" fill="#e8c55a"/>
-  </g>
-  <path d="M260 240 C326 204 414 208 480 250" fill="none" stroke="#f8e9c6" stroke-width="18" stroke-linecap="round" opacity=".28"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <!-- Shadow layer -->
+  <path d="M 60 340 L 220 340 L 220 355 L 60 355 Z M 255 335 L 355 335 L 355 355 L 255 355 Z M 400 340 L 520 340 L 520 355 L 400 355 Z" fill="#10202d" opacity="0.22"/>
+  <!-- Wooden crate (left) — body + lid + cross-brace -->
+  <path d="M 65 240 L 215 240 L 215 340 L 65 340 Z M 55 230 L 225 230 L 225 250 L 55 250 Z M 65 240 L 65 340 M 215 240 L 215 340 M 140 240 L 140 340 M 65 290 L 215 290" fill="#F5E8D3" stroke="#2B2730" stroke-width="9"/>
+  <!-- Milestone stone marker (center) -->
+  <path d="M 270 180 C 270 160 290 145 305 145 C 320 145 340 160 340 180 L 340 335 L 270 335 Z" fill="#067078"/>
+  <!-- Lantern (right) — body + top cap + glow window -->
+  <path d="M 415 210 L 505 210 L 505 330 L 415 330 Z M 405 200 L 515 200 L 515 215 L 405 215 Z M 455 195 L 465 175 L 465 195 Z M 425 225 L 495 225 L 495 315 L 425 315 Z" fill="#FFB340" stroke="#2B2730" stroke-width="9"/>
+  <!-- Lantern glow window inner light -->
+  <path d="M 435 235 L 485 235 L 485 305 L 435 305 Z" fill="#F5E8D3" opacity="0.65"/>
 </svg>
