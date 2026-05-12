@@ -574,6 +574,74 @@ func transition_to(zone: String) -> void:
 			ui_mod.play_dream_transition(Callable(self, "_setup_final"))
 
 
+func restore_saved_zone(zone: String) -> void:
+	"""Kaydedilmiş zone'u overlay ve state reseti yapmadan yeniden kur."""
+	var builder: Node = _get_builder()
+	var marker_node: Node = _get_marker()
+	var state: Node = _get_state()
+	var player_mod: Node = _get_player_mod()
+	if builder == null or marker_node == null or state == null or player_mod == null:
+		return
+
+	clear_world()
+	_current_event_index = 0
+	_is_event_chain_active = false
+
+	match zone:
+		"room":
+			builder.build_world("room", _world)
+			marker_node.spawn_markers("room", _world)
+			state.set_zone("room")
+		"bandirma", "ship":
+			builder.build_world("ship", _world)
+			marker_node.spawn_markers("ship", _world)
+			player_mod.target_position = _setup_player_position(Vector2(520, 760), Vector2(660, 820))
+			state.set_zone("ship")
+		"samsun_rift":
+			builder.build_world("samsun_rift", _world)
+			_setup_samsun_rift_after_build()
+			marker_node.spawn_markers("samsun_rift", _world)
+			player_mod.target_position = _setup_player_position(Vector2(800, 1070), Vector2(930, 1160))
+			state.set_zone("samsun_rift")
+		"havza":
+			builder.build_world("havza", _world)
+			marker_node.spawn_markers("havza", _world)
+			player_mod.target_position = _setup_player_position(Vector2(760, 1180), Vector2(900, 1260))
+			state.set_zone("havza")
+		"amasya":
+			builder.build_world("amasya", _world)
+			marker_node.spawn_markers("amasya", _world)
+			player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
+			state.set_zone("amasya")
+		"kongreler":
+			builder.build_world("kongreler", _world)
+			marker_node.spawn_markers("kongreler", _world)
+			player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
+			state.set_zone("kongreler")
+		"ankara":
+			builder.build_world("ankara", _world)
+			_setup_ankara_after_build()
+			marker_node.spawn_markers("ankara", _world)
+			player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
+			state.set_zone("ankara")
+		"sakarya":
+			builder.build_world("sakarya", _world)
+			_setup_sakarya_after_build()
+			marker_node.spawn_markers("sakarya", _world)
+			player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
+			state.set_zone("sakarya")
+		"final":
+			builder.build_world("final", _world)
+			_setup_final_after_build()
+			marker_node.spawn_markers("final", _world)
+			player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
+			state.set_zone("final")
+		_:
+			builder.build_world("room", _world)
+			marker_node.spawn_markers("room", _world)
+			state.set_zone("room")
+
+
 func _setup_bandirma() -> void:
 	"""Bandırma Vapuru sahnesini kur."""
 	var builder: Node = _get_builder()

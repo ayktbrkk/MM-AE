@@ -24,6 +24,9 @@ signal save_deleted()
 signal save_corrupted(path: String, error_message: String)
 signal settings_changed(key: String, value: Variant)
 
+# Runtime-only scene entry hint used to distinguish new game vs continue.
+var pending_entry_action: String = ""
+
 
 func save_game(data: Dictionary) -> bool:
 	"""Verilen Dictionary'yi JSON'a serialize ederek kaydeder.

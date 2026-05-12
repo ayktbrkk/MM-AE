@@ -299,6 +299,12 @@ func _current_chip_text() -> String:
 			return "Amasya Genelgesi"
 		"kongreler":
 			return "Kongreler"
+		"ankara":
+			return "Ankara: Meclis ve İrade"
+		"sakarya":
+			return "Sakarya ve Büyük Taarruz"
+		"final":
+			return "Final: Cumhuriyet"
 		_:
 			return "Sınav Gecesi"
 
@@ -1008,10 +1014,14 @@ func _save_game() -> void:
 	"""Oyun durumunu kaydet."""
 	var state: Node = _world.get_node("WorldState")
 	var player_mod: Node = _world.get_node("WorldPlayer")
+	var player_node: Node2D = _world.get_node("Player")
+	var companion_node: Node2D = _world.get_node("Companion")
 	var save_data: Dictionary = state.to_dict()
 
 	save_data["hero_name"] = player_mod.hero_name
 	save_data["current_chapter"] = _current_chip_text()
+	save_data["player_position"] = {"x": player_node.position.x, "y": player_node.position.y}
+	save_data["companion_position"] = {"x": companion_node.position.x, "y": companion_node.position.y}
 
 	SaveManager.save_game(save_data)
 

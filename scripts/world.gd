@@ -145,12 +145,7 @@ func _ready() -> void:
 	_connect_ui()
 
 	# 8. Oyun başlangıcı — karakter seçimi
-	if SaveManager.has_save():
-		print("[World] Kayit bulundu. Karakter secim ekrani gosteriliyor.")
-	_player_mod.reset_panel_for_character_choice()
-	_player_mod.set_character_choice_visible(true)
-	_state.set_goal("unit", "Karakterini seç. Sonra odada dolaşıp ünite notlarını topla ve rüya yolculuğunu başlat.")
-	_ui_mod.update_progress()
+	_enter_requested_flow()
 
 	# 9. Touch boyutları
 	interact_button.custom_minimum_size = Vector2(104, 104)
@@ -162,6 +157,64 @@ func _ready() -> void:
 	# 11. Idle animasyonlarını başlat
 	_player_mod.start_idle_animations()
 	_ui_mod.start_idle_animations()
+
+
+func _enter_requested_flow() -> void:
+	var entry_action := SaveManager.pending_entry_action
+	SaveManager.pending_entry_action = ""
+	if entry_action == "continue" and SaveManager.has_save():
+		if _restore_saved_game(SaveManager.load_game()):
+			print("[World] Kayit yuklendi, akış devam ettirildi.")
+			return
+	if SaveManager.has_save():
+		print("[World] Kayit bulundu. Yeni oyun karakter secim ekrani gosteriliyor.")
+	_player_mod.reset_panel_for_character_choice()
+	_player_mod.set_character_choice_visible(true)
+	_state.set_goal("unit", "Karakterini seç. Sonra odada dolaşıp ünite notlarını topla ve rüya yolculuğunu başlat.")
+	_ui_mod.update_progress()
+
+
+func _restore_saved_game(save_data: Dictionary) -> bool:
+	if save_data.is_empty():
+		return false
+
+	_state.from_dict(save_data)
+	_player_mod.apply_hero_selection(_state.selected_character)
+	_ui_mod.panel_mode = "character"
+	panel_mode = "character"
+	_zone_mod.restore_saved_zone(_state.current_zone)
+	_restore_saved_positions(save_data)
+	_ui_mod.update_objective(_state.current_goal_text)
+	_ui_mod.update_progress()
+	_ui_mod.refresh_minimap_markers()
+	interact_button.visible = true
+	interact_button.disabled = false
+	character_panel.visible = false
+	return true
+
+
+func _restore_saved_positions(save_data: Dictionary) -> void:
+	var player_pos := _vector2_from_save(save_data.get("player_position", {}), player.position)
+	var companion_pos := _vector2_from_save(save_data.get("companion_position", {}), companion.position)
+	player.position = player_pos
+	companion.position = companion_pos
+	_player_mod.target_position = player_pos
+	_player_mod.has_target = false
+
+
+func _vector2_from_save(raw_value: Variant, fallback: Vector2) -> Vector2:
+	if raw_value is Dictionary:
+		var point := raw_value as Dictionary
+		if point.has("x") and point.has("y"):
+			return Vector2(float(point.get("x", fallback.x)), float(point.get("y", fallback.y)))
+	return fallback
+
+
+func _on_hero_chosen(hero_name: String, companion_name: String) -> void:
+	var intro_text := "%s ve %s odadaki notlara yaklaşır. Önce ünite notlarını topla; ardından Bandırma yolculuğu başlayacak." % [hero_name, companion_name]
+	_state.set_goal("unit", intro_text)
+	_ui_mod.update_progress()
+	_ui_mod.show_dialogue(hero_name, intro_text, Callable())
 
 
 # ---------------------------------------------------------------------------

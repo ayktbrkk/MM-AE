@@ -57,6 +57,17 @@ func initialize(world: Node2D) -> void:
 
 func choose_hero(choice: String) -> void:
 	"""Karakter seçimi: texture'ları değiştir, UI'yi gizle, diyalog başlat."""
+	var companion_name := apply_hero_selection(choice)
+
+	# Diyalog gösterimi için world._ui_mod.show_dialogue çağrılacak
+	# world.gd aracılığıyla (orchestrator)
+	var world_script = _world
+	if world_script.has_method("_on_hero_chosen"):
+		world_script._on_hero_chosen(hero_name, companion_name)
+
+
+func apply_hero_selection(choice: String) -> String:
+	"""Seçili karaktere göre world sprite ve companion eşleşmesini kur."""
 	var state: Node = _world.get_node("WorldState")
 	var player_sprite: Sprite2D = _world.get_node("Player/PlayerSprite")
 	var companion_sprite: Sprite2D = _world.get_node("Companion/CompanionSprite")
@@ -70,15 +81,8 @@ func choose_hero(choice: String) -> void:
 	_sync_character_outline_textures()
 	_free_character_choice_identity_row()
 	_set_character_choice_visible(false)
-
-	# initialize companion reaction spots with correct companion name
 	_update_companion_reaction_spots_text(companion_name)
-
-	# Diyalog gösterimi için world._ui_mod.show_dialogue çağrılacak
-	# world.gd aracılığıyla (orchestrator)
-	var world_script = _world
-	if world_script.has_method("_on_hero_chosen"):
-		world_script._on_hero_chosen(hero_name, companion_name)
+	return companion_name
 
 
 func reset_panel_for_character_choice() -> void:

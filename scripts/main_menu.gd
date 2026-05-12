@@ -129,6 +129,7 @@ func _ready() -> void:
 	settings_button.pressed.connect(_on_settings_pressed)
 	settings_close_button.pressed.connect(_hide_settings_overlay)
 	dream_intro_overlay.intro_finished.connect(_open_world)
+	continue_button.disabled = not SaveManager.has_save()
 	# P2-13: Çıkış onay diyalogu
 	exit_button.pressed.connect(_on_exit_pressed)
 	_exit_dialog = preload("res://scenes/exit_confirm_overlay.tscn").instantiate()
@@ -387,6 +388,7 @@ func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radiu
 func _on_start_pressed() -> void:
 	if is_transitioning:
 		return
+	SaveManager.pending_entry_action = "start"
 	AudioManager.play_sfx("SFX_CLICK")
 	start_pressed.emit()
 	_begin_dream_intro("Kitap Açılıyor", "Arda ve Eda'nın gözleri ağırlaşır. Sayfalar dalga sesine dönüşürken Bandırma gecesi yaklaşır.")
@@ -394,6 +396,10 @@ func _on_start_pressed() -> void:
 func _on_continue_pressed() -> void:
 	if is_transitioning:
 		return
+	if not SaveManager.has_save():
+		continue_button.disabled = true
+		return
+	SaveManager.pending_entry_action = "continue"
 	AudioManager.play_sfx("SFX_CLICK")
 	continue_pressed.emit()
 	_begin_dream_intro("Rüya Yeniden Başlıyor", "Bandırma Vapuru sislerin arasından yeniden beliriyor. Tarih yolculuğu kaldığın duygudan devam ediyor.")
@@ -421,7 +427,7 @@ func _begin_dream_intro(title: String, body: String) -> void:
 
 func _set_menu_enabled(enabled: bool) -> void:
 	start_button.disabled = not enabled
-	continue_button.disabled = not enabled
+	continue_button.disabled = not enabled or not SaveManager.has_save()
 	settings_button.disabled = not enabled
 	settings_close_button.disabled = not enabled
 	exit_button.disabled = not enabled

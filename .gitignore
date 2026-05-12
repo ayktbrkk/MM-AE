@@ -37,3 +37,4 @@ builds/
 # Generated render artifacts
 artifacts/renders/**/*.png.import
 artifacts/renders/character_ui/
+artifacts/renders/flow_check/

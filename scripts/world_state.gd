@@ -18,6 +18,7 @@ var current_zone: String = "room" : set = _set_current_zone
 
 # Aktif hedef (world.gd'den taşındı: active_goal_kind)
 var current_goal_kind: String = "unit"
+var current_goal_text: String = ""
 
 # Koleksiyon item'ları (world.gd'den taşındı: collected_units, collected_ship_clues, vb.)
 var collected_items: Dictionary = {}
@@ -71,6 +72,7 @@ func _on_character_selected(char_name: String) -> void:
 # Hedef/goal belirleme (world.gd'den taşındı: _set_goal)
 func set_goal(kind: String, goal_text: String = "") -> void:
 	current_goal_kind = kind
+	current_goal_text = goal_text
 	state_changed.emit("goal_updated", {"kind": kind, "text": goal_text})
 
 # Item toplandı mı kontrolü
@@ -161,6 +163,7 @@ func to_dict() -> Dictionary:
 		"selected_character": selected_character,
 		"current_zone": current_zone,
 		"current_goal_kind": current_goal_kind,
+		"current_goal_text": current_goal_text,
 		"collected_items": collected_items.duplicate(),
 		"total_items_in_zone": total_items_in_zone.duplicate(),
 		"leadership_points": leadership_points,
@@ -181,6 +184,8 @@ func from_dict(data: Dictionary) -> void:
 		current_zone = data["current_zone"]
 	if data.has("current_goal_kind"):
 		current_goal_kind = data["current_goal_kind"]
+	if data.has("current_goal_text"):
+		current_goal_text = data["current_goal_text"]
 	if data.has("collected_items"):
 		collected_items = data["collected_items"].duplicate()
 	if data.has("total_items_in_zone"):
