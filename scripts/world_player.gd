@@ -445,11 +445,11 @@ func update_companion(delta: float) -> void:
 		facing_direction = player_velocity.normalized()
 	elif has_target and player_node.position.distance_to(target_position) > 8.0:
 		facing_direction = (target_position - player_node.position).normalized()
-	var follow_offset := Vector2(-facing_direction.x * 95.0, 92.0)
+	var follow_offset := Vector2(-facing_direction.x * 132.0, 116.0)
 	var desired_position := player_node.position + follow_offset
 	var distance := companion_node.position.distance_to(desired_position)
 	if distance > 520.0:
-		companion_node.position = player_node.position + Vector2(105, 96)
+		companion_node.position = player_node.position + Vector2(142, 122)
 	else:
 		var speed_factor: float = clamp(distance / 160.0, 0.35, 1.0)
 		companion_node.position = companion_node.position.lerp(desired_position, min(delta * (3.0 + speed_factor * 3.4), 1.0))

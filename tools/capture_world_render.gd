@@ -5,6 +5,7 @@ const DEFAULT_SCENE := "res://scenes/world.tscn"
 const DEFAULT_SIZE := Vector2i(923, 1287)
 const DEFAULT_ZONE := ""
 const READY_FRAME_LIMIT := 240
+const DEFAULT_CAMERA_ZOOM := Vector2.ZERO
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -12,8 +13,10 @@ func _initialize() -> void:
 	var scene_path := DEFAULT_SCENE
 	var viewport_size := DEFAULT_SIZE
 	var zone := DEFAULT_ZONE
+	var camera_zoom := DEFAULT_CAMERA_ZOOM
 	var world_only := false
 	var hide_hud := false
+	var hide_overlays := false
 	var hide_markers := false
 	var hide_actors := false
 	var hide_world_guides := false
@@ -35,10 +38,21 @@ func _initialize() -> void:
 			"--zone":
 				if index + 1 < args.size():
 					zone = args[index + 1]
+			"--zoom":
+				if index + 1 < args.size():
+					var zoom_parts := args[index + 1].split(",")
+					if zoom_parts.size() == 2:
+						camera_zoom = Vector2(zoom_parts[0].to_float(), zoom_parts[1].to_float())
+					else:
+						var uniform_zoom := args[index + 1].to_float()
+						if uniform_zoom > 0.0:
+							camera_zoom = Vector2(uniform_zoom, uniform_zoom)
 			"--world-only":
 				world_only = true
 			"--hide-hud":
 				hide_hud = true
+			"--hide-overlays":
+				hide_overlays = true
 			"--hide-markers":
 				hide_markers = true
 			"--hide-actors":
@@ -54,9 +68,9 @@ func _initialize() -> void:
 			"--hero":
 				if index + 1 < args.size():
 					hero = args[index + 1]
-	call_deferred("_capture", scene_path, output_path, viewport_size, zone, world_only, hide_hud, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
+	call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
 
-func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, world_only: bool, hide_hud: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
+func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, camera_zoom: Vector2, world_only: bool, hide_hud: bool, hide_overlays: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
 	var packed_scene := load(scene_path)
 	if packed_scene == null:
 		push_error("Could not load scene: %s" % scene_path)
@@ -75,9 +89,12 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 	_select_hero(scene, hero)
 	if zone != "":
 		await _configure_world_zone(scene, zone)
+	_apply_camera_zoom(scene, camera_zoom)
 	await _await_capture_ready(scene, zone)
 	if clean_export:
 		_apply_clean_export(scene)
+	if hide_overlays:
+		_hide_overlays(scene)
 	if world_only:
 		var canvas := scene.get_node_or_null("CanvasLayer")
 		if canvas != null:
@@ -114,6 +131,14 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 		return
 	print("Saved render: %s" % absolute_output)
 	quit()
+
+
+func _apply_camera_zoom(scene: Node, camera_zoom: Vector2) -> void:
+	if camera_zoom == Vector2.ZERO:
+		return
+	var camera: Camera2D = scene.get_node_or_null("Player/Camera2D")
+	if camera != null:
+		camera.zoom = camera_zoom
 
 
 func _select_hero(scene: Node, hero: String) -> void:
@@ -172,6 +197,25 @@ func _apply_clean_export(scene: Node) -> void:
 	var character_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
 	if character_panel != null:
 		character_panel.visible = false
+
+
+func _hide_overlays(scene: Node) -> void:
+	var world_ui := scene.get_node_or_null("WorldUI")
+	if world_ui != null:
+		var overlay_manager = world_ui.get("_overlay_manager")
+		if overlay_manager != null and overlay_manager.has_method("hide_all"):
+			overlay_manager.call("hide_all")
+	for path in [
+		"CanvasLayer/HUD/DialoguePanel",
+		"CanvasLayer/HUD/CharacterPanel",
+		"CanvasLayer/HUD/DialogueOverlay",
+		"CanvasLayer/HUD/DecisionOverlay",
+		"CanvasLayer/HUD/InfoCardOverlay",
+		"CanvasLayer/HUD/ChapterTransitionOverlay",
+	]:
+		var node := scene.get_node_or_null(path)
+		if node != null and node is CanvasItem:
+			(node as CanvasItem).visible = false
 
 
 func _hide_actor_visuals(scene: Node) -> void:
