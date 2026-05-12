@@ -1,32 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="520" height="760" viewBox="0 0 520 760">
-  <ellipse cx="252" cy="698" rx="176" ry="24" fill="#1a2a3a" opacity=".14"/>
-  <rect x="80" y="64" width="344" height="594" rx="28" fill="#7a5a42" stroke="#2b2730" stroke-width="10"/>
-  <g fill="#5b3f2f">
-    <rect x="116" y="184" width="272" height="16" rx="6"/>
-    <rect x="116" y="326" width="272" height="16" rx="6"/>
-    <rect x="116" y="468" width="272" height="16" rx="6"/>
-  </g>
-  <g stroke="#2b2730" stroke-width="5" stroke-linejoin="round">
-    <rect x="128" y="104" width="34" height="80" rx="5" fill="#d6674b"/>
-    <rect x="168" y="92" width="34" height="92" rx="5" fill="#f2be63"/>
-    <rect x="210" y="116" width="34" height="68" rx="5" fill="#47b2c2"/>
-    <rect x="270" y="102" width="72" height="70" rx="8" fill="#f5e8d3"/>
-    <rect x="132" y="238" width="92" height="68" rx="8" fill="#f5e8d3"/>
-    <rect x="246" y="218" width="34" height="90" rx="5" fill="#438a87"/>
-    <rect x="288" y="230" width="34" height="78" rx="5" fill="#e89863"/>
-    <rect x="330" y="246" width="34" height="62" rx="5" fill="#f2be63"/>
-    <rect x="142" y="380" width="34" height="76" rx="5" fill="#47b2c2"/>
-    <rect x="184" y="366" width="34" height="90" rx="5" fill="#d6674b"/>
-    <rect x="236" y="382" width="118" height="58" rx="10" fill="#f5e8d3"/>
-    <rect x="132" y="518" width="74" height="90" rx="8" fill="#f2be63"/>
-    <rect x="226" y="518" width="34" height="90" rx="5" fill="#438a87"/>
-    <rect x="268" y="532" width="34" height="76" rx="5" fill="#e89863"/>
-    <rect x="318" y="516" width="50" height="92" rx="7" fill="#f5e8d3"/>
-  </g>
-  <g fill="#fff8d9" opacity=".40">
-    <circle cx="356" cy="130" r="10"/>
-    <circle cx="184" cy="270" r="9"/>
-    <circle cx="336" cy="414" r="8"/>
-    <circle cx="158" cy="562" r="8"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 760">
+  <!-- Shadow -->
+  <path fill="#1a2a3a" opacity="0.20" d="M 30 40 L 490 40 L 510 760 L 10 760 Z"/>
+  <!-- Shelf body: walnut wooden bookshelf frame and shelves -->
+  <path fill="#7A5A42" d="
+    M 60 30 L 460 30 L 460 740 L 420 740 L 420 60 L 100 60 L 100 740 L 60 740 Z
+    M 60 240 L 460 240 L 460 270 L 60 270 Z
+    M 60 450 L 460 450 L 460 480 L 60 480 Z
+    M 60 660 L 460 660 L 460 690 L 60 690 Z
+    M 60 30 L 460 30 L 460 60 L 60 60 Z
+    M 60 710 L 460 710 L 460 740 L 60 740 Z
+  "/>
+  <!-- Books: cream book spine silhouettes on shelves using multi-subpath -->
+  <path fill="#F5E8D3" d="
+    M 110 80 L 140 80 L 140 238 L 110 238 Z
+    M 148 80 L 172 80 L 172 238 L 148 238 Z
+    M 180 80 L 210 80 L 210 238 L 180 238 Z
+    M 218 80 L 238 80 L 238 238 L 218 238 Z
+    M 246 80 L 280 80 L 280 238 L 246 238 Z
+    M 288 80 L 308 80 L 308 238 L 288 238 Z
+    M 316 80 L 350 80 L 350 238 L 316 238 Z
+    M 358 80 L 378 80 L 378 238 L 358 238 Z
+    M 386 80 L 418 80 L 418 238 L 386 238 Z
+    M 110 290 L 145 290 L 145 448 L 110 448 Z
+    M 153 290 L 178 290 L 178 448 L 153 448 Z
+    M 186 290 L 220 290 L 220 448 L 186 448 Z
+    M 228 290 L 252 290 L 252 448 L 228 448 Z
+    M 260 290 L 295 290 L 295 448 L 260 448 Z
+    M 303 290 L 325 290 L 325 448 L 303 448 Z
+    M 333 290 L 368 290 L 368 448 L 333 448 Z
+    M 376 290 L 418 290 L 418 448 L 376 448 Z
+    M 110 500 L 148 500 L 148 658 L 110 658 Z
+    M 156 500 L 182 500 L 182 658 L 156 658 Z
+    M 190 500 L 225 500 L 225 658 L 190 658 Z
+    M 233 500 L 258 500 L 258 658 L 233 658 Z
+    M 266 500 L 300 500 L 300 658 L 266 658 Z
+    M 308 500 L 332 500 L 332 658 L 308 658 Z
+    M 340 500 L 375 500 L 375 658 L 340 658 Z
+    M 383 500 L 418 500 L 418 658 L 383 658 Z
+  "/>
+  <!-- Accent book: highlighted gold book on middle shelf -->
+  <path fill="#F2BE63" opacity="0.85" d="
+    M 246 290 L 258 290 L 258 448 L 246 448 Z
+  "/>
 </svg>

@@ -305,7 +305,46 @@ func _add_open_world_start_asset_layer(world_root: Node) -> void:
 
 
 func _add_room_paper_asset_layer(world_root: Node) -> void:
-	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_WALL_TEXTURE, Vector2(800, 410), Vector2(1.0, 1.0), Color(1, 1, 1, 0.86), -6, "paperroom.wall_window", Vector2.ZERO, -2.0)
+	# Duvar arka planı — en uzak katman
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_WALL_TEXTURE,
+		Vector2(800, 410), Vector2(1.0, 1.0), Color(1, 1, 1, 0.86), -6,
+		"paperroom.wall_window", Vector2.ZERO, -2.0)
+	# Duvar hikaye çerçeveleri
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_WALL_STORY_TEXTURE,
+		Vector2(460, 320), Vector2(0.90, 0.90), Color(1, 1, 1, 0.78), -5,
+		"paperroom.wall_story", Vector2.ZERO, -1.8)
+	# Zemin yüzeyi
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_TERRAIN_TEXTURE,
+		Vector2(800, 1580), Vector2(1.05, 1.05), Color(1, 1, 1, 0.88), -9,
+		"paperroom.terrain", Vector2.ZERO, -3.0)
+	# Kitaplık — sol kenar
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_SHELF_TEXTURE,
+		Vector2(60, 900), Vector2(0.82, 0.82), Color(1, 1, 1, 0.84), -7,
+		"paperroom.shelf", Vector2.ZERO, -1.5)
+	# Masa eşyaları
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_DESK_CLUTTER_TEXTURE,
+		Vector2(1100, 1260), Vector2(0.78, 0.78), Color(1, 1, 1, 0.82), -4,
+		"paperroom.desk_clutter", Vector2.ZERO, -1.0)
+	# Çalışma köşesi
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_STUDY_NOOK_TEXTURE,
+		Vector2(860, 1280), Vector2(0.80, 0.80), Color(1, 1, 1, 0.86), -3,
+		"paperroom.study_nook", Vector2.ZERO, -0.8)
+	# Yatak
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_BED_TEXTURE,
+		Vector2(340, 1380), Vector2(0.84, 0.84), Color(1, 1, 1, 0.88), -4,
+		"paperroom.bed", Vector2.ZERO, -1.2)
+	# Halı
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_FLOOR_RUG_TEXTURE,
+		Vector2(800, 1620), Vector2(0.92, 0.92), Color(1, 1, 1, 0.76), -8,
+		"paperroom.floor_rug", Vector2.ZERO, -2.5)
+	# Kitap portalı — zaman yolculuğu geçiş noktası
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_BOOK_PORTAL_TEXTURE,
+		Vector2(800, 1100), Vector2(0.72, 0.72), Color(1, 1, 1, 0.92), -2,
+		"paperroom.book_portal", Vector2.ZERO, 0.5)
+	# Ön plan çerçeve — en yakın katman
+	_add_paper_cutout_asset(world_root, _textures.ROOM_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.10, 1.10), Color(1, 1, 1, 0.88), 4,
+		"paperroom.foreground_frame", Vector2.ZERO, 2.0)
 
 
 # ============================================================
@@ -351,6 +390,8 @@ func _snap_room_characters_to_floor(world_root: Node) -> void:
 func _build_room(world_root: Node) -> void:
 	_add_open_world_start_depth_pass(world_root)
 	_add_open_world_start_asset_layer(world_root)
+	_add_room_paper_asset_layer(world_root)
+	_add_room_depth_pass(world_root)
 	_snap_room_characters_to_floor(world_root)
 	_decorate_room(world_root)
 

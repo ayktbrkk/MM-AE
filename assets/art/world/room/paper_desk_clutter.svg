@@ -1,18 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="520" height="300" viewBox="0 0 520 300">
-  <ellipse cx="260" cy="246" rx="196" ry="24" fill="#1a2a3a" opacity=".12"/>
-  <g stroke="#7a5a42" stroke-width="6" stroke-linejoin="round">
-    <rect x="56" y="126" width="112" height="68" rx="8" fill="#f5e8d3"/>
-    <path d="M72 150 H144" stroke="#e89863" stroke-width="7" stroke-linecap="round"/>
-    <path d="M74 172 H132" stroke="#47b2c2" stroke-width="7" stroke-linecap="round"/>
-    <rect x="194" y="104" width="98" height="88" rx="10" fill="#20344f"/>
-    <rect x="210" y="120" width="66" height="42" rx="6" fill="#355d78"/>
-    <path d="M316 140 H420 L438 194 H300Z" fill="#f2be63"/>
-    <path d="M328 114 H408 L430 142 H306Z" fill="#f5e8d3"/>
-  </g>
-  <g fill="#ffd768">
-    <path d="M138 70 L152 84 L138 98 L124 84Z"/>
-    <path d="M394 70 L408 84 L394 98 L380 84Z"/>
-  </g>
-  <path d="M240 188 H306" stroke="#2b2730" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="448" cy="200" r="12" fill="#47b2c2" stroke="#2b2730" stroke-width="5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 300">
+  <!-- Layer 1: Shadow -->
+  <path fill="#2b2730" opacity="0.16" d="M 30 260 L 490 260 Q 500 268 490 275 L 30 275 Q 20 268 30 260 Z"/>
+  <!-- Layer 2: Books (stacked book silhouette, left side) -->
+  <path fill="#F5E8D3" d="M 40 200 L 40 255 L 180 255 L 180 200 Z M 50 190 L 50 202 L 170 202 L 170 190 Z M 55 178 L 55 192 L 165 192 L 165 178 Z M 60 168 L 60 180 L 160 180 L 160 168 Z M 42 255 L 42 260 L 178 260 L 178 255 Z"/>
+  <!-- Layer 3: Inkwell (ink bottle silhouette, center) -->
+  <path fill="#2B2730" d="M 230 195 L 225 200 L 220 240 Q 220 255 235 255 L 265 255 Q 280 255 280 240 L 275 200 L 270 195 Z M 235 185 L 235 197 L 265 197 L 265 185 Q 265 178 258 178 L 242 178 Q 235 178 235 185 Z M 245 170 L 245 180 L 255 180 L 255 170 Q 255 165 250 165 Q 245 165 245 170 Z"/>
+  <!-- Layer 4: Quill pen (feather quill silhouette, right side) -->
+  <path fill="#F2BE63" opacity="0.90" d="M 460 80 Q 480 60 490 50 Q 485 70 475 90 L 380 230 Q 375 240 370 245 L 360 255 Q 365 245 368 235 Z M 460 80 Q 450 95 440 110 L 368 235 Q 375 225 382 215 Z"/>
+  <!-- Layer 5: Desk surface accent (wooden desk surface detail) -->
+  <path fill="#7A5A42" opacity="0.70" d="M 0 265 L 520 265 L 520 300 L 0 300 Z M 0 265 Q 10 258 30 260 L 490 260 Q 510 258 520 265 Z"/>
 </svg>

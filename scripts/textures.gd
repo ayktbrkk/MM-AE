@@ -179,6 +179,7 @@ const ROOM_PAPER_BED_TEXTURE := preload("res://assets/art/world/room/paper_bed.s
 const ROOM_PAPER_WALL_STORY_TEXTURE := preload("res://assets/art/world/room/paper_wall_story.svg")
 const ROOM_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/room/paper_foreground_frame.svg")
 const ROOM_PAPER_DESK_CLUTTER_TEXTURE := preload("res://assets/art/world/room/paper_desk_clutter.svg")
+const ROOM_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/room/paper_terrain_room.svg")
 
 # ====================================
 # OPENING PAPER CUTOUT (özel asset)

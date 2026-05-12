@@ -1,18 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520">
-  <ellipse cx="336" cy="430" rx="258" ry="38" fill="#1a2a3a" opacity=".16"/>
-  <g stroke="#2b2730" stroke-width="9" stroke-linejoin="round">
-    <path d="M84 166 C92 120 134 96 190 106 L480 158 C566 174 612 220 602 288 L586 390 H92Z" fill="#7a5a42"/>
-    <path d="M132 176 C146 138 182 126 228 136 L478 182 C536 194 566 228 558 276 L546 348 H126Z" fill="#f5e8d3"/>
-    <path d="M124 278 H562 L546 388 H98Z" fill="#e89863"/>
-    <path d="M142 212 C190 188 260 196 308 232 C276 268 196 272 136 246Z" fill="#9dd3c8"/>
-    <path d="M318 232 C386 204 490 216 548 258 L534 326 C456 294 382 290 306 318Z" fill="#f2be63"/>
-  </g>
-  <g fill="#fff8d9" opacity=".50">
-    <circle cx="180" cy="218" r="10"/>
-    <circle cx="252" cy="228" r="8"/>
-    <circle cx="438" cy="256" r="9"/>
-    <circle cx="500" cy="282" r="8"/>
-  </g>
-  <path d="M138 386 V448" stroke="#5b3f2f" stroke-width="18" stroke-linecap="round"/>
-  <path d="M548 386 V448" stroke="#5b3f2f" stroke-width="18" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520">
+  <!-- Shadow -->
+  <path fill="#1a2a3a" opacity="0.20" d="M 80 460 L 80 480 Q 80 490 90 490 L 630 490 Q 640 490 640 480 L 640 460 Q 560 472 360 472 Q 160 472 80 460 Z"/>
+  <!-- Bed frame: headboard + footboard + side rails + legs -->
+  <path fill="#7A5A42" d="M 100 120 L 100 100 Q 100 80 120 80 L 220 80 Q 240 80 240 100 L 240 120 L 240 440 L 220 440 L 220 460 L 200 460 L 200 440 L 140 440 L 140 460 L 120 460 L 120 440 L 100 440 Z M 480 160 L 480 140 Q 480 130 490 130 L 600 130 Q 610 130 610 140 L 610 160 L 620 160 L 620 440 L 600 440 L 600 460 L 580 460 L 580 440 L 520 440 L 520 460 L 500 460 L 500 440 L 480 440 Z M 240 160 L 480 160 L 480 180 L 240 180 Z M 240 420 L 480 420 L 480 440 L 240 440 Z"/>
+  <!-- Bedding / mattress -->
+  <path fill="#F5E8D3" d="M 240 180 L 480 180 L 480 420 L 240 420 Z M 100 180 L 240 180 L 240 420 L 100 420 Z M 480 180 L 620 180 L 620 420 L 480 420 Z"/>
+  <!-- Pillow -->
+  <path fill="#E89863" opacity="0.80" d="M 110 195 Q 110 185 120 185 L 230 185 Q 240 185 240 195 L 240 270 Q 240 280 230 280 L 120 280 Q 110 280 110 270 Z"/>
 </svg>
