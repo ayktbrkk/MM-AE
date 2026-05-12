@@ -99,13 +99,13 @@ mouse_filter = 2
 color = Color(0.95, 0.66, 0.35, 0.55)
 
 [node name="CharacterRow" type="HBoxContainer" parent="Center/DecisionPanel/DecisionMargin/DecisionContent"]
-custom_minimum_size = Vector2(0, 420)
+custom_minimum_size = Vector2(0, 460)
 layout_mode = 2
 theme_override_constants/separation = 22
 
 [node name="ArdaGlow" type="ColorRect" parent="Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow"]
 visible = false
-custom_minimum_size = Vector2(0, 320)
+custom_minimum_size = Vector2(0, 360)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -129,10 +129,10 @@ alignment = 1
 theme_override_constants/separation = 12
 
 [node name="Portrait" type="TextureRect" parent="Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard/CardMargin/CardContent"]
-custom_minimum_size = Vector2(0, 230)
+custom_minimum_size = Vector2(0, 270)
 layout_mode = 2
 size_flags_vertical = 3
-expand_mode = 1
+expand_mode = 3
 stretch_mode = 5
 
 [node name="Name" type="Label" parent="Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard/CardMargin/CardContent"]
@@ -149,7 +149,7 @@ horizontal_alignment = 1
 
 [node name="EdaGlow" type="ColorRect" parent="Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow"]
 visible = false
-custom_minimum_size = Vector2(0, 320)
+custom_minimum_size = Vector2(0, 360)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -173,10 +173,10 @@ alignment = 1
 theme_override_constants/separation = 12
 
 [node name="Portrait" type="TextureRect" parent="Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaCard/CardMargin/CardContent"]
-custom_minimum_size = Vector2(0, 230)
+custom_minimum_size = Vector2(0, 270)
 layout_mode = 2
 size_flags_vertical = 3
-expand_mode = 1
+expand_mode = 3
 stretch_mode = 5
 
 [node name="Name" type="Label" parent="Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaCard/CardMargin/CardContent"]

@@ -69,7 +69,7 @@ class MenuBackdrop:
 		var ship_center := Vector2(viewport_size.x * 0.50, horizon_y + sin(elapsed * TAU / 4.0) * 2.0)
 		_draw_bandirma_ship(ship_center, min(viewport_size.x * 0.46, 460.0))
 
-		var front_y := viewport_size.y * 0.66
+		var front_y := viewport_size.y * 0.58
 		_draw_character_zone(Vector2(viewport_size.x * 0.31, front_y), "ARDA", _MC.ARDA_CORAL)
 		_draw_character_zone(Vector2(viewport_size.x * 0.69, front_y), "EDA", _MC.EDA_TEAL)
 
@@ -114,7 +114,7 @@ class MenuBackdrop:
 
 	func _draw_character_zone(center: Vector2, label_text: String, chip_color: Color) -> void:
 		draw_circle(center, 122.0, Color(chip_color.r, chip_color.g, chip_color.b, 0.40))
-		var label_pos := center + Vector2(-54, 170)
+		var label_pos := center + Vector2(-54, 136)
 		draw_string(ThemeDB.fallback_font, label_pos, label_text, HORIZONTAL_ALIGNMENT_CENTER, 108.0, 30, Color.WHITE)
 
 func _ready() -> void:
@@ -315,11 +315,11 @@ func _sync_responsive_layout() -> void:
 	safe_area.offset_top = max(28.0, viewport_size.y * 0.018)
 	safe_area.offset_bottom = -max(34.0, viewport_size.y * 0.022)
 
-	var front_y := viewport_size.y * 0.66
-	arda_sprite.size = Vector2(190, 236)
-	eda_sprite.size = Vector2(184, 230)
-	arda_sprite.position = Vector2(viewport_size.x * 0.31 - arda_sprite.size.x * 0.5, front_y - arda_sprite.size.y + 72.0)
-	eda_sprite.position = Vector2(viewport_size.x * 0.69 - eda_sprite.size.x * 0.5, front_y - eda_sprite.size.y + 72.0)
+	var front_y := viewport_size.y * 0.58
+	arda_sprite.size = Vector2(176, 218)
+	eda_sprite.size = Vector2(172, 214)
+	arda_sprite.position = Vector2(viewport_size.x * 0.31 - arda_sprite.size.x * 0.5, front_y - arda_sprite.size.y + 28.0)
+	eda_sprite.position = Vector2(viewport_size.x * 0.69 - eda_sprite.size.x * 0.5, front_y - eda_sprite.size.y + 28.0)
 	_arda_base_y = arda_sprite.position.y
 	_eda_base_y = eda_sprite.position.y
 

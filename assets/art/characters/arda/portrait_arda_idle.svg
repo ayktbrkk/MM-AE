@@ -1,13 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="520" viewBox="0 0 520 520">
   <rect width="520" height="520" rx="80" fill="#f5e8d3"/>
-  <circle cx="260" cy="254" r="206" fill="#d6674b" opacity=".18"/>
-  <path d="M154 214 C146 136 206 88 272 88 C344 88 390 146 382 220 C374 292 326 338 260 338 C194 338 160 286 154 214Z" fill="#2b2730"/>
-  <circle cx="264" cy="232" r="118" fill="#d99b72" stroke="#2b2730" stroke-width="14"/>
-  <path d="M168 218 C198 130 302 112 366 184 C316 180 292 150 248 162 C210 172 194 208 168 218Z" fill="#2b2730"/>
-  <path d="M202 242 Q226 226 250 242" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
-  <path d="M280 242 Q304 226 328 242" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
-  <path d="M234 286 Q266 310 306 284" fill="none" stroke="#7a3f32" stroke-width="10" stroke-linecap="round"/>
-  <path d="M132 458 C154 368 202 332 264 332 C330 332 378 372 402 458Z" fill="#d6674b" stroke="#2b2730" stroke-width="14"/>
-  <path d="M206 350 L264 414 L326 350" fill="none" stroke="#f5e8d3" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="260" y="494" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2b2730">ARDA</text>
+  <circle cx="260" cy="252" r="204" fill="#d6674b" opacity=".16"/>
+  <path d="M152 214 C156 140 206 88 274 88 C344 88 390 144 384 222 C378 298 322 340 256 340 C192 340 148 286 152 214Z" fill="#2b2730"/>
+  <circle cx="260" cy="232" r="118" fill="#d99b72" stroke="#2b2730" stroke-width="14"/>
+  <path d="M166 184 C182 122 246 96 312 106 C342 110 368 128 382 160 C350 152 320 142 286 144 C238 148 198 162 166 184Z" fill="#6a402c" stroke="#2b2730" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M178 164 C206 138 244 128 286 132 C316 134 344 144 366 164 C346 160 324 150 292 150 C248 150 212 156 178 164Z" fill="#2b2730"/>
+  <path d="M190 166 C214 154 240 154 264 166" fill="none" stroke="#c78e43" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="212" cy="166" r="20" fill="#8f6a4a" stroke="#2b2730" stroke-width="6"/>
+  <circle cx="258" cy="164" r="20" fill="#8f6a4a" stroke="#2b2730" stroke-width="6"/>
+  <path d="M232 164 H238" stroke="#2b2730" stroke-width="6" stroke-linecap="round"/>
+  <path d="M202 236 Q226 224 248 236" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
+  <path d="M276 236 Q300 224 322 236" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
+  <path d="M236 286 Q262 302 292 286" fill="none" stroke="#7a3f32" stroke-width="10" stroke-linecap="round"/>
+  <path d="M130 462 C152 370 202 334 264 334 C330 334 378 374 402 462Z" fill="#2f5f93" stroke="#2b2730" stroke-width="14"/>
+  <path d="M198 346 L260 408 L324 346" fill="none" stroke="#f5e8d3" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M204 346 L262 384 L320 346" fill="none" stroke="#c43f34" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M194 346 C206 384 210 418 208 448" fill="none" stroke="#8a5b39" stroke-width="10" stroke-linecap="round"/>
+  <path d="M332 346 C320 382 316 418 318 446" fill="none" stroke="#8a5b39" stroke-width="10" stroke-linecap="round"/>
 </svg>

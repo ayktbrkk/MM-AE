@@ -1,14 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="520" viewBox="0 0 520 520">
   <rect width="520" height="520" rx="80" fill="#f5e8d3"/>
-  <circle cx="260" cy="254" r="206" fill="#8ccb74" opacity=".22"/>
-  <path d="M150 214 C148 132 208 84 270 88 C342 92 386 148 378 226 C370 302 322 350 258 350 C194 350 152 294 150 214Z" fill="#2b2730"/>
-  <circle cx="262" cy="230" r="116" fill="#d99b72" stroke="#2b2730" stroke-width="14"/>
-  <path d="M166 214 C206 142 306 124 360 182 C324 176 292 154 250 164 C212 174 190 202 166 214Z" fill="#2b2730"/>
-  <path d="M198 238 Q226 254 252 238" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
-  <path d="M280 238 Q306 254 334 238" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
-  <path d="M226 282 Q264 324 314 282" fill="none" stroke="#7a3f32" stroke-width="12" stroke-linecap="round"/>
-  <path d="M130 458 C156 366 202 332 264 332 C330 332 376 372 404 458Z" fill="#438a87" stroke="#2b2730" stroke-width="14"/>
-  <path d="M126 150 L148 172 L126 194 L104 172Z" fill="#9dd3c8"/>
-  <path d="M394 138 L414 158 L394 178 L374 158Z" fill="#9dd3c8"/>
-  <text x="260" y="494" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2b2730">EDA</text>
+  <circle cx="260" cy="252" r="204" fill="#9dd3c8" opacity=".22"/>
+  <path d="M150 214 C152 138 204 88 272 88 C344 88 386 146 380 226 C374 302 326 348 260 348 C196 348 148 292 150 214Z" fill="#2b2730"/>
+  <circle cx="262" cy="232" r="116" fill="#d99b72" stroke="#2b2730" stroke-width="14"/>
+  <path d="M170 194 C182 134 236 104 292 108 C330 110 362 130 378 164 C350 154 326 144 294 144 C246 144 204 162 170 194Z" fill="#4a2d24" stroke="#2b2730" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M180 152 C202 126 228 114 262 114 C298 114 326 126 348 150" fill="none" stroke="#a4513a" stroke-width="14" stroke-linecap="round"/>
+  <path d="M198 238 Q224 252 246 238" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
+  <path d="M278 238 Q304 252 328 238" fill="none" stroke="#2b2730" stroke-width="11" stroke-linecap="round"/>
+  <path d="M224 282 Q260 314 306 282" fill="none" stroke="#7a3f32" stroke-width="12" stroke-linecap="round"/>
+  <path d="M128 462 C154 366 202 332 264 332 C330 332 376 372 404 462Z" fill="#d9c6a3" stroke="#2b2730" stroke-width="14"/>
+  <path d="M204 350 L264 414 L324 350" fill="none" stroke="#f5e8d3" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M200 350 C220 366 244 372 264 372 C286 372 308 366 328 350" fill="none" stroke="#a4513a" stroke-width="18" stroke-linecap="round"/>
+  <path d="M200 344 C212 382 214 418 212 446" fill="none" stroke="#80583b" stroke-width="10" stroke-linecap="round"/>
+  <path d="M320 344 C306 382 304 416 306 446" fill="none" stroke="#80583b" stroke-width="10" stroke-linecap="round"/>
+  <path d="M314 356 L362 356 L356 430 L308 430Z" fill="#b33b33" stroke="#2b2730" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M320 370 L350 370" stroke="#f5e8d3" stroke-width="6" stroke-linecap="round"/>
+  <path d="M354 112 C366 100 386 100 398 112 C410 124 410 144 398 156 C386 168 366 168 354 156 C342 144 342 124 354 112Z" fill="#f2be63" opacity=".84"/>
 </svg>

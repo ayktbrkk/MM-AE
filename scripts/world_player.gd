@@ -136,7 +136,7 @@ func _create_character_identity_card(card_name: String, character_name: String, 
 
 	var circle := PanelContainer.new()
 	circle.name = "IdentityCircle"
-	circle.custom_minimum_size = Vector2(118, 118)
+	circle.custom_minimum_size = Vector2(142, 142)
 	circle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	circle.set_meta("identity_accent", accent)
 	column.add_child(circle)
@@ -151,8 +151,8 @@ func _create_character_identity_card(card_name: String, character_name: String, 
 	var portrait := TextureRect.new()
 	portrait.name = "Portrait"
 	portrait.texture = texture
-	portrait.custom_minimum_size = Vector2(94, 94)
-	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	portrait.custom_minimum_size = Vector2(118, 118)
+	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.set_meta("character_choice_portrait", true)
 	circle_margin.add_child(portrait)

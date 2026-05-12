@@ -893,6 +893,11 @@ func apply_ui_styles() -> void:
 	_add_button_style(interact_btn, Color("#F2BE63"))
 	_add_button_style(dialogue_continue_btn, Color(0.20, 0.42, 0.38))
 
+	var character_title: Label = _world.get_node("CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/CharacterTitle")
+	var character_text: Label = _world.get_node("CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/CharacterText")
+	character_title.add_theme_color_override("font_color", Color(0.13, 0.15, 0.20, 0.96))
+	character_text.add_theme_color_override("font_color", Color(0.22, 0.24, 0.30, 0.84))
+
 
 func _add_panel_style(panel: PanelContainer, fill: Color, border: Color, radius: int) -> void:
 	var style := StyleBoxFlat.new()

@@ -48,9 +48,9 @@ mouse_filter = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = -632.0
+offset_top = -694.0
 offset_right = 236.0
-offset_bottom = -392.0
+offset_bottom = -408.0
 mouse_filter = 2
 color = Color(0.98, 0.56, 0.22, 0.08)
 
@@ -60,9 +60,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -236.0
-offset_top = -632.0
+offset_top = -694.0
 offset_right = -20.0
-offset_bottom = -392.0
+offset_bottom = -408.0
 mouse_filter = 2
 color = Color(0.28, 0.50, 0.84, 0.08)
 
@@ -70,9 +70,9 @@ color = Color(0.28, 0.50, 0.84, 0.08)
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 28.0
-offset_top = -604.0
-offset_right = 228.0
-offset_bottom = -404.0
+offset_top = -646.0
+offset_right = 248.0
+offset_bottom = -416.0
 color = Color(0.95, 0.60, 0.28, 0.12)
 
 [node name="RightGlow" type="ColorRect" parent="PortraitLayer"]
@@ -80,20 +80,20 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -228.0
-offset_top = -604.0
+offset_left = -248.0
+offset_top = -646.0
 offset_right = -28.0
-offset_bottom = -404.0
+offset_bottom = -416.0
 color = Color(0.32, 0.54, 0.78, 0.12)
 
 [node name="LeftPortrait" type="TextureRect" parent="PortraitLayer"]
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 48.0
-offset_top = -600.0
-offset_right = 208.0
-offset_bottom = -440.0
-custom_minimum_size = Vector2(160, 160)
+offset_top = -656.0
+offset_right = 238.0
+offset_bottom = -416.0
+custom_minimum_size = Vector2(190, 190)
 expand_mode = 3
 stretch_mode = 5
 
@@ -102,11 +102,11 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -208.0
-offset_top = -600.0
+offset_left = -238.0
+offset_top = -656.0
 offset_right = -48.0
-offset_bottom = -440.0
-custom_minimum_size = Vector2(160, 160)
+offset_bottom = -416.0
+custom_minimum_size = Vector2(190, 190)
 expand_mode = 3
 stretch_mode = 5
 
