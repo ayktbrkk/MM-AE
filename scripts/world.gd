@@ -169,7 +169,8 @@ func _ready() -> void:
 # ---------------------------------------------------------------------------
 func _process(delta: float) -> void:
 	_ui_mod.elapsed_time += delta
-	_marker.animate_feedback(markers, _ui_mod.elapsed_time, _player_mod.nearby_marker, _state.current_goal_kind)
+	if is_instance_valid(_player_mod.nearby_marker):
+		_marker.animate_feedback(markers, _ui_mod.elapsed_time, _player_mod.nearby_marker, _state.current_goal_kind)
 	_player_mod.update_movement_feedback()
 	_player_mod.update_companion_reaction()
 	_player_mod.update_nearby_marker()
@@ -275,12 +276,38 @@ func _on_transition_finished() -> void:
 	
 	1. OverlayManager.hide() ile chapter transition CanvasLayer'ını kapatır.
 	   Bu, is_any_overlay_visible()'ın yanlış pozitif döndürmesini engeller.
-	2. Sadece bandirma (ship) zone'u için event chain'i başlatır.
+	2. Sadece ship zone'u için event chain'i başlatır.
 	   Diğer zone'lar kendi show_dialogue()'larını _setup_* içinde çağırır.
 	"""
 	_ui_mod._overlay_manager.hide(OverlayManager.OverlayType.CHAPTER_TRANSITION)
 	if _state.current_zone == "ship":
 		_zone_mod.trigger_event_chain()
+
+
+# ---------------------------------------------------------------------------
+# ZONE TRANSITION BRIDGE (world_wave.gd callback'leri için)
+# ---------------------------------------------------------------------------
+# world_wave.gd, dalga sonrası Callable(_world, "_enter_*") kullanır.
+# Bu köprü fonksiyonlar, çağrıyı _zone_mod üzerinden world_zone.gd'ye iletir.
+
+func _enter_havza() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd._enter_havza()"""
+	_zone_mod._enter_havza()
+
+
+func _enter_amasya() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd._enter_amasya()"""
+	_zone_mod._enter_amasya()
+
+
+func _enter_kongreler() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd._enter_kongreler()"""
+	_zone_mod._enter_kongreler()
+
+
+func _finish_prototype() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd.finish_prototype()"""
+	_zone_mod.finish_prototype()
 
 
 # ---------------------------------------------------------------------------

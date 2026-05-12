@@ -42,12 +42,8 @@ func _ready() -> void:
 	eda_button.icon = _textures.CHOICE_ICON
 	arda_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	eda_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	arda_button.pressed.connect(func() -> void:
-		_emit_choice("a")
-	)
-	eda_button.pressed.connect(func() -> void:
-		_emit_choice("b")
-	)
+	arda_button.pressed.connect(func(): _emit_choice("a"))
+	eda_button.pressed.connect(func(): _emit_choice("b"))
 	_arda_portrait_base_y = arda_portrait.position.y
 	_eda_portrait_base_y = eda_portrait.position.y
 	visible = false
@@ -56,38 +52,38 @@ func _ready() -> void:
 func _start_idle_animations() -> void:
 	# Top glow + bottom fog — sin(elapsed * 0.9), periyot 2*PI/0.9
 	var tween_fog := create_tween().set_loops()
-	tween_fog.tween_method(
-		func(v: float) -> void:
-			top_glow.color.a = 0.10 + (0.02 * sin(v))
-			bottom_fog.color.a = 0.18 + (0.03 * sin(v + 0.8)),
-		0.0, TAU, 6.98132
-	)
+	tween_fog.tween_method(_animate_fog, 0.0, TAU, 6.98132)
 
 	# Decision divider — sin(elapsed * 1.2), periyot 2*PI/1.2
 	var tween_divider := create_tween().set_loops()
-	tween_divider.tween_method(
-		func(v: float) -> void:
-			decision_divider.color.a = 0.48 + (0.08 * sin(v)),
-		0.0, TAU, 5.23599
-	)
+	tween_divider.tween_method(_animate_divider, 0.0, TAU, 5.23599)
 
 	# Portre bob — sin(elapsed * 1.8), periyot 2*PI/1.8
 	var tween_portraits := create_tween().set_loops()
-	tween_portraits.tween_method(
-		func(v: float) -> void:
-			arda_portrait.position.y = _arda_portrait_base_y + sin(v) * 2.0
-			eda_portrait.position.y = _eda_portrait_base_y + sin(v + 0.7) * 2.0,
-		0.0, TAU, 3.49066
-	)
+	tween_portraits.tween_method(_animate_portraits, 0.0, TAU, 3.49066)
 
 	# Karakter glow'ları — sin(elapsed * 1.6), periyot 2*PI/1.6
 	var tween_char_glow := create_tween().set_loops()
-	tween_char_glow.tween_method(
-		func(v: float) -> void:
-			arda_glow.color.a = 0.12 + (0.03 * sin(v))
-			eda_glow.color.a = 0.12 + (0.03 * sin(v + 0.8)),
-		0.0, TAU, 3.92699
-	)
+	tween_char_glow.tween_method(_animate_char_glow, 0.0, TAU, 3.92699)
+
+
+func _animate_fog(v: float) -> void:
+	top_glow.color.a = 0.10 + (0.02 * sin(v))
+	bottom_fog.color.a = 0.18 + (0.03 * sin(v + 0.8))
+
+
+func _animate_divider(v: float) -> void:
+	decision_divider.color.a = 0.48 + (0.08 * sin(v))
+
+
+func _animate_portraits(v: float) -> void:
+	arda_portrait.position.y = _arda_portrait_base_y + sin(v) * 2.0
+	eda_portrait.position.y = _eda_portrait_base_y + sin(v + 0.7) * 2.0
+
+
+func _animate_char_glow(v: float) -> void:
+	arda_glow.color.a = 0.12 + (0.03 * sin(v))
+	eda_glow.color.a = 0.12 + (0.03 * sin(v + 0.8))
 
 func present(config: Dictionary) -> void:
 	current_context = String(config.get("context", ""))

@@ -23,6 +23,7 @@ const _questions := preload("res://assets/data/questions.gd")
 const CHAPTER_EVENT_CHAINS := {
 	"room": [0, 1, 2],
 	"bandirma": [3, 4],
+	"ship": [3, 4],
 	"samsun_rift": [5, 6],
 	"havza": [7, 8, 9],
 	"amasya": [10, 11, 12, 13],
@@ -33,9 +34,12 @@ const CHAPTER_EVENT_CHAINS := {
 }
 
 # Builder'ı olan ve marker sistemi çalışan bölgeler
+# Not: "ship", _setup_bandirma()'da state.enter_zone("ship") ile kullanılan
+# zone adıdır. BUILT_ZONES ve CHAPTER_EVENT_CHAINS'de "ship" olarak geçer.
 const BUILT_ZONES := [
 	"room",
 	"bandirma",
+	"ship",
 	"samsun_rift",
 	"havza",
 	"amasya",

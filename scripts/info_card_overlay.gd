@@ -36,9 +36,7 @@ func _ready() -> void:
 	continue_button.icon = _textures.CONTINUE_ICON
 	continue_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_styles()
-	continue_button.pressed.connect(func() -> void:
-		continue_pressed.emit()
-	)
+	continue_button.pressed.connect(func(): continue_pressed.emit())
 	visible = false
 
 func _start_idle_animations() -> void:
@@ -46,38 +44,22 @@ func _start_idle_animations() -> void:
 
 	# 1. reward_halo alpha shimmer (sin(elapsed * 1.8))
 	var t1 := create_tween().set_loops()
-	t1.tween_method(
-		func(v: float) -> void:
-			reward_halo.color.a = 0.1225 + sin(v) * 0.0225,
-		0.0, TAU, TAU / 1.8
-	)
+	t1.tween_method(_animate_reward_halo, 0.0, TAU, TAU / 1.8)
 	_idle_tweens.append(t1)
 
 	# 2. reward_star scale pulse (sin(elapsed * 4.2))
 	var t2 := create_tween().set_loops()
-	t2.tween_method(
-		func(v: float) -> void:
-			reward_star.scale = Vector2.ONE * (1.0 + sin(v) * 0.06),
-		0.0, TAU, TAU / 4.2
-	)
+	t2.tween_method(_animate_reward_star, 0.0, TAU, TAU / 4.2)
 	_idle_tweens.append(t2)
 
 	# 3. icon_texture rotation (sin(elapsed * 1.8))
 	var t3 := create_tween().set_loops()
-	t3.tween_method(
-		func(v: float) -> void:
-			icon_texture.rotation = sin(v) * 0.04,
-		0.0, TAU, TAU / 1.8
-	)
+	t3.tween_method(_animate_icon_texture, 0.0, TAU, TAU / 1.8)
 	_idle_tweens.append(t3)
 
 	# 4. icon_glow scale pulse (sin(elapsed * 2.6))
 	var t4 := create_tween().set_loops()
-	t4.tween_method(
-		func(v: float) -> void:
-			icon_glow.scale = Vector2.ONE * (1.0 + sin(v) * 0.03),
-		0.0, TAU, TAU / 2.6
-	)
+	t4.tween_method(_animate_icon_glow, 0.0, TAU, TAU / 2.6)
 	_idle_tweens.append(t4)
 
 	# 5-7. Sparkle animasyonları (scale + rotation + alpha)
@@ -85,29 +67,43 @@ func _start_idle_animations() -> void:
 	_tween_sparkle(sparkle_b, 0.8, 4.6)
 	_tween_sparkle(sparkle_c, 1.45, 4.9)
 
+
+func _animate_reward_halo(v: float) -> void:
+	reward_halo.color.a = 0.1225 + sin(v) * 0.0225
+
+
+func _animate_reward_star(v: float) -> void:
+	reward_star.scale = Vector2.ONE * (1.0 + sin(v) * 0.06)
+
+
+func _animate_icon_texture(v: float) -> void:
+	icon_texture.rotation = sin(v) * 0.04
+
+
+func _animate_icon_glow(v: float) -> void:
+	icon_glow.scale = Vector2.ONE * (1.0 + sin(v) * 0.03)
+
+
 func _tween_sparkle(sparkle: TextureRect, phase: float, speed: float) -> void:
 	# Scale + modulate.a: sin((elapsed + phase) * speed)
-	# pulse = (sin(...) + 1) * 0.5 → center 0.5, amp 0.5
-	# scale = 0.74 + pulse * 0.18 = 0.83 + sin(...) * 0.09
-	# modulate.a = 0.36 + pulse * 0.28 = 0.5 + sin(...) * 0.14
 	var t_scale := create_tween().set_loops()
-	t_scale.tween_method(
-		func(v: float) -> void:
-			var sv := sin(v + phase * speed)
-			sparkle.scale = Vector2.ONE * (0.83 + sv * 0.09)
-			sparkle.modulate.a = 0.5 + sv * 0.14,
-		0.0, TAU, TAU / speed
-	)
+	t_scale.tween_method(_sparkle_scale_anim.bind(sparkle, phase, speed), 0.0, TAU, TAU / speed)
 	_idle_tweens.append(t_scale)
 
 	# Rotation: sin((elapsed + phase) * 1.9) * 0.18
 	var t_rot := create_tween().set_loops()
-	t_rot.tween_method(
-		func(v: float) -> void:
-			sparkle.rotation = sin(v + phase * 1.9) * 0.18,
-		0.0, TAU, TAU / 1.9
-	)
+	t_rot.tween_method(_sparkle_rot_anim.bind(sparkle, phase), 0.0, TAU, TAU / 1.9)
 	_idle_tweens.append(t_rot)
+
+
+func _sparkle_scale_anim(v: float, sparkle: TextureRect, phase: float, speed: float) -> void:
+	var sv := sin(v + phase * speed)
+	sparkle.scale = Vector2.ONE * (0.83 + sv * 0.09)
+	sparkle.modulate.a = 0.5 + sv * 0.14
+
+
+func _sparkle_rot_anim(v: float, sparkle: TextureRect, phase: float) -> void:
+	sparkle.rotation = sin(v + phase * 1.9) * 0.18
 
 func _stop_idle_animations() -> void:
 	for t in _idle_tweens:

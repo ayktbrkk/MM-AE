@@ -103,6 +103,7 @@ func show_dialogue(title: String, text: String, callback: Callable, expression: 
 func show_info_card(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
 	current_dialogue_callback = callback
 	current_overlay_kind = "info"
+	panel_mode = "info_card"
 	var info_card_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.INFO_CARD)
 	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
 	_overlay_manager.show(OverlayManager.OverlayType.INFO_CARD)
@@ -174,21 +175,40 @@ func show_chapter_transition(title: String, subtitle: String) -> void:
 	_save_game()
 
 
+func _is_overlay_effectively_visible(type: int) -> bool:
+	"""Overlay'in hem CanvasLayer'ı hem de node'u görünür mü?
+	
+	CanvasLayer.visible true olsa bile overlay node'u kendi visible=false
+	yapmış olabilir (örn. chapter_transition._finish() node.visible=false yapar).
+	Bu durumda overlay etkili bir şekilde görünmez sayılmalıdır.
+	"""
+	if not _overlay_manager.is_visible(type):
+		return false
+	var node: Node = _overlay_manager.get_overlay_node(type)
+	if node == null:
+		return false
+	return node.visible
+
+
 func is_any_overlay_visible() -> bool:
 	"""Herhangi bir overlay (DECISION, DIALOGUE, INFO_CARD, CHAPTER_TRANSITION, EXIT_CONFIRM) görünür mü?
 	
 	world.gd _physics_process/_unhandled_input'da input kilidi için kullanılır.
 	character_panel ve dialogue_panel bu kapsam dışıdır (world.gd doğrudan kontrol eder).
+	
+	NOT: CanvasLayer.visible ve node.visible birlikte kontrol edilir.
+	Overlay node'u visible=false ise (tween/animation sonrası kendini gizlemişse),
+	CanvasLayer.visible=true olsa bile overlay görünmez sayılır.
 	"""
-	if _overlay_manager.is_visible(OverlayManager.OverlayType.DECISION):
+	if _is_overlay_effectively_visible(OverlayManager.OverlayType.DECISION):
 		return true
-	if _overlay_manager.is_visible(OverlayManager.OverlayType.DIALOGUE):
+	if _is_overlay_effectively_visible(OverlayManager.OverlayType.DIALOGUE):
 		return true
-	if _overlay_manager.is_visible(OverlayManager.OverlayType.INFO_CARD):
+	if _is_overlay_effectively_visible(OverlayManager.OverlayType.INFO_CARD):
 		return true
-	if _overlay_manager.is_visible(OverlayManager.OverlayType.CHAPTER_TRANSITION):
+	if _is_overlay_effectively_visible(OverlayManager.OverlayType.CHAPTER_TRANSITION):
 		return true
-	if _overlay_manager.is_visible(OverlayManager.OverlayType.EXIT_CONFIRM):
+	if _is_overlay_effectively_visible(OverlayManager.OverlayType.EXIT_CONFIRM):
 		return true
 	return false
 
@@ -963,7 +983,7 @@ func play_dream_transition(callback: Callable) -> void:
 	dream_overlay.visible = true
 	dream_overlay.color = Color(0.91, 0.89, 1.0, 0.0)
 	var tween := create_tween()
-	tween.tween_property(dream_overlay, "color:a", 0.62, 0.22)
+	tween.tween_property(dream_overlay, "color:a", 1.0, 0.22)
 	tween.tween_callback(callback)
 	tween.tween_interval(0.08)
 	tween.tween_property(dream_overlay, "color:a", 0.0, 0.28)

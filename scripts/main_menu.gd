@@ -6,6 +6,8 @@ signal settings_pressed
 
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 
+const TAU := 2.0 * PI
+
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 

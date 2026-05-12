@@ -31,37 +31,37 @@ func _ready() -> void:
 func _start_idle_animations() -> void:
 	# Dream mist drift — sin(elapsed * 1.4), periyot 2*PI/1.4
 	var tween_mist := create_tween().set_loops()
-	tween_mist.tween_method(
-		func(v: float) -> void:
-			dream_mist.position.y = _dream_mist_base_y + sin(v) * 6.0,
-		0.0, TAU, 4.48799
-	)
+	tween_mist.tween_method(_animate_mist, 0.0, TAU, 4.48799)
 
 	# Route dot scale pulse — sin(elapsed * 4.0), periyot 2*PI/4.0
 	var tween_dots := create_tween().set_loops()
-	tween_dots.tween_method(
-		func(v: float) -> void:
-			route_dot_a.scale = Vector2.ONE * (0.92 + (0.06 * sin(v)))
-			route_dot_b.scale = Vector2.ONE * (0.92 + (0.06 * sin(v + 0.7)))
-			route_dot_c.scale = Vector2.ONE * (0.92 + (0.06 * sin(v + 1.4))),
-		0.0, TAU, 1.57080
-	)
+	tween_dots.tween_method(_animate_dots, 0.0, TAU, 1.57080)
 
 	# Rift shard drift — çoklu frekans (0.9/0.7/0.8) tek tween'de
 	var tween_rift := create_tween().set_loops()
-	tween_rift.tween_method(
-		func(v: float) -> void:
-			for shard in rift_shards:
-				var base: Vector2 = shard.get_meta("base_position")
-				var phase: float = shard.get_meta("phase")
-				# v: 0→TAU, freq=0.8 base; scale others relative
-				shard.position = base + Vector2(
-					sin(v * 1.125 + phase) * 14.0,
-					cos(v * 0.875 + phase) * 16.0
-				)
-				shard.rotation = sin(v + phase) * 0.12,
-		0.0, TAU, 7.85398
-	)
+	tween_rift.tween_method(_animate_rift, 0.0, TAU, 7.85398)
+
+
+func _animate_mist(v: float) -> void:
+	dream_mist.position.y = _dream_mist_base_y + sin(v) * 6.0
+
+
+func _animate_dots(v: float) -> void:
+	route_dot_a.scale = Vector2.ONE * (0.92 + (0.06 * sin(v)))
+	route_dot_b.scale = Vector2.ONE * (0.92 + (0.06 * sin(v + 0.7)))
+	route_dot_c.scale = Vector2.ONE * (0.92 + (0.06 * sin(v + 1.4)))
+
+
+func _animate_rift(v: float) -> void:
+	for shard in rift_shards:
+		var base: Vector2 = shard.get_meta("base_position")
+		var phase: float = shard.get_meta("phase")
+		# v: 0→TAU, freq=0.8 base; scale others relative
+		shard.position = base + Vector2(
+			sin(v * 1.125 + phase) * 14.0,
+			cos(v * 0.875 + phase) * 16.0
+		)
+		shard.rotation = sin(v + phase) * 0.12
 
 func present(chapter: String, subtitle: String) -> void:
 	chapter_label.text = chapter

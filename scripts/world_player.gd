@@ -377,14 +377,17 @@ func get_active_character() -> String:
 
 
 func handle_unhandled_input(event: InputEvent) -> void:
-	"""Touch/mouse input ile hedef belirleme."""
+	"""Touch/mouse input ile hedef belirleme.
+	
+	Not: Overlay görünürlük kontrolleri world.gd._unhandled_input() tarafından
+	zaten yapılır (is_any_overlay_visible()). Burada sadece panel kontrolleri
+	kalır çünkü OverlayManager overlay node'larını reparent eder ve
+	CanvasLayer/HUD/ altındaki yollar geçersiz olur.
+	"""
 	var character_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/CharacterPanel")
 	var dialogue_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/DialoguePanel")
-	var decision_overlay: Node = _world.get_node("CanvasLayer/HUD/DecisionOverlay")
-	var dialogue_overlay: Node = _world.get_node("CanvasLayer/HUD/DialogueOverlay")
-	var info_card_overlay: Node = _world.get_node("CanvasLayer/HUD/InfoCardOverlay")
 
-	if character_panel.visible or dialogue_panel.visible or decision_overlay.visible or dialogue_overlay.visible or info_card_overlay.visible:
+	if character_panel.visible or dialogue_panel.visible:
 		return
 
 	if event is InputEventScreenTouch and event.pressed:

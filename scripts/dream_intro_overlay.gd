@@ -1,4 +1,7 @@
 extends Control
+class_name DreamIntroOverlay
+
+const TAU := 2.0 * PI
 
 signal intro_finished
 
