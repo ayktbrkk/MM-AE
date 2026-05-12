@@ -68,6 +68,9 @@ const DESIGN_STORY_INK := Color("#2B2730")
 ## Önplan koyuluk - oda/sahne derinliği
 const DESIGN_ROOM_FOREGROUND := Color("#1A2A3A")
 
+## Oda zemini - önplandaki koyu siluetten bir ton daha açık
+const DESIGN_ROOM_FLOOR := Color("#31485C")
+
 ## ====================================
 ## UCUNCU PALET: ARTWORK ANALIZI (docs/ART_ANALYSIS.md)
 ## ====================================

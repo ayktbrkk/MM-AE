@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="420" viewBox="0 0 700 420">
+  <metadata><slot_id>ship.map_table</slot_id></metadata>
+  <path d="M96 300 C176 266 242 252 350 252 C458 252 524 266 604 300 C522 344 456 360 350 360 C244 360 178 344 96 300 Z" fill="#1A1510" opacity="0.18"/>
+  <path d="M130 146 L570 146 L610 290 L90 290 Z" fill="#856536" stroke="#2B2730" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M166 178 L534 178 L558 260 L142 260 Z" fill="#ECDEC8"/>
+  <path d="M210 196 C262 188 304 188 350 202 C398 216 438 214 490 200 L470 244 C422 252 388 252 348 240 C300 226 260 224 192 236 Z" fill="#FFB340" opacity="0.26"/>
+</svg>

@@ -1,24 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760">
-  <!-- Havza Sky - Earthy Dry Afternoon -->
-  <rect width="1500" height="760" fill="#685934"/>
-  <!-- Sun at zenith -->
-  <circle cx="1060" cy="180" r="50" fill="#f2be63" opacity=".34"/>
-  <circle cx="1060" cy="180" r="100" fill="#f2be63" opacity=".12"/>
-  <circle cx="1060" cy="180" r="180" fill="#f2be63" opacity=".05"/>
-  <!-- Dusty atmosphere layers -->
-  <path d="M0 420 C180 368 320 392 480 340 C640 288 780 328 960 274 C1140 222 1320 244 1500 196 V760 H0Z" fill="#887f53" opacity=".20"/>
-  <path d="M0 496 C210 444 380 476 540 418 C720 360 880 404 1060 350 C1240 294 1380 324 1500 276 V760 H0Z" fill="#7d513a" opacity=".14"/>
-  <path d="M0 566 C220 514 400 552 580 496 C768 438 940 478 1120 424 C1280 374 1400 400 1500 366 V760 H0Z" fill="#856536" opacity=".18"/>
-  <!-- Dust motes -->
-  <g fill="#f2be63" opacity=".10">
-    <ellipse cx="400" cy="260" rx="140" ry="22"/>
-    <ellipse cx="800" cy="300" rx="180" ry="26"/>
-    <ellipse cx="1100" cy="240" rx="120" ry="20"/>
-  </g>
-  <!-- Sun highlights -->
-  <g stroke="#fff8d9" stroke-width="6" stroke-linecap="round" opacity=".10">
-    <path d="M160 618 H360"/>
-    <path d="M640 580 H840"/>
-    <path d="M1080 540 H1340"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 760">
+  <path fill="#1a2a3a" opacity="0.18" d="M 0 0 L 1500 0 L 1500 760 L 0 760 Z M 40 40 L 1460 40 L 1460 720 L 40 720 Z"/>
+  <path fill="#685934" d="M 0 0 L 1500 0 L 1500 760 L 0 760 Z"/>
+  <path fill="#D4C5A9" opacity="0.55" d="M 0 580 C 200 560 400 545 600 550 C 800 555 1000 565 1200 555 C 1350 548 1450 540 1500 538 L 1500 760 L 0 760 Z"/>
+  <path fill="#F2BE63" opacity="0.30" d="M 600 0 C 650 20 720 60 750 120 C 780 180 770 240 750 280 C 730 320 700 340 680 330 C 640 310 600 260 580 200 C 560 140 570 60 600 0 Z"/>
 </svg>

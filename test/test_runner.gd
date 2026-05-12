@@ -11,6 +11,17 @@
 extends Node
 
 const SEPARATOR := "============================================="
+const RUN_TEST_SCRIPTS: Array[Script] = [
+	preload("res://test/test_samsun_svg_validity.gd"),
+	preload("res://test/test_samsun_svg_properties.gd"),
+	preload("res://test/test_samsun_color_properties.gd"),
+	preload("res://test/test_samsun_builder_properties.gd"),
+	preload("res://test/test_havza_svg_validity.gd"),
+	preload("res://test/test_amasya_svg_validity.gd"),
+	preload("res://test/test_room_svg_validity.gd"),
+	preload("res://test/test_bandirma_svg_validity.gd"),
+	preload("res://test/test_bandirma_builder_properties.gd"),
+]
 
 
 func _ready() -> void:
@@ -43,6 +54,25 @@ func _ready() -> void:
 				else:
 					failed += 1
 					results.append("  [KALDI] %s::%s: %s" % [test.name, name, str(result)])
+
+	for test_script: Script in RUN_TEST_SCRIPTS:
+		var test_ref: RefCounted = test_script.new()
+		var summary: Variant = test_ref.run_tests()
+		var test_name: String = test_script.resource_path.get_file().get_basename()
+		if summary is Dictionary:
+			var summary_dict: Dictionary = summary
+			var local_passed: int = int(summary_dict.get("passed", 0))
+			var local_failed: int = int(summary_dict.get("failed", 0))
+			var local_total: int = int(summary_dict.get("total", local_passed + local_failed))
+			passed += local_passed
+			failed += local_failed
+			if local_failed == 0:
+				results.append("  [GECTI] %s::run_tests (%d/%d)" % [test_name, local_passed, local_total])
+			else:
+				results.append("  [KALDI] %s::run_tests (%d/%d)" % [test_name, local_failed, local_total])
+		else:
+			failed += 1
+			results.append("  [KALDI] %s::run_tests: Beklenmeyen sonuc %s" % [test_name, str(summary)])
 
 	print("")
 	print(SEPARATOR)

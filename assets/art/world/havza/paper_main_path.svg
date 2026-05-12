@@ -1,58 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="920" height="900" viewBox="0 0 920 900">
-  <!-- ============================================= -->
-  <!-- Havza Main Path v2                           -->
-  <!-- Green-gold + cream + sage palette            -->
-  <!-- ============================================= -->
-  <!-- Shadow layer -->
-  <path d="M440 810 C420 670 430 550 490 460 C550 380 530 290 460 210 C420 160 410 120 440 70" fill="none" stroke="#10202d" stroke-width="92" stroke-linecap="round" stroke-linejoin="round" opacity="0.18"/>
-  <!-- Main path - cream basestone -->
-  <path d="M440 810 C420 670 430 550 490 460 C550 380 530 290 460 210 C420 160 410 120 440 70" fill="none" stroke="#e8dfc8" stroke-width="64" stroke-linecap="round" stroke-linejoin="round" opacity="0.90"/>
-  <!-- Path inner - sage green -->
-  <path d="M440 810 C420 670 430 550 490 460 C550 380 530 290 460 210 C420 160 410 120 440 70" fill="none" stroke="#8db572" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" opacity="0.26"/>
-  <!-- Branch path - left town -->
-  <path d="M490 460 C370 420 260 430 140 510" fill="none" stroke="#10202d" stroke-width="62" stroke-linecap="round" opacity="0.12"/>
-  <path d="M490 460 C370 420 260 430 140 510" fill="none" stroke="#e8dfc8" stroke-width="42" stroke-linecap="round" opacity="0.80"/>
-  <path d="M490 460 C370 420 260 430 140 510" fill="none" stroke="#8db572" stroke-width="14" stroke-linecap="round" opacity="0.22"/>
-  <!-- Branch path - right -->
-  <path d="M510 430 C640 390 750 420 830 510" fill="none" stroke="#10202d" stroke-width="62" stroke-linecap="round" opacity="0.12"/>
-  <path d="M510 430 C640 390 750 420 830 510" fill="none" stroke="#e8dfc8" stroke-width="42" stroke-linecap="round" opacity="0.78"/>
-  <path d="M510 430 C640 390 750 420 830 510" fill="none" stroke="#8db572" stroke-width="14" stroke-linecap="round" opacity="0.20"/>
-  <!-- Shadow pads -->
-  <g fill="#1a2a3a" opacity="0.20">
-    <ellipse cx="450" cy="730" rx="32" ry="11"/>
-    <ellipse cx="460" cy="560" rx="28" ry="10"/>
-    <ellipse cx="500" cy="380" rx="28" ry="10"/>
-    <ellipse cx="420" cy="220" rx="26" ry="9"/>
-    <ellipse cx="290" cy="450" rx="24" ry="8"/>
-    <ellipse cx="690" cy="450" rx="24" ry="8"/>
-  </g>
-  <!-- Olive gold dots -->
-  <g fill="#c4a35a" opacity="0.32">
-    <circle cx="445" cy="700" r="8"/>
-    <circle cx="535" cy="460" r="7"/>
-    <circle cx="480" cy="340" r="6"/>
-    <circle cx="410" cy="250" r="8"/>
-    <circle cx="350" cy="440" r="5"/>
-    <circle cx="710" cy="450" r="6"/>
-  </g>
-  <!-- Sage sparkles -->
-  <g fill="#b7d99b" opacity="0.35">
-    <circle cx="430" cy="650" r="5"/>
-    <circle cx="500" cy="500" r="6"/>
-    <circle cx="450" cy="300" r="5"/>
-    <circle cx="200" cy="470" r="4"/>
-  </g>
-  <!-- Marker pins - warm red -->
-  <g fill="#c84b3d" opacity="0.48">
-    <circle cx="460" cy="560" r="12" stroke="#2b2730" stroke-width="4"/>
-    <circle cx="500" cy="380" r="12" stroke="#2b2730" stroke-width="4"/>
-    <circle cx="290" cy="450" r="10" stroke="#2b2730" stroke-width="3"/>
-    <circle cx="690" cy="450" r="10" stroke="#2b2730" stroke-width="3"/>
-  </g>
-  <g fill="#fff8e7" opacity="0.65">
-    <circle cx="460" cy="560" r="5"/>
-    <circle cx="500" cy="380" r="5"/>
-    <circle cx="290" cy="450" r="4"/>
-    <circle cx="690" cy="450" r="4"/>
-  </g>
+  <!-- Layer 1: Shadow — filled band slightly wider than main path -->
+  <path d="M390 900 C385 820 375 750 370 680 C362 600 355 530 360 460 C365 390 380 330 400 270 C418 215 430 165 435 110 C438 80 440 50 442 20 L478 20 C476 50 474 80 471 110 C466 165 454 215 436 270 C416 330 401 390 396 460 C391 530 398 600 406 680 C411 750 421 820 426 900 Z" fill="#1a2a3a" opacity="0.14"/>
+  <!-- Layer 2: Main path — cream cobblestone filled winding band -->
+  <path d="M396 900 C391 820 381 750 376 680 C368 600 361 530 366 460 C371 390 386 330 406 270 C424 215 436 165 441 110 C444 80 446 50 448 20 L472 20 C470 50 468 80 465 110 C460 165 448 215 430 270 C410 330 395 390 390 460 C385 530 392 600 400 680 C405 750 415 820 420 900 Z" fill="#E8DFC8"/>
+  <!-- Layer 3: Branch — left side road, filled shape diverging from mid-path -->
+  <path d="M366 460 C340 448 310 440 275 436 C240 432 200 435 160 445 C130 453 100 465 75 480 L68 462 C94 447 125 435 156 427 C198 417 240 414 277 418 C314 422 344 430 370 442 Z" fill="#D4C5A9" opacity="0.80"/>
+  <!-- Layer 4: Path accent — sage green edge vegetation, flanking the main path -->
+  <path d="M376 680 C368 600 361 530 366 460 C371 390 386 330 406 270 C424 215 436 165 441 110 L448 110 C443 165 431 215 413 270 C393 330 378 390 373 460 C368 530 375 600 383 680 Z M420 900 C415 820 405 750 400 680 C392 600 385 530 390 460 C395 390 410 330 430 270 C448 215 460 165 465 110 L472 110 C467 165 455 215 437 270 C417 330 402 390 397 460 C392 530 399 600 407 680 C412 750 422 820 427 900 Z" fill="#8DB572" opacity="0.25"/>
+  <!-- Layer 5: Second branch — right side road -->
+  <path d="M390 460 C416 448 446 440 481 436 C516 432 556 435 596 445 C626 453 656 465 681 480 L688 462 C662 447 631 435 600 427 C558 417 516 414 479 418 C442 422 412 430 386 442 Z" fill="#E8DFC8" opacity="0.70"/>
 </svg>

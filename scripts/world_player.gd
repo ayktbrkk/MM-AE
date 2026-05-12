@@ -495,13 +495,21 @@ func update_companion_reaction() -> void:
 	if active_companion_reaction == "":
 		companion_reaction_label.visible = false
 		return
-	var character_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/CharacterPanel")
-	var dialogue_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/DialoguePanel")
-	var decision_overlay: Node = _world.get_node("CanvasLayer/HUD/DecisionOverlay")
-	var dialogue_overlay: Node = _world.get_node("CanvasLayer/HUD/DialogueOverlay")
-	var info_card_overlay: Node = _world.get_node("CanvasLayer/HUD/InfoCardOverlay")
+	var character_panel: PanelContainer = _world.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
+	var dialogue_panel: PanelContainer = _world.get_node_or_null("CanvasLayer/HUD/DialoguePanel")
+	var world_ui := _world.get_node_or_null("WorldUI")
+	var overlay_manager = world_ui.get("_overlay_manager") if world_ui != null else null
+	var decision_overlay: Node = overlay_manager.get_overlay_node(OverlayManager.OverlayType.DECISION) if overlay_manager != null else null
+	var dialogue_overlay: Node = overlay_manager.get_overlay_node(OverlayManager.OverlayType.DIALOGUE) if overlay_manager != null else null
+	var info_card_overlay: Node = overlay_manager.get_overlay_node(OverlayManager.OverlayType.INFO_CARD) if overlay_manager != null else null
 	companion_reaction_label.text = active_companion_reaction
-	companion_reaction_label.visible = not (character_panel.visible or dialogue_panel.visible or decision_overlay.visible or dialogue_overlay.visible or info_card_overlay.visible)
+	companion_reaction_label.visible = not (
+		(character_panel != null and character_panel.visible)
+		or (dialogue_panel != null and dialogue_panel.visible)
+		or (decision_overlay != null and decision_overlay.visible)
+		or (dialogue_overlay != null and dialogue_overlay.visible)
+		or (info_card_overlay != null and info_card_overlay.visible)
+	)
 
 
 func add_companion_reaction_spot(center: Vector2, radius: float, text: String, slot_id := "") -> void:

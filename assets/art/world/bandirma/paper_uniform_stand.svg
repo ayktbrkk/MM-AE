@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="620" viewBox="0 0 420 620">
+  <metadata><slot_id>ship.uniform_stand</slot_id></metadata>
+  <path d="M112 520 C150 486 178 470 210 470 C242 470 270 486 308 520 C268 548 240 560 210 560 C180 560 152 548 112 520 Z" fill="#1A1510" opacity="0.18"/>
+  <path d="M198 108 L222 108 L222 444 L198 444 Z M112 520 L308 520 L308 548 L112 548 Z" fill="#856536" stroke="#2B2730" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M124 210 C156 182 182 170 210 170 C238 170 264 182 296 210 L264 340 C246 372 232 392 210 420 C188 392 174 372 156 340 Z" fill="#292C39" stroke="#2B2730" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M150 216 C178 198 194 192 210 192 C226 192 242 198 270 216 L254 272 C234 286 224 292 210 308 C196 292 186 286 166 272 Z" fill="#B82E1F" opacity="0.58"/>
+</svg>

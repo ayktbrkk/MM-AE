@@ -3,14 +3,21 @@ extends SceneTree
 const DEFAULT_OUTPUT := "res://artifacts/renders/opening/opening_render.png"
 const DEFAULT_SCENE := "res://scenes/world.tscn"
 const DEFAULT_SIZE := Vector2i(923, 1287)
+const DEFAULT_ZONE := ""
+const READY_FRAME_LIMIT := 240
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	var output_path := DEFAULT_OUTPUT
 	var scene_path := DEFAULT_SCENE
 	var viewport_size := DEFAULT_SIZE
+	var zone := DEFAULT_ZONE
 	var world_only := false
 	var hide_hud := false
+	var hide_markers := false
+	var hide_actors := false
+	var hide_world_guides := false
+	var clean_export := false
 	var hero := ""
 	for index in range(args.size()):
 		match args[index]:
@@ -25,26 +32,52 @@ func _initialize() -> void:
 					var parts := args[index + 1].split("x")
 					if parts.size() == 2:
 						viewport_size = Vector2i(parts[0].to_int(), parts[1].to_int())
+			"--zone":
+				if index + 1 < args.size():
+					zone = args[index + 1]
 			"--world-only":
 				world_only = true
 			"--hide-hud":
 				hide_hud = true
+			"--hide-markers":
+				hide_markers = true
+			"--hide-actors":
+				hide_actors = true
+			"--hide-world-guides":
+				hide_world_guides = true
+			"--clean-export":
+				clean_export = true
+				hide_hud = true
+				hide_markers = true
+				hide_actors = true
+				hide_world_guides = true
 			"--hero":
 				if index + 1 < args.size():
 					hero = args[index + 1]
-	call_deferred("_capture", scene_path, output_path, viewport_size, world_only, hide_hud, hero)
+	call_deferred("_capture", scene_path, output_path, viewport_size, zone, world_only, hide_hud, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
 
-func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, world_only: bool, hide_hud: bool, hero: String) -> void:
-	root.size = viewport_size
+func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, world_only: bool, hide_hud: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
 	var packed_scene := load(scene_path)
 	if packed_scene == null:
 		push_error("Could not load scene: %s" % scene_path)
 		quit(1)
 		return
+	var viewport := SubViewport.new()
+	viewport.name = "CaptureViewport"
+	viewport.disable_3d = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport.transparent_bg = false
+	viewport.size = viewport_size
+	root.add_child(viewport)
 	var scene: Node = packed_scene.instantiate()
-	root.add_child(scene)
-	if hero != "" and scene.has_method("_choose_hero"):
-		scene.call("_choose_hero", hero)
+	viewport.add_child(scene)
+	await process_frame
+	_select_hero(scene, hero)
+	if zone != "":
+		await _configure_world_zone(scene, zone)
+	await _await_capture_ready(scene, zone)
+	if clean_export:
+		_apply_clean_export(scene)
 	if world_only:
 		var canvas := scene.get_node_or_null("CanvasLayer")
 		if canvas != null:
@@ -53,11 +86,19 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 		var hud := scene.get_node_or_null("CanvasLayer/HUD")
 		if hud != null:
 			hud.visible = false
+	if hide_markers:
+		var markers := scene.get_node_or_null("Markers")
+		if markers != null:
+			markers.visible = false
+	if hide_world_guides:
+		_hide_world_guides(scene)
+	if hide_actors:
+		_hide_actor_visuals(scene)
 	for frame in range(12):
 		await process_frame
 	RenderingServer.force_draw()
 	await process_frame
-	var image := root.get_texture().get_image()
+	var image := viewport.get_texture().get_image()
 	if image == null or image.is_empty():
 		push_error("Could not capture viewport image.")
 		quit(1)
@@ -73,3 +114,99 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 		return
 	print("Saved render: %s" % absolute_output)
 	quit()
+
+
+func _select_hero(scene: Node, hero: String) -> void:
+	if hero == "":
+		return
+	var player_mod := scene.get_node_or_null("WorldPlayer")
+	if player_mod != null and player_mod.has_method("choose_hero"):
+		player_mod.call("choose_hero", hero)
+
+
+func _configure_world_zone(scene: Node, zone: String) -> void:
+	var zone_node := scene.get_node_or_null("WorldZone")
+	if zone_node == null or not zone_node.has_method("transition_to"):
+		push_error("Could not configure zone '%s': WorldZone missing." % zone)
+		quit(1)
+		return
+	zone_node.call("transition_to", zone)
+	for frame in range(16):
+		await process_frame
+
+
+func _await_capture_ready(scene: Node, zone: String) -> void:
+	for frame in range(READY_FRAME_LIMIT):
+		await process_frame
+		if _is_scene_ready(scene, zone):
+			for settle_frame in range(8):
+				await process_frame
+			return
+
+
+func _is_scene_ready(scene: Node, zone: String) -> bool:
+	var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
+	if dream_overlay != null and dream_overlay.visible:
+		return false
+	var chapter_transition := scene.get_node_or_null("WorldUI/OverlayManager/CanvasLayer_30/ChapterTransitionOverlay")
+	if chapter_transition != null and chapter_transition.visible:
+		return false
+	if zone == "":
+		return true
+	var state := scene.get_node_or_null("WorldState")
+	if state == null:
+		return false
+	var expected_zone := "ship" if zone == "bandirma" else zone
+	return String(state.get("current_zone")) == expected_zone
+
+
+func _apply_clean_export(scene: Node) -> void:
+	var world_ui := scene.get_node_or_null("WorldUI")
+	if world_ui != null:
+		var overlay_manager = world_ui.get("_overlay_manager")
+		if overlay_manager != null and overlay_manager.has_method("hide_all"):
+			overlay_manager.call("hide_all")
+	var dialogue_panel := scene.get_node_or_null("CanvasLayer/HUD/DialoguePanel")
+	if dialogue_panel != null:
+		dialogue_panel.visible = false
+	var character_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
+	if character_panel != null:
+		character_panel.visible = false
+
+
+func _hide_actor_visuals(scene: Node) -> void:
+	var player := scene.get_node_or_null("Player")
+	if player != null:
+		_hide_canvas_items_except(player, ["Camera2D"])
+	var companion := scene.get_node_or_null("Companion")
+	if companion != null:
+		_hide_canvas_items_except(companion, [])
+
+
+func _hide_canvas_items_except(node: Node, keep_names: Array[String]) -> void:
+	for child in node.get_children():
+		if keep_names.has(String(child.name)):
+			continue
+		if child is CanvasItem:
+			(child as CanvasItem).visible = false
+		_hide_canvas_items_except(child, keep_names)
+
+
+func _hide_world_guides(scene: Node) -> void:
+	_hide_nodes_with_meta(scene.get_node_or_null("Props"), "world_guide")
+	_hide_nodes_with_meta(scene.get_node_or_null("ForegroundProps"), "world_guide")
+	var guidance_arrow := scene.get_node_or_null("Player/GuidanceArrow")
+	if guidance_arrow != null and guidance_arrow is CanvasItem:
+		(guidance_arrow as CanvasItem).visible = false
+	var route_panel := scene.get_node_or_null("CanvasLayer/HUD/RoutePanel")
+	if route_panel != null and route_panel is CanvasItem:
+		(route_panel as CanvasItem).visible = false
+
+
+func _hide_nodes_with_meta(root_node: Node, meta_key: String) -> void:
+	if root_node == null:
+		return
+	if root_node.has_meta(meta_key) and root_node is CanvasItem:
+		(root_node as CanvasItem).visible = false
+	for child in root_node.get_children():
+		_hide_nodes_with_meta(child, meta_key)

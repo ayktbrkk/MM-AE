@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
+  <metadata><slot_id>ship.compass</slot_id></metadata>
+  <path d="M32 160 C64 102 102 64 160 32 C218 64 256 102 288 160 C256 218 218 256 160 288 C102 256 64 218 32 160 Z" fill="#FFB340" opacity="0.18"/>
+  <path d="M60 160 C86 112 112 86 160 60 C208 86 234 112 260 160 C234 208 208 234 160 260 C112 234 86 208 60 160 Z" fill="#ECDEC8" stroke="#2B2730" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M160 86 L188 160 L160 234 L132 160 Z" fill="#FFB340" stroke="#2B2730" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M160 120 L222 160 L160 200 L98 160 Z" fill="#38C7FF" opacity="0.26"/>
+</svg>

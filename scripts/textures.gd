@@ -182,6 +182,41 @@ const ROOM_PAPER_DESK_CLUTTER_TEXTURE := preload("res://assets/art/world/room/pa
 const ROOM_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/room/paper_terrain_room.svg")
 
 # ====================================
+# HAVZA PAPER CUTOUT (özel asset)
+# ====================================
+const HAVZA_PAPER_SKY_TEXTURE := preload("res://assets/art/world/havza/paper_sky_havza.svg")
+const HAVZA_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/havza/paper_terrain_town.svg")
+const HAVZA_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/havza/paper_main_path.svg")
+const HAVZA_PAPER_CIVIC_SQUARE_TEXTURE := preload("res://assets/art/world/havza/paper_civic_square.svg")
+const HAVZA_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/havza/paper_foreground_frame.svg")
+
+# ====================================
+# AMASYA PAPER CUTOUT (özel asset)
+# ====================================
+const AMASYA_PAPER_SKY_TEXTURE := preload("res://assets/art/world/amasya/paper_sky_amasya.svg")
+const AMASYA_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/amasya/paper_terrain_amasya.svg")
+const AMASYA_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/amasya/paper_main_path.svg")
+const AMASYA_PAPER_CONGRESS_HALL_TEXTURE := preload("res://assets/art/world/amasya/paper_congress_hall.svg")
+const AMASYA_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/amasya/paper_foreground_frame.svg")
+
+# ====================================
+# BANDIRMA PAPER CUTOUT (özel asset)
+# ====================================
+const BANDIRMA_PAPER_SKY_TEXTURE := preload("res://assets/art/world/bandirma/paper_sky_bandirma.svg")
+const BANDIRMA_PAPER_FOG_BANDS_TEXTURE := preload("res://assets/art/world/bandirma/paper_fog_bands.svg")
+const BANDIRMA_PAPER_DISTANT_COAST_TEXTURE := preload("res://assets/art/world/bandirma/paper_distant_coast.svg")
+const BANDIRMA_PAPER_CABIN_WALL_TEXTURE := preload("res://assets/art/world/bandirma/paper_cabin_wall.svg")
+const BANDIRMA_PAPER_SEA_WINDOW_TEXTURE := preload("res://assets/art/world/bandirma/paper_sea_window.svg")
+const BANDIRMA_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/bandirma/paper_terrain_harbor.svg")
+const BANDIRMA_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/bandirma/paper_main_path.svg")
+const BANDIRMA_PAPER_SHIP_TEXTURE := preload("res://assets/art/world/bandirma/paper_bandirma_ship.svg")
+const BANDIRMA_PAPER_MAP_TABLE_TEXTURE := preload("res://assets/art/world/bandirma/paper_map_table.svg")
+const BANDIRMA_PAPER_UNIFORM_STAND_TEXTURE := preload("res://assets/art/world/bandirma/paper_uniform_stand.svg")
+const BANDIRMA_PAPER_COMPASS_TEXTURE := preload("res://assets/art/world/bandirma/paper_compass.svg")
+const BANDIRMA_PAPER_TELEGRAPH_PROPS_TEXTURE := preload("res://assets/art/world/bandirma/paper_telegraph_props.svg")
+const BANDIRMA_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/bandirma/paper_foreground_frame.svg")
+
+# ====================================
 # OPENING PAPER CUTOUT (özel asset)
 # ====================================
 const OPENING_PAPER_SKY_TEXTURE := preload("res://assets/art/world/opening/paper_sky_horizon.svg")

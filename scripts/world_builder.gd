@@ -95,6 +95,12 @@ func _get_markers(world_root: Node) -> Node:
 	return world_root.get_node("Markers")
 
 
+func _mark_world_guide(node: Node) -> Node:
+	if node != null:
+		node.set_meta("world_guide", true)
+	return node
+
+
 # Dikdörtgen ekle — en temel yapı taşı
 func _add_rect(world_root: Node, pos: Vector2, size: Vector2, color: Color, label_text := "") -> void:
 	var props := _get_props(world_root)
@@ -178,7 +184,7 @@ func _add_room_bottom_rounded_rect(world_root: Node, pos: Vector2, size: Vector2
 
 
 # Yumuşak ışıltı (blob) — atmosferik efekt
-func _add_soft_blob(world_root: Node, center: Vector2, radius: Vector2, color: Color, point_count := 18, wobble := 0.08, to_foreground := false, z_index := -4) -> void:
+func _add_soft_blob(world_root: Node, center: Vector2, radius: Vector2, color: Color, point_count := 18, wobble := 0.08, to_foreground := false, z_index := -4) -> Polygon2D:
 	var blob := Polygon2D.new()
 	blob.position = center
 	blob.color = color
@@ -193,6 +199,7 @@ func _add_soft_blob(world_root: Node, center: Vector2, radius: Vector2, color: C
 		_get_foreground(world_root).add_child(blob)
 	else:
 		_get_props(world_root).add_child(blob)
+	return blob
 
 
 # Işık havuzu — soft blob wrapper
@@ -416,8 +423,90 @@ func _add_ship_room_plates(world_root: Node) -> void:
 
 
 func _build_ship(world_root: Node) -> void:
-	_add_ship_room_plates(world_root)
+	_add_room_rect(world_root, Vector2.ZERO, WORLD_SIZE, _colors.THEME_BANDIRMA["bg"], -20, "world_tiles.bandirma_bg")
+	_add_bandirma_paper_asset_layer(world_root)
 	_decorate_ship(world_root)
+
+
+func _add_bandirma_paper_asset_layer(world_root: Node) -> void:
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_SKY_TEXTURE,
+		Vector2(800, 380), Vector2(1.05, 1.05),
+		Color(1, 1, 1, 0.86), -18,
+		"paperworld.bandirma_sky", Vector2.ZERO, -16.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_FOG_BANDS_TEXTURE,
+		Vector2(800, 430), Vector2(1.04, 1.04),
+		Color(1, 1, 1, 0.54), -17,
+		"paperworld.bandirma_fog_bands", Vector2.ZERO, -13.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_DISTANT_COAST_TEXTURE,
+		Vector2(800, 560), Vector2(1.02, 1.02),
+		Color(1, 1, 1, 0.62), -16,
+		"paperworld.bandirma_distant_coast", Vector2.ZERO, -9.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_CABIN_WALL_TEXTURE,
+		Vector2(800, 590), Vector2(1.08, 1.08),
+		Color(1, 1, 1, 0.88), -14,
+		"paperworld.bandirma_cabin_wall", Vector2.ZERO, -4.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_SEA_WINDOW_TEXTURE,
+		Vector2(1160, 1290), Vector2(0.92, 0.92),
+		Color(1, 1, 1, 0.78), -13,
+		"paperworld.bandirma_sea_window", Vector2.ZERO, -6.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_TERRAIN_TEXTURE,
+		Vector2(800, 1450), Vector2(1.08, 1.08),
+		Color(1, 1, 1, 0.90), -11,
+		"paperworld.bandirma_terrain", Vector2.ZERO, -2.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(830, 1260), Vector2(0.88, 0.88),
+		Color(1, 1, 1, 0.84), -10,
+		"paperworld.bandirma_main_path", Vector2.ZERO, -0.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_SHIP_TEXTURE,
+		Vector2(820, 1180), Vector2(1.18, 1.18),
+		Color(1, 1, 1, 0.90), -8,
+		"paperworld.bandirma_ship", Vector2.ZERO, 0.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_UNIFORM_STAND_TEXTURE,
+		Vector2(455, 535), Vector2(0.82, 0.82),
+		Color(1, 1, 1, 0.88), -6,
+		"paperworld.bandirma_uniform_stand", Vector2.ZERO, 1.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_MAP_TABLE_TEXTURE,
+		Vector2(690, 1170), Vector2(0.90, 0.90),
+		Color(1, 1, 1, 0.92), -5,
+		"paperworld.bandirma_map_table", Vector2.ZERO, 2.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_COMPASS_TEXTURE,
+		Vector2(1020, 1370), Vector2(0.72, 0.72),
+		Color(1, 1, 1, 0.88), -3,
+		"paperworld.bandirma_compass", Vector2.ZERO, 3.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.BANDIRMA_PAPER_TELEGRAPH_PROPS_TEXTURE,
+		Vector2(1110, 1510), Vector2(0.82, 0.82),
+		Color(1, 1, 1, 0.84), -2,
+		"paperworld.bandirma_telegraph_props", Vector2.ZERO, 4.0
+	)
+	_add_foreground_paper_cutout_asset(
+		_textures.BANDIRMA_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1835), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.90), 4,
+		"paperworld.bandirma_foreground_frame", 14.0
+	)
 
 
 # ============================================================
@@ -449,6 +538,7 @@ func _build_samsun_rift(world_root: Node) -> void:
 
 func _build_havza_world(world_root: Node) -> void:
 	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.10, 0.17, 0.13))
+	_add_havza_paper_asset_layer(world_root)
 	_add_rect(world_root, Vector2(90, 170), Vector2(1420, 1840), Color(0.20, 0.28, 0.18))
 	_add_rect(world_root, Vector2(180, 320), Vector2(1240, 1460), Color(0.30, 0.40, 0.24))
 	_add_rect(world_root, Vector2(310, 1490), Vector2(290, 230), Color(0.18, 0.30, 0.34))
@@ -456,14 +546,86 @@ func _build_havza_world(world_root: Node) -> void:
 	_add_rift_cloud(world_root, Vector2(790, 1100), 760, Color(0.95, 0.80, 0.26, 0.12))
 	_add_rift_cloud(world_root, Vector2(790, 1100), 900, Color(0.28, 0.50, 0.42, 0.12))
 	_decorate_havza(world_root)
+	emit_signal("world_built", "havza")
+
+
+func _add_havza_paper_asset_layer(world_root: Node) -> void:
+	# Gökyüzü — en uzak katman
+	_add_paper_cutout_asset(
+		world_root, _textures.HAVZA_PAPER_SKY_TEXTURE,
+		Vector2(800, 380), Vector2(1.05, 1.05),
+		Color(1, 1, 1, 0.88), -18,
+		"havza.depth.sky", Vector2.ZERO, -15.0
+	)
+	# Arazi — kasaba zemin katmanı
+	_add_paper_cutout_asset(
+		world_root, _textures.HAVZA_PAPER_TERRAIN_TEXTURE,
+		Vector2(800, 1100), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.90), -14,
+		"havza.depth.terrain", Vector2.ZERO, -3.5
+	)
+	# Ana patika — kıvrımlı yol
+	_add_paper_cutout_asset(
+		world_root, _textures.HAVZA_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(800, 1300), Vector2(0.82, 0.82),
+		Color(1, 1, 1, 0.86), -10,
+		"havza.path.main", Vector2.ZERO, -1.5
+	)
+	# Kasaba meydanı — civic landmark
+	_add_paper_cutout_asset(
+		world_root, _textures.HAVZA_PAPER_CIVIC_SQUARE_TEXTURE,
+		Vector2(800, 1450), Vector2(0.88, 0.88),
+		Color(1, 1, 1, 0.84), -5,
+		"havza.landmark.civic_square", Vector2.ZERO, 2.0
+	)
+	# Ön plan çerçeve — en yakın katman
+	_add_paper_cutout_asset(
+		world_root, _textures.HAVZA_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.12, 1.12),
+		Color(1, 1, 1, 0.90), 4,
+		"havza.foreground.frame", Vector2.ZERO, 18.0
+	)
 
 
 # ============================================================
 # AMASYA BUILDER (temel)
 # ============================================================
 
+func _add_amasya_paper_asset_layer(world_root: Node) -> void:
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_SKY_TEXTURE,
+		Vector2(800, 380), Vector2(1.05, 1.05),
+		Color(1, 1, 1, 0.88), -18,
+		"amasya.depth.sky", Vector2.ZERO, -15.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_TERRAIN_TEXTURE,
+		Vector2(800, 1100), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.90), -14,
+		"amasya.depth.terrain", Vector2.ZERO, -3.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(800, 1300), Vector2(0.82, 0.82),
+		Color(1, 1, 1, 0.86), -10,
+		"amasya.path.main", Vector2.ZERO, -1.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_CONGRESS_HALL_TEXTURE,
+		Vector2(800, 1450), Vector2(0.88, 0.88),
+		Color(1, 1, 1, 0.90), -5,
+		"amasya.landmark.congress_hall", Vector2.ZERO, 2.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.12, 1.12),
+		Color(1, 1, 1, 0.90), 4,
+		"amasya.foreground.frame", Vector2.ZERO, 18.0
+	)
+
 func _build_amasya_world(world_root: Node) -> void:
 	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.12, 0.15, 0.20))
+	_add_amasya_paper_asset_layer(world_root)
 	_add_rect(world_root, Vector2(90, 170), Vector2(1420, 1840), Color(0.22, 0.24, 0.30))
 	_add_rect(world_root, Vector2(180, 280), Vector2(1240, 1580), Color(0.32, 0.34, 0.40))
 	_add_rect(world_root, Vector2(300, 440), Vector2(980, 340), Color(0.46, 0.36, 0.26), "Toplanti Evi")
@@ -472,6 +634,7 @@ func _build_amasya_world(world_root: Node) -> void:
 	_add_rift_cloud(world_root, Vector2(810, 1120), 780, Color(0.64, 0.70, 0.95, 0.12))
 	_add_rift_cloud(world_root, Vector2(810, 1120), 920, Color(0.95, 0.82, 0.40, 0.10))
 	_decorate_amasya(world_root)
+	emit_signal("world_built", "amasya")
 
 
 # ============================================================
@@ -1509,61 +1672,27 @@ func _add_final_environment() -> void:
 
 func _decorate_ship(world_root: Node) -> void:
 	_add_toy_world_frame(Color(0.08, 0.24, 0.32, 0.22), Color(0.72, 0.88, 1.0, 0.09))
-	_add_backdrop_band([_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE], 540.0, Vector2(1.08, 1.08), Color(0.55, 0.86, 0.94, 0.17), "ship.horizon_mountains", -8)
 	_add_location_sign("Bandırma", "Rotayı oku", Vector2(535, 280), 440.0, Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.82), "ship.location_sign")
 	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(150, 150), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.24), 24, 0.02, false, -6)
 	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(245, 190), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.10), 24, 0.06, false, -7)
-	_add_path_ribbon([Vector2(120, 920), Vector2(450, 900), Vector2(820, 910), Vector2(1460, 880)], 10.0, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.16), -4)
 	_add_light_pool(world_root, Vector2(830, 1260), Vector2(340, 140), Color(1.0, 0.78, 0.42, 0.13))
 	_add_light_pool(world_root, Vector2(1160, 1300), Vector2(230, 460), Color(0.42, 0.76, 0.94, 0.12))
-	_add_water_glints(Vector2(1090, 1120), 8, Vector2(12, 68), Color(0.78, 0.98, 1.0, 0.26))
-	_add_rift_shard_cluster(Vector2(1210, 1120), 6, 160.0)
+	_add_water_glints(Vector2(1090, 1120), 4, Vector2(12, 68), Color(0.78, 0.98, 1.0, 0.24))
 	_add_path_ribbon([Vector2(420, 650), Vector2(700, 860), Vector2(860, 1240), Vector2(1160, 1470)], 28.0, Color(0.92, 0.68, 0.38, 0.26), -1)
 	_add_story_banner(Vector2(470, 910), Vector2(390, 126), Color(0.94, 0.86, 0.66, 0.84), Color(0.52, 0.34, 0.20, 0.82), "Rotayı oku, acele etme")
-	_add_asset_slot_prop("ship.map_table", Vector2(690, 1170), Vector2(330, 154), Color(0.78, 0.56, 0.30, 0.92), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.60), "Harita", true)
-	_add_asset_slot_prop("ship.uniform_stand", Vector2(455, 535), Vector2(112, 154), Color(0.18, 0.32, 0.48, 0.88), Color(_colors.POP_CRIMSON.r, _colors.POP_CRIMSON.g, _colors.POP_CRIMSON.b, 0.46), "", true)
-	_add_asset_slot_prop("ship.compass", Vector2(1020, 1370), Vector2(128, 96), Color(_colors.POP_CREAM.r, _colors.POP_CREAM.g, _colors.POP_CREAM.b, 0.80), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.64), "", true)
-	_add_asset_slot_prop("ship.dock_glow", Vector2(1110, 1510), Vector2(180, 72), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.20), Color(1.0, 1.0, 1.0, 0.18), "Samsun", true)
-	_add_kenney_prop(_textures.BLOCK_TILE_WOOD_TEXTURE, Vector2(855, 1214), Vector2(1.60, 0.92), Color(1.0, 0.76, 0.46, 0.74), true, "ship.map_table_surface")
-	_add_kenney_prop(_textures.BLOCK_BOX_TEXTURE, Vector2(420, 1460), Vector2(1.02, 1.02), Color(0.92, 0.76, 0.54, 0.70), true, "ship.deck_crate_left")
-	_add_kenney_prop(_textures.BLOCK_BOX_WIDE_TEXTURE, Vector2(525, 1486), Vector2(1.05, 1.05), Color(0.96, 0.80, 0.58, 0.66), true, "ship.deck_crate_stack")
-	_add_kenney_prop(_textures.BLOCK_CART_TOP_TEXTURE, Vector2(1016, 1380), Vector2(0.86, 0.86), Color(1.0, 0.90, 0.64, 0.74), true, "ship.compass_case")
 	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(380, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_left")
 	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1060, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_right")
 	_add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(520, 1188), Vector2(0.92, 0.92), Color(0.92, 0.96, 1.0, 0.62), "ship.deck_helper", "rota")
 	_add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(1180, 1248), Vector2(0.86, 0.86), Color(0.90, 1.0, 0.96, 0.56), "ship.watch_helper", "liman")
 	_add_strategy_card(_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(730, 1130), Vector2(0.44, 0.44), Color(0.92, 1.0, 0.88, 0.76), "Harita", "ship.route_card")
 	_add_strategy_token(_textures.BOARD_CHIP_BLUE_TEXTURE, Vector2(1114, 1390), Vector2(0.44, 0.44), Color(0.84, 0.98, 1.0, 0.80), "ship.navigation_token")
-	_add_decorative_speckles(Rect2(Vector2(250, 420), Vector2(1040, 1140)), Color(1.0, 0.86, 0.55, 0.06), 20)
+	_add_decorative_speckles(Rect2(Vector2(250, 420), Vector2(1040, 1140)), Color(1.0, 0.86, 0.55, 0.06), 8)
 	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(300, 150), Vector2(0.96, 0.96), Color(1, 1, 1, 0.22))
 	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1220, 170), Vector2(0.88, 0.88), Color(1, 1, 1, 0.22))
 	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(840, 120), Vector2(0.74, 0.74), Color(1, 1, 1, 0.18))
-	_add_rect(world_root, Vector2(1030, 1015), Vector2(120, 600), Color(0.08, 0.28, 0.36))
-	_add_rect(world_root, Vector2(1180, 1015), Vector2(105, 600), Color(0.10, 0.31, 0.40))
-	_add_rect(world_root, Vector2(270, 1090), Vector2(980, 52), Color(0.58, 0.44, 0.30))
-	_add_rect(world_root, Vector2(270, 1230), Vector2(980, 52), Color(0.58, 0.44, 0.30))
-	_add_rect(world_root, Vector2(270, 1370), Vector2(980, 52), Color(0.58, 0.44, 0.30))
-	_add_ship_planks(Vector2(360, 1094), 8, 102.0, Color(1, 1, 1, 0.42), Vector2(0.62, 0.62))
-	_add_ship_planks(Vector2(360, 1234), 8, 102.0, Color(1, 1, 1, 0.42), Vector2(0.62, 0.62))
-	_add_ship_planks(Vector2(360, 1374), 8, 102.0, Color(1, 1, 1, 0.42), Vector2(0.62, 0.62))
-	_add_sprite_prop(_textures.SHIP_HULL_TEXTURE, Vector2(680, 1500), Vector2(1.30, 1.30), Color(1, 1, 1, 0.30))
-	_add_sprite_prop(_textures.SHIP_HULL_ALT_TEXTURE, Vector2(950, 1515), Vector2(1.18, 1.18), Color(1, 1, 1, 0.26))
-	_add_sprite_prop(_textures.SHIP_MAST_TEXTURE, Vector2(820, 900), Vector2(1.26, 1.26), Color(1, 1, 1, 0.42), true)
-	_add_sprite_prop(_textures.SHIP_MAST_TEXTURE, Vector2(1040, 980), Vector2(0.92, 0.92), Color(1, 1, 1, 0.34), true)
-	_add_sprite_prop(_textures.SHIP_SAIL_TEXTURE, Vector2(885, 840), Vector2(0.92, 0.92), Color(1, 1, 1, 0.30), true)
-	_add_sprite_prop(_textures.SHIP_SMALL_SAIL_TEXTURE, Vector2(1080, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.28), true)
-	_add_sprite_prop(_textures.SHIP_FLAG_TEXTURE, Vector2(905, 610), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), true)
-	_add_sprite_prop(_textures.SHIP_FLAG_ALT_TEXTURE, Vector2(1090, 760), Vector2(0.62, 0.62), Color(1, 1, 1, 0.78), true)
-	_add_crimson_flag(Vector2(960, 650), 0.86, true)
-	_add_crimson_flag(Vector2(1160, 820), 0.64, true)
-	_add_sprite_prop(_textures.SHIP_NEST_TEXTURE, Vector2(820, 720), Vector2(0.78, 0.78), Color(1, 1, 1, 0.45), true)
-	_add_sprite_prop(_textures.SHIP_CANNON_TEXTURE, Vector2(1140, 1320), Vector2(0.70, 0.70), Color(1, 1, 1, 0.72), true)
-	_add_sprite_prop(_textures.SHIP_CANNON_TEXTURE, Vector2(420, 1330), Vector2(-0.66, 0.66), Color(1, 1, 1, 0.54), true)
-	_add_sprite_prop(_textures.SHIP_CREW_TEXTURE, Vector2(1180, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.38), true)
-	_add_sprite_prop(_textures.SHIP_CREW_ALT_TEXTURE, Vector2(540, 1110), Vector2(0.60, 0.60), Color(1, 1, 1, 0.34), true)
 	_add_sprite_prop(_textures.SMOKE_TEXTURE, Vector2(1010, 450), Vector2(0.78, 0.78), Color(0.85, 0.92, 1.0, 0.22))
 	_add_sprite_prop(_textures.SMOKE_TEXTURE, Vector2(1180, 1460), Vector2(0.56, 0.56), Color(0.88, 0.94, 1.0, 0.18))
-	_add_mote_cluster(Vector2(1140, 1160), Color(0.78, 0.92, 1.0, 0.14), 6)
+	_add_mote_cluster(Vector2(1140, 1160), Color(0.78, 0.92, 1.0, 0.14), 4)
 
 
 # ============================================================
@@ -1653,15 +1782,15 @@ func _decorate_havza(world_root: Node) -> void:
 	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(320, 470), 7, Vector2(118, 0), Color(1, 1, 1, 0.68))
 	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(270, 1280), 8, Vector2(118, 0), Color(1, 1, 1, 0.68))
 	_add_sketch_strip(_textures.SKETCH_GRASS_TEXTURE, Vector2(340, 1380), 7, Vector2(118, 0), Color(1, 1, 1, 0.66))
-	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(450, 1540), 6, Vector2(84, -82), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74))
-	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(920, 1040), 3, Vector2(0, -102), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74))
-	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(960, 920), Color.WHITE, Vector2(0.82, 0.82))
-	_add_sketch_tile(_textures.SKETCH_PATH_CORNER_TEXTURE, Vector2(780, 1120), Color.WHITE, Vector2(0.74, 0.74))
-	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1080, 720), Color.WHITE, Vector2(0.74, 0.74))
-	_add_sketch_tile(_textures.SKETCH_RIVER_TEXTURE, Vector2(330, 1500), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
-	_add_sketch_tile(_textures.SKETCH_RIVER_TEXTURE, Vector2(260, 1588), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
-	_add_sketch_tile(_textures.SKETCH_RIVER_BEND_TEXTURE, Vector2(398, 1676), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78))
-	_add_sketch_tile(_textures.SKETCH_RIVER_BRIDGE_TEXTURE, Vector2(520, 1424), Color.WHITE, Vector2(0.78, 0.78))
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(450, 1540), 6, Vector2(84, -82), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74), false, true)
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(920, 1040), 3, Vector2(0, -102), Color(1, 1, 1, 0.95), Vector2(0.74, 0.74), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(960, 920), Color.WHITE, Vector2(0.82, 0.82), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_CORNER_TEXTURE, Vector2(780, 1120), Color.WHITE, Vector2(0.74, 0.74), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1080, 720), Color.WHITE, Vector2(0.74, 0.74), false, true)
+	_add_sketch_tile(_textures.SKETCH_RIVER_TEXTURE, Vector2(330, 1500), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78), false, true)
+	_add_sketch_tile(_textures.SKETCH_RIVER_TEXTURE, Vector2(260, 1588), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78), false, true)
+	_add_sketch_tile(_textures.SKETCH_RIVER_BEND_TEXTURE, Vector2(398, 1676), Color(0.92, 1.0, 1.0, 0.88), Vector2(0.78, 0.78), false, true)
+	_add_sketch_tile(_textures.SKETCH_RIVER_BRIDGE_TEXTURE, Vector2(520, 1424), Color.WHITE, Vector2(0.78, 0.78), false, true)
 	_add_havza_building(Vector2(790, 560), 4, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOWS_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.92))
 	_add_havza_building(Vector2(300, 680), 3, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.78))
 	_add_havza_building(Vector2(1120, 760), 2, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.74))
@@ -1716,9 +1845,9 @@ func _decorate_amasya(world_root: Node) -> void:
 	_add_decorative_speckles(Rect2(Vector2(260, 520), Vector2(1100, 1140)), Color(1.0, 0.84, 0.48, 0.06), 20)
 	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(280, 210), Vector2(0.92, 0.92), Color(1, 1, 1, 0.16))
 	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1240, 250), Vector2(0.82, 0.82), Color(1, 1, 1, 0.12))
-	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(420, 1700), 6, Vector2(94, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78))
-	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(800, 1450), Color.WHITE, Vector2(0.82, 0.82))
-	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1090, 1180), Color.WHITE, Vector2(0.76, 0.76))
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(420, 1700), 6, Vector2(94, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(800, 1450), Color.WHITE, Vector2(0.82, 0.82), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1090, 1180), Color.WHITE, Vector2(0.76, 0.76), false, true)
 	_add_havza_building(Vector2(360, 540), 5, _textures.SKETCH_BUILDING_DOOR_TEXTURE, _textures.SKETCH_BUILDING_WINDOWS_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.88))
 	_add_havza_building(Vector2(980, 620), 2, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.72))
 	_add_kenney_building(Vector2(1130, 720), Vector2(0.92, 0.92), _textures.BLOCK_BUILDING_ROOF_RED_TEXTURE, Color(1.0, 0.94, 0.82, 0.48))
@@ -1771,9 +1900,9 @@ func _decorate_kongreler(world_root: Node) -> void:
 	_add_havza_building(Vector2(1060, 620), 2, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_WINDOW_TEXTURE, _textures.SKETCH_BUILDING_CENTER_TEXTURE, Color(1, 1, 1, 0.70))
 	_add_kenney_building(Vector2(1120, 745), Vector2(0.90, 0.90), _textures.BLOCK_BUILDING_ROOF_BLUE_TEXTURE, Color(0.94, 1.0, 1.0, 0.44))
 	_add_crimson_flag(Vector2(1040, 790), 0.52, true)
-	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(430, 1660), 5, Vector2(96, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78))
-	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(780, 1220), Color.WHITE, Vector2(0.82, 0.82))
-	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1090, 980), Color.WHITE, Vector2(0.76, 0.76))
+	_add_sketch_strip(_textures.SKETCH_PATH_TEXTURE, Vector2(430, 1660), 5, Vector2(96, 0), Color(1, 1, 1, 0.96), Vector2(0.78, 0.78), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_CROSS_TEXTURE, Vector2(780, 1220), Color.WHITE, Vector2(0.82, 0.82), false, true)
+	_add_sketch_tile(_textures.SKETCH_PATH_END_TEXTURE, Vector2(1090, 980), Color.WHITE, Vector2(0.76, 0.76), false, true)
 	_add_sprite_prop(_textures.TREE_TEXTURE, Vector2(250, 1290), Vector2(0.84, 0.84), Color(0.96, 1.0, 0.92, 0.32), true)
 	_add_sprite_prop(_textures.TREE_TEXTURE_ALT, Vector2(1350, 1330), Vector2(0.78, 0.78), Color(0.96, 1.0, 0.92, 0.28), true)
 	_add_sprite_prop(_textures.FENCE_TEXTURE, Vector2(790, 840), Vector2(1.04, 1.04), Color(1, 1, 1, 0.26))
@@ -1842,8 +1971,8 @@ func _add_sprite_prop(texture: Texture2D, pos: Vector2, scale_value: Vector2, ti
 	target.add_child(sprite)
 
 
-func _add_paper_shadow(center: Vector2, radius: Vector2, alpha := 0.20, to_foreground := false) -> void:
-	_add_soft_blob(_cached_world_root, center + Vector2(0, 22), radius, Color(0.03, 0.05, 0.08, alpha), 18, 0.05, to_foreground, -3)
+func _add_paper_shadow(center: Vector2, radius: Vector2, alpha := 0.20, to_foreground := false) -> Polygon2D:
+	return _add_soft_blob(_cached_world_root, center + Vector2(0, 22), radius, Color(0.03, 0.05, 0.08, alpha), 18, 0.05, to_foreground, -3)
 
 
 func _add_crimson_flag(pos: Vector2, scale_value := 1.0, to_foreground := true) -> void:
@@ -1893,6 +2022,7 @@ func _add_path_ribbon(points: Array, width: float, color: Color, z_index := -2) 
 	line.end_cap_mode = Line2D.LINE_CAP_ROUND
 	for point in points:
 		line.add_point(point)
+	_mark_world_guide(line)
 	_get_props(_cached_world_root).add_child(line)
 
 
@@ -2094,6 +2224,7 @@ func _add_location_sign(title: String, subtitle: String, pos: Vector2, width: fl
 	var root := Node2D.new()
 	root.position = pos
 	root.z_index = 10
+	_mark_world_guide(root)
 	root.set_meta("ambient_bob", true)
 	root.set_meta("base_pos", pos)
 	root.set_meta("phase", fmod(pos.x + pos.y, TAU))
@@ -2173,6 +2304,7 @@ func _add_way_arrow(pos: Vector2, rotation: float, tint: Color, label_text := ""
 	root.position = pos
 	root.rotation = rotation
 	root.z_index = 10
+	_mark_world_guide(root)
 	root.set_meta("ambient_bob", true)
 	root.set_meta("base_pos", pos)
 	root.set_meta("phase", fmod(pos.x * 0.27 + pos.y * 0.13, TAU))
@@ -2210,16 +2342,39 @@ func _add_way_arrow(pos: Vector2, rotation: float, tint: Color, label_text := ""
 		label.add_theme_font_size_override("font_size", 17)
 		label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, _colors.DECORATIVE_LABEL_ALPHA))
 		label.z_index = 11
+		_mark_world_guide(label)
 		_get_foreground(_cached_world_root).add_child(label)
 
 
 func _add_discovery_badge(texture: Texture2D, pos: Vector2, tint: Color, label_text: String, slot_id := "") -> void:
-	_add_soft_blob(_cached_world_root, pos, Vector2(78, 54), Color(tint.r, tint.g, tint.b, 0.16), 14, 0.04, true, 7)
-	var badge := _add_kenney_prop(texture, pos, Vector2(0.58, 0.58), Color(1, 1, 1, 0.86), true, slot_id)
-	badge.set_meta("ambient_bob", true)
-	badge.set_meta("base_pos", pos)
-	badge.set_meta("phase", fmod(pos.x + pos.y, TAU))
-	badge.set_meta("bob_amount", 4.0)
+	_mark_world_guide(_add_soft_blob(_cached_world_root, pos, Vector2(78, 54), Color(tint.r, tint.g, tint.b, 0.16), 14, 0.04, true, 7))
+	var root := Node2D.new()
+	root.position = pos
+	root.z_index = 9
+	_mark_world_guide(root)
+	root.set_meta("ambient_bob", true)
+	root.set_meta("base_pos", pos)
+	root.set_meta("phase", fmod(pos.x + pos.y, TAU))
+	root.set_meta("bob_amount", 4.0)
+	if slot_id != "":
+		root.set_meta("asset_slot", slot_id)
+		root.set_meta("kenney_fallback", true)
+
+	var outline := Sprite2D.new()
+	outline.texture = texture
+	outline.scale = Vector2(0.64, 0.64)
+	outline.modulate = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.28)
+	outline.z_index = 0
+	root.add_child(outline)
+
+	var icon := Sprite2D.new()
+	icon.texture = texture
+	icon.scale = Vector2(0.58, 0.58)
+	icon.modulate = Color(1, 1, 1, 0.86)
+	icon.z_index = 1
+	root.add_child(icon)
+	_get_foreground(_cached_world_root).add_child(root)
+
 	var label := Label.new()
 	label.position = pos + Vector2(-82, 50)
 	label.custom_minimum_size = Vector2(164, 28)
@@ -2229,6 +2384,7 @@ func _add_discovery_badge(texture: Texture2D, pos: Vector2, tint: Color, label_t
 	label.add_theme_font_size_override("font_size", 16)
 	label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, _colors.DECORATIVE_LABEL_ALPHA))
 	label.z_index = 11
+	_mark_world_guide(label)
 	_get_foreground(_cached_world_root).add_child(label)
 
 
@@ -2236,6 +2392,7 @@ func _add_breadcrumb_dot(texture: Texture2D, pos: Vector2, tint: Color, scale_va
 	var root := Node2D.new()
 	root.position = pos
 	root.z_index = 8
+	_mark_world_guide(root)
 	root.set_meta("ambient_bob", true)
 	root.set_meta("base_pos", pos)
 	root.set_meta("phase", fmod(pos.x * 0.19 + pos.y * 0.11, TAU))
@@ -2287,8 +2444,8 @@ func _add_breadcrumb_trail(points: Array, texture: Texture2D, tint: Color, slot_
 
 
 func _add_story_banner(pos: Vector2, size: Vector2, fill: Color, accent: Color, text: String) -> void:
-	_add_paper_shadow(pos + (size * 0.5), Vector2(size.x * 0.56, size.y * 0.40), 0.18, true)
-	_add_soft_blob(_cached_world_root, pos + (size * 0.5), Vector2(size.x * 0.52, size.y * 0.36), fill, 16, 0.04, true, 8)
+	_mark_world_guide(_add_paper_shadow(pos + (size * 0.5), Vector2(size.x * 0.56, size.y * 0.40), 0.18, true))
+	_mark_world_guide(_add_soft_blob(_cached_world_root, pos + (size * 0.5), Vector2(size.x * 0.52, size.y * 0.36), fill, 16, 0.04, true, 8))
 	var stripe := Polygon2D.new()
 	stripe.position = pos + Vector2(size.x * 0.18, size.y * 0.56)
 	stripe.color = accent
@@ -2299,6 +2456,7 @@ func _add_story_banner(pos: Vector2, size: Vector2, fill: Color, accent: Color, 
 		Vector2(size.x * 0.64, 10),
 		Vector2.ZERO + Vector2(0, 10),
 	])
+	_mark_world_guide(stripe)
 	_get_foreground(_cached_world_root).add_child(stripe)
 	var label := Label.new()
 	label.position = pos + Vector2(size.x * 0.12, size.y * 0.22)
@@ -2310,6 +2468,7 @@ func _add_story_banner(pos: Vector2, size: Vector2, fill: Color, accent: Color, 
 	label.add_theme_font_size_override("font_size", 24)
 	label.add_theme_color_override("font_color", Color(0.18, 0.18, 0.24, 0.92))
 	label.z_index = 10
+	_mark_world_guide(label)
 	_get_foreground(_cached_world_root).add_child(label)
 
 
@@ -2464,22 +2623,24 @@ func _add_distant_town_band(y: float, tint: Color, slot_prefix: String) -> void:
 	_add_backdrop_prop(_textures.BG_FLAT_TREE_08_TEXTURE, Vector2(1370, y + 30), Vector2(0.60, 0.60), tint, -4, "%s.tree_b" % slot_prefix)
 
 
-func _add_sketch_tile(texture: Texture2D, pos: Vector2, tint := Color.WHITE, scale_value := Vector2(0.72, 0.72), to_foreground := false) -> void:
+func _add_sketch_tile(texture: Texture2D, pos: Vector2, tint := Color.WHITE, scale_value := Vector2(0.72, 0.72), to_foreground := false, mark_as_guide := false) -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = texture
 	sprite.position = pos
 	sprite.scale = scale_value
 	sprite.modulate = tint
 	sprite.z_index = 6 if to_foreground else -1
+	if mark_as_guide:
+		_mark_world_guide(sprite)
 	if to_foreground:
 		_get_foreground(_cached_world_root).add_child(sprite)
 	else:
 		_get_props(_cached_world_root).add_child(sprite)
 
 
-func _add_sketch_strip(texture: Texture2D, start: Vector2, count: int, step: Vector2, tint := Color.WHITE, scale_value := Vector2(0.72, 0.72), to_foreground := false) -> void:
+func _add_sketch_strip(texture: Texture2D, start: Vector2, count: int, step: Vector2, tint := Color.WHITE, scale_value := Vector2(0.72, 0.72), to_foreground := false, mark_as_guide := false) -> void:
 	for index in range(count):
-		_add_sketch_tile(texture, start + (step * index), tint, scale_value, to_foreground)
+		_add_sketch_tile(texture, start + (step * index), tint, scale_value, to_foreground, mark_as_guide)
 
 
 func _add_havza_building(origin: Vector2, columns: int, front_texture: Texture2D, fill_texture: Texture2D, accent_texture: Texture2D, tint := Color.WHITE) -> void:

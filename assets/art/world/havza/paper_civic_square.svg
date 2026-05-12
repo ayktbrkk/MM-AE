@@ -1,75 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
-  <!-- ============================================= -->
-  <!-- Civic Square / Town Square v2                -->
-  <!-- Stone pavement + people silhouettes + trees  -->
-  <!-- ============================================= -->
-  <!-- Ground shadow -->
-  <ellipse cx="300" cy="370" rx="280" ry="26" fill="#1a2a3a" opacity="0.16"/>
-  <!-- Stone pavement base -->
-  <path d="M60 340 C60 280 120 240 300 240 C480 240 540 280 540 340 V360 H60Z" fill="#e8dfc8" stroke="#2b2730" stroke-width="8" stroke-linejoin="round"/>
-  <!-- Inner pavement -->
-  <path d="M90 330 C90 282 148 252 300 252 C452 252 510 282 510 330 V350 H90Z" fill="#f5e8d3" stroke="none"/>
-  <!-- Cobblestone pattern -->
-  <g fill="none" stroke="#7a5a42" stroke-width="3" opacity="0.16">
-    <path d="M150 280 C180 270 220 272 250 284"/>
-    <path d="M340 280 C370 268 410 270 440 284"/>
-    <path d="M120 310 C160 298 200 300 240 312"/>
-    <path d="M350 310 C390 298 430 300 470 312"/>
-    <path d="M280 270 C300 262 320 264 340 276"/>
-    <path d="M280 300 C300 292 320 294 340 306"/>
-  </g>
-  <!-- Center monument/fountain base -->
-  <ellipse cx="300" cy="300" rx="40" ry="12" fill="#dab679" stroke="#2b2730" stroke-width="5"/>
-  <!-- Fountain -->
-  <rect x="290" y="268" width="20" height="32" fill="#e8dfc8" stroke="#2b2730" stroke-width="4"/>
-  <ellipse cx="300" cy="268" rx="18" ry="6" fill="#f5e8d3" stroke="#2b2730" stroke-width="4"/>
-  <!-- Water -->
-  <path d="M300 268 C296 254 304 254 300 244" fill="none" stroke="#8bd3dc" stroke-width="4" stroke-linecap="round" opacity="0.50"/>
-  <circle cx="300" cy="240" r="4" fill="#8bd3dc" opacity="0.40"/>
-  <!-- Left tree -->
-  <g>
-    <rect x="108" y="260" width="10" height="60" rx="3" fill="#5b3f2f"/>
-    <circle cx="113" cy="244" r="30" fill="#8db572" stroke="#2b2730" stroke-width="5" opacity="0.60"/>
-    <circle cx="100" cy="240" r="22" fill="#8db572" stroke="#2b2730" stroke-width="4" opacity="0.50"/>
-    <circle cx="126" cy="240" r="22" fill="#8db572" stroke="#2b2730" stroke-width="4" opacity="0.50"/>
-  </g>
-  <!-- Right tree -->
-  <g>
-    <rect x="482" y="260" width="10" height="60" rx="3" fill="#5b3f2f"/>
-    <circle cx="487" cy="244" r="30" fill="#8db572" stroke="#2b2730" stroke-width="5" opacity="0.60"/>
-    <circle cx="474" cy="240" r="22" fill="#8db572" stroke="#2b2730" stroke-width="4" opacity="0.50"/>
-    <circle cx="500" cy="240" r="22" fill="#8db572" stroke="#2b2730" stroke-width="4" opacity="0.50"/>
-  </g>
-  <!-- People silhouettes (small) -->
-  <g fill="#2b2730" opacity="0.24">
-    <!-- Person 1 -->
-    <circle cx="180" cy="310" r="8"/>
-    <path d="M180 318 L180 340 M172 326 L188 326"/>
-    <!-- Person 2 -->
-    <circle cx="220" cy="316" r="7"/>
-    <path d="M220 323 L220 342 M214 330 L226 330"/>
-    <!-- Person 3 -->
-    <circle cx="380" cy="314" r="8"/>
-    <path d="M380 322 L380 344 M374 330 L386 330"/>
-    <!-- Person 4 -->
-    <circle cx="420" cy="308" r="7"/>
-    <path d="M420 315 L420 338 M414 324 L426 324"/>
-    <!-- Person 5 (smaller, child) -->
-    <circle cx="160" cy="322" r="5"/>
-    <path d="M160 327 L160 340 M156 332 L164 332"/>
-  </g>
-  <!-- Notice board / bulletin -->
-  <rect x="240" y="250" width="30" height="24" fill="#dab679" stroke="#2b2730" stroke-width="4" opacity="0.50"/>
-  <!-- Small papers on board -->
-  <rect x="244" y="254" width="10" height="6" fill="#f5e8d3" stroke="#2b2730" stroke-width="2"/>
-  <rect x="256" y="254" width="10" height="6" fill="#f5e8d3" stroke="#2b2730" stroke-width="2"/>
-  <rect x="244" y="262" width="10" height="6" fill="#f5e8d3" stroke="#2b2730" stroke-width="2"/>
-  <!-- Gold accent dots -->
-  <g fill="#f2be63" opacity="0.26">
-    <circle cx="300" cy="362" r="5"/>
-    <circle cx="160" cy="350" r="6"/>
-    <circle cx="440" cy="350" r="6"/>
-    <circle cx="240" cy="270" r="4"/>
-    <circle cx="360" cy="270" r="4"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <!-- Layer 1: Shadow -->
+  <path fill="#1a2a3a" opacity="0.16" d="M 0 0 L 600 0 L 600 400 L 0 400 Z M 20 20 L 20 380 L 580 380 L 580 20 Z"/>
+  <!-- Layer 2: Ground (cream cobblestone) -->
+  <path fill="#E8DFC8" d="M 0 180 L 600 180 L 600 400 L 0 400 Z M 60 180 Q 120 170 180 175 Q 240 168 300 172 Q 360 166 420 171 Q 480 168 540 174 L 540 180 L 60 180 Z"/>
+  <!-- Layer 3: Fountain/Monument -->
+  <path fill="#D4C5A9" d="M 270 155 L 280 155 L 280 170 L 295 170 L 295 175 L 305 175 L 305 170 L 320 170 L 320 155 L 330 155 L 330 150 L 315 148 L 315 135 L 320 130 L 300 120 L 280 130 L 285 135 L 285 148 Z M 255 175 L 255 185 Q 255 195 265 198 L 335 198 Q 345 195 345 185 L 345 175 Z M 250 198 L 350 198 L 355 210 L 245 210 Z"/>
+  <!-- Layer 4: Trees -->
+  <path fill="#8DB572" d="M 60 210 Q 75 170 90 155 Q 105 140 100 125 Q 115 135 110 155 Q 125 140 120 120 Q 140 135 130 160 Q 145 148 142 168 Q 155 158 148 180 Q 160 172 155 195 L 155 210 Z M 440 210 Q 445 195 455 185 Q 448 162 460 150 Q 453 130 468 120 Q 478 140 472 158 Q 485 145 480 125 Q 498 138 490 162 Q 505 150 500 172 Q 512 162 508 185 Q 518 175 515 200 L 515 210 Z M 80 210 L 80 240 L 90 240 L 90 210 Z M 470 210 L 470 240 L 480 240 L 480 210 Z"/>
+  <!-- Layer 5: NPC silhouettes -->
+  <path fill="#2B2730" opacity="0.30" d="M 190 210 Q 190 200 195 197 Q 200 194 205 197 Q 210 200 210 210 L 210 240 L 205 240 L 205 225 L 200 225 L 200 240 L 195 240 L 195 225 L 190 225 Z M 197 194 Q 197 188 200 188 Q 203 188 203 194 Q 203 197 200 197 Q 197 197 197 194 Z M 380 210 Q 380 200 385 197 Q 390 194 395 197 Q 400 200 400 210 L 400 240 L 395 240 L 395 225 L 390 225 L 390 240 L 385 240 L 385 225 L 380 225 Z M 387 194 Q 387 188 390 188 Q 393 188 393 194 Q 393 197 390 197 Q 387 197 387 194 Z M 230 215 Q 230 206 234 203 Q 238 200 242 203 Q 246 206 246 215 L 246 242 L 242 242 L 242 228 L 238 228 L 238 242 L 234 242 L 234 228 L 230 228 Z M 236 200 Q 236 195 239 195 Q 242 195 242 200 Q 242 203 239 203 Q 236 203 236 200 Z"/>
 </svg>
