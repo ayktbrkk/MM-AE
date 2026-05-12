@@ -33,3 +33,7 @@ Thumbs.db
 
 # Build artifacts (APK too large for GitHub)
 builds/
+
+# Generated render artifacts
+artifacts/renders/**/*.png.import
+artifacts/renders/character_ui/
