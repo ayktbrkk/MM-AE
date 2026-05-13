@@ -74,9 +74,14 @@ func _build_surface(surface: String) -> Node:
 	match surface:
 		"menu":
 			return load("res://scenes/main_menu.tscn").instantiate()
+		"hud":
+			return load("res://scenes/hud_bar.tscn").instantiate()
 		"dialogue":
 			var dialogue: Node = load("res://scenes/dialogue_overlay.tscn").instantiate()
 			return dialogue
+		"info_card":
+			var info_card: Node = load("res://scenes/info_card_overlay.tscn").instantiate()
+			return info_card
 		"decision":
 			var decision: Node = load("res://scenes/decision_overlay.tscn").instantiate()
 			return decision
@@ -90,6 +95,21 @@ func _finalize_surface(surface: String, scene: Node) -> void:
 	match surface:
 		"menu":
 			return
+		"hud":
+			if scene.has_method("apply_theme"):
+				scene.call("apply_theme", Color(0.90, 0.97, 1.0), Color(0.04, 0.42, 0.56), Color(0.08, 0.48, 0.62), Color(0.04, 0.22, 0.32), Color(0.08, 0.48, 0.62))
+			if scene.has_method("set_title"):
+				scene.call("set_title", "Zaman Yolculari: Samsun Ruyasi")
+			if scene.has_method("set_chip"):
+				scene.call("set_chip", "Samsun Ruyasi")
+			if scene.has_method("set_objective"):
+				scene.call("set_objective", "Telgrafhaneye ulas ve ilk ipuclarini topla.")
+			if scene.has_method("set_progress"):
+				scene.call("set_progress", "Liderlik: 3 | Destek: 2/3 | Dalga: 1")
+			if scene.has_method("set_star_count"):
+				scene.call("set_star_count", 0)
+				await process_frame
+				scene.call("set_star_count", 4)
 		"dialogue":
 			if scene.has_method("present"):
 				scene.call("present", {
@@ -103,6 +123,15 @@ func _finalize_surface(surface: String, scene: Node) -> void:
 				var body_label := scene.get_node_or_null("BottomArea/DialoguePanel/DialogueMargin/DialogueContent/BodyText")
 				if body_label != null:
 					body_label.visible_ratio = 1.0
+		"info_card":
+			if scene.has_method("present"):
+				scene.call("present", {
+					"tag_text": "Dogru Karar",
+					"title": "Karar Notu",
+					"text": "Bilgi karti artik gorunur bir kapat aksiyonu ve daha net mobil aksiyon satiri ile aciliyor.",
+					"reward_text": "Yoluna devam et",
+					"accent_color": Color(0.34, 0.63, 0.95, 0.18)
+				})
 		"decision":
 			if scene.has_method("present"):
 				scene.call("present", {

@@ -27,13 +27,24 @@ static var STAR_TEXTURE := _star_texture()
 @onready var star_label: Label = $TopPanel/TopMargin/TopContent/ProgressRow/StarGroup/StarLabel
 @onready var chip_label: Label = $ChapterChip/ChipMargin/ChipLabel
 
+var status_panel: PanelContainer
+var compact_objective_label: Label
+var compact_progress_label: Label
 var star_counter_panel: PanelContainer
 var compact_star_icon: TextureRect
 var compact_star_label: Label
+var star_feedback_panel: PanelContainer
+var star_feedback_label: Label
+var star_feedback_timer: Timer
+var star_feedback_tween: Tween
 var objective_hint_panel: PanelContainer
 var objective_hint_label: Label
 var objective_hint_timer: Timer
 var objective_hint_tween: Tween
+var _theme_accent := _colors.UI_BADGE_GOLD
+var _last_objective := ""
+var _last_progress := ""
+var _last_star_count := -1
 
 func _ready() -> void:
 	star_icon.texture = STAR_TEXTURE
@@ -45,25 +56,49 @@ func set_title(value: String) -> void:
 
 func set_objective(value: String) -> void:
 	objective_label.text = value
+	if compact_objective_label != null:
+		compact_objective_label.text = value
+	if value == _last_objective:
+		return
+	_last_objective = value
 	_show_objective_hint(value)
+	_pulse_panel(status_panel, 1.02)
 
 func set_progress(value: String) -> void:
 	progress_label.text = value
+	if compact_progress_label != null:
+		compact_progress_label.text = value
+	if value == _last_progress:
+		return
+	_last_progress = value
+	_pulse_panel(status_panel, 1.015)
 
 func set_chip(value: String) -> void:
 	chip_label.text = value
 
 func set_star_count(value: int) -> void:
+	var previous_count := _last_star_count
+	_last_star_count = value
 	star_label.text = "x%d" % value
 	if compact_star_label != null:
 		compact_star_label.text = "x%d" % value
+	_pulse_panel(star_counter_panel, 1.04)
+	if previous_count >= 0 and value > previous_count:
+		_show_star_feedback(value - previous_count)
 
-func apply_theme(top_fill: Color, top_border: Color, chip_fill: Color, chip_border: Color) -> void:
+func apply_theme(top_fill: Color, top_border: Color, chip_fill: Color, chip_border: Color, accent_fill := _colors.UI_BADGE_GOLD) -> void:
+	_theme_accent = accent_fill
 	_apply_panel_style(chip_panel, chip_fill, chip_border, 24)
+	if status_panel != null:
+		_apply_panel_style(status_panel, Color(top_fill.r, top_fill.g, top_fill.b, 0.94), Color(top_border.r, top_border.g, top_border.b, 0.92), 18, 3)
 	if star_counter_panel != null:
 		_apply_panel_style(star_counter_panel, Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.64), Color(1.0, 1.0, 1.0, 0.10), 24, 2)
+	if star_feedback_panel != null:
+		_apply_panel_style(star_feedback_panel, Color(accent_fill.r, accent_fill.g, accent_fill.b, 0.94), Color(top_border.r, top_border.g, top_border.b, 0.50), 18, 3)
 	if objective_hint_panel != null:
-		_apply_panel_style(objective_hint_panel, Color(top_fill.r, top_fill.g, top_fill.b, 0.88), Color(top_border.r, top_border.g, top_border.b, 0.42), 14, 2)
+		_apply_panel_style(objective_hint_panel, Color(top_fill.r, top_fill.g, top_fill.b, 0.92), Color(accent_fill.r, accent_fill.g, accent_fill.b, 0.48), 14, 2)
+	if compact_progress_label != null:
+		compact_progress_label.add_theme_color_override("font_color", Color(top_border.r, top_border.g, top_border.b, 0.82))
 
 func _apply_styles() -> void:
 	top_panel.visible = false
@@ -74,13 +109,25 @@ func _apply_styles() -> void:
 	objective_label.add_theme_color_override("font_color", Color(0.21, 0.22, 0.28))
 	progress_label.add_theme_color_override("font_color", Color(0.32, 0.34, 0.40))
 	star_label.add_theme_color_override("font_color", Color(0.86, 0.42, 0.08))
+	if status_panel != null:
+		_apply_panel_style(status_panel, Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.94), Color(0.18, 0.28, 0.24, 0.88), 18, 3)
+	if compact_objective_label != null:
+		compact_objective_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.96))
+		compact_objective_label.add_theme_font_size_override("font_size", 22)
+	if compact_progress_label != null:
+		compact_progress_label.add_theme_color_override("font_color", Color(0.23, 0.27, 0.32, 0.84))
+		compact_progress_label.add_theme_font_size_override("font_size", 18)
 	if compact_star_label != null:
 		compact_star_label.add_theme_color_override("font_color", _colors.UI_BADGE_GOLD)
 		compact_star_label.add_theme_font_size_override("font_size", 24)
+	if star_feedback_label != null:
+		star_feedback_label.add_theme_color_override("font_color", Color.WHITE)
+		star_feedback_label.add_theme_font_size_override("font_size", 18)
 	if objective_hint_label != null:
 		objective_hint_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.86))
 		objective_hint_label.add_theme_font_size_override("font_size", 20)
-		_show_objective_hint(objective_label.text)
+		if objective_label.text.strip_edges() != "":
+			_show_objective_hint(objective_label.text)
 
 func _build_compact_layout() -> void:
 	top_panel.visible = false
@@ -91,6 +138,49 @@ func _build_compact_layout() -> void:
 	chip_panel.offset_bottom = 74.0
 	chip_panel.custom_minimum_size = Vector2(276, 56)
 	chip_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chip_panel.z_index = 3
+
+	status_panel = PanelContainer.new()
+	status_panel.name = "StatusPanel"
+	status_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	status_panel.offset_left = 24.0
+	status_panel.offset_top = 86.0
+	status_panel.offset_right = 700.0
+	status_panel.offset_bottom = 168.0
+	status_panel.custom_minimum_size = Vector2(676, 82)
+	status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status_panel.z_index = 2
+	add_child(status_panel)
+
+	var status_margin := MarginContainer.new()
+	status_margin.add_theme_constant_override("margin_left", 18)
+	status_margin.add_theme_constant_override("margin_top", 12)
+	status_margin.add_theme_constant_override("margin_right", 18)
+	status_margin.add_theme_constant_override("margin_bottom", 12)
+	status_panel.add_child(status_margin)
+
+	var status_content := VBoxContainer.new()
+	status_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status_content.add_theme_constant_override("separation", 6)
+	status_margin.add_child(status_content)
+
+	compact_objective_label = Label.new()
+	compact_objective_label.text = objective_label.text
+	compact_objective_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	compact_objective_label.custom_minimum_size = Vector2(0, 28)
+	compact_objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	compact_objective_label.clip_text = false
+	compact_objective_label.max_lines_visible = 2
+	status_content.add_child(compact_objective_label)
+
+	compact_progress_label = Label.new()
+	compact_progress_label.text = progress_label.text
+	compact_progress_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	compact_progress_label.custom_minimum_size = Vector2(0, 24)
+	compact_progress_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	compact_progress_label.clip_text = false
+	compact_progress_label.max_lines_visible = 2
+	status_content.add_child(compact_progress_label)
 
 	star_counter_panel = PanelContainer.new()
 	star_counter_panel.name = "StarCounter"
@@ -101,6 +191,7 @@ func _build_compact_layout() -> void:
 	star_counter_panel.offset_bottom = 74.0
 	star_counter_panel.custom_minimum_size = Vector2(144, 56)
 	star_counter_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	star_counter_panel.z_index = 3
 	add_child(star_counter_panel)
 
 	var star_margin := MarginContainer.new()
@@ -130,14 +221,47 @@ func _build_compact_layout() -> void:
 	compact_star_label.add_theme_color_override("font_color", _colors.UI_BADGE_GOLD)
 	star_row.add_child(compact_star_label)
 
+	star_feedback_panel = PanelContainer.new()
+	star_feedback_panel.name = "StarFeedback"
+	star_feedback_panel.visible = false
+	star_feedback_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	star_feedback_panel.offset_left = -244.0
+	star_feedback_panel.offset_top = 86.0
+	star_feedback_panel.offset_right = -24.0
+	star_feedback_panel.offset_bottom = 138.0
+	star_feedback_panel.custom_minimum_size = Vector2(220, 52)
+	star_feedback_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	star_feedback_panel.z_index = 2
+	add_child(star_feedback_panel)
+
+	var star_feedback_margin := MarginContainer.new()
+	star_feedback_margin.add_theme_constant_override("margin_left", 16)
+	star_feedback_margin.add_theme_constant_override("margin_top", 8)
+	star_feedback_margin.add_theme_constant_override("margin_right", 16)
+	star_feedback_margin.add_theme_constant_override("margin_bottom", 8)
+	star_feedback_panel.add_child(star_feedback_margin)
+
+	star_feedback_label = Label.new()
+	star_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	star_feedback_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	star_feedback_margin.add_child(star_feedback_label)
+
+	star_feedback_timer = Timer.new()
+	star_feedback_timer.one_shot = true
+	star_feedback_timer.wait_time = 1.45
+	star_feedback_timer.timeout.connect(_on_star_feedback_timeout)
+	add_child(star_feedback_timer)
+
 	objective_hint_panel = PanelContainer.new()
 	objective_hint_panel.name = "ObjectiveHint"
 	objective_hint_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	objective_hint_panel.offset_left = 24.0
-	objective_hint_panel.offset_top = 84.0
+	objective_hint_panel.offset_top = 178.0
 	objective_hint_panel.offset_right = 700.0
-	objective_hint_panel.offset_bottom = 152.0
+	objective_hint_panel.offset_bottom = 238.0
 	objective_hint_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	objective_hint_panel.visible = false
+	objective_hint_panel.z_index = 1
 	add_child(objective_hint_panel)
 
 	var hint_margin := MarginContainer.new()
@@ -149,8 +273,10 @@ func _build_compact_layout() -> void:
 
 	objective_hint_label = Label.new()
 	objective_hint_label.text = objective_label.text
+	objective_hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	objective_hint_label.custom_minimum_size = Vector2(0, 28)
 	objective_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	objective_hint_label.clip_text = true
+	objective_hint_label.clip_text = false
 	objective_hint_label.max_lines_visible = 2
 	objective_hint_label.add_theme_font_size_override("font_size", 20)
 	objective_hint_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.86))
@@ -158,7 +284,7 @@ func _build_compact_layout() -> void:
 
 	objective_hint_timer = Timer.new()
 	objective_hint_timer.one_shot = true
-	objective_hint_timer.wait_time = 5.0
+	objective_hint_timer.wait_time = 3.8
 	objective_hint_timer.timeout.connect(_on_objective_hint_timeout)
 	add_child(objective_hint_timer)
 
@@ -167,11 +293,13 @@ func _show_objective_hint(value: String) -> void:
 		return
 	if objective_hint_tween != null:
 		objective_hint_tween.kill()
-	objective_hint_label.text = value
+	objective_hint_label.text = "Yeni hedef: %s" % value
 	objective_hint_panel.visible = value.strip_edges() != ""
 	objective_hint_panel.modulate.a = 1.0
+	objective_hint_panel.scale = Vector2.ONE * 0.98
 	if not objective_hint_panel.visible:
 		return
+	_pulse_panel(objective_hint_panel, 1.02)
 	objective_hint_timer.start()
 
 func _on_objective_hint_timeout() -> void:
@@ -183,6 +311,39 @@ func _on_objective_hint_timeout() -> void:
 		if objective_hint_panel != null:
 			objective_hint_panel.visible = false
 	)
+
+
+func _show_star_feedback(delta: int) -> void:
+	if star_feedback_panel == null or star_feedback_label == null or delta <= 0:
+		return
+	if star_feedback_tween != null:
+		star_feedback_tween.kill()
+	star_feedback_label.text = "+%d tarih yildizi" % delta
+	star_feedback_panel.visible = true
+	star_feedback_panel.modulate.a = 1.0
+	star_feedback_panel.scale = Vector2.ONE * 0.96
+	_pulse_panel(star_feedback_panel, 1.04)
+	star_feedback_timer.start()
+
+
+func _on_star_feedback_timeout() -> void:
+	if star_feedback_panel == null or not star_feedback_panel.visible:
+		return
+	star_feedback_tween = create_tween()
+	star_feedback_tween.tween_property(star_feedback_panel, "modulate:a", 0.0, 0.30)
+	star_feedback_tween.finished.connect(func() -> void:
+		if star_feedback_panel != null:
+			star_feedback_panel.visible = false
+	)
+
+
+func _pulse_panel(target: Control, peak_scale: float) -> void:
+	if target == null:
+		return
+	var tween := create_tween()
+	target.scale = Vector2.ONE
+	tween.tween_property(target, "scale", Vector2.ONE * peak_scale, 0.10)
+	tween.tween_property(target, "scale", Vector2.ONE, 0.18)
 
 func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radius: int, border_width := 4) -> void:
 	var style := StyleBoxFlat.new()

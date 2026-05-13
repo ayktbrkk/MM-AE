@@ -14,7 +14,7 @@ var _world: Node2D
 # UI state
 var panel_mode := "character"
 var current_dialogue_callback: Callable
-var current_overlay_kind := ""
+var _active_closeable_overlay := -1
 
 # Minimap
 var minimap_panel: PanelContainer
@@ -49,33 +49,82 @@ var elapsed_time := 0.0
 
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
+const MIN_INTERACT_TOUCH_SIZE := 104.0
+const MIN_DIALOGUE_TOUCH_SIZE := 88.0
 
 # Overlay Manager
 var _overlay_manager: OverlayManager
+var _hud_root: Control
+var _hud_bar: Node
+var _interact_button: Button
+var _character_panel: PanelContainer
+var _dialogue_panel: PanelContainer
+var _dialogue_continue_button: Button
+var _dialogue_overlay: Node
+var _decision_overlay: Node
+var _info_card_overlay: Node
+var _chapter_transition_overlay: Node
+var _exit_confirm_overlay: CanvasLayer
 
 
 func initialize(world: Node2D) -> void:
 	_world = world
+	_cache_ui_references()
+	_apply_touch_target_defaults()
 	_setup_overlay_manager()
+
+
+func _cache_ui_references() -> void:
+	_hud_root = _world.get_node("CanvasLayer/HUD")
+	_hud_bar = _hud_root.get_node("HudBar")
+	_interact_button = _hud_root.get_node("InteractButton")
+	_character_panel = _hud_root.get_node("CharacterPanel")
+	_dialogue_panel = _hud_root.get_node("DialoguePanel")
+	_dialogue_continue_button = _dialogue_panel.get_node("DialogueMargin/DialogueContent/DialogueContinue")
+	_dialogue_overlay = _hud_root.get_node("DialogueOverlay")
+	_decision_overlay = _hud_root.get_node("DecisionOverlay")
+	_info_card_overlay = _hud_root.get_node("InfoCardOverlay")
+	_chapter_transition_overlay = _hud_root.get_node("ChapterTransitionOverlay")
+
+
+func _apply_touch_target_defaults() -> void:
+	_interact_button.custom_minimum_size.x = maxf(_interact_button.custom_minimum_size.x, MIN_INTERACT_TOUCH_SIZE)
+	_interact_button.custom_minimum_size.y = maxf(_interact_button.custom_minimum_size.y, MIN_INTERACT_TOUCH_SIZE)
+	_dialogue_continue_button.custom_minimum_size.x = maxf(_dialogue_continue_button.custom_minimum_size.x, MIN_DIALOGUE_TOUCH_SIZE)
+	_dialogue_continue_button.custom_minimum_size.y = maxf(_dialogue_continue_button.custom_minimum_size.y, MIN_DIALOGUE_TOUCH_SIZE)
 
 
 func _setup_overlay_manager() -> void:
 	"""Overlay Manager'ı kur ve tüm overlay'leri kaydet."""
 	_overlay_manager = OverlayManager.new()
 	add_child(_overlay_manager)
-	
-	# Mevcut overlay node'larını bul ve kaydet
-	var hud_path := "CanvasLayer/HUD"
-	_overlay_manager.register_overlay(OverlayManager.OverlayType.DIALOGUE, _world.get_node("%s/DialogueOverlay" % hud_path))
-	_overlay_manager.register_overlay(OverlayManager.OverlayType.DECISION, _world.get_node("%s/DecisionOverlay" % hud_path))
-	_overlay_manager.register_overlay(OverlayManager.OverlayType.INFO_CARD, _world.get_node("%s/InfoCardOverlay" % hud_path))
-	_overlay_manager.register_overlay(OverlayManager.OverlayType.CHAPTER_TRANSITION, _world.get_node("%s/ChapterTransitionOverlay" % hud_path))
+
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.DIALOGUE, _dialogue_overlay)
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.DECISION, _decision_overlay)
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.INFO_CARD, _info_card_overlay)
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.CHAPTER_TRANSITION, _chapter_transition_overlay)
 	
 	# P2-13: Çıkış onay overlay'ini programatik olarak oluştur ve kaydet
 	var exit_confirm_scene := preload("res://scenes/exit_confirm_overlay.tscn")
-	var exit_confirm_instance: CanvasLayer = exit_confirm_scene.instantiate()
-	add_child(exit_confirm_instance)
-	_overlay_manager.register_overlay(OverlayManager.OverlayType.EXIT_CONFIRM, exit_confirm_instance)
+	_exit_confirm_overlay = exit_confirm_scene.instantiate()
+	add_child(_exit_confirm_overlay)
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.EXIT_CONFIRM, _exit_confirm_overlay)
+
+
+func get_overlay_manager() -> OverlayManager:
+	return _overlay_manager
+
+
+func get_overlay(type) -> Node:
+	return _overlay_manager.get_overlay_node(type)
+
+
+func hide_overlay(type) -> void:
+	_overlay_manager.hide(type)
+
+
+func has_closeable_overlay() -> bool:
+	return _active_closeable_overlay >= 0 and _is_overlay_effectively_visible(_active_closeable_overlay)
 
 
 # ---------------------------------------------------------------------------
@@ -84,30 +133,26 @@ func _setup_overlay_manager() -> void:
 
 func show_dialogue(title: String, text: String, callback: Callable, expression: String = "idle") -> void:
 	current_dialogue_callback = callback
-	current_overlay_kind = "dialogue"
-	var dialogue_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.DIALOGUE)
-	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
+	_active_closeable_overlay = OverlayManager.OverlayType.DIALOGUE
 	_overlay_manager.show(OverlayManager.OverlayType.DIALOGUE)
-	dialogue_overlay.present({
+	_dialogue_overlay.present({
 		"chapter": _current_chip_text(),
 		"speaker": title,
 		"text": text,
 		"speaker_side": _speaker_side_for_title(title),
 		"expression": expression,
 	})
-	interact_btn.disabled = true
+	_interact_button.disabled = true
 	# P1.3: Diyalog acilinca gecis sesi
 	AudioManager.play_sfx("SFX_TRANSITION")
 
 
 func show_info_card(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
 	current_dialogue_callback = callback
-	current_overlay_kind = "info"
+	_active_closeable_overlay = OverlayManager.OverlayType.INFO_CARD
 	panel_mode = "info_card"
-	var info_card_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.INFO_CARD)
-	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
 	_overlay_manager.show(OverlayManager.OverlayType.INFO_CARD)
-	info_card_overlay.present({
+	_info_card_overlay.present({
 		"tag_text": _info_tag_text(card_kind),
 		"title": title,
 		"text": text,
@@ -115,7 +160,7 @@ func show_info_card(title: String, text: String, reward_text: String, callback: 
 		"icon_texture": _info_icon(card_kind),
 		"accent_color": _info_accent(card_kind)
 	})
-	interact_btn.disabled = true
+	_interact_button.disabled = true
 	# P1.3: Bilgi karti acilinca gecis sesi
 	AudioManager.play_sfx("SFX_TRANSITION")
 
@@ -124,12 +169,10 @@ func show_decision(event_index: int, context: String) -> void:
 	"""Karar overlay'ini göster."""
 	var questions := preload("res://assets/data/questions.gd")
 	var event: Dictionary = questions.EVENTS[event_index]
+	_active_closeable_overlay = -1
 	panel_mode = "decision"
-	var decision_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.DECISION)
-	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
-	var character_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/CharacterPanel")
 	_overlay_manager.show(OverlayManager.OverlayType.DECISION)
-	decision_overlay.present({
+	_decision_overlay.present({
 		"context": context,
 		"chapter": event.get("chapter", "Karar Anı"),
 		"title": event.get("chapter", "Karar Anı") + " - Karar",
@@ -137,25 +180,20 @@ func show_decision(event_index: int, context: String) -> void:
 		"option_a": event.get("option_a", ""),
 		"option_b": event.get("option_b", ""),
 	})
-	interact_btn.visible = false
-	character_panel.visible = false
+	_interact_button.visible = false
+	_character_panel.visible = false
 	# P1.3: Karar acilinca gecis sesi
 	AudioManager.play_sfx("SFX_TRANSITION")
 
 
 func close_dialogue() -> void:
 	"""Aktif overlay'i kapat ve callback'i çağır."""
-	var dialogue_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/DialoguePanel")
-	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
-
-	if current_overlay_kind == "dialogue":
-		_overlay_manager.hide(OverlayManager.OverlayType.DIALOGUE)
-	elif current_overlay_kind == "info":
-		_overlay_manager.hide(OverlayManager.OverlayType.INFO_CARD)
+	if _active_closeable_overlay >= 0:
+		_overlay_manager.hide(_active_closeable_overlay)
 	else:
-		dialogue_panel.visible = false
-	current_overlay_kind = ""
-	interact_btn.disabled = false
+		_dialogue_panel.visible = false
+	_active_closeable_overlay = -1
+	_interact_button.disabled = false
 	if current_dialogue_callback.is_valid():
 		var callback := current_dialogue_callback
 		current_dialogue_callback = Callable()
@@ -164,9 +202,9 @@ func close_dialogue() -> void:
 
 func show_chapter_transition(title: String, subtitle: String) -> void:
 	"""Bölüm geçiş overlay'ini göster."""
-	var chapter_transition_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.CHAPTER_TRANSITION)
+	_active_closeable_overlay = -1
 	_overlay_manager.show(OverlayManager.OverlayType.CHAPTER_TRANSITION)
-	chapter_transition_overlay.present(title, subtitle)
+	_chapter_transition_overlay.present(title, subtitle)
 	# Ses: bölüme göre bgm değiştir
 	AudioManager.play_bgm(_bgm_for_chapter(title))
 	# P1.3: Bölüm geçiş sesi
@@ -339,8 +377,7 @@ func build_minimap_hud() -> void:
 	minimap_panel.offset_right = -28
 	minimap_panel.offset_bottom = 558
 	_add_panel_style(minimap_panel, Color(0.98, 0.94, 0.78, 0.86), Color(0.10, 0.25, 0.30, 0.92), 16)
-	var hud: CanvasLayer = _world.get_node("CanvasLayer")
-	hud.get_node("HUD").add_child(minimap_panel)
+	_hud_root.add_child(minimap_panel)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 14)
@@ -553,18 +590,13 @@ func update_guidance_arrow() -> void:
 		return
 	var state: Node = _world.get_node("WorldState")
 	var player_node: Node2D = _world.get_node("Player")
-	var character_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/CharacterPanel")
-	var dialogue_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/DialoguePanel")
-	var decision_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.DECISION)
-	var dialogue_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.DIALOGUE)
-	var info_card_overlay: Node = _overlay_manager.get_overlay_node(OverlayManager.OverlayType.INFO_CARD)
 	var marker_mod: Node = _world.get_node("WorldMarker")
 	var markers: Node2D = _world.get_node("Markers")
 
 	if state.current_zone == "samsun_rift":
 		guidance_arrow.visible = false
 		return
-	var blocked: bool = character_panel.visible or dialogue_panel.visible or decision_overlay.visible or dialogue_overlay.visible or info_card_overlay.visible
+	var blocked: bool = _character_panel.visible or _dialogue_panel.visible or _decision_overlay.visible or _dialogue_overlay.visible or _info_card_overlay.visible
 	var target_marker: Node2D = marker_mod.get_guidance_marker(markers, state.current_goal_kind)
 	if blocked or target_marker == null:
 		guidance_arrow.visible = false
@@ -594,8 +626,7 @@ func build_route_hud() -> void:
 	route_panel.offset_right = 250
 	route_panel.offset_bottom = 592
 	_add_panel_style(route_panel, Color(0.98, 0.94, 0.78, 0.82), Color(0.12, 0.22, 0.26, 0.90), 16)
-	var hud: CanvasLayer = _world.get_node("CanvasLayer")
-	hud.get_node("HUD").add_child(route_panel)
+	_hud_root.add_child(route_panel)
 
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 14)
@@ -688,7 +719,6 @@ func update_route_hud() -> void:
 # ---------------------------------------------------------------------------
 
 func update_progress() -> void:
-	var hud_bar: Node = _world.get_node("CanvasLayer/HUD/HudBar")
 	var state: Node = _world.get_node("WorldState")
 	var progress := ""
 	var star_count := 0
@@ -721,12 +751,11 @@ func update_progress() -> void:
 		progress = "Ünite notları: %d/%d" % [state.get_item_count("units"), state.get_zone_item_total("units")]
 		star_count = state.get_item_count("units")
 
-	hud_bar.set_progress(progress)
-	hud_bar.set_star_count(star_count)
+	_hud_bar.set_progress(progress)
+	_hud_bar.set_star_count(star_count)
 
 
 func update_objective(text: String) -> void:
-	var hud_bar: Node = _world.get_node("CanvasLayer/HUD/HudBar")
 	var state: Node = _world.get_node("WorldState")
 	var title := "Zaman Yolcuları: Sınav Gecesi"
 	var chip := "Sınav Gecesi"
@@ -757,9 +786,9 @@ func update_objective(text: String) -> void:
 			title = "Zaman Yolcuları: Cumhuriyet"
 			chip = "Final: Cumhuriyet"
 
-	hud_bar.set_title(title)
-	hud_bar.set_chip(chip)
-	hud_bar.set_objective(text)
+	_hud_bar.set_title(title)
+	_hud_bar.set_chip(chip)
+	_hud_bar.set_objective(text)
 	_update_area_theme()
 
 
@@ -769,9 +798,6 @@ func update_objective(text: String) -> void:
 
 func _update_area_theme() -> void:
 	var state: Node = _world.get_node("WorldState")
-	var hud_bar: Node = _world.get_node("CanvasLayer/HUD/HudBar")
-	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
-	var dialogue_continue_btn: Button = _world.get_node("CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent/DialogueContinue")
 	var atmosphere_top_glow: ColorRect = _world.get_node("CanvasLayer/AtmosphereLayer/TopGlow")
 	var atmosphere_horizon_glow: ColorRect = _world.get_node("CanvasLayer/AtmosphereLayer/HorizonGlow")
 	var atmosphere_bottom_fog: ColorRect = _world.get_node("CanvasLayer/AtmosphereLayer/BottomFog")
@@ -877,9 +903,9 @@ func _update_area_theme() -> void:
 			horizon_glow = Color(0.90, 0.76, 0.58, ambient_horizon_alpha)
 			bottom_fog = Color(0.98, 0.92, 0.84, ambient_fog_alpha)
 
-	hud_bar.apply_theme(top_fill, top_border, chip_fill, chip_border)
-	_add_button_style(interact_btn, Color("#F2BE63"))
-	_add_button_style(dialogue_continue_btn, action_fill)
+	_hud_bar.apply_theme(top_fill, top_border, chip_fill, chip_border, action_fill)
+	_add_button_style(_interact_button, Color("#F2BE63"))
+	_add_button_style(_dialogue_continue_button, action_fill)
 	atmosphere_top_glow.color = top_glow
 	atmosphere_horizon_glow.color = horizon_glow
 	atmosphere_bottom_fog.color = bottom_fog
@@ -897,12 +923,12 @@ func _update_area_theme() -> void:
 # ---------------------------------------------------------------------------
 
 func apply_ui_styles() -> void:
-	var character_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/CharacterPanel")
-	var dialogue_panel: PanelContainer = _world.get_node("CanvasLayer/HUD/DialoguePanel")
+	var character_panel: PanelContainer = _character_panel
+	var dialogue_panel: PanelContainer = _dialogue_panel
 	var arda_btn: Button = _world.get_node("CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/ArdaButton")
 	var eda_btn: Button = _world.get_node("CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/EdaButton")
-	var interact_btn: Button = _world.get_node("CanvasLayer/HUD/InteractButton")
-	var dialogue_continue_btn: Button = _world.get_node("CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent/DialogueContinue")
+	var interact_btn: Button = _interact_button
+	var dialogue_continue_btn: Button = _dialogue_continue_button
 
 	_add_panel_style(character_panel, Color(0.97, 0.95, 0.88), Color(0.20, 0.42, 0.38), 18)
 

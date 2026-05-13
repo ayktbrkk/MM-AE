@@ -5,6 +5,10 @@ signal choice_selected(context: String, choice: String)
 const ARDA_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
 const EDA_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
 const TAU := 2.0 * PI
+const MIN_DECISION_BUTTON_HEIGHT := 124.0
+const MIN_DECISION_BUTTON_WIDTH := 0.0
+const DECISION_PANEL_WIDTH := 920.0
+const DECISION_PANEL_HEIGHT := 1180.0
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -12,14 +16,18 @@ const TAU := 2.0 * PI
 @onready var top_glow: ColorRect = $TopGlow
 @onready var bottom_fog: ColorRect = $BottomFog
 @onready var panel: PanelContainer = $Center/DecisionPanel
+@onready var decision_margin: MarginContainer = $Center/DecisionPanel/DecisionMargin
+@onready var decision_content: VBoxContainer = $Center/DecisionPanel/DecisionMargin/DecisionContent
 @onready var chapter_label: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/HeaderRow/HeaderText/ChapterLabel
 @onready var title_label: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/HeaderRow/HeaderText/TitleLabel
 @onready var prompt_label: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/PromptLabel
 @onready var decision_divider: ColorRect = $Center/DecisionPanel/DecisionMargin/DecisionContent/DecisionDivider
+@onready var character_row: HBoxContainer = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow
 @onready var arda_glow: ColorRect = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaGlow
 @onready var eda_glow: ColorRect = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaGlow
 @onready var arda_card: PanelContainer = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard
 @onready var eda_card: PanelContainer = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaCard
+@onready var choice_row: VBoxContainer = $Center/DecisionPanel/DecisionMargin/DecisionContent/ChoiceRow
 @onready var arda_button: Button = $Center/DecisionPanel/DecisionMargin/DecisionContent/ChoiceRow/ArdaButton
 @onready var eda_button: Button = $Center/DecisionPanel/DecisionMargin/DecisionContent/ChoiceRow/EdaButton
 @onready var arda_portrait: TextureRect = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard/CardMargin/CardContent/Portrait
@@ -35,6 +43,9 @@ func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.DECISION
 
 func _ready() -> void:
+	resized.connect(_apply_responsive_layout)
+	_apply_touch_target_layout()
+	_apply_responsive_layout()
 	_apply_styles()
 	arda_portrait.texture = ARDA_TEXTURE
 	eda_portrait.texture = EDA_TEXTURE
@@ -48,6 +59,44 @@ func _ready() -> void:
 	_eda_portrait_base_y = eda_portrait.position.y
 	visible = false
 	_start_idle_animations()
+
+
+func _apply_touch_target_layout() -> void:
+	for button in [arda_button, eda_button]:
+		button.custom_minimum_size.x = maxf(button.custom_minimum_size.x, MIN_DECISION_BUTTON_WIDTH)
+		button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, MIN_DECISION_BUTTON_HEIGHT)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		button.clip_text = false
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+
+func _apply_responsive_layout() -> void:
+	var viewport_size := get_viewport_rect().size
+	var compact := viewport_size.x <= 960.0 or viewport_size.y <= 1280.0
+	panel.custom_minimum_size = Vector2(
+		minf(DECISION_PANEL_WIDTH, maxf(560.0, viewport_size.x - (56.0 if compact else 72.0))),
+		minf(DECISION_PANEL_HEIGHT, maxf(980.0, viewport_size.y - (72.0 if compact else 96.0)))
+	)
+	var side_margin := 28 if compact else 36
+	var top_margin := 26 if compact else 32
+	decision_margin.add_theme_constant_override("margin_left", side_margin)
+	decision_margin.add_theme_constant_override("margin_top", top_margin)
+	decision_margin.add_theme_constant_override("margin_right", side_margin)
+	decision_margin.add_theme_constant_override("margin_bottom", top_margin)
+	decision_content.add_theme_constant_override("separation", 18 if compact else 22)
+	character_row.custom_minimum_size.y = 400.0 if compact else 460.0
+	character_row.add_theme_constant_override("separation", 16 if compact else 22)
+	choice_row.add_theme_constant_override("separation", 14 if compact else 18)
+	chapter_label.add_theme_font_size_override("font_size", 24 if compact else 26)
+	title_label.add_theme_font_size_override("font_size", 38 if compact else 42)
+	prompt_label.add_theme_font_size_override("font_size", 26 if compact else 28)
+	arda_subtitle.add_theme_font_size_override("font_size", 22 if compact else 24)
+	eda_subtitle.add_theme_font_size_override("font_size", 22 if compact else 24)
+	arda_portrait.custom_minimum_size.y = 220.0 if compact else 270.0
+	eda_portrait.custom_minimum_size.y = 220.0 if compact else 270.0
+	for button in [arda_button, eda_button]:
+		button.add_theme_font_size_override("font_size", 30 if compact else 32)
 
 func _start_idle_animations() -> void:
 	# Top glow + bottom fog — sin(elapsed * 0.9), periyot 2*PI/0.9
@@ -86,6 +135,7 @@ func _animate_char_glow(v: float) -> void:
 	eda_glow.color.a = 0.12 + (0.03 * sin(v + 0.8))
 
 func present(config: Dictionary) -> void:
+	_apply_responsive_layout()
 	current_context = String(config.get("context", ""))
 	chapter_label.text = String(config.get("chapter", "Karar Anı"))
 	title_label.text = String(config.get("title", "Bir karar ver"))
@@ -190,5 +240,6 @@ func _add_button_style(target: Button, fill: Color) -> void:
 	target.add_theme_stylebox_override("hover", normal)
 	target.add_theme_stylebox_override("pressed", pressed)
 	target.add_theme_color_override("font_color", Color.WHITE)
+	target.add_theme_font_size_override("font_size", 32)
 	target.add_theme_constant_override("icon_max_width", 42)
-	target.add_theme_constant_override("h_separation", 18)
+	target.add_theme_constant_override("h_separation", 22)

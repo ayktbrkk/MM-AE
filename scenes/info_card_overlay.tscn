@@ -155,8 +155,19 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Yeni tarih yıldızı kazandın"
 
-[node name="ContinueButton" type="Button" parent="Center/InfoCard/CardMargin/CardContent"]
+[node name="ActionRow" type="HBoxContainer" parent="Center/InfoCard/CardMargin/CardContent"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="Center/InfoCard/CardMargin/CardContent/ActionRow"]
+custom_minimum_size = Vector2(208, 96)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Kapat"
+
+[node name="ContinueButton" type="Button" parent="Center/InfoCard/CardMargin/CardContent/ActionRow"]
 custom_minimum_size = Vector2(0, 104)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Devam Et"

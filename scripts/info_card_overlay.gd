@@ -19,7 +19,8 @@ signal continue_pressed
 @onready var icon_texture: TextureRect = $Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame/IllustrationMargin/IllustrationStack/IconTexture
 @onready var reward_star: TextureRect = $Center/InfoCard/CardMargin/CardContent/RewardRow/RewardStar
 @onready var reward_label: Label = $Center/InfoCard/CardMargin/CardContent/RewardRow/RewardLabel
-@onready var continue_button: Button = $Center/InfoCard/CardMargin/CardContent/ContinueButton
+@onready var back_button: Button = $Center/InfoCard/CardMargin/CardContent/ActionRow/BackButton
+@onready var continue_button: Button = $Center/InfoCard/CardMargin/CardContent/ActionRow/ContinueButton
 
 # Idle tween referansları
 var _idle_tweens: Array[Tween] = []
@@ -33,11 +34,17 @@ func _ready() -> void:
 	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
 		sparkle.texture = _textures.STAR_TEXTURE
 		sparkle.modulate = Color(1, 1, 1, 0.0)
+	back_button.text = "Kapat"
 	continue_button.icon = _textures.CONTINUE_ICON
 	continue_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_styles()
-	continue_button.pressed.connect(func(): continue_pressed.emit())
+	back_button.pressed.connect(_emit_continue)
+	continue_button.pressed.connect(_emit_continue)
 	visible = false
+
+
+func _emit_continue() -> void:
+	continue_pressed.emit()
 
 func _start_idle_animations() -> void:
 	_stop_idle_animations()
@@ -168,11 +175,36 @@ func _apply_styles() -> void:
 	frame_style.shadow_size = 8
 	frame_style.shadow_offset = Vector2(0, 5)
 	illustration_frame.add_theme_stylebox_override("panel", frame_style)
+	_apply_secondary_button_style(back_button)
 	_apply_button_style(continue_button, _colors.POP_DEEP_TURQUOISE)
 	tag_label.add_theme_color_override("font_color", Color(0.02, 0.44, 0.56))
 	title_label.add_theme_color_override("font_color", Color(0.17, 0.19, 0.25))
 	body_label.add_theme_color_override("font_color", Color(0.25, 0.25, 0.30))
 	reward_label.add_theme_color_override("font_color", Color(0.86, 0.42, 0.08))
+	back_button.add_theme_color_override("font_color", Color(0.17, 0.19, 0.25))
+
+
+func _apply_secondary_button_style(target: Button) -> void:
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(1, 1, 1, 0.76)
+	normal.set_corner_radius_all(20)
+	normal.border_color = Color(0.05, 0.24, 0.32, 0.34)
+	normal.set_border_width_all(3)
+	normal.shadow_color = Color(0.05, 0.06, 0.08, 0.14)
+	normal.shadow_size = 4
+	normal.shadow_offset = Vector2(0, 3)
+	var pressed := StyleBoxFlat.new()
+	pressed.bg_color = Color(0.93, 0.91, 0.86, 0.96)
+	pressed.set_corner_radius_all(20)
+	pressed.border_color = Color(0.05, 0.24, 0.32, 0.42)
+	pressed.set_border_width_all(3)
+	pressed.shadow_color = Color(0.05, 0.06, 0.08, 0.10)
+	pressed.shadow_size = 2
+	pressed.shadow_offset = Vector2(0, 1)
+	target.add_theme_stylebox_override("normal", normal)
+	target.add_theme_stylebox_override("hover", normal)
+	target.add_theme_stylebox_override("pressed", pressed)
+	target.add_theme_font_size_override("font_size", 26)
 
 func _apply_button_style(target: Button, fill: Color) -> void:
 	var normal := StyleBoxFlat.new()

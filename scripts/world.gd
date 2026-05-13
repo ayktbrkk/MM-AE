@@ -258,15 +258,19 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	# P2-13: Android geri tuşu — çıkış onay diyalogu yönetimi
 	if event.is_action_pressed("ui_cancel"):
-		var om: OverlayManager = _ui_mod._overlay_manager
+		if _ui_mod.has_closeable_overlay():
+			_ui_mod.close_dialogue()
+			get_viewport().set_input_as_handled()
+			return
+		var om: OverlayManager = _ui_mod.get_overlay_manager()
 		if om.is_visible(OverlayManager.OverlayType.EXIT_CONFIRM):
-			var exit_overlay: CanvasLayer = om.get_overlay_node(OverlayManager.OverlayType.EXIT_CONFIRM)
+			var exit_overlay: CanvasLayer = _ui_mod.get_overlay(OverlayManager.OverlayType.EXIT_CONFIRM)
 			exit_overlay.hide_overlay()
 			get_viewport().set_input_as_handled()
 			return
 		elif not character_panel.visible and not dialogue_panel.visible \
 			and not _ui_mod.is_any_overlay_visible():
-			var exit_overlay: CanvasLayer = om.get_overlay_node(OverlayManager.OverlayType.EXIT_CONFIRM)
+			var exit_overlay: CanvasLayer = _ui_mod.get_overlay(OverlayManager.OverlayType.EXIT_CONFIRM)
 			exit_overlay.show_overlay()
 			get_viewport().set_input_as_handled()
 			return
@@ -292,11 +296,10 @@ func _connect_ui() -> void:
 	dialogue_continue.pressed.connect(_on_dialogue_continue)
 	
 	# Overlay sinyalleri — OverlayManager üzerinden node referansları
-	var om: OverlayManager = _ui_mod._overlay_manager
-	om.get_overlay_node(OverlayManager.OverlayType.DECISION).choice_selected.connect(_on_decision_overlay_choice)
-	om.get_overlay_node(OverlayManager.OverlayType.DIALOGUE).continue_pressed.connect(_on_dialogue_continue)
-	om.get_overlay_node(OverlayManager.OverlayType.INFO_CARD).continue_pressed.connect(_on_dialogue_continue)
-	om.get_overlay_node(OverlayManager.OverlayType.CHAPTER_TRANSITION).transition_finished.connect(_on_transition_finished)
+	_ui_mod.get_overlay(OverlayManager.OverlayType.DECISION).choice_selected.connect(_on_decision_overlay_choice)
+	_ui_mod.get_overlay(OverlayManager.OverlayType.DIALOGUE).continue_pressed.connect(_on_dialogue_continue)
+	_ui_mod.get_overlay(OverlayManager.OverlayType.INFO_CARD).continue_pressed.connect(_on_dialogue_continue)
+	_ui_mod.get_overlay(OverlayManager.OverlayType.CHAPTER_TRANSITION).transition_finished.connect(_on_transition_finished)
 
 
 func _on_panel_button_pressed(choice: String) -> void:
@@ -338,7 +341,7 @@ func _on_transition_finished() -> void:
 	2. Sadece ship zone'u için event chain'i başlatır.
 	   Diğer zone'lar kendi show_dialogue()'larını _setup_* içinde çağırır.
 	"""
-	_ui_mod._overlay_manager.hide(OverlayManager.OverlayType.CHAPTER_TRANSITION)
+	_ui_mod.hide_overlay(OverlayManager.OverlayType.CHAPTER_TRANSITION)
 	if _state.current_zone == "ship":
 		_zone_mod.trigger_event_chain()
 
