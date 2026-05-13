@@ -394,4 +394,3 @@ func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radiu
 		"panel",
 		_ui_styles.panel_style(fill, border, radius, border_width, Color(0.03, 0.05, 0.08, 0.22), 5, Vector2(0, 3))
 	)
-
