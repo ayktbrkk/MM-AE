@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <path fill="#1f2d3b" opacity="0.12" d="M24 284 C94 242 170 226 252 226 C336 226 426 244 576 286 L576 334 L24 334 Z"/>
+  <path fill="#6f7a63" d="M0 214 C58 196 118 194 182 204 C258 216 330 216 404 204 C474 194 536 194 600 208 L600 250 C530 264 462 272 392 272 C322 272 252 264 182 256 C118 248 58 248 0 258 Z"/>
+  <path fill="#a18c6c" stroke="#5d4937" stroke-width="5" stroke-linejoin="round" d="M94 196 L142 176 L190 194 L234 172 L278 194 L322 168 L368 192 L414 174 L456 196 L500 180 L542 202 L534 222 L494 210 L456 214 L412 202 L368 214 L322 192 L278 212 L232 192 L190 214 L144 196 L104 208 Z"/>
+  <g fill="#eadcc3" stroke="#5d4937" stroke-width="4" stroke-linejoin="round">
+    <path d="M126 146 L156 136 L184 146 L184 174 L126 174 Z"/>
+    <path d="M210 134 L240 124 L270 136 L270 168 L210 168 Z"/>
+    <path d="M300 126 L332 118 L362 130 L362 164 L300 164 Z"/>
+    <path d="M392 136 L424 128 L454 140 L454 174 L392 174 Z"/>
+  </g>
+  <g fill="#c84b3d" opacity="0.72">
+    <path d="M140 132 L156 122 L172 132 Z"/>
+    <path d="M226 120 L240 110 L256 120 Z"/>
+    <path d="M316 112 L332 102 L348 112 Z"/>
+    <path d="M408 122 L424 112 L440 122 Z"/>
+  </g>
+  <g fill="#fff2de" opacity="0.56">
+    <rect x="142" y="152" width="10" height="12" rx="2"/>
+    <rect x="226" y="144" width="10" height="12" rx="2"/>
+    <rect x="316" y="138" width="10" height="12" rx="2"/>
+    <rect x="408" y="148" width="10" height="12" rx="2"/>
+  </g>
+</svg>

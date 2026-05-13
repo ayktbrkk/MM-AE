@@ -200,6 +200,24 @@ const AMASYA_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/amasya/pap
 const AMASYA_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/amasya/paper_main_path.svg")
 const AMASYA_PAPER_CONGRESS_HALL_TEXTURE := preload("res://assets/art/world/amasya/paper_congress_hall.svg")
 const AMASYA_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/amasya/paper_foreground_frame.svg")
+const AMASYA_PAPER_RIVER_TERRACES_TEXTURE := preload("res://assets/art/world/amasya/paper_river_terraces.svg")
+const AMASYA_PAPER_BILDIRI_PROPS_TEXTURE := preload("res://assets/art/world/amasya/paper_bildiri_props.svg")
+const AMASYA_PAPER_HILLSIDE_HOUSES_TEXTURE := preload("res://assets/art/world/amasya/paper_hillside_houses.svg")
+const AMASYA_PAPER_RIVER_BOATS_TEXTURE := preload("res://assets/art/world/amasya/paper_river_boats.svg")
+
+# ====================================
+# KONGRELER PAPER CUTOUT (özel asset)
+# ====================================
+const CONGRESS_PAPER_SKY_TEXTURE := preload("res://assets/art/world/congress/paper_sky_congress.svg")
+const CONGRESS_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/congress/paper_terrain_congress.svg")
+const CONGRESS_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/congress/paper_main_path.svg")
+const CONGRESS_PAPER_LANDMARK_TEXTURE := preload("res://assets/art/world/congress/paper_congress_landmark.svg")
+const CONGRESS_PAPER_FLAG_PROPS_TEXTURE := preload("res://assets/art/world/congress/paper_flag_props.svg")
+const CONGRESS_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/congress/paper_foreground_frame.svg")
+const CONGRESS_PAPER_HILLTOWN_RIBBON_TEXTURE := preload("res://assets/art/world/congress/paper_hilltown_ribbon.svg")
+const CONGRESS_PAPER_DELEGATE_CROWD_TEXTURE := preload("res://assets/art/world/congress/paper_delegate_crowd.svg")
+const CONGRESS_PAPER_BALCONY_FRAME_TEXTURE := preload("res://assets/art/world/congress/paper_balcony_frame.svg")
+const CONGRESS_PAPER_DELEGATE_SILHOUETTE_FRONT_TEXTURE := preload("res://assets/art/world/congress/paper_delegate_silhouette_front.svg")
 
 # ====================================
 # BANDIRMA PAPER CUTOUT (özel asset)
@@ -238,6 +256,10 @@ const ANKARA_PAPER_TERRAIN_TEXTURE := preload("res://assets/art/world/ankara/pap
 const ANKARA_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/ankara/paper_main_path.svg")
 const ANKARA_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/ankara/paper_foreground_frame.svg")
 const ANKARA_PAPER_MECLIS_LANDMARK_TEXTURE := preload("res://assets/art/world/ankara/paper_meclis_landmark.svg")
+const ANKARA_PAPER_STEPPE_RIDGE_TEXTURE := preload("res://assets/art/world/ankara/paper_steppe_ridge.svg")
+const ANKARA_PAPER_TELEGRAPH_SQUARE_TEXTURE := preload("res://assets/art/world/ankara/paper_telegraph_square.svg")
+const ANKARA_PAPER_ROOFLINE_DEPTH_TEXTURE := preload("res://assets/art/world/ankara/paper_roofline_depth.svg")
+const ANKARA_PAPER_COURTYARD_BANNERS_TEXTURE := preload("res://assets/art/world/ankara/paper_courtyard_banners.svg")
 
 # ====================================
 # SAKARYA PAPER CUTOUT (özel asset)
@@ -248,6 +270,10 @@ const SAKARYA_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/sakarya
 const SAKARYA_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/sakarya/paper_foreground_frame.svg")
 const SAKARYA_PAPER_HQ_LANDMARK_TEXTURE := preload("res://assets/art/world/sakarya/paper_hq_landmark.svg")
 const SAKARYA_PAPER_VICTORY_MARKER_TEXTURE := preload("res://assets/art/world/sakarya/paper_victory_marker.svg")
+const SAKARYA_PAPER_SMOKE_FRONT_TEXTURE := preload("res://assets/art/world/sakarya/paper_smoke_front.svg")
+const SAKARYA_PAPER_SUPPLY_ROUTE_TEXTURE := preload("res://assets/art/world/sakarya/paper_supply_route.svg")
+const SAKARYA_PAPER_TRENCH_RIDGE_TEXTURE := preload("res://assets/art/world/sakarya/paper_trench_ridge.svg")
+const SAKARYA_PAPER_SIGNAL_FIRES_TEXTURE := preload("res://assets/art/world/sakarya/paper_signal_fires.svg")
 
 # ====================================
 # FINAL PAPER CUTOUT (özel asset) — Zafer/Cumhuriyet
@@ -258,6 +284,12 @@ const FINAL_PAPER_MAIN_PATH_TEXTURE := preload("res://assets/art/world/final/pap
 const FINAL_PAPER_FOREGROUND_FRAME_TEXTURE := preload("res://assets/art/world/final/paper_foreground_frame.svg")
 const FINAL_PAPER_CUMHURIYET_LANDMARK_TEXTURE := preload("res://assets/art/world/final/paper_cumhuriyet_landmark.svg")
 const FINAL_PAPER_VICTORY_ARCH_TEXTURE := preload("res://assets/art/world/final/paper_victory_arch.svg")
+const FINAL_PAPER_DAWN_RAYS_TEXTURE := preload("res://assets/art/world/final/paper_dawn_rays.svg")
+const FINAL_PAPER_CELEBRATION_CROWD_TEXTURE := preload("res://assets/art/world/final/paper_celebration_crowd.svg")
+const FINAL_PAPER_CITY_ROOFLINE_TEXTURE := preload("res://assets/art/world/final/paper_city_roofline.svg")
+const FINAL_PAPER_LAUREL_FLAGS_TEXTURE := preload("res://assets/art/world/final/paper_laurel_flags.svg")
+const FINAL_PAPER_VICTORY_CANOPY_TEXTURE := preload("res://assets/art/world/final/paper_victory_canopy.svg")
+const FINAL_PAPER_STAGE_SILHOUETTE_TEXTURE := preload("res://assets/art/world/final/paper_stage_silhouette.svg")
 
 # ====================================
 # PROCEDURAL ICON GENERATORS (P2-10)

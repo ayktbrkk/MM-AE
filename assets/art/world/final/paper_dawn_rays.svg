@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff2b8" stop-opacity="0.70"/>
+      <stop offset="100%" stop-color="#fff2b8" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="420" cy="86" r="54" fill="url(#skyGlow)"/>
+  <g fill="#fff3c4" opacity="0.30">
+    <path d="M420 90 L396 194 L430 194 Z"/>
+    <path d="M420 90 L336 180 L364 194 Z"/>
+    <path d="M420 90 L474 194 L510 194 Z"/>
+    <path d="M420 90 L300 150 L328 172 Z"/>
+    <path d="M420 90 L528 148 L500 170 Z"/>
+  </g>
+  <g fill="#ffffff" opacity="0.18">
+    <ellipse cx="178" cy="122" rx="46" ry="18"/>
+    <ellipse cx="220" cy="110" rx="34" ry="14"/>
+    <ellipse cx="496" cy="136" rx="42" ry="16"/>
+    <ellipse cx="534" cy="126" rx="28" ry="12"/>
+  </g>
+</svg>

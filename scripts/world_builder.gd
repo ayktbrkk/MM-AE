@@ -605,6 +605,18 @@ func _add_amasya_paper_asset_layer(world_root: Node) -> void:
 		"amasya.depth.terrain", Vector2.ZERO, -3.5
 	)
 	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_RIVER_TERRACES_TEXTURE,
+		Vector2(800, 1040), Vector2(1.04, 1.04),
+		Color(1, 1, 1, 0.72), -12,
+		"amasya.depth.river_terraces", Vector2.ZERO, -2.6
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_HILLSIDE_HOUSES_TEXTURE,
+		Vector2(802, 910), Vector2(1.00, 1.00),
+		Color(1, 1, 1, 0.60), -11,
+		"amasya.depth.hillside_houses", Vector2.ZERO, -2.2
+	)
+	_add_paper_cutout_asset(
 		world_root, _textures.AMASYA_PAPER_MAIN_PATH_TEXTURE,
 		Vector2(800, 1300), Vector2(0.82, 0.82),
 		Color(1, 1, 1, 0.86), -10,
@@ -615,6 +627,18 @@ func _add_amasya_paper_asset_layer(world_root: Node) -> void:
 		Vector2(800, 1450), Vector2(0.88, 0.88),
 		Color(1, 1, 1, 0.90), -5,
 		"amasya.landmark.congress_hall", Vector2.ZERO, 2.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_BILDIRI_PROPS_TEXTURE,
+		Vector2(800, 1500), Vector2(0.88, 0.88),
+		Color(1, 1, 1, 0.82), -2,
+		"amasya.props.bildiri", Vector2.ZERO, 5.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.AMASYA_PAPER_RIVER_BOATS_TEXTURE,
+		Vector2(808, 1608), Vector2(0.90, 0.90),
+		Color(1, 1, 1, 0.72), -1,
+		"amasya.props.river_boats", Vector2.ZERO, 6.5
 	)
 	_add_paper_cutout_asset(
 		world_root, _textures.AMASYA_PAPER_FOREGROUND_FRAME_TEXTURE,
@@ -642,6 +666,7 @@ func _build_amasya_world(world_root: Node) -> void:
 # ============================================================
 
 func _build_kongreler_world(world_root: Node) -> void:
+	_add_kongreler_paper_asset_layer(world_root)
 	_add_rect(world_root, Vector2.ZERO, WORLD_SIZE, Color(0.14, 0.14, 0.18))
 	_add_rect(world_root, Vector2(80, 150), Vector2(1440, 1880), Color(0.24, 0.24, 0.30))
 	_add_rect(world_root, Vector2(200, 300), Vector2(1200, 1500), Color(0.36, 0.34, 0.28))
@@ -651,6 +676,69 @@ func _build_kongreler_world(world_root: Node) -> void:
 	_add_rift_cloud(world_root, Vector2(800, 1080), 760, Color(0.95, 0.70, 0.42, 0.10))
 	_add_rift_cloud(world_root, Vector2(800, 1080), 920, Color(0.70, 0.72, 0.92, 0.10))
 	_decorate_kongreler(world_root)
+
+
+func _add_kongreler_paper_asset_layer(world_root: Node) -> void:
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_SKY_TEXTURE,
+		Vector2(800, 360), Vector2(1.08, 1.08),
+		Color(1, 1, 1, 0.90), -20,
+		"kongre.depth.sky", Vector2.ZERO, -15.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_BALCONY_FRAME_TEXTURE,
+		Vector2(800, 486), Vector2(1.18, 1.18),
+		Color(1, 1, 1, 0.82), -13,
+		"kongre.frame.balcony_top", Vector2.ZERO, -14.2
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_TERRAIN_TEXTURE,
+		Vector2(800, 1120), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.86), -14,
+		"kongre.depth.terrain", Vector2.ZERO, -3.8
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_HILLTOWN_RIBBON_TEXTURE,
+		Vector2(802, 936), Vector2(1.02, 1.02),
+		Color(1, 1, 1, 0.62), -12,
+		"kongre.depth.hilltown_ribbon", Vector2.ZERO, -2.8
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_MAIN_PATH_TEXTURE,
+		Vector2(800, 1310), Vector2(0.86, 0.86),
+		Color(1, 1, 1, 0.82), -9,
+		"kongre.path.main", Vector2.ZERO, -1.6
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_LANDMARK_TEXTURE,
+		Vector2(800, 1420), Vector2(0.92, 0.92),
+		Color(1, 1, 1, 0.90), -4,
+		"kongre.landmark.hall", Vector2.ZERO, 1.6
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_FLAG_PROPS_TEXTURE,
+		Vector2(800, 1350), Vector2(0.92, 0.92),
+		Color(1, 1, 1, 0.80), -2,
+		"kongre.props.flags", Vector2.ZERO, 3.4
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_DELEGATE_CROWD_TEXTURE,
+		Vector2(804, 1546), Vector2(0.94, 0.94),
+		Color(1, 1, 1, 0.74), -1,
+		"kongre.props.delegate_crowd", Vector2.ZERO, 6.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_FOREGROUND_FRAME_TEXTURE,
+		Vector2(800, 1850), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.90), 4,
+		"kongre.foreground.frame", Vector2.ZERO, 18.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.CONGRESS_PAPER_DELEGATE_SILHOUETTE_FRONT_TEXTURE,
+		Vector2(800, 1710), Vector2(1.18, 1.18),
+		Color(1, 1, 1, 0.54), 5,
+		"kongre.foreground.delegate_silhouette", Vector2.ZERO, 20.0
+	)
 
 
 # ============================================================
@@ -697,6 +785,18 @@ func _add_ankara_paper_asset_layer(world_root: Node) -> void:
 		Color(1, 1, 1, 0.92), -21, "ankara.depth.sky",
 		Vector2.ZERO, -3.0
 	)
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_STEPPE_RIDGE_TEXTURE,
+		Vector2(812, 660), Vector2(1.04, 1.04),
+		Color(1, 1, 1, 0.68), -18, "ankara.depth.steppe_ridge",
+		Vector2.ZERO, -2.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_ROOFLINE_DEPTH_TEXTURE,
+		Vector2(804, 898), Vector2(1.00, 1.00),
+		Color(1, 1, 1, 0.58), -16, "ankara.depth.roofline",
+		Vector2.ZERO, -2.1
+	)
 	# Terrain — ana zemin katmanı
 	_add_paper_cutout_asset(
 		world_root, _textures.ANKARA_PAPER_TERRAIN_TEXTURE,
@@ -724,6 +824,18 @@ func _add_ankara_paper_asset_layer(world_root: Node) -> void:
 		Vector2(360, 820), Vector2(0.60, 0.60),
 		Color(1, 1, 1, 0.94), -4, "ankara.landmark.meclis",
 		Vector2.ZERO, -1.5
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_TELEGRAPH_SQUARE_TEXTURE,
+		Vector2(790, 1330), Vector2(0.92, 0.92),
+		Color(1, 1, 1, 0.82), -2, "ankara.props.telegraph_square",
+		Vector2.ZERO, 2.6
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.ANKARA_PAPER_COURTYARD_BANNERS_TEXTURE,
+		Vector2(810, 1508), Vector2(0.94, 0.94),
+		Color(1, 1, 1, 0.76), -1, "ankara.props.courtyard_banners",
+		Vector2.ZERO, 5.6
 	)
 
 
@@ -1047,6 +1159,18 @@ func _add_sakarya_paper_asset_layer(world_root: Node) -> void:
 		Color(1, 1, 1, 0.88), -14, "sakarya.depth.terrain",
 		Vector2.ZERO, -2.0
 	)
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_SMOKE_FRONT_TEXTURE,
+		Vector2(804, 980), Vector2(1.02, 1.02),
+		Color(1, 1, 1, 0.68), -11, "sakarya.depth.smoke_front",
+		Vector2.ZERO, -1.8
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_TRENCH_RIDGE_TEXTURE,
+		Vector2(806, 914), Vector2(1.02, 1.02),
+		Color(1, 1, 1, 0.60), -10, "sakarya.depth.trench_ridge",
+		Vector2.ZERO, -1.6
+	)
 	# Main path — soldan saga kivrilan taarruz yolu
 	_add_paper_cutout_asset(
 		world_root, _textures.SAKARYA_PAPER_MAIN_PATH_TEXTURE,
@@ -1074,6 +1198,18 @@ func _add_sakarya_paper_asset_layer(world_root: Node) -> void:
 		Vector2(1040, 680), Vector2(0.50, 0.50),
 		Color(1, 1, 1, 0.90), -3, "sakarya.landmark.victory",
 		Vector2.ZERO, -1.2
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_SUPPLY_ROUTE_TEXTURE,
+		Vector2(816, 1320), Vector2(0.92, 0.92),
+		Color(1, 1, 1, 0.80), -2, "sakarya.props.supply_route",
+		Vector2.ZERO, 2.0
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.SAKARYA_PAPER_SIGNAL_FIRES_TEXTURE,
+		Vector2(806, 1510), Vector2(0.92, 0.92),
+		Color(1, 1, 1, 0.72), -1, "sakarya.props.signal_fires",
+		Vector2.ZERO, 5.2
 	)
 
 
@@ -1386,6 +1522,24 @@ func _add_final_paper_asset_layer(world_root: Node) -> void:
 		Color(1, 1, 1, 0.92), -21, "final.depth.sky",
 		Vector2.ZERO, -3.0
 	)
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_VICTORY_CANOPY_TEXTURE,
+		Vector2(800, 500), Vector2(1.18, 1.18),
+		Color(1, 1, 1, 0.82), -14, "final.frame.victory_canopy",
+		Vector2.ZERO, -2.9
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_DAWN_RAYS_TEXTURE,
+		Vector2(816, 420), Vector2(1.10, 1.10),
+		Color(1, 1, 1, 0.72), -19, "final.depth.dawn_rays",
+		Vector2.ZERO, -2.7
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_CITY_ROOFLINE_TEXTURE,
+		Vector2(810, 920), Vector2(1.02, 1.02),
+		Color(1, 1, 1, 0.58), -16, "final.depth.city_roofline",
+		Vector2.ZERO, -2.2
+	)
 	# Terrain — golden victory plains
 	_add_paper_cutout_asset(
 		world_root, _textures.FINAL_PAPER_TERRAIN_TEXTURE,
@@ -1420,6 +1574,24 @@ func _add_final_paper_asset_layer(world_root: Node) -> void:
 		Vector2(1040, 680), Vector2(0.50, 0.50),
 		Color(1, 1, 1, 0.90), -3, "final.landmark.victory_arch",
 		Vector2.ZERO, -1.2
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_CELEBRATION_CROWD_TEXTURE,
+		Vector2(814, 1500), Vector2(0.96, 0.96),
+		Color(1, 1, 1, 0.82), -2, "final.props.celebration_crowd",
+		Vector2.ZERO, 2.4
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_LAUREL_FLAGS_TEXTURE,
+		Vector2(812, 1602), Vector2(0.94, 0.94),
+		Color(1, 1, 1, 0.76), -1, "final.props.laurel_flags",
+		Vector2.ZERO, 5.8
+	)
+	_add_paper_cutout_asset(
+		world_root, _textures.FINAL_PAPER_STAGE_SILHOUETTE_TEXTURE,
+		Vector2(800, 1710), Vector2(1.18, 1.18),
+		Color(1, 1, 1, 0.56), 5, "final.foreground.stage_silhouette",
+		Vector2.ZERO, 20.5
 	)
 
 
