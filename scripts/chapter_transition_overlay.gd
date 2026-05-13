@@ -23,6 +23,7 @@ const TAU := 2.0 * PI
 var rift_shards: Array[Polygon2D] = []
 var _dream_mist_base_y: float
 var _transition_tween: Tween
+var _idle_tweens: Array[Tween] = []
 
 func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.CHAPTER_TRANSITION
@@ -54,17 +55,26 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _start_idle_animations() -> void:
+	_stop_idle_animations()
 	# Dream mist drift — sin(elapsed * 1.4), periyot 2*PI/1.4
 	var tween_mist := create_tween().set_loops()
 	tween_mist.tween_method(_animate_mist, 0.0, TAU, 4.48799)
+	_idle_tweens.append(tween_mist)
 
 	# Route dot scale pulse — sin(elapsed * 4.0), periyot 2*PI/4.0
 	var tween_dots := create_tween().set_loops()
 	tween_dots.tween_method(_animate_dots, 0.0, TAU, 1.57080)
+	_idle_tweens.append(tween_dots)
 
 	# Rift shard drift — çoklu frekans (0.9/0.7/0.8) tek tween'de
 	var tween_rift := create_tween().set_loops()
 	tween_rift.tween_method(_animate_rift, 0.0, TAU, 7.85398)
+	_idle_tweens.append(tween_rift)
+
+
+func _stop_idle_animations() -> void:
+	_overlay_tween_helper.cancel_many(_idle_tweens)
+	_idle_tweens.clear()
 
 
 func _animate_mist(v: float) -> void:
@@ -107,15 +117,13 @@ func present(chapter: String, subtitle: String, progress_text := "Sahne hazırla
 	progress_label.modulate = Color(1, 1, 1, 0.0)
 	_transition_tween = _overlay_tween_helper.replace(self, _transition_tween, Callable(self, "_clear_transition_tween"))
 	var tween := _transition_tween
-	tween.tween_property(backdrop, "color:a", 0.76, 0.20)
-	tween.parallel().tween_property(dream_mist, "color:a", 0.18, 0.26)
-	tween.parallel().tween_property(route_line, "color:a", 0.55, 0.24)
+	_overlay_tween_helper.fade_color_alpha(tween, backdrop, 0.76, 0.20)
+	_overlay_tween_helper.fade_color_alpha(tween, dream_mist, 0.18, 0.26)
+	_overlay_tween_helper.fade_color_alpha(tween, route_line, 0.55, 0.24)
 	for shard in rift_shards:
-		tween.parallel().tween_property(shard, "color:a", 0.18, 0.24)
-	tween.parallel().tween_property(panel, "modulate:a", 1.0, 0.16)
-	tween.parallel().tween_property(panel, "scale", Vector2.ONE, 0.18)
-	tween.parallel().tween_property(panel, "position:y", 0.0, 0.18)
-	tween.parallel().tween_property(progress_label, "modulate:a", 1.0, 0.20)
+		_overlay_tween_helper.fade_modulate_alpha(tween, shard, 0.18, 0.24)
+	_overlay_tween_helper.panel_pop_in(tween, panel)
+	_overlay_tween_helper.fade_modulate_alpha(tween, progress_label, 1.0, 0.20)
 	tween.tween_property(route_dot_a, "color:a", 0.85, 0.10)
 	tween.parallel().tween_property(route_dot_a, "scale", Vector2.ONE, 0.12)
 	tween.tween_property(route_dot_b, "color:a", 0.85, 0.10)
@@ -123,14 +131,14 @@ func present(chapter: String, subtitle: String, progress_text := "Sahne hazırla
 	tween.tween_property(route_dot_c, "color:a", 0.85, 0.10)
 	tween.parallel().tween_property(route_dot_c, "scale", Vector2.ONE, 0.12)
 	tween.tween_interval(0.78)
-	tween.tween_property(panel, "modulate:a", 0.0, 0.16)
-	tween.parallel().tween_property(backdrop, "color:a", 0.0, 0.22)
-	tween.parallel().tween_property(dream_mist, "color:a", 0.0, 0.22)
-	tween.parallel().tween_property(route_line, "color:a", 0.0, 0.18)
+	_overlay_tween_helper.panel_pop_out(tween, panel, 0.16, Vector2(0.97, 0.97))
+	_overlay_tween_helper.fade_color_alpha(tween, backdrop, 0.0, 0.22)
+	_overlay_tween_helper.fade_color_alpha(tween, dream_mist, 0.0, 0.22)
+	_overlay_tween_helper.fade_color_alpha(tween, route_line, 0.0, 0.18)
 	for dot in [route_dot_a, route_dot_b, route_dot_c]:
-		tween.parallel().tween_property(dot, "color:a", 0.0, 0.18)
+		_overlay_tween_helper.fade_color_alpha(tween, dot, 0.0, 0.18)
 	for shard in rift_shards:
-		tween.parallel().tween_property(shard, "color:a", 0.0, 0.18)
+		_overlay_tween_helper.fade_modulate_alpha(tween, shard, 0.0, 0.18)
 	tween.tween_callback(Callable(self, "_finish"))
 
 
@@ -144,6 +152,7 @@ func show_overlay(config: Dictionary = {}) -> void:
 
 func hide_overlay() -> void:
 	_transition_tween = _overlay_tween_helper.cancel(_transition_tween)
+	_stop_idle_animations()
 	visible = false
 
 func _finish() -> void:
@@ -187,11 +196,29 @@ func _build_rift_fx() -> void:
 		rift_shards.append(shard)
 
 func _apply_styles() -> void:
-	panel.add_theme_stylebox_override(
-		"panel",
-		_ui_styles.panel_style(Color(0.97, 0.94, 0.86, 0.96), _colors.POP_DEEP_TURQUOISE, _ui_tokens.RADIUS_XL, _ui_tokens.BORDER_BOLD, Color(0.04, 0.05, 0.08, 0.28), _ui_tokens.SHADOW_SIZE_XL, _ui_tokens.SHADOW_OFFSET_XL)
-	)
+	_ui_styles.apply_panel_variant(panel, "chapter_transition_panel")
 	chapter_label.add_theme_color_override("font_color", _colors.POP_CRIMSON)
 	subtitle_label.add_theme_color_override("font_color", Color(0.30, 0.32, 0.40))
 	progress_label.add_theme_color_override("font_color", Color(0.10, 0.32, 0.42, 0.78))
 	progress_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
+
+
+func _freeze_for_capture() -> void:
+	_transition_tween = _overlay_tween_helper.cancel(_transition_tween)
+	_stop_idle_animations()
+	visible = true
+	backdrop.color.a = 0.76
+	dream_mist.position.y = _dream_mist_base_y
+	dream_mist.color.a = 0.18
+	route_line.color.a = 0.55
+	for dot in [route_dot_a, route_dot_b, route_dot_c]:
+		dot.color.a = 0.85
+		dot.scale = Vector2.ONE
+	panel.modulate = Color.WHITE
+	panel.scale = Vector2.ONE
+	panel.position.y = 0.0
+	progress_label.modulate = Color.WHITE
+	for shard in rift_shards:
+		shard.position = shard.get_meta("base_position")
+		shard.rotation = 0.0
+		shard.color.a = 0.18

@@ -14,6 +14,7 @@ var _world: Node2D
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
 const _questions := preload("res://assets/data/questions.gd")
+const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 
 # ---------------------------------------------------------------------------
 # EVENT CHAIN SABİTLERİ
@@ -1553,3 +1554,33 @@ func finish_prototype() -> void:
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod != null:
 		ui_mod.update_objective("Yolculuk tamamlandı: Cumhuriyet ilan edildi ve tarih akışı başarıyla korundu.")
+		ui_mod.show_info_card(
+			"Cumhuriyet Korundu",
+			"Arda ve Eda, tarih akışını güvenle tamamladı. Şimdi ana menüye dönüp yolculuğu yeniden başlatabilir ya da başka bir kayıtla devam edebilirsin.",
+			"Ana menüye dön",
+			Callable(self, "_return_to_main_menu_after_completion"),
+			"decision"
+		)
+
+
+func _return_to_main_menu_after_completion() -> void:
+	_clear_completion_save()
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.show_loading_request(_build_completion_load_request())
+
+
+func _build_completion_load_request() -> Dictionary:
+	return {
+		"target_scene": MAIN_MENU_SCENE_PATH,
+		"title": "Yolculuk Tamamlandı",
+		"hint_text": "Ana menü hazırlanıyor...",
+	}
+
+
+func _clear_completion_save() -> void:
+	var save_manager := get_node_or_null("/root/SaveManager")
+	if save_manager == null:
+		return
+	save_manager.set("pending_entry_action", "")
+	save_manager.call("delete_save")

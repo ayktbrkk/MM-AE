@@ -1,0 +1,37 @@
+,tr
+ui.menu.title,Zaman Yolcuları
+ui.menu.subtitle,Bandırma'dan başlayan tarih yolculuğu
+ui.menu.start,Oyuna Başla
+ui.menu.continue,Devam Et
+ui.menu.settings,Ayarlar
+ui.menu.exit,Çıkış
+ui.menu.settings.title,Ayarlar ve Bilgi
+ui.menu.settings.body,"Bu prototipte çocuk dostu, reklamsız ve hikaye odaklı bir tarih yolculuğu deneyimi kuruluyor.
+
+Başlat ile Bandırma yolculuğuna geçebilir, Devam Et ile aynı dünyayı yeniden açabilirsin."
+ui.menu.back,Geri Dön
+ui.menu.settings.bgm,🎵 Müzik:
+ui.menu.settings.sfx,🔊 Ses:
+ui.menu.dream.start.title,Kitap Açılıyor
+ui.menu.dream.start.body,Arda ve Eda'nın gözleri ağırlaşır. Sayfalar dalga sesine dönüşürken Bandırma gecesi yaklaşır.
+ui.menu.dream.continue.title,Rüya Yeniden Başlıyor
+ui.menu.dream.continue.body,Bandırma Vapuru sislerin arasından yeniden beliriyor. Tarih yolculuğu kaldığın duygudan devam ediyor.
+ui.dialogue.default.chapter,Bölüm
+ui.dialogue.default.speaker,Anlatıcı
+ui.dialogue.default.body,Hikaye metni burada görünür.
+ui.dialogue.continue,Dokun ve devam et
+ui.decision.default.chapter,Karar Anı
+ui.decision.default.title,Bir karar ver
+ui.decision.default.prompt,Her iki yaklaşım da anlaşılır gelebilir. Tarihsel durum için en uygun olanı seç.
+ui.decision.arda.name,Arda
+ui.decision.eda.name,Eda
+ui.decision.arda.hint,Hızlı ama cesur
+ui.decision.eda.hint,Düşünceli ve planlı
+ui.decision.option.arda,Arda seçeneği
+ui.decision.option.eda,Eda seçeneği
+ui.info.default.tag,Tarih Kartı
+ui.info.default.title,Bilgi Kartı
+ui.info.default.body,Kısa ve anlaşılır tarih bilgisi burada görünür.
+ui.info.default.reward,Yeni tarih yıldızı kazandın
+ui.info.back,Kapat
+ui.info.continue,Devam Et

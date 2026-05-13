@@ -2,6 +2,9 @@ extends Control
 
 signal continue_pressed
 
+const _rich_text := preload("res://scripts/rich_text_utils.gd")
+const _ui_focus := preload("res://scripts/ui_focus_helper.gd")
+const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
@@ -17,7 +20,7 @@ const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 @onready var panel: PanelContainer = $Center/InfoCard
 @onready var tag_label: Label = $Center/InfoCard/CardMargin/CardContent/TagLabel
 @onready var title_label: Label = $Center/InfoCard/CardMargin/CardContent/TitleLabel
-@onready var body_label: Label = $Center/InfoCard/CardMargin/CardContent/BodyLabel
+@onready var body_label: RichTextLabel = $Center/InfoCard/CardMargin/CardContent/BodyLabel
 @onready var illustration_frame: PanelContainer = $Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame
 @onready var icon_glow: ColorRect = $Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame/IllustrationMargin/IllustrationStack/IconGlow
 @onready var icon_texture: TextureRect = $Center/InfoCard/CardMargin/CardContent/IconRow/IllustrationFrame/IllustrationMargin/IllustrationStack/IconTexture
@@ -38,13 +41,27 @@ func _ready() -> void:
 	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
 		sparkle.texture = _textures.STAR_TEXTURE
 		sparkle.modulate = Color(1, 1, 1, 0.0)
-	back_button.text = "Kapat"
+	tag_label.text = _ui_text.text(_ui_text.INFO_DEFAULT_TAG, "Tarih Kartı")
+	title_label.text = _ui_text.text(_ui_text.INFO_DEFAULT_TITLE, "Bilgi Kartı")
+	body_label.text = _rich_text.centered(_ui_text.text(_ui_text.INFO_DEFAULT_BODY, "Kısa ve anlaşılır tarih bilgisi burada görünür."))
+	reward_label.text = _ui_text.text(_ui_text.INFO_DEFAULT_REWARD, "Yeni tarih yıldızı kazandın")
+	back_button.text = _ui_text.text(_ui_text.INFO_BACK, "Kapat")
+	continue_button.text = _ui_text.text(_ui_text.INFO_CONTINUE, "Devam Et")
 	continue_button.icon = _textures.CONTINUE_ICON
 	continue_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_styles()
+	_configure_focus_navigation()
 	back_button.pressed.connect(_emit_continue)
 	continue_button.pressed.connect(_emit_continue)
 	visible = false
+
+
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if _matches_action(event, &"ui_cancel"):
+		_emit_continue()
+		get_viewport().set_input_as_handled()
 
 
 func _emit_continue() -> void:
@@ -122,13 +139,14 @@ func _stop_idle_animations() -> void:
 
 func present(config: Dictionary) -> void:
 	_stop_idle_animations()
-	tag_label.text = String(config.get("tag_text", "Tarih Kartı"))
-	title_label.text = String(config.get("title", "Bilgi Kartı"))
-	body_label.text = String(config.get("text", ""))
-	reward_label.text = String(config.get("reward_text", "Yeni tarih yıldızı kazandın"))
+	tag_label.text = String(config.get("tag_text", _ui_text.text(_ui_text.INFO_DEFAULT_TAG, "Tarih Kartı")))
+	title_label.text = String(config.get("title", _ui_text.text(_ui_text.INFO_DEFAULT_TITLE, "Bilgi Kartı")))
+	body_label.text = _rich_text.centered(String(config.get("text", _ui_text.text(_ui_text.INFO_DEFAULT_BODY, "Kısa ve anlaşılır tarih bilgisi burada görünür."))))
+	reward_label.text = String(config.get("reward_text", _ui_text.text(_ui_text.INFO_DEFAULT_REWARD, "Yeni tarih yıldızı kazandın")))
 	icon_texture.texture = config.get("icon_texture", _textures.BADGE_TEXTURE)
 	icon_glow.color = Color(config.get("accent_color", Color(0.95, 0.75, 0.28, 0.18)))
 	visible = true
+	_ui_focus.grab_preferred(continue_button, [continue_button, back_button])
 	backdrop.color = Color(0.08, 0.10, 0.14, 0.0)
 	reward_halo.color = Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.0)
 	panel.scale = Vector2(0.94, 0.94)
@@ -142,11 +160,9 @@ func present(config: Dictionary) -> void:
 		sparkle.modulate = Color(1, 0.86, 0.42, 0.0)
 		sparkle.scale = Vector2.ONE * 0.72
 	var tween := create_tween()
-	tween.tween_property(backdrop, "color:a", 0.68, 0.16)
-	tween.parallel().tween_property(reward_halo, "color:a", 0.12, 0.20)
-	tween.parallel().tween_property(panel, "modulate:a", 1.0, 0.14)
-	tween.parallel().tween_property(panel, "scale", Vector2.ONE, 0.18)
-	tween.parallel().tween_property(panel, "position:y", 0.0, 0.18)
+	_overlay_tween_helper.fade_color_alpha(tween, backdrop, 0.68, 0.16)
+	_overlay_tween_helper.fade_color_alpha(tween, reward_halo, 0.12, 0.20)
+	_overlay_tween_helper.panel_pop_in(tween, panel)
 	tween.parallel().tween_property(icon_texture, "scale", Vector2.ONE, 0.18)
 	tween.parallel().tween_property(reward_star, "scale", Vector2.ONE, 0.18)
 	tween.parallel().tween_property(sparkle_a, "modulate:a", 0.72, 0.22)
@@ -162,30 +178,41 @@ func hide_overlay() -> void:
 	visible = false
 	_stop_idle_animations()
 
+
+func _matches_action(event: InputEvent, action: StringName) -> bool:
+	var action_event := event as InputEventAction
+	if action_event != null:
+		return action_event.pressed and action_event.action == action
+	return event.is_action_pressed(action)
+
 func _apply_styles() -> void:
-	panel.add_theme_stylebox_override(
-		"panel",
-		_ui_styles.panel_style(Color(0.98, 0.95, 0.88, 0.98), Color(0.05, 0.24, 0.32), _ui_tokens.RADIUS_2XL, _ui_tokens.BORDER_BOLD, Color(0.05, 0.06, 0.08, 0.26), _ui_tokens.SHADOW_SIZE_XL, _ui_tokens.SHADOW_OFFSET_XL)
-	)
-	illustration_frame.add_theme_stylebox_override(
-		"panel",
-		_ui_styles.panel_style(Color(1, 1, 1, 0.72), Color(0.90, 0.78, 0.58), _ui_tokens.RADIUS_2XL, _ui_tokens.BORDER_BOLD, Color(0.55, 0.35, 0.12, 0.16), 8, Vector2(0, 5))
-	)
-	_apply_secondary_button_style(back_button)
-	_apply_button_style(continue_button, _colors.POP_DEEP_TURQUOISE)
+	_ui_styles.apply_panel_variant(panel, "info_panel")
+	_ui_styles.apply_panel_variant(illustration_frame, "info_illustration_frame")
+	_ui_styles.apply_button_variant(back_button, "info_secondary")
+	_ui_styles.apply_button_variant(continue_button, "info_continue")
 	tag_label.add_theme_color_override("font_color", Color(0.02, 0.44, 0.56))
 	title_label.add_theme_color_override("font_color", Color(0.17, 0.19, 0.25))
-	body_label.add_theme_color_override("font_color", Color(0.25, 0.25, 0.30))
+	body_label.add_theme_color_override("default_color", Color(0.25, 0.25, 0.30))
+	body_label.add_theme_constant_override("line_separation", _ui_tokens.LINE_SEPARATION_RICH)
 	reward_label.add_theme_color_override("font_color", Color(0.86, 0.42, 0.08))
 	back_button.add_theme_color_override("font_color", Color(0.17, 0.19, 0.25))
 
 
-func _apply_secondary_button_style(target: Button) -> void:
-	var normal := _ui_styles.button_state_style(Color(1, 1, 1, 0.76), _ui_tokens.RADIUS_BASE, Color(0.05, 0.24, 0.32, 0.34), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.14), _ui_tokens.SPACE_3XS, _ui_tokens.SHADOW_OFFSET_SM)
-	var pressed := _ui_styles.button_state_style(Color(0.93, 0.91, 0.86, 0.96), _ui_tokens.RADIUS_BASE, Color(0.05, 0.24, 0.32, 0.42), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.10), _ui_tokens.SHADOW_SIZE_XS, _ui_tokens.SHADOW_OFFSET_XS)
-	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color(1, 1, 1, 1), Color(1, 1, 1, 0.62), _ui_tokens.FONT_LABEL_XL)
+func _configure_focus_navigation() -> void:
+	_ui_focus.configure_linear([back_button, continue_button], _ui_focus.AXIS_HORIZONTAL)
 
-func _apply_button_style(target: Button, fill: Color) -> void:
-	var normal := _ui_styles.button_state_style(fill, _ui_tokens.RADIUS_BASE, fill.lightened(0.18), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.22), _ui_tokens.SHADOW_SIZE_MD, _ui_tokens.SHADOW_OFFSET_MD)
-	var pressed := _ui_styles.button_state_style(fill.darkened(0.14), _ui_tokens.RADIUS_BASE, fill.lightened(0.10), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.12), _ui_tokens.SHADOW_SIZE_XS, Vector2(0, 2))
-	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), -1, 42, _ui_tokens.SPACE_LG)
+
+func _freeze_for_capture() -> void:
+	_stop_idle_animations()
+	backdrop.color.a = 0.68
+	reward_halo.color.a = 0.12
+	panel.scale = Vector2.ONE
+	panel.position.y = 0.0
+	panel.modulate = Color.WHITE
+	icon_texture.scale = Vector2.ONE
+	icon_texture.rotation = 0.0
+	icon_glow.scale = Vector2.ONE
+	reward_star.scale = Vector2.ONE
+	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
+		sparkle.rotation = 0.0
+		sparkle.scale = Vector2.ONE * 0.86

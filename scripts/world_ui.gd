@@ -14,7 +14,6 @@ var _world: Node2D
 # UI state
 var panel_mode := "character"
 var current_dialogue_callback: Callable
-var _active_closeable_overlay := -1
 var _post_transition_actions: Array[Callable] = []
 
 # Minimap
@@ -50,8 +49,10 @@ var elapsed_time := 0.0
 
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
+const LOADING_OVERLAY_SCENE := preload("res://scenes/loading_overlay.tscn")
 const MIN_INTERACT_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_PRIMARY
 const MIN_DIALOGUE_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
 
@@ -74,6 +75,7 @@ var _decision_overlay: Node
 var _info_card_overlay: Node
 var _chapter_transition_overlay: Node
 var _exit_confirm_overlay: CanvasLayer
+var _loading_overlay: CanvasLayer
 
 
 func initialize(world: Node2D) -> void:
@@ -118,9 +120,9 @@ func sync_hud_layout() -> void:
 	if _world == null or _hud_root == null:
 		return
 	var viewport_size := _world.get_viewport_rect().size
-	var side_margin := maxf(_ui_tokens.SAFE_AREA_SIDE_MIN, viewport_size.x * _ui_tokens.SAFE_AREA_SIDE_RATIO)
-	var top_margin := maxf(_ui_tokens.SAFE_AREA_TOP_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_TOP_RATIO)
-	var bottom_margin := maxf(_ui_tokens.SAFE_AREA_BOTTOM_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_BOTTOM_RATIO)
+	var side_margin := _gui_frame.safe_area_side(viewport_size)
+	var top_margin := _gui_frame.safe_area_top(viewport_size)
+	var bottom_margin := _gui_frame.safe_area_bottom(viewport_size)
 	_sync_world_panels(side_margin, top_margin, bottom_margin, viewport_size)
 	if _hud_bar != null and _hud_bar.has_method("sync_layout"):
 		_hud_bar.call("sync_layout")
@@ -162,6 +164,9 @@ func _setup_overlay_manager() -> void:
 	_overlay_manager.register_overlay(OverlayManager.OverlayType.DECISION, _decision_overlay)
 	_overlay_manager.register_overlay(OverlayManager.OverlayType.INFO_CARD, _info_card_overlay)
 	_overlay_manager.register_overlay(OverlayManager.OverlayType.CHAPTER_TRANSITION, _chapter_transition_overlay)
+	_loading_overlay = LOADING_OVERLAY_SCENE.instantiate()
+	add_child(_loading_overlay)
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.LOADING, _loading_overlay)
 	
 	# P2-13: Çıkış onay overlay'ini programatik olarak oluştur ve kaydet
 	var exit_confirm_scene := preload("res://scenes/exit_confirm_overlay.tscn")
@@ -190,12 +195,30 @@ func get_overlay(type) -> Node:
 	return _overlay_manager.get_overlay_node(type)
 
 
+func get_loading_overlay() -> Node:
+	return get_overlay(OverlayManager.OverlayType.LOADING)
+
+
+func stage_loading_request(request: Dictionary) -> bool:
+	var loading_overlay := get_loading_overlay()
+	if loading_overlay == null or not loading_overlay.has_method("stage_request"):
+		return false
+	return bool(loading_overlay.call("stage_request", request))
+
+
+func show_loading_request(request: Dictionary) -> bool:
+	if not stage_loading_request(request):
+		return false
+	_overlay_manager.show(OverlayManager.OverlayType.LOADING, request)
+	return true
+
+
 func hide_overlay(type) -> void:
 	_overlay_manager.hide(type)
 
 
 func is_world_input_blocked() -> bool:
-	return _character_panel.visible or _dialogue_panel.visible or is_any_overlay_visible()
+	return _character_panel.visible or _dialogue_panel.visible or _overlay_manager.active_blocks_world_input()
 
 
 func restore_world_hud_after_load() -> void:
@@ -234,7 +257,20 @@ func hide_exit_confirm() -> void:
 
 
 func has_closeable_overlay() -> bool:
-	return _active_closeable_overlay >= 0 and _is_overlay_effectively_visible(_active_closeable_overlay)
+	return _dialogue_panel.visible or _overlay_manager.has_closeable_active_overlay()
+
+
+func handle_global_cancel() -> bool:
+	if has_closeable_overlay():
+		close_dialogue()
+		return true
+	if is_exit_confirm_visible():
+		hide_exit_confirm()
+		return true
+	if not is_world_input_blocked():
+		show_exit_confirm()
+		return true
+	return false
 
 
 # ---------------------------------------------------------------------------
@@ -249,7 +285,6 @@ func show_dialogue(title: String, text: String, callback: Callable, expression: 
 
 func _show_dialogue_now(title: String, text: String, callback: Callable, expression: String = "idle") -> void:
 	current_dialogue_callback = callback
-	_active_closeable_overlay = OverlayManager.OverlayType.DIALOGUE
 	_overlay_manager.show(OverlayManager.OverlayType.DIALOGUE, {
 		"chapter": _current_chip_text(),
 		"speaker": title,
@@ -259,7 +294,7 @@ func _show_dialogue_now(title: String, text: String, callback: Callable, express
 	})
 	_interact_button.disabled = true
 	# P1.3: Diyalog acilinca gecis sesi
-	AudioManager.play_sfx("SFX_TRANSITION")
+	_play_transition_sfx()
 
 
 func show_info_card(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
@@ -270,7 +305,6 @@ func show_info_card(title: String, text: String, reward_text: String, callback: 
 
 func _show_info_card_now(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
 	current_dialogue_callback = callback
-	_active_closeable_overlay = OverlayManager.OverlayType.INFO_CARD
 	panel_mode = "info_card"
 	_overlay_manager.show(OverlayManager.OverlayType.INFO_CARD, {
 		"tag_text": _info_tag_text(card_kind),
@@ -282,7 +316,7 @@ func _show_info_card_now(title: String, text: String, reward_text: String, callb
 	})
 	_interact_button.disabled = true
 	# P1.3: Bilgi karti acilinca gecis sesi
-	AudioManager.play_sfx("SFX_TRANSITION")
+	_play_transition_sfx()
 
 
 func show_decision(event_index: int, context: String) -> void:
@@ -296,7 +330,6 @@ func _show_decision_now(event_index: int, context: String) -> void:
 	"""Karar overlay'ini göster."""
 	var questions := preload("res://assets/data/questions.gd")
 	var event: Dictionary = questions.EVENTS[event_index]
-	_active_closeable_overlay = -1
 	panel_mode = "decision"
 	_overlay_manager.show(OverlayManager.OverlayType.DECISION, {
 		"context": context,
@@ -309,22 +342,23 @@ func _show_decision_now(event_index: int, context: String) -> void:
 	_interact_button.visible = false
 	_character_panel.visible = false
 	# P1.3: Karar acilinca gecis sesi
-	AudioManager.play_sfx("SFX_TRANSITION")
+	_play_transition_sfx()
 
 
 func close_dialogue() -> void:
 	"""Aktif overlay'i kapat ve callback'i çağır."""
-	if _active_closeable_overlay >= 0:
-		_overlay_manager.hide(_active_closeable_overlay)
-	else:
+	var closed_callback_surface := _dialogue_panel.visible
+	var active_overlay := _overlay_manager.get_active()
+	if active_overlay == OverlayManager.OverlayType.DIALOGUE or active_overlay == OverlayManager.OverlayType.INFO_CARD:
+		closed_callback_surface = true
+	if _overlay_manager.has_closeable_active_overlay():
+		_overlay_manager.hide_active_closeable_overlay()
+	elif _dialogue_panel.visible:
 		_dialogue_panel.visible = false
-	var restored_overlay := _overlay_manager.get_active()
-	if restored_overlay == OverlayManager.OverlayType.DIALOGUE or restored_overlay == OverlayManager.OverlayType.INFO_CARD:
-		_active_closeable_overlay = restored_overlay
 	else:
-		_active_closeable_overlay = -1
-	_interact_button.disabled = _active_closeable_overlay >= 0
-	if current_dialogue_callback.is_valid():
+		return
+	_interact_button.disabled = has_closeable_overlay()
+	if closed_callback_surface and current_dialogue_callback.is_valid():
 		var callback := current_dialogue_callback
 		current_dialogue_callback = Callable()
 		callback.call()
@@ -332,16 +366,15 @@ func close_dialogue() -> void:
 
 func show_chapter_transition(title: String, subtitle: String) -> void:
 	"""Bölüm geçiş overlay'ini göster."""
-	_active_closeable_overlay = -1
 	_overlay_manager.show(OverlayManager.OverlayType.CHAPTER_TRANSITION, {
 		"chapter": title,
 		"subtitle": subtitle,
 		"progress_text": _chapter_loading_text(title),
 	})
 	# Ses: bölüme göre bgm değiştir
-	AudioManager.play_bgm(_bgm_for_chapter(title))
+	_play_bgm_track(_bgm_for_chapter(title))
 	# P1.3: Bölüm geçiş sesi
-	AudioManager.play_sfx("SFX_TRANSITION")
+	_play_transition_sfx()
 	# P7: Bölüm geçişinde otomatik kaydet
 	_save_game()
 
@@ -357,48 +390,31 @@ func flush_post_transition_actions() -> void:
 
 
 func _queue_after_transition(action: Callable) -> bool:
-	if not _is_overlay_effectively_visible(OverlayManager.OverlayType.CHAPTER_TRANSITION):
+	if not _overlay_manager.is_effectively_visible(OverlayManager.OverlayType.CHAPTER_TRANSITION):
 		return false
 	_post_transition_actions.append(action)
 	return true
 
 
+func _play_transition_sfx() -> void:
+	var audio_manager := get_node_or_null("/root/AudioManager")
+	if audio_manager != null:
+		audio_manager.call("play_sfx", "SFX_TRANSITION")
+
+
+func _play_bgm_track(track_name: String) -> void:
+	var audio_manager := get_node_or_null("/root/AudioManager")
+	if audio_manager != null:
+		audio_manager.call("play_bgm", track_name)
+
+
 func _is_overlay_effectively_visible(type: int) -> bool:
-	"""Overlay'in hem CanvasLayer'ı hem de node'u görünür mü?
-	
-	CanvasLayer.visible true olsa bile overlay node'u kendi visible=false
-	yapmış olabilir (örn. chapter_transition._finish() node.visible=false yapar).
-	Bu durumda overlay etkili bir şekilde görünmez sayılmalıdır.
-	"""
-	if not _overlay_manager.is_visible(type):
-		return false
-	var node: Node = _overlay_manager.get_overlay_node(type)
-	if node == null:
-		return false
-	return node.visible
+	return _overlay_manager.is_effectively_visible(type)
 
 
 func is_any_overlay_visible() -> bool:
-	"""Herhangi bir overlay (DECISION, DIALOGUE, INFO_CARD, CHAPTER_TRANSITION, EXIT_CONFIRM) görünür mü?
-	
-	world.gd _physics_process/_unhandled_input'da input kilidi için kullanılır.
-	character_panel ve dialogue_panel bu kapsam dışıdır (world.gd doğrudan kontrol eder).
-	
-	NOT: CanvasLayer.visible ve node.visible birlikte kontrol edilir.
-	Overlay node'u visible=false ise (tween/animation sonrası kendini gizlemişse),
-	CanvasLayer.visible=true olsa bile overlay görünmez sayılır.
-	"""
-	if _is_overlay_effectively_visible(OverlayManager.OverlayType.DECISION):
-		return true
-	if _is_overlay_effectively_visible(OverlayManager.OverlayType.DIALOGUE):
-		return true
-	if _is_overlay_effectively_visible(OverlayManager.OverlayType.INFO_CARD):
-		return true
-	if _is_overlay_effectively_visible(OverlayManager.OverlayType.CHAPTER_TRANSITION):
-		return true
-	if _is_overlay_effectively_visible(OverlayManager.OverlayType.EXIT_CONFIRM):
-		return true
-	return false
+	var active_overlay := _overlay_manager.get_active()
+	return active_overlay >= 0 and _overlay_manager.is_effectively_visible(active_overlay)
 
 
 # ---------------------------------------------------------------------------
@@ -769,7 +785,7 @@ func update_guidance_arrow() -> void:
 	if state.current_zone == "samsun_rift":
 		guidance_arrow.visible = false
 		return
-	var blocked: bool = _character_panel.visible or _dialogue_panel.visible or _decision_overlay.visible or _dialogue_overlay.visible or _info_card_overlay.visible
+	var blocked := is_world_input_blocked()
 	var target_marker: Node2D = marker_mod.get_guidance_marker(markers, state.current_goal_kind)
 	if blocked or target_marker == null:
 		guidance_arrow.visible = false
@@ -1225,7 +1241,9 @@ func _save_game() -> void:
 	save_data["player_position"] = {"x": player_node.position.x, "y": player_node.position.y}
 	save_data["companion_position"] = {"x": companion_node.position.x, "y": companion_node.position.y}
 
-	SaveManager.save_game(save_data)
+	var save_manager := get_node_or_null("/root/SaveManager")
+	if save_manager != null:
+		save_manager.call("save_game", save_data)
 
 
 # ---------------------------------------------------------------------------

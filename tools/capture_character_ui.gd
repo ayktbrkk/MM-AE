@@ -2,12 +2,16 @@ extends SceneTree
 
 const DEFAULT_SIZE := Vector2i(923, 1287)
 const DEFAULT_OUTPUT_DIR := "res://artifacts/renders/character_ui"
+const PSEUDO_EXPANSION_RATIO := 1.35
+const PSEUDO_PREFIX := "[[ "
+const PSEUDO_SUFFIX := " ]]"
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	var surface := "menu"
 	var output_path := ""
 	var viewport_size := DEFAULT_SIZE
+	var pseudo_locale := "--pseudo" in args
 	for index in range(args.size()):
 		match args[index]:
 			"--surface":
@@ -22,11 +26,13 @@ func _initialize() -> void:
 					if parts.size() == 2:
 						viewport_size = Vector2i(parts[0].to_int(), parts[1].to_int())
 	if output_path == "":
-		output_path = "%s/%s.png" % [DEFAULT_OUTPUT_DIR, surface]
-	call_deferred("_capture_surface", surface, output_path, viewport_size)
+		var variant_suffix := "_pseudo" if pseudo_locale else ""
+		output_path = "%s/%s%s.png" % [DEFAULT_OUTPUT_DIR, surface, variant_suffix]
+	call_deferred("_capture_surface", surface, output_path, viewport_size, pseudo_locale)
 
 
-func _capture_surface(surface: String, output_path: String, viewport_size: Vector2i) -> void:
+func _capture_surface(surface: String, output_path: String, viewport_size: Vector2i, pseudo_locale: bool) -> void:
+	_configure_pseudolocalization(pseudo_locale)
 	var viewport := SubViewport.new()
 	viewport.name = "CharacterUICaptureViewport"
 	viewport.disable_3d = true
@@ -45,7 +51,9 @@ func _capture_surface(surface: String, output_path: String, viewport_size: Vecto
 	for frame in range(24):
 		await process_frame
 
-	_finalize_surface(surface, scene)
+	_finalize_surface(surface, scene, pseudo_locale)
+	if scene.has_method("_freeze_for_capture"):
+		scene.call("_freeze_for_capture")
 
 	for frame in range(24):
 		await process_frame
@@ -70,6 +78,30 @@ func _capture_surface(surface: String, output_path: String, viewport_size: Vecto
 	quit()
 
 
+func _configure_pseudolocalization(enabled: bool) -> void:
+	TranslationServer.pseudolocalization_enabled = enabled
+	ProjectSettings.set_setting("internationalization/pseudolocalization/replace_with_accents", enabled)
+	ProjectSettings.set_setting("internationalization/pseudolocalization/double_vowels", enabled)
+	ProjectSettings.set_setting("internationalization/pseudolocalization/override", enabled)
+	ProjectSettings.set_setting("internationalization/pseudolocalization/skip_placeholders", true)
+	ProjectSettings.set_setting("internationalization/pseudolocalization/prefix", PSEUDO_PREFIX if enabled else "")
+	ProjectSettings.set_setting("internationalization/pseudolocalization/suffix", PSEUDO_SUFFIX if enabled else "")
+	ProjectSettings.set_setting("internationalization/pseudolocalization/expansion_ratio", PSEUDO_EXPANSION_RATIO if enabled else 1.0)
+	TranslationServer.reload_pseudolocalization()
+
+
+func _variant_text(value: String, pseudo_locale: bool) -> String:
+	if not pseudo_locale:
+		return value
+	return TranslationServer.pseudolocalize(value)
+
+
+func _set_node_text(node: Object, value: String, pseudo_locale: bool) -> void:
+	if node == null:
+		return
+	node.set("text", _variant_text(value, pseudo_locale))
+
+
 func _build_surface(surface: String) -> Node:
 	match surface:
 		"menu":
@@ -90,25 +122,33 @@ func _build_surface(surface: String) -> Node:
 			return chapter_transition
 		"choice":
 			return load("res://scenes/world.tscn").instantiate()
+		"completion":
+			return load("res://scenes/world.tscn").instantiate()
 		_:
 			return null
 
 
-func _finalize_surface(surface: String, scene: Node) -> void:
+func _finalize_surface(surface: String, scene: Node, pseudo_locale: bool) -> void:
 	match surface:
 		"menu":
+			_set_node_text(scene.get("title_label"), "Zaman Yolculari", pseudo_locale)
+			_set_node_text(scene.get("subtitle_label"), "Bandirma'dan baslayan tarih yolculugu", pseudo_locale)
+			_set_node_text(scene.get("start_button"), "Oyuna Basla", pseudo_locale)
+			_set_node_text(scene.get("continue_button"), "Devam Et", pseudo_locale)
+			_set_node_text(scene.get("settings_button"), "Ayarlar", pseudo_locale)
+			_set_node_text(scene.get("exit_button"), "Cikis", pseudo_locale)
 			return
 		"hud":
 			if scene.has_method("apply_theme"):
 				scene.call("apply_theme", Color(0.90, 0.97, 1.0), Color(0.04, 0.42, 0.56), Color(0.08, 0.48, 0.62), Color(0.04, 0.22, 0.32), Color(0.08, 0.48, 0.62))
 			if scene.has_method("set_title"):
-				scene.call("set_title", "Zaman Yolculari: Samsun Ruyasi")
+				scene.call("set_title", _variant_text("Zaman Yolculari: Samsun Ruyasi", pseudo_locale))
 			if scene.has_method("set_chip"):
-				scene.call("set_chip", "Samsun Ruyasi")
+				scene.call("set_chip", _variant_text("Samsun Ruyasi", pseudo_locale))
 			if scene.has_method("set_objective"):
-				scene.call("set_objective", "Telgrafhaneye ulas ve ilk ipuclarini topla.")
+				scene.call("set_objective", _variant_text("Telgrafhaneye ulas ve ilk ipuclarini topla.", pseudo_locale))
 			if scene.has_method("set_progress"):
-				scene.call("set_progress", "Liderlik: 3 | Destek: 2/3 | Dalga: 1")
+				scene.call("set_progress", _variant_text("Liderlik: 3 | Destek: 2/3 | Dalga: 1", pseudo_locale))
 			if scene.has_method("set_star_count"):
 				scene.call("set_star_count", 0)
 				await process_frame
@@ -116,9 +156,9 @@ func _finalize_surface(surface: String, scene: Node) -> void:
 		"dialogue":
 			if scene.has_method("present"):
 				scene.call("present", {
-					"chapter": "Bandirma 1919",
-					"speaker": "Arda",
-					"text": "Bandirma'ya geldik. Hazir misin?",
+					"chapter": _variant_text("Bandirma 1919", pseudo_locale),
+					"speaker": _variant_text("Arda", pseudo_locale),
+					"text": _variant_text("Bandirma'ya geldik. Hazir misin?", pseudo_locale),
 					"speaker_side": "left",
 					"expression": "thinking"
 				})
@@ -129,52 +169,61 @@ func _finalize_surface(surface: String, scene: Node) -> void:
 		"info_card":
 			if scene.has_method("present"):
 				scene.call("present", {
-					"tag_text": "Dogru Karar",
-					"title": "Karar Notu",
-					"text": "Bilgi karti artik gorunur bir kapat aksiyonu ve daha net mobil aksiyon satiri ile aciliyor.",
-					"reward_text": "Yoluna devam et",
+					"tag_text": _variant_text("Dogru Karar", pseudo_locale),
+					"title": _variant_text("Karar Notu", pseudo_locale),
+					"text": _variant_text("Bilgi karti artik gorunur bir kapat aksiyonu ve daha net mobil aksiyon satiri ile aciliyor.", pseudo_locale),
+					"reward_text": _variant_text("Yoluna devam et", pseudo_locale),
 					"accent_color": Color(0.34, 0.63, 0.95, 0.18)
 				})
 		"decision":
 			if scene.has_method("present"):
 				scene.call("present", {
 					"context": "visual_check",
-					"chapter": "Karar Ani",
-					"title": "Ilk adimi kim atsın?",
-					"prompt": "Bandirma'daki ilk ipucunu incelemek icin hangi ogrenci one cikmali?",
-					"option_a": "Arda hemen ilerlesin",
-					"option_b": "Eda once gozlem yapsin",
-					"arda_hint": "Merakli ve hizli",
-					"eda_hint": "Sakin ve planli"
+					"chapter": _variant_text("Karar Ani", pseudo_locale),
+					"title": _variant_text("Ilk adimi kim atsin?", pseudo_locale),
+					"prompt": _variant_text("Bandirma'daki ilk ipucunu incelemek icin hangi ogrenci one cikmali?", pseudo_locale),
+					"option_a": _variant_text("Arda hemen ilerlesin", pseudo_locale),
+					"option_b": _variant_text("Eda once gozlem yapsin", pseudo_locale),
+					"arda_hint": _variant_text("Merakli ve hizli", pseudo_locale),
+					"eda_hint": _variant_text("Sakin ve planli", pseudo_locale)
 				})
 		"chapter_transition":
 			if scene.has_method("present"):
-				scene.call("present", "Ankara", "Meclis iradesi toplaniyor", "Sahne hazirlaniyor...")
+				scene.call(
+					"present",
+					_variant_text("Ankara", pseudo_locale),
+					_variant_text("Meclis iradesi toplaniyor", pseudo_locale),
+					_variant_text("Sahne hazirlaniyor...", pseudo_locale)
+				)
 		"choice":
-			var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
-			if dream_overlay != null and dream_overlay is CanvasItem:
-				(dream_overlay as CanvasItem).visible = false
-			var world_ui := scene.get_node_or_null("WorldUI")
-			if world_ui != null:
-				var overlay_manager = world_ui.get("_overlay_manager")
-				if overlay_manager != null and overlay_manager.has_method("hide_all"):
-					overlay_manager.call("hide_all")
+			_prepare_world_capture_scene(scene)
 			var player_mod := scene.get_node_or_null("WorldPlayer")
 			if player_mod != null and player_mod.has_method("set_character_choice_visible"):
 				player_mod.call("set_character_choice_visible", true)
-			for path in ["Props", "Markers", "ForegroundProps", "Player", "Companion"]:
-				var node := scene.get_node_or_null(path)
-				if node != null and node is CanvasItem:
-					(node as CanvasItem).visible = false
-			var dialogue_panel := scene.get_node_or_null("CanvasLayer/HUD/DialoguePanel")
-			if dialogue_panel != null and dialogue_panel is CanvasItem:
-				(dialogue_panel as CanvasItem).visible = false
-			var interact_button := scene.get_node_or_null("CanvasLayer/HUD/InteractButton")
-			if interact_button != null and interact_button is CanvasItem:
-				(interact_button as CanvasItem).visible = false
-			var progress_panel := scene.get_node_or_null("CanvasLayer/HUD/ProgressPanel")
-			if progress_panel != null and progress_panel is CanvasItem:
-				(progress_panel as CanvasItem).visible = false
-			var route_panel := scene.get_node_or_null("CanvasLayer/HUD/RoutePanel")
-			if route_panel != null and route_panel is CanvasItem:
-				(route_panel as CanvasItem).visible = false
+		"completion":
+			_prepare_world_capture_scene(scene)
+			var character_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
+			if character_panel != null and character_panel is CanvasItem:
+				(character_panel as CanvasItem).visible = false
+			var world_zone := scene.get_node_or_null("WorldZone")
+			if world_zone != null and world_zone.has_method("finish_prototype"):
+				world_zone.call("finish_prototype")
+
+
+func _prepare_world_capture_scene(scene: Node) -> void:
+	var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
+	if dream_overlay != null and dream_overlay is CanvasItem:
+		(dream_overlay as CanvasItem).visible = false
+	var world_ui := scene.get_node_or_null("WorldUI")
+	if world_ui != null:
+		var overlay_manager = world_ui.get("_overlay_manager")
+		if overlay_manager != null and overlay_manager.has_method("hide_all"):
+			overlay_manager.call("hide_all")
+	for path in ["Props", "Markers", "ForegroundProps", "Player", "Companion"]:
+		var node := scene.get_node_or_null(path)
+		if node != null and node is CanvasItem:
+			(node as CanvasItem).visible = false
+	for path in ["CanvasLayer/HUD/DialoguePanel", "CanvasLayer/HUD/InteractButton", "CanvasLayer/HUD/ProgressPanel", "CanvasLayer/HUD/RoutePanel"]:
+		var hud_node := scene.get_node_or_null(path)
+		if hud_node != null and hud_node is CanvasItem:
+			(hud_node as CanvasItem).visible = false

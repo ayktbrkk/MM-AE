@@ -1,5 +1,6 @@
 extends Control
 
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
@@ -301,8 +302,8 @@ func sync_layout() -> void:
 	var viewport_size := get_viewport_rect().size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
 		return
-	var side_margin := maxf(_ui_tokens.SAFE_AREA_SIDE_MIN, viewport_size.x * _ui_tokens.SAFE_AREA_SIDE_RATIO)
-	var top_margin := maxf(_ui_tokens.SAFE_AREA_TOP_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_TOP_RATIO)
+	var side_margin := _gui_frame.safe_area_side(viewport_size)
+	var top_margin := _gui_frame.safe_area_top(viewport_size)
 	var chip_width := maxf(220.0, minf(_ui_tokens.HUD_CHIP_WIDTH, viewport_size.x - (side_margin * 2.0) - _ui_tokens.HUD_STAR_WIDTH - _ui_tokens.SPACE_LG))
 	var status_width := maxf(320.0, minf(_ui_tokens.HUD_STATUS_WIDTH_MAX, viewport_size.x - (side_margin * 2.0) - _ui_tokens.HUD_STAR_WIDTH - _ui_tokens.SPACE_LG))
 	var chip_top := top_margin - _ui_tokens.SPACE_XS

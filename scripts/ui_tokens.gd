@@ -43,6 +43,8 @@ const FONT_TITLE_LG := 36
 const FONT_TITLE_XL := 42
 const FONT_TITLE_HERO := 38
 const FONT_DISPLAY := 66
+const LINE_SPACING_BODY := 6
+const LINE_SEPARATION_RICH := 8
 
 # Spacing tokens
 const SPACE_3XS := 4

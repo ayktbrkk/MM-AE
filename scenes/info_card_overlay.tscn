@@ -129,15 +129,16 @@ offset_bottom = 154.0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BodyLabel" type="Label" parent="Center/InfoCard/CardMargin/CardContent"]
+[node name="BodyLabel" type="RichTextLabel" parent="Center/InfoCard/CardMargin/CardContent"]
 custom_minimum_size = Vector2(0, 280)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/normal_font_size = 28
+bbcode_enabled = true
 text = "Kısa ve anlaşılır tarih bilgisi burada görünür."
+fit_content = true
+scroll_active = false
 autowrap_mode = 3
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="RewardRow" type="HBoxContainer" parent="Center/InfoCard/CardMargin/CardContent"]
 layout_mode = 2

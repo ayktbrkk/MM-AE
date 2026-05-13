@@ -5,8 +5,13 @@ signal continue_pressed
 signal settings_pressed
 
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
+const WORLD_LOAD_TITLE := "Bandırma Yolculuğu"
+const LOADING_OVERLAY_SCENE := preload("res://scenes/loading_overlay.tscn")
 
 const TAU := 2.0 * PI
+const _gui_frame := preload("res://scripts/gui_frame.gd")
+const _ui_focus := preload("res://scripts/ui_focus_helper.gd")
+const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
@@ -20,6 +25,10 @@ const MIN_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
 
 # AudioManager autoload — P2-12 ses ayarlari icin
 @onready var _audio_manager: AudioManager = AudioManager
+
+var _loading_overlay: LoadingOverlay
+var _pending_world_load_request := {}
+var _idle_tweens: Array[Tween] = []
 
 var backdrop: MenuBackdrop
 var safe_area: MarginContainer
@@ -36,6 +45,8 @@ var exit_button: Button
 var settings_overlay: Control
 var settings_panel: PanelContainer
 var settings_container: VBoxContainer
+var bgm_slider: HSlider
+var sfx_slider: HSlider
 var settings_close_button: Button
 var is_transitioning := false
 var _exit_dialog: CanvasLayer
@@ -130,13 +141,20 @@ func _ready() -> void:
 	settings_button.pressed.connect(_on_settings_pressed)
 	settings_close_button.pressed.connect(_hide_settings_overlay)
 	dream_intro_overlay.intro_finished.connect(_open_world)
+	_loading_overlay = LOADING_OVERLAY_SCENE.instantiate()
+	add_child(_loading_overlay)
 	continue_button.disabled = not SaveManager.has_save()
+	_configure_focus_navigation()
+	_refresh_menu_focus()
 	# P2-13: Çıkış onay diyalogu
 	exit_button.pressed.connect(_on_exit_pressed)
 	_exit_dialog = preload("res://scenes/exit_confirm_overlay.tscn").instantiate()
 	add_child(_exit_dialog)
 	_exit_dialog.exit_confirmed.connect(func() -> void: get_tree().quit())
-	_exit_dialog.exit_cancelled.connect(func() -> void: _exit_dialog.hide_overlay())
+	_exit_dialog.exit_cancelled.connect(func() -> void:
+		_exit_dialog.hide_overlay()
+		_refresh_menu_focus(exit_button)
+	)
 	# P1.3: Ana menü BGM'sini başlat
 	AudioManager.play_bgm("BGM_MENU")
 	_start_idle_animations()
@@ -149,6 +167,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if _exit_dialog.visible:
 			_exit_dialog.hide_overlay()
+			_refresh_menu_focus(exit_button)
 			get_viewport().set_input_as_handled()
 			return
 		if settings_overlay.visible:
@@ -214,13 +233,13 @@ func _build_menu_layout() -> void:
 	layout.add_child(title_group)
 
 	title_label = Label.new()
-	title_label.text = "Zaman Yolcuları"
+	title_label.text = _ui_text.text(_ui_text.MENU_TITLE, "Zaman Yolcuları")
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_DISPLAY)
 	title_group.add_child(title_label)
 
 	subtitle_label = Label.new()
-	subtitle_label.text = "Bandırma'dan başlayan tarih yolculuğu"
+	subtitle_label.text = _ui_text.text(_ui_text.MENU_SUBTITLE, "Bandırma'dan başlayan tarih yolculuğu")
 	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	subtitle_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	title_group.add_child(subtitle_label)
@@ -236,25 +255,25 @@ func _build_menu_layout() -> void:
 	layout.add_child(button_stack)
 
 	start_button = Button.new()
-	start_button.text = "Oyuna Başla"
+	start_button.text = _ui_text.text(_ui_text.MENU_START, "Oyuna Başla")
 	start_button.custom_minimum_size = Vector2(0, 112)
 	start_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_MD)
 	button_stack.add_child(start_button)
 
 	continue_button = Button.new()
-	continue_button.text = "Devam Et"
+	continue_button.text = _ui_text.text(_ui_text.MENU_CONTINUE, "Devam Et")
 	continue_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
 	continue_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(continue_button)
 
 	settings_button = Button.new()
-	settings_button.text = "Ayarlar"
+	settings_button.text = _ui_text.text(_ui_text.MENU_SETTINGS, "Ayarlar")
 	settings_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
 	settings_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(settings_button)
 
 	exit_button = Button.new()
-	exit_button.text = "Çıkış"
+	exit_button.text = _ui_text.text(_ui_text.MENU_EXIT, "Çıkış")
 	exit_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
 	exit_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(exit_button)
@@ -291,35 +310,32 @@ func _build_settings_overlay() -> void:
 	margin.add_child(settings_container)
 
 	var title := Label.new()
-	title.text = "Ayarlar ve Bilgi"
+	title.text = _ui_text.text(_ui_text.MENU_SETTINGS_TITLE, "Ayarlar ve Bilgi")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_LG)
 	settings_container.add_child(title)
 
 	var body := Label.new()
-	body.text = "Bu prototipte çocuk dostu, reklamsız ve hikaye odaklı bir tarih yolculuğu deneyimi kuruluyor.\n\nBaşlat ile Bandırma yolculuğuna geçebilir, Devam Et ile aynı dünyayı yeniden açabilirsin."
+	body.text = _ui_text.text(_ui_text.MENU_SETTINGS_BODY, "Bu prototipte çocuk dostu, reklamsız ve hikaye odaklı bir tarih yolculuğu deneyimi kuruluyor.\n\nBaşlat ile Bandırma yolculuğuna geçebilir, Devam Et ile aynı dünyayı yeniden açabilirsin.")
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_LG)
+	body.add_theme_constant_override("line_spacing", _ui_tokens.LINE_SPACING_BODY)
 	settings_container.add_child(body)
 
 	settings_close_button = Button.new()
-	settings_close_button.text = "Geri Dön"
+	settings_close_button.text = _ui_text.text(_ui_text.MENU_BACK, "Geri Dön")
 	settings_close_button.custom_minimum_size = Vector2(0, MIN_TOUCH_SIZE)
 	settings_close_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	settings_container.add_child(settings_close_button)
 
 func _sync_responsive_layout() -> void:
 	var viewport_size := get_viewport_rect().size
-
-	var margin_x: float = max(_ui_tokens.SAFE_AREA_SIDE_MIN, viewport_size.x * _ui_tokens.SAFE_AREA_SIDE_RATIO)
-	safe_area.offset_left = margin_x
-	safe_area.offset_right = -margin_x
-	safe_area.offset_top = max(_ui_tokens.SAFE_AREA_TOP_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_TOP_RATIO)
-	safe_area.offset_bottom = -max(_ui_tokens.SAFE_AREA_BOTTOM_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_BOTTOM_RATIO)
+	var safe_rect := _gui_frame.apply_safe_area_offsets(safe_area, viewport_size)
 
 	var compact_layout := viewport_size.x < 900.0
 	title_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_XL if compact_layout else _ui_tokens.FONT_DISPLAY)
 	subtitle_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_XL if compact_layout else _ui_tokens.FONT_BODY_XL)
+	subtitle_label.add_theme_constant_override("line_spacing", _ui_tokens.LINE_SPACING_BODY)
 
 	var front_y := viewport_size.y * 0.58
 	arda_sprite.size = Vector2(176, 218)
@@ -329,8 +345,8 @@ func _sync_responsive_layout() -> void:
 	_arda_base_y = arda_sprite.position.y
 	_eda_base_y = eda_sprite.position.y
 
-	var panel_width: float = min(viewport_size.x - 64.0, 760.0)
-	var panel_height: float = min(viewport_size.y - 220.0, 560.0)
+	var panel_width: float = min(safe_rect.size.x, 760.0)
+	var panel_height: float = min(maxf(320.0, safe_rect.size.y - 64.0), 560.0)
 	settings_panel.offset_left = -panel_width * 0.5
 	settings_panel.offset_right = panel_width * 0.5
 	settings_panel.offset_top = -panel_height * 0.5
@@ -387,10 +403,13 @@ func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radiu
 func _on_start_pressed() -> void:
 	if is_transitioning:
 		return
-	SaveManager.pending_entry_action = "start"
 	AudioManager.play_sfx("SFX_CLICK")
 	start_pressed.emit()
-	_begin_dream_intro("Kitap Açılıyor", "Arda ve Eda'nın gözleri ağırlaşır. Sayfalar dalga sesine dönüşürken Bandırma gecesi yaklaşır.")
+	_begin_dream_intro(
+		_ui_text.text(_ui_text.MENU_DREAM_START_TITLE, "Kitap Açılıyor"),
+		_ui_text.text(_ui_text.MENU_DREAM_START_BODY, "Arda ve Eda'nın gözleri ağırlaşır. Sayfalar dalga sesine dönüşürken Bandırma gecesi yaklaşır."),
+		_build_world_load_request("start")
+	)
 
 func _on_continue_pressed() -> void:
 	if is_transitioning:
@@ -398,20 +417,24 @@ func _on_continue_pressed() -> void:
 	if not SaveManager.has_save():
 		continue_button.disabled = true
 		return
-	SaveManager.pending_entry_action = "continue"
 	AudioManager.play_sfx("SFX_CLICK")
 	continue_pressed.emit()
-	_begin_dream_intro("Rüya Yeniden Başlıyor", "Bandırma Vapuru sislerin arasından yeniden beliriyor. Tarih yolculuğu kaldığın duygudan devam ediyor.")
+	_begin_dream_intro(
+		_ui_text.text(_ui_text.MENU_DREAM_CONTINUE_TITLE, "Rüya Yeniden Başlıyor"),
+		_ui_text.text(_ui_text.MENU_DREAM_CONTINUE_BODY, "Bandırma Vapuru sislerin arasından yeniden beliriyor. Tarih yolculuğu kaldığın duygudan devam ediyor."),
+		_build_world_load_request("continue")
+	)
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sfx("SFX_CLICK")
 	settings_pressed.emit()
 	_sync_responsive_layout()
 	settings_overlay.visible = true
-	settings_close_button.grab_focus()
+	_ui_focus.grab_preferred(bgm_slider, [bgm_slider, sfx_slider, settings_close_button])
 
 func _hide_settings_overlay() -> void:
 	settings_overlay.visible = false
+	_refresh_menu_focus(settings_button)
 
 func _on_exit_pressed() -> void:
 	"""Çıkış butonuna basıldı — onay diyalogunu göster."""
@@ -419,8 +442,9 @@ func _on_exit_pressed() -> void:
 	_exit_dialog.show_overlay()
 
 
-func _begin_dream_intro(title: String, body: String) -> void:
+func _begin_dream_intro(title: String, body: String, load_request: Dictionary) -> void:
 	is_transitioning = true
+	_pending_world_load_request = load_request.duplicate()
 	_set_menu_enabled(false)
 	dream_intro_overlay.present(title, body)
 
@@ -430,18 +454,56 @@ func _set_menu_enabled(enabled: bool) -> void:
 	settings_button.disabled = not enabled
 	settings_close_button.disabled = not enabled
 	exit_button.disabled = not enabled
+	if enabled and not settings_overlay.visible:
+		_refresh_menu_focus()
 
 func _open_world() -> void:
+	if _loading_overlay != null:
+		_loading_overlay.show_overlay(_pending_world_load_request)
+		return
+	var entry_action := String(_pending_world_load_request.get("entry_action", ""))
+	if not entry_action.is_empty():
+		SaveManager.pending_entry_action = entry_action
 	get_tree().change_scene_to_file(WORLD_SCENE_PATH)
 
+
+func _build_world_load_request(entry_action: String) -> Dictionary:
+	return {
+		"target_scene": WORLD_SCENE_PATH,
+		"entry_action": entry_action,
+		"title": WORLD_LOAD_TITLE,
+		"hint_text": "Sahne hazırlanıyor...",
+	}
+
 func _start_idle_animations() -> void:
+	_stop_idle_animations()
 	# Karakter bob animasyonu — sinüs dalgası ile yumuşak salınım
 	var char_tween: Tween = create_tween().set_loops()
 	char_tween.tween_method(_animate_menu_characters, 0.0, TAU, PI)
+	_idle_tweens.append(char_tween)
 
 	# Start butonu pulse animasyonu — modülasyon alpha
 	var btn_tween: Tween = create_tween().set_loops()
 	btn_tween.tween_method(_animate_menu_button, 0.0, TAU, PI)
+	_idle_tweens.append(btn_tween)
+
+
+func _stop_idle_animations() -> void:
+	for tween in _idle_tweens:
+		if tween != null:
+			tween.kill()
+	_idle_tweens.clear()
+
+
+func _freeze_for_capture() -> void:
+	_stop_idle_animations()
+	if backdrop != null:
+		backdrop.set_process(false)
+		backdrop.elapsed = 0.0
+		backdrop.queue_redraw()
+	arda_sprite.position.y = _arda_base_y
+	eda_sprite.position.y = _eda_base_y
+	start_button.modulate = Color.WHITE
 
 func _animate_menu_characters(phase: float) -> void:
 	arda_sprite.position.y = _arda_base_y + sin(phase) * 3.0
@@ -463,12 +525,12 @@ func _build_settings_ui() -> void:
 	bgm_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	var bgm_label := Label.new()
-	bgm_label.text = "🎵 Müzik:"
+	bgm_label.text = _ui_text.text(_ui_text.MENU_BGM, "🎵 Müzik:")
 	bgm_label.add_theme_font_size_override("font_size", 24)
 	bgm_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	bgm_box.add_child(bgm_label)
 
-	var bgm_slider := HSlider.new()
+	bgm_slider = HSlider.new()
 	bgm_slider.name = "BGMSlider"
 	bgm_slider.min_value = 0.0
 	bgm_slider.max_value = 1.0
@@ -500,12 +562,12 @@ func _build_settings_ui() -> void:
 	sfx_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	var sfx_label := Label.new()
-	sfx_label.text = "🔊 Ses:"
+	sfx_label.text = _ui_text.text(_ui_text.MENU_SFX, "🔊 Ses:")
 	sfx_label.add_theme_font_size_override("font_size", 24)
 	sfx_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	sfx_box.add_child(sfx_label)
 
-	var sfx_slider := HSlider.new()
+	sfx_slider = HSlider.new()
 	sfx_slider.name = "SFXSlider"
 	sfx_slider.min_value = 0.0
 	sfx_slider.max_value = 1.0
@@ -541,6 +603,15 @@ func _build_settings_ui() -> void:
 	sfx_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.85))
 	bgm_value_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.70))
 	sfx_value_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.70))
+
+
+func _configure_focus_navigation() -> void:
+	_ui_focus.configure_linear([start_button, continue_button, settings_button, exit_button], _ui_focus.AXIS_VERTICAL)
+	_ui_focus.configure_linear([bgm_slider, sfx_slider, settings_close_button], _ui_focus.AXIS_VERTICAL)
+
+
+func _refresh_menu_focus(preferred: Control = null) -> void:
+	_ui_focus.grab_preferred(preferred, [start_button, continue_button, settings_button, exit_button])
 
 
 func _load_volume_settings() -> void:

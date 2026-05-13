@@ -36,6 +36,43 @@ const HUD_LAYER: int = 10
 const LAYER_BASE: int = 50
 const LAYER_STEP: int = 10
 const OVERLAY_HOST_NAME := "UIOverlayHost"
+const INPUT_CONTRACTS := {
+	OverlayType.DIALOGUE: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": true,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.DECISION: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": false,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.INFO_CARD: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": true,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.CHAPTER_TRANSITION: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": false,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.DREAM_INTRO: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": false,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.EXIT_CONFIRM: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": false,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.LOADING: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": false,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+}
 
 
 # ---------------------------------------------------------------------------
@@ -54,6 +91,7 @@ var _canvas_layers: Dictionary = {}     # OverlayType → CanvasLayer
 ## Overlay'i sisteme kaydeder, CanvasLayer'ını oluşturur ve reparent eder.
 func register_overlay(type: OverlayType, node: Node) -> void:
 	_overlay_nodes[type] = node
+	node.process_mode = expected_process_mode(type)
 	if node is Control:
 		(node as Control).mouse_filter = Control.MOUSE_FILTER_STOP
 
@@ -139,11 +177,46 @@ func get_active() -> int:
 	return _active_overlay
 
 
+func get_input_contract(type: OverlayType) -> Dictionary:
+	return INPUT_CONTRACTS.get(type, {})
+
+
 ## Belirtilen overlay görünür mü?
 func is_visible(type: OverlayType) -> bool:
 	if _canvas_layers.has(type):
 		return _canvas_layers[type].visible
 	return false
+
+
+func is_effectively_visible(type: OverlayType) -> bool:
+	if not is_visible(type):
+		return false
+	var node := get_overlay_node(type)
+	if node == null:
+		return false
+	if node is CanvasItem:
+		return (node as CanvasItem).visible
+	return true
+
+
+func active_blocks_world_input() -> bool:
+	if _active_overlay < 0:
+		return false
+	return bool(get_input_contract(_active_overlay as OverlayType).get("blocks_world_input", false)) and is_effectively_visible(_active_overlay)
+
+
+func has_closeable_active_overlay() -> bool:
+	if _active_overlay < 0:
+		return false
+	return bool(get_input_contract(_active_overlay as OverlayType).get("closeable_on_cancel", false)) and is_effectively_visible(_active_overlay)
+
+
+func hide_active_closeable_overlay() -> int:
+	if not has_closeable_active_overlay():
+		return -1
+	var active := _active_overlay
+	hide(active)
+	return active
 
 
 ## Overlay'in kendisini (Node) döndürür.
@@ -166,6 +239,10 @@ static func layer_for(type: OverlayType) -> int:
 
 static func canvas_name_for(type: OverlayType) -> String:
 	return "CanvasLayer_%d" % int(type)
+
+
+static func expected_process_mode(type: OverlayType) -> ProcessMode:
+	return INPUT_CONTRACTS.get(type, {}).get("process_mode", Node.PROCESS_MODE_ALWAYS)
 
 
 # ---------------------------------------------------------------------------

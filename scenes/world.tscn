@@ -1,71 +1,69 @@
-[gd_scene load_steps=11 format=3 uid="uid://b4k3w7qq1fubc"]
+[gd_scene format=3 uid="uid://b4k3w7qq1fubc"]
 
-[ext_resource type="Script" path="res://scripts/world.gd" id="1_world"]
-[ext_resource type="PackedScene" path="res://scenes/decision_overlay.tscn" id="4_decision_overlay"]
-[ext_resource type="PackedScene" path="res://scenes/dialogue_overlay.tscn" id="5_dialogue_overlay"]
-[ext_resource type="PackedScene" path="res://scenes/info_card_overlay.tscn" id="6_info_card_overlay"]
-[ext_resource type="PackedScene" path="res://scenes/hud_bar.tscn" id="7_hud_bar"]
-[ext_resource type="PackedScene" path="res://scenes/chapter_transition_overlay.tscn" id="8_transition_overlay"]
-[ext_resource type="Script" path="res://scripts/world_state.gd" id="9_world_state"]
-[ext_resource type="Script" path="res://scripts/world_builder.gd" id="10_world_builder"]
-[ext_resource type="Script" path="res://scripts/world_marker.gd" id="11_world_marker"]
-[ext_resource type="Script" path="res://scripts/world_wave.gd" id="12_world_wave"]
+[ext_resource type="Script" uid="uid://vyyr5c1k6fi" path="res://scripts/world.gd" id="1_world"]
+[ext_resource type="PackedScene" uid="uid://dw5fbxt4johdo" path="res://scenes/decision_overlay.tscn" id="4_decision_overlay"]
+[ext_resource type="PackedScene" uid="uid://c3qt1iut1b0ie" path="res://scenes/dialogue_overlay.tscn" id="5_dialogue_overlay"]
+[ext_resource type="PackedScene" uid="uid://cxs21h8xv4jy6" path="res://scenes/info_card_overlay.tscn" id="6_info_card_overlay"]
+[ext_resource type="PackedScene" uid="uid://ce1i2yq8u1m1h" path="res://scenes/hud_bar.tscn" id="7_hud_bar"]
+[ext_resource type="PackedScene" uid="uid://d3l1j2atnlhm4" path="res://scenes/chapter_transition_overlay.tscn" id="8_transition_overlay"]
+[ext_resource type="Script" uid="uid://nii80mga0803" path="res://scripts/world_state.gd" id="9_world_state"]
+[ext_resource type="Script" uid="uid://frq7gh42tqjm" path="res://scripts/world_builder.gd" id="10_world_builder"]
+[ext_resource type="Script" uid="uid://d3sp48hr5kdvq" path="res://scripts/world_marker.gd" id="11_world_marker"]
+[ext_resource type="Script" uid="uid://bqbkp03vndu8r" path="res://scripts/world_wave.gd" id="12_world_wave"]
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" unique_id=37169983]
 script = ExtResource("1_world")
 
-[node name="WorldState" type="Node" parent="."]
+[node name="WorldState" type="Node" parent="." unique_id=568606201]
 script = ExtResource("9_world_state")
 
-[node name="WorldBuilder" type="Node" parent="."]
+[node name="WorldBuilder" type="Node" parent="." unique_id=213092718]
 script = ExtResource("10_world_builder")
 
-[node name="WorldMarker" type="Node" parent="."]
+[node name="WorldMarker" type="Node" parent="." unique_id=690794577]
 script = ExtResource("11_world_marker")
 
-[node name="WorldWave" type="Node" parent="."]
+[node name="WorldWave" type="Node" parent="." unique_id=428381738]
 script = ExtResource("12_world_wave")
 
-[node name="Props" type="Node2D" parent="."]
+[node name="Props" type="Node2D" parent="." unique_id=1636354219]
 
-[node name="Markers" type="Node2D" parent="."]
+[node name="Markers" type="Node2D" parent="." unique_id=2841732]
 
-[node name="ForegroundProps" type="Node2D" parent="."]
+[node name="ForegroundProps" type="Node2D" parent="." unique_id=262693562]
 
-[node name="Player" type="Node2D" parent="."]
+[node name="Player" type="Node2D" parent="." unique_id=1090209870]
 position = Vector2(540, 1480)
 
-[node name="PlayerShadow" type="Polygon2D" parent="Player"]
+[node name="PlayerShadow" type="Polygon2D" parent="Player" unique_id=1981498796]
 position = Vector2(0, 44)
 color = Color(0, 0, 0, 0.22)
 polygon = PackedVector2Array(-38, -14, -18, -22, 18, -22, 38, -14, 38, 14, 18, 22, -18, 22, -38, 14)
 
-[node name="PlayerSprite" type="Sprite2D" parent="Player"]
+[node name="PlayerSprite" type="Sprite2D" parent="Player" unique_id=1135787931]
 scale = Vector2(0.72, 0.72)
 
-[node name="Companion" type="Node2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1872945504]
+zoom = Vector2(0.9, 0.9)
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+
+[node name="Companion" type="Node2D" parent="." unique_id=865722434]
 position = Vector2(660, 1540)
 
-[node name="CompanionShadow" type="Polygon2D" parent="Companion"]
+[node name="CompanionShadow" type="Polygon2D" parent="Companion" unique_id=74711881]
 position = Vector2(0, 42)
 color = Color(0, 0, 0, 0.18)
 polygon = PackedVector2Array(-34, -12, -18, -20, 18, -20, 34, -12, 34, 12, 18, 20, -18, 20, -34, 12)
 
-[node name="CompanionSprite" type="Sprite2D" parent="Companion"]
+[node name="CompanionSprite" type="Sprite2D" parent="Companion" unique_id=276929313]
 scale = Vector2(0.62, 0.62)
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-position_smoothing_enabled = true
-position_smoothing_speed = 7.0
-zoom = Vector2(0.9, 0.9)
-enabled = true
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1834690082]
 layer = 10
 
-[node name="DreamOverlay" type="ColorRect" parent="CanvasLayer"]
+[node name="DreamOverlay" type="ColorRect" parent="CanvasLayer" unique_id=1966933128]
 visible = false
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -76,7 +74,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.91, 0.89, 1, 0)
 
-[node name="AtmosphereLayer" type="Control" parent="CanvasLayer"]
+[node name="AtmosphereLayer" type="Control" parent="CanvasLayer" unique_id=2089301193]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -85,7 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TopGlow" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="TopGlow" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=165014013]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -94,7 +92,7 @@ offset_bottom = 620.0
 grow_horizontal = 2
 color = Color(0.96, 0.72, 0.42, 0)
 
-[node name="HorizonGlow" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="HorizonGlow" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=1010706778]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -109,7 +107,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.78, 0.86, 1, 0)
 
-[node name="BottomFog" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="BottomFog" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=1828111815]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -121,20 +119,21 @@ grow_horizontal = 2
 grow_vertical = 0
 color = Color(0.94, 0.96, 1, 0)
 
-[node name="VignetteLeft" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="VignetteLeft" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=657270331]
 layout_mode = 1
-anchors_preset = 13
-anchor_right = 0.0
+anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 180.0
 offset_bottom = 1920.0
+grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.04, 0.05, 0.08, 0)
 
-[node name="VignetteRight" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="VignetteRight" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=1100133127]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
 anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -180.0
 offset_right = 1080.0
@@ -143,20 +142,21 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.04, 0.05, 0.08, 0)
 
-[node name="RiftEdgeLeft" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="RiftEdgeLeft" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=1103453045]
 layout_mode = 1
-anchors_preset = 13
-anchor_right = 0.0
+anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 86.0
 offset_bottom = 1920.0
+grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.22, 0.78, 1, 0)
 
-[node name="RiftEdgeRight" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="RiftEdgeRight" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=58688515]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
 anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -86.0
 offset_right = 1080.0
@@ -165,7 +165,7 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.22, 0.78, 1, 0)
 
-[node name="CrimsonAccent" type="ColorRect" parent="CanvasLayer/AtmosphereLayer"]
+[node name="CrimsonAccent" type="ColorRect" parent="CanvasLayer/AtmosphereLayer" unique_id=142413570]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -175,7 +175,7 @@ offset_bottom = 638.0
 grow_horizontal = 2
 color = Color(0.86, 0.05, 0.12, 0)
 
-[node name="HUD" type="Control" parent="CanvasLayer"]
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=1684320178]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -183,9 +183,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HudBar" parent="CanvasLayer/HUD" instance=ExtResource("7_hud_bar")]
+[node name="HudBar" parent="CanvasLayer/HUD" unique_id=1026049893 instance=ExtResource("7_hud_bar")]
 
-[node name="TopPanel" type="PanelContainer" parent="CanvasLayer/HUD"]
+[node name="TopPanel" type="PanelContainer" parent="CanvasLayer/HUD" unique_id=1062548900]
 visible = false
 layout_mode = 1
 anchors_preset = 10
@@ -196,55 +196,54 @@ offset_right = -24.0
 offset_bottom = 176.0
 grow_horizontal = 2
 
-[node name="ChapterChip" type="PanelContainer" parent="CanvasLayer/HUD"]
-visible = false
-layout_mode = 1
-anchors_preset = 0
-offset_left = 24.0
-offset_top = 192.0
-offset_right = 288.0
-offset_bottom = 252.0
-
-[node name="ChipMargin" type="MarginContainer" parent="CanvasLayer/HUD/ChapterChip"]
-layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 10
-
-[node name="ChipLabel" type="Label" parent="CanvasLayer/HUD/ChapterChip/ChipMargin"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Sınav Gecesi"
-
-[node name="TopMargin" type="MarginContainer" parent="CanvasLayer/HUD/TopPanel"]
+[node name="TopMargin" type="MarginContainer" parent="CanvasLayer/HUD/TopPanel" unique_id=231271449]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 16
 
-[node name="TopContent" type="VBoxContainer" parent="CanvasLayer/HUD/TopPanel/TopMargin"]
+[node name="TopContent" type="VBoxContainer" parent="CanvasLayer/HUD/TopPanel/TopMargin" unique_id=1917028738]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="CanvasLayer/HUD/TopPanel/TopMargin/TopContent"]
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HUD/TopPanel/TopMargin/TopContent" unique_id=1738563166]
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "Zaman Yolcuları"
 
-[node name="ObjectiveLabel" type="Label" parent="CanvasLayer/HUD/TopPanel/TopMargin/TopContent"]
+[node name="ObjectiveLabel" type="Label" parent="CanvasLayer/HUD/TopPanel/TopMargin/TopContent" unique_id=1808825952]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Karakter seç."
 autowrap_mode = 3
 
-[node name="ProgressLabel" type="Label" parent="CanvasLayer/HUD/TopPanel/TopMargin/TopContent"]
+[node name="ProgressLabel" type="Label" parent="CanvasLayer/HUD/TopPanel/TopMargin/TopContent" unique_id=1108336004]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Ünite: 0/3"
 
-[node name="CharacterPanel" type="PanelContainer" parent="CanvasLayer/HUD"]
+[node name="ChapterChip" type="PanelContainer" parent="CanvasLayer/HUD" unique_id=49940967]
+visible = false
+layout_mode = 1
+offset_left = 24.0
+offset_top = 192.0
+offset_right = 288.0
+offset_bottom = 252.0
+
+[node name="ChipMargin" type="MarginContainer" parent="CanvasLayer/HUD/ChapterChip" unique_id=899566]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 10
+
+[node name="ChipLabel" type="Label" parent="CanvasLayer/HUD/ChapterChip/ChipMargin" unique_id=1481883234]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Sınav Gecesi"
+
+[node name="CharacterPanel" type="PanelContainer" parent="CanvasLayer/HUD" unique_id=752442317]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -258,43 +257,43 @@ offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CharacterMargin" type="MarginContainer" parent="CanvasLayer/HUD/CharacterPanel"]
+[node name="CharacterMargin" type="MarginContainer" parent="CanvasLayer/HUD/CharacterPanel" unique_id=1096363058]
 layout_mode = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 30
 
-[node name="CharacterContent" type="VBoxContainer" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin"]
+[node name="CharacterContent" type="VBoxContainer" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin" unique_id=2007794943]
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="CharacterTitle" type="Label" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent"]
+[node name="CharacterTitle" type="Label" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent" unique_id=1028761638]
 layout_mode = 2
 theme_override_font_sizes/font_size = 38
 text = "Kimin rüyasına girelim?"
 horizontal_alignment = 1
 
-[node name="CharacterText" type="Label" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent"]
+[node name="CharacterText" type="Label" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent" unique_id=972807883]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Seçtiğin öğrenci sınav gecesi kitaptaki tarih dünyasına uyanacak."
-autowrap_mode = 3
 horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="ArdaButton" type="Button" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent"]
+[node name="ArdaButton" type="Button" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent" unique_id=764815579]
 custom_minimum_size = Vector2(0, 92)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Arda ile başla"
 
-[node name="EdaButton" type="Button" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent"]
+[node name="EdaButton" type="Button" parent="CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent" unique_id=815998426]
 custom_minimum_size = Vector2(0, 92)
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Eda ile başla"
 
-[node name="InteractButton" type="Button" parent="CanvasLayer/HUD"]
+[node name="InteractButton" type="Button" parent="CanvasLayer/HUD" unique_id=822551247]
 custom_minimum_size = Vector2(104, 104)
 layout_mode = 1
 anchors_preset = 12
@@ -310,7 +309,7 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 32
 text = "Yaklaş ve incele"
 
-[node name="DialoguePanel" type="PanelContainer" parent="CanvasLayer/HUD"]
+[node name="DialoguePanel" type="PanelContainer" parent="CanvasLayer/HUD" unique_id=88211372]
 visible = false
 layout_mode = 1
 anchors_preset = 12
@@ -324,39 +323,39 @@ offset_bottom = -168.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="DialogueMargin" type="MarginContainer" parent="CanvasLayer/HUD/DialoguePanel"]
+[node name="DialogueMargin" type="MarginContainer" parent="CanvasLayer/HUD/DialoguePanel" unique_id=1205159782]
 layout_mode = 2
 theme_override_constants/margin_left = 28
 theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 28
 theme_override_constants/margin_bottom = 24
 
-[node name="DialogueContent" type="VBoxContainer" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin"]
+[node name="DialogueContent" type="VBoxContainer" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin" unique_id=4794545]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="DialogueTitle" type="Label" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent"]
+[node name="DialogueTitle" type="Label" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent" unique_id=984002448]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Başlık"
 
-[node name="DialogueText" type="Label" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent"]
+[node name="DialogueText" type="Label" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent" unique_id=2115779180]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 28
 text = "Metin"
 autowrap_mode = 3
 
-[node name="DialogueContinue" type="Button" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent"]
+[node name="DialogueContinue" type="Button" parent="CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent" unique_id=635418654]
 custom_minimum_size = Vector2(88, 88)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Tamam"
 
-[node name="DecisionOverlay" parent="CanvasLayer/HUD" instance=ExtResource("4_decision_overlay")]
+[node name="DecisionOverlay" parent="CanvasLayer/HUD" unique_id=1121305402 instance=ExtResource("4_decision_overlay")]
 
-[node name="DialogueOverlay" parent="CanvasLayer/HUD" instance=ExtResource("5_dialogue_overlay")]
+[node name="DialogueOverlay" parent="CanvasLayer/HUD" unique_id=1327405191 instance=ExtResource("5_dialogue_overlay")]
 
-[node name="InfoCardOverlay" parent="CanvasLayer/HUD" instance=ExtResource("6_info_card_overlay")]
+[node name="InfoCardOverlay" parent="CanvasLayer/HUD" unique_id=1863876061 instance=ExtResource("6_info_card_overlay")]
 
-[node name="ChapterTransitionOverlay" parent="CanvasLayer/HUD" instance=ExtResource("8_transition_overlay")]
+[node name="ChapterTransitionOverlay" parent="CanvasLayer/HUD" unique_id=1182212740 instance=ExtResource("8_transition_overlay")]

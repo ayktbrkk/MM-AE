@@ -5,12 +5,15 @@ signal choice_selected(context: String, choice: String)
 const ARDA_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
 const EDA_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
 const TAU := 2.0 * PI
+const _ui_focus := preload("res://scripts/ui_focus_helper.gd")
+const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const MIN_DECISION_BUTTON_HEIGHT := _ui_tokens.DECISION_CHOICE_HEIGHT
 const MIN_DECISION_BUTTON_WIDTH := 0.0
 const DECISION_PANEL_WIDTH := 920.0
 const DECISION_PANEL_HEIGHT := 1180.0
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -33,13 +36,16 @@ const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 @onready var arda_button: Button = $Center/DecisionPanel/DecisionMargin/DecisionContent/ChoiceRow/ArdaButton
 @onready var eda_button: Button = $Center/DecisionPanel/DecisionMargin/DecisionContent/ChoiceRow/EdaButton
 @onready var arda_portrait: TextureRect = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard/CardMargin/CardContent/Portrait
+@onready var arda_name_label: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard/CardMargin/CardContent/Name
 @onready var eda_portrait: TextureRect = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaCard/CardMargin/CardContent/Portrait
+@onready var eda_name_label: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaCard/CardMargin/CardContent/Name
 @onready var arda_subtitle: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/ArdaCard/CardMargin/CardContent/SubTitle
 @onready var eda_subtitle: Label = $Center/DecisionPanel/DecisionMargin/DecisionContent/CharacterRow/EdaCard/CardMargin/CardContent/SubTitle
 
 var current_context := ""
 var _arda_portrait_base_y: float
 var _eda_portrait_base_y: float
+var _idle_tweens: Array[Tween] = []
 
 func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.DECISION
@@ -55,8 +61,18 @@ func _ready() -> void:
 	eda_button.icon = _textures.CHOICE_ICON
 	arda_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	eda_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	chapter_label.text = _ui_text.text(_ui_text.DECISION_DEFAULT_CHAPTER, "Karar Anı")
+	title_label.text = _ui_text.text(_ui_text.DECISION_DEFAULT_TITLE, "Bir karar ver")
+	prompt_label.text = _ui_text.text(_ui_text.DECISION_DEFAULT_PROMPT, "Her iki yaklaşım da anlaşılır gelebilir. Tarihsel durum için en uygun olanı seç.")
+	arda_name_label.text = _ui_text.text(_ui_text.DECISION_ARDA_NAME, "Arda")
+	eda_name_label.text = _ui_text.text(_ui_text.DECISION_EDA_NAME, "Eda")
+	arda_subtitle.text = _ui_text.text(_ui_text.DECISION_ARDA_HINT, "Hızlı ama cesur")
+	eda_subtitle.text = _ui_text.text(_ui_text.DECISION_EDA_HINT, "Düşünceli ve planlı")
+	arda_button.text = _ui_text.text(_ui_text.DECISION_OPTION_ARDA, "Arda seçeneği")
+	eda_button.text = _ui_text.text(_ui_text.DECISION_OPTION_EDA, "Eda seçeneği")
 	arda_button.pressed.connect(func(): _emit_choice("a"))
 	eda_button.pressed.connect(func(): _emit_choice("b"))
+	_configure_focus_navigation()
 	_arda_portrait_base_y = arda_portrait.position.y
 	_eda_portrait_base_y = eda_portrait.position.y
 	visible = false
@@ -101,21 +117,31 @@ func _apply_responsive_layout() -> void:
 		button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_2XL if compact else _ui_tokens.FONT_ACTION)
 
 func _start_idle_animations() -> void:
+	_stop_idle_animations()
 	# Top glow + bottom fog — sin(elapsed * 0.9), periyot 2*PI/0.9
 	var tween_fog := create_tween().set_loops()
 	tween_fog.tween_method(_animate_fog, 0.0, TAU, 6.98132)
+	_idle_tweens.append(tween_fog)
 
 	# Decision divider — sin(elapsed * 1.2), periyot 2*PI/1.2
 	var tween_divider := create_tween().set_loops()
 	tween_divider.tween_method(_animate_divider, 0.0, TAU, 5.23599)
+	_idle_tweens.append(tween_divider)
 
 	# Portre bob — sin(elapsed * 1.8), periyot 2*PI/1.8
 	var tween_portraits := create_tween().set_loops()
 	tween_portraits.tween_method(_animate_portraits, 0.0, TAU, 3.49066)
+	_idle_tweens.append(tween_portraits)
 
 	# Karakter glow'ları — sin(elapsed * 1.6), periyot 2*PI/1.6
 	var tween_char_glow := create_tween().set_loops()
 	tween_char_glow.tween_method(_animate_char_glow, 0.0, TAU, 3.92699)
+	_idle_tweens.append(tween_char_glow)
+
+
+func _stop_idle_animations() -> void:
+	_overlay_tween_helper.cancel_many(_idle_tweens)
+	_idle_tweens.clear()
 
 
 func _animate_fog(v: float) -> void:
@@ -139,13 +165,15 @@ func _animate_char_glow(v: float) -> void:
 func present(config: Dictionary) -> void:
 	_apply_responsive_layout()
 	current_context = String(config.get("context", ""))
-	chapter_label.text = String(config.get("chapter", "Karar Anı"))
-	title_label.text = String(config.get("title", "Bir karar ver"))
-	prompt_label.text = String(config.get("prompt", ""))
-	arda_button.text = String(config.get("option_a", ""))
-	eda_button.text = String(config.get("option_b", ""))
-	arda_subtitle.text = String(config.get("arda_hint", "Hızlı ama cesur"))
-	eda_subtitle.text = String(config.get("eda_hint", "Düşünceli ve planlı"))
+	chapter_label.text = String(config.get("chapter", _ui_text.text(_ui_text.DECISION_DEFAULT_CHAPTER, "Karar Anı")))
+	title_label.text = String(config.get("title", _ui_text.text(_ui_text.DECISION_DEFAULT_TITLE, "Bir karar ver")))
+	prompt_label.text = String(config.get("prompt", _ui_text.text(_ui_text.DECISION_DEFAULT_PROMPT, "Her iki yaklaşım da anlaşılır gelebilir. Tarihsel durum için en uygun olanı seç.")))
+	arda_name_label.text = _ui_text.text(_ui_text.DECISION_ARDA_NAME, "Arda")
+	eda_name_label.text = _ui_text.text(_ui_text.DECISION_EDA_NAME, "Eda")
+	arda_button.text = String(config.get("option_a", _ui_text.text(_ui_text.DECISION_OPTION_ARDA, "Arda seçeneği")))
+	eda_button.text = String(config.get("option_b", _ui_text.text(_ui_text.DECISION_OPTION_EDA, "Eda seçeneği")))
+	arda_subtitle.text = String(config.get("arda_hint", _ui_text.text(_ui_text.DECISION_ARDA_HINT, "Hızlı ama cesur")))
+	eda_subtitle.text = String(config.get("eda_hint", _ui_text.text(_ui_text.DECISION_EDA_HINT, "Düşünceli ve planlı")))
 	arda_glow.visible = false
 	eda_glow.visible = false
 	arda_glow.scale = Vector2.ONE * 0.96
@@ -165,13 +193,13 @@ func present(config: Dictionary) -> void:
 	eda_card.modulate = Color(1, 1, 1, 0.0)
 	arda_card.position.y = 18.0
 	eda_card.position.y = 18.0
+	_ui_focus.grab_preferred(arda_button, [arda_button, eda_button])
+	_start_idle_animations()
 	var tween := create_tween()
-	tween.tween_property(backdrop, "color:a", 0.72, 0.18)
-	tween.parallel().tween_property(top_glow, "color:a", 0.10, 0.18)
-	tween.parallel().tween_property(bottom_fog, "color:a", 0.18, 0.20)
-	tween.parallel().tween_property(panel, "scale", Vector2.ONE, 0.18)
-	tween.parallel().tween_property(panel, "position:y", 0.0, 0.18)
-	tween.parallel().tween_property(panel, "modulate:a", 1.0, 0.16)
+	_overlay_tween_helper.fade_color_alpha(tween, backdrop, 0.72, 0.18)
+	_overlay_tween_helper.fade_color_alpha(tween, top_glow, 0.10, 0.18)
+	_overlay_tween_helper.fade_color_alpha(tween, bottom_fog, 0.18, 0.20)
+	_overlay_tween_helper.panel_pop_in(tween, panel)
 	tween.tween_property(arda_card, "modulate:a", 1.0, 0.10)
 	tween.parallel().tween_property(arda_card, "position:y", 0.0, 0.14)
 	tween.tween_property(eda_card, "modulate:a", 1.0, 0.10)
@@ -183,17 +211,17 @@ func show_overlay(config: Dictionary = {}) -> void:
 
 
 func hide_overlay() -> void:
+	_stop_idle_animations()
 	visible = false
 
 func dismiss() -> void:
 	if not visible:
 		return
 	var tween := create_tween()
-	tween.tween_property(backdrop, "color:a", 0.0, 0.14)
-	tween.parallel().tween_property(top_glow, "color:a", 0.0, 0.12)
-	tween.parallel().tween_property(bottom_fog, "color:a", 0.0, 0.12)
-	tween.parallel().tween_property(panel, "scale", Vector2(0.96, 0.96), 0.14)
-	tween.parallel().tween_property(panel, "modulate:a", 0.0, 0.12)
+	_overlay_tween_helper.fade_color_alpha(tween, backdrop, 0.0, 0.14)
+	_overlay_tween_helper.fade_color_alpha(tween, top_glow, 0.0, 0.12)
+	_overlay_tween_helper.fade_color_alpha(tween, bottom_fog, 0.0, 0.12)
+	_overlay_tween_helper.panel_pop_out(tween, panel)
 	tween.tween_callback(func() -> void:
 		visible = false
 	)
@@ -209,22 +237,34 @@ func _emit_choice(choice: String) -> void:
 	dismiss()
 
 func _apply_styles() -> void:
-	_add_panel_style(panel, Color(0.97, 0.95, 0.90), Color(0.25, 0.22, 0.18), 28)
-	_add_panel_style(arda_card, Color(1.0, 0.84, 0.64), _colors.POP_CRIMSON, 22)
-	_add_panel_style(eda_card, Color(0.74, 0.94, 0.94), _colors.POP_DEEP_TURQUOISE, 22)
-	_add_button_style(arda_button, _colors.POP_CRIMSON)
-	_add_button_style(eda_button, _colors.POP_DEEP_TURQUOISE)
+	_ui_styles.apply_panel_variant(panel, "decision_panel")
+	_ui_styles.apply_panel_variant(arda_card, "decision_card_arda")
+	_ui_styles.apply_panel_variant(eda_card, "decision_card_eda")
+	_ui_styles.apply_button_variant(arda_button, "decision_arda")
+	_ui_styles.apply_button_variant(eda_button, "decision_eda")
 	chapter_label.add_theme_color_override("font_color", Color(0.02, 0.44, 0.56))
 	title_label.add_theme_color_override("font_color", Color(0.16, 0.18, 0.24))
 	prompt_label.add_theme_color_override("font_color", Color(0.23, 0.24, 0.30))
+	prompt_label.add_theme_constant_override("line_spacing", _ui_tokens.LINE_SPACING_BODY)
 
-func _add_panel_style(target: PanelContainer, fill: Color, border: Color, radius: int) -> void:
-	target.add_theme_stylebox_override(
-		"panel",
-		_ui_styles.panel_style(fill, border, radius, _ui_tokens.BORDER_BOLD, Color(0.05, 0.06, 0.08, 0.22), _ui_tokens.SHADOW_SIZE_LG, _ui_tokens.SHADOW_OFFSET_LG)
-	)
 
-func _add_button_style(target: Button, fill: Color) -> void:
-	var normal := _ui_styles.button_state_style(fill, _ui_tokens.RADIUS_MD, fill.lightened(0.18), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.22), _ui_tokens.SHADOW_SIZE_MD, _ui_tokens.SHADOW_OFFSET_MD)
-	var pressed := _ui_styles.button_state_style(fill.darkened(0.18), _ui_tokens.RADIUS_MD, fill.lightened(0.10), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.14), _ui_tokens.SHADOW_SIZE_XS, Vector2(0, 2))
-	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), _ui_tokens.FONT_ACTION, 42, _ui_tokens.SPACE_LG_PLUS)
+func _configure_focus_navigation() -> void:
+	_ui_focus.configure_linear([arda_button, eda_button], _ui_focus.AXIS_VERTICAL)
+
+
+func _freeze_for_capture() -> void:
+	_stop_idle_animations()
+	backdrop.color.a = 0.72
+	top_glow.color.a = 0.10
+	bottom_fog.color.a = 0.18
+	panel.scale = Vector2.ONE
+	panel.position.y = 0.0
+	panel.modulate = Color.WHITE
+	arda_card.modulate = Color.WHITE
+	eda_card.modulate = Color.WHITE
+	arda_card.position.y = 0.0
+	eda_card.position.y = 0.0
+	arda_portrait.position.y = _arda_portrait_base_y
+	eda_portrait.position.y = _eda_portrait_base_y
+	arda_glow.color.a = 0.12
+	eda_glow.color.a = 0.12

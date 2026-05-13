@@ -11,6 +11,7 @@ const SURFACES := [
 	"decision",
 	"info_card",
 	"chapter_transition",
+	"completion",
 ]
 
 

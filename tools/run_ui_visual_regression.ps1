@@ -9,7 +9,7 @@ param(
 	[double]$ThresholdDelta = 0.025
 )
 
-$surfaces = @("menu", "dialogue", "decision", "info_card", "chapter_transition")
+$surfaces = @("menu", "dialogue", "decision", "info_card", "chapter_transition", "completion")
 
 if ([string]::IsNullOrWhiteSpace($GodotExe)) {
 	$defaultExe = "C:\Users\Aykut\Desktop\MM-AE-main\Godot_v4.6.2-stable_win64_console.exe"

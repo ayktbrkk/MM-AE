@@ -242,16 +242,7 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	# P2-13: Android geri tuşu — çıkış onay diyalogu yönetimi
 	if event.is_action_pressed("ui_cancel"):
-		if _ui_mod.has_closeable_overlay():
-			_ui_mod.close_dialogue()
-			get_viewport().set_input_as_handled()
-			return
-		if _ui_mod.is_exit_confirm_visible():
-			_ui_mod.hide_exit_confirm()
-			get_viewport().set_input_as_handled()
-			return
-		elif not _ui_mod.is_world_input_blocked():
-			_ui_mod.show_exit_confirm()
+		if _ui_mod.handle_global_cancel():
 			get_viewport().set_input_as_handled()
 			return
 

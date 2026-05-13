@@ -12,6 +12,8 @@ const EDA_IDLE_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_
 const EDA_HAPPY_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_happy.svg")
 const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_thinking.svg")
 const TAU := 2.0 * PI
+const _rich_text := preload("res://scripts/rich_text_utils.gd")
+const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
@@ -72,6 +74,10 @@ func _ready() -> void:
 	stage_light_left_base_position = stage_light_left.position
 	stage_light_right_base_position = stage_light_right.position
 	_continue_row_base_x = continue_row.position.x
+	chapter_label.text = _ui_text.text(_ui_text.DIALOGUE_DEFAULT_CHAPTER, "Bölüm")
+	name_label.text = _ui_text.text(_ui_text.DIALOGUE_DEFAULT_SPEAKER, "Anlatıcı")
+	body_label.text = _rich_text.sanitize(_ui_text.text(_ui_text.DIALOGUE_DEFAULT_BODY, "Hikaye metni burada görünür."))
+	continue_label.text = _ui_text.text(_ui_text.DIALOGUE_CONTINUE, "Dokun ve devam et")
 	_apply_styles()
 	hide_overlay()
 	_start_idle_animations()
@@ -83,6 +89,14 @@ func _gui_input(event: InputEvent) -> void:
 		_advance_or_continue()
 	elif event is InputEventScreenTouch and event.pressed:
 		_advance_or_continue()
+
+
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if _matches_action(event, &"ui_accept") or _matches_action(event, &"ui_cancel"):
+		_advance_or_continue()
+		get_viewport().set_input_as_handled()
 
 func _start_idle_animations() -> void:
 	# Portreler ve glow'lar — sin(elapsed * 2.0), periyot PI
@@ -125,9 +139,9 @@ func _start_idle_animations() -> void:
 	)
 
 func present(config: Dictionary) -> void:
-	chapter_label.text = String(config.get("chapter", "Bölüm"))
-	name_label.text = String(config.get("speaker", "Anlatıcı"))
-	body_label.text = String(config.get("text", ""))
+	chapter_label.text = String(config.get("chapter", _ui_text.text(_ui_text.DIALOGUE_DEFAULT_CHAPTER, "Bölüm")))
+	name_label.text = String(config.get("speaker", _ui_text.text(_ui_text.DIALOGUE_DEFAULT_SPEAKER, "Anlatıcı")))
+	body_label.text = _rich_text.sanitize(String(config.get("text", _ui_text.text(_ui_text.DIALOGUE_DEFAULT_BODY, "Hikaye metni burada görünür."))))
 	var speaker_side := String(config.get("speaker_side", "left"))
 	var expression := String(config.get("expression", "idle"))
 	speaker_side_current = speaker_side
@@ -154,15 +168,13 @@ func present(config: Dictionary) -> void:
 	body_label.visible_ratio = 0.0
 	reveal_tween = _overlay_tween_helper.cancel(reveal_tween)
 	var tween := create_tween()
-	tween.tween_property(backdrop_soft, "color:a", 0.16, 0.16)
-	tween.parallel().tween_property(panel_glow, "color:a", 0.10, 0.20)
-	tween.tween_property(panel, "modulate:a", 1.0, 0.16)
-	tween.parallel().tween_property(panel, "scale", Vector2.ONE, 0.18)
-	tween.parallel().tween_property(panel, "position:y", 0.0, 0.18)
+	_overlay_tween_helper.fade_color_alpha(tween, backdrop_soft, 0.16, 0.16)
+	_overlay_tween_helper.fade_color_alpha(tween, panel_glow, 0.10, 0.20)
+	_overlay_tween_helper.panel_pop_in(tween, panel, 0.18, 18.0, Vector2(0.97, 0.97))
 	tween.parallel().tween_property(left_glow, "scale", Vector2.ONE, 0.18)
 	tween.parallel().tween_property(right_glow, "scale", Vector2.ONE, 0.18)
 	reveal_tween = _overlay_tween_helper.replace(self, reveal_tween)
-	var reveal_duration := clampf(float(body_label.text.length()) * 0.012, 0.28, 1.15)
+	var reveal_duration := clampf(float(body_label.get_parsed_text().length()) * 0.012, 0.28, 1.15)
 	reveal_tween.tween_property(body_label, "visible_ratio", 1.0, reveal_duration)
 
 
@@ -180,23 +192,19 @@ func _advance_or_continue() -> void:
 		return
 	continue_pressed.emit()
 
+
+func _matches_action(event: InputEvent, action: StringName) -> bool:
+	var action_event := event as InputEventAction
+	if action_event != null:
+		return action_event.pressed and action_event.action == action
+	return event.is_action_pressed(action)
+
 func _apply_styles() -> void:
-	panel.add_theme_stylebox_override(
-		"panel",
-		_ui_styles.panel_style(
-			Color(0.97, 0.94, 0.86, 0.94),
-			Color(0.28, 0.23, 0.19),
-			_ui_tokens.RADIUS_LG,
-			_ui_tokens.BORDER_BOLD,
-			Color(0, 0, 0, 0),
-			0,
-			Vector2.ZERO,
-			{"top_left": _ui_tokens.RADIUS_2XL, "top_right": _ui_tokens.RADIUS_2XL, "bottom_left": _ui_tokens.RADIUS_LG, "bottom_right": _ui_tokens.RADIUS_LG}
-		)
-	)
+	_ui_styles.apply_panel_variant(panel, "dialogue_panel")
 	chapter_label.add_theme_color_override("font_color", _colors.POP_DEEP_TURQUOISE)
 	name_label.add_theme_color_override("font_color", Color(0.17, 0.18, 0.24))
 	body_label.add_theme_color_override("default_color", Color(0.20, 0.21, 0.27))
+	body_label.add_theme_constant_override("line_separation", _ui_tokens.LINE_SEPARATION_RICH)
 	continue_label.add_theme_color_override("font_color", _colors.POP_DEEP_TURQUOISE)
 	left_glow.color = Color(_colors.POP_CRIMSON.r, 0.25, 0.16, 0.12)
 	right_glow.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.12)
