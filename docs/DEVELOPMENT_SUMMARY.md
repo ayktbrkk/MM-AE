@@ -141,6 +141,48 @@ Test 3: --headless --verbose --quit --path .          → ✅ 0 hata
 ```
 
 **Toplam:** 3 test, 0 hata — proje stabil.
+
+### 14. Runtime Validation Akışı
+
+Karakter entegrasyonu ve oyun akışı için doğrulama artık üç katmanlı yürütülüyor:
+
+1. Parse / tip kontrolü
+
+```
+C:\Users\Aykut\Desktop\MM-AE-main\Godot_v4.6.2-stable_win64_console.exe --headless --check-only --path . --quit
+```
+
+2. Oyun akışı doğrulaması
+
+`tools/validate_game_flow.gd` yeni oyun, `Devam Et` yolu ve Kongreler → Ankara → Sakarya → Final geç oyun zincirini sahne düzeyinde doğrular.
+
+```
+C:\Users\Aykut\Desktop\MM-AE-main\Godot_v4.6.2-stable_win64_console.exe --path . --script res://tools/validate_game_flow.gd
+```
+
+Başarılı koşum çıktısı: `FLOW_VALIDATION_OK`
+
+3. Görsel doğrulama
+
+- UI yüzeyleri için `tools/capture_character_ui.gd`
+- World sahneleri için `tools/capture_world_render.gd`
+
+Notlar:
+
+- `capture_character_ui.gd` bu projede `--headless` ile güvenilir çalışmaz; non-headless Godot koşumu gerekir.
+- `capture_world_render.gd` artık yakın plan kontrol için `--zoom`, UI temizleme için `--hide-overlays`, HUD kaldırma için `--hide-hud`, marker/guidance temizliği için `--hide-markers` ve `--hide-world-guides` destekler.
+
+Örnek yakın plan world capture:
+
+```
+C:\Users\Aykut\Desktop\MM-AE-main\Godot_v4.6.2-stable_win64_console.exe --path . --script res://tools/capture_world_render.gd -- --zone havza --hero eda --hide-overlays --hide-hud --hide-markers --hide-world-guides --zoom 1.18 --output res://artifacts/renders/flow_check/havza_eda_close_clean.png
+```
+
+Bu akış şu yüzeylerde kullanıldı:
+
+- Main menu / choice / dialogue / decision UI preview
+- Room, Bandırma, Havza yakın plan karakter okunurluğu
+- Yeni oyun + kayıt geri yükleme akışı
 ---
 
 ## 📁 Proje Klasör Yapısı

@@ -224,6 +224,12 @@ func interact() -> void:
 			_collect_ship_clue(nearby_marker)
 		"havza_clue":
 			_collect_havza_clue(nearby_marker)
+		"ankara_clue":
+			_collect_ankara_clue(nearby_marker)
+		"sakarya_clue":
+			_collect_sakarya_clue(nearby_marker)
+		"final_clue":
+			_collect_final_clue(nearby_marker)
 		"npc":
 			var ui_mod: Node = _get_ui_mod()
 			if ui_mod != null:
@@ -243,6 +249,12 @@ func interact() -> void:
 			_handle_amasya_decision_check(nearby_marker, player_mod)
 		"kongre_decision":
 			_handle_kongre_decision_check(nearby_marker, player_mod)
+		"ankara_decision":
+			_handle_ankara_decision_check(nearby_marker, player_mod)
+		"sakarya_decision":
+			_handle_sakarya_decision_check(nearby_marker, player_mod)
+		"final_decision":
+			_handle_final_decision_check(nearby_marker, player_mod)
 		"amasya_clue":
 			_collect_amasya_clue(nearby_marker)
 		"kongre_clue":
@@ -264,6 +276,15 @@ func interact() -> void:
 		"kongre_wave":
 			var wave: Node = _get_wave()
 			wave.start_kongre_wave()
+		"ankara_wave":
+			var wave: Node = _get_wave()
+			wave.start_ankara_wave()
+		"sakarya_wave":
+			var wave: Node = _get_wave()
+			wave.start_sakarya_wave()
+		"final_wave":
+			var wave: Node = _get_wave()
+			wave.start_final_wave()
 
 
 func _handle_portal_interaction(marker: Node2D, player_mod: Node) -> void:
@@ -352,6 +373,57 @@ func _handle_kongre_decision_check(marker: Node2D, player_mod: Node) -> void:
 		ui_mod.show_dialogue(
 			"Kongre İçin Hazır Değilsin",
 			"Önce temsil listesini ve ortak karar taslağını incele.",
+			Callable()
+		)
+
+
+func _handle_ankara_decision_check(marker: Node2D, player_mod: Node) -> void:
+	"""Ankara karar kontrolü."""
+	var state: Node = _get_state()
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod == null:
+		return
+
+	if state.get_item_count("ankara_clues") >= state.get_zone_item_total("ankara_clues"):
+		_show_ankara_decision()
+	else:
+		ui_mod.show_dialogue(
+			"Meclis İçin Hazır Değilsin",
+			"Önce Meclis notunu ve telgraf defterini incele.",
+			Callable()
+		)
+
+
+func _handle_sakarya_decision_check(marker: Node2D, player_mod: Node) -> void:
+	"""Sakarya karar kontrolü."""
+	var state: Node = _get_state()
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod == null:
+		return
+
+	if state.get_item_count("sakarya_clues") >= state.get_zone_item_total("sakarya_clues"):
+		_show_sakarya_decision()
+	else:
+		ui_mod.show_dialogue(
+			"Savunma İçin Hazır Değilsin",
+			"Önce karargah notunu ve cephe telgrafını incele.",
+			Callable()
+		)
+
+
+func _handle_final_decision_check(marker: Node2D, player_mod: Node) -> void:
+	"""Final karar kontrolü."""
+	var state: Node = _get_state()
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod == null:
+		return
+
+	if state.get_item_count("final_clues") >= state.get_zone_item_total("final_clues"):
+		_show_final_decision()
+	else:
+		ui_mod.show_dialogue(
+			"Cumhuriyet İçin Hazır Değilsin",
+			"Önce Cumhuriyet notunu ve gelecek defterini incele.",
 			Callable()
 		)
 
@@ -498,6 +570,90 @@ func _collect_kongre_clue(marker: Node2D) -> void:
 
 	if state.get_item_count("kongre_clues") >= state.get_zone_item_total("kongre_clues"):
 		set_goal("kongre_decision", "Kongre ipuçları tamamlandı. Şimdi Kongre Kararı noktasına git.")
+
+
+func _collect_ankara_clue(marker: Node2D) -> void:
+	"""Ankara ipucu toplama."""
+	if bool(marker.get_meta("collected")):
+		return
+
+	var marker_node: Node = _get_marker()
+	var state: Node = _get_state()
+	var ui_mod: Node = _get_ui_mod()
+	var player_mod: Node = _get_player_mod()
+
+	marker_node.mark_collected(marker)
+	state.increment_item_count("ankara_clues")
+	ui_mod.spawn_reward_burst(marker.position, Color(0.98, 0.82, 0.38, 0.82), "reward.ankara")
+	marker_node.hide_nearby_collection_visuals(marker.position, true, _world.get_node("Props"), _world.get_node("ForegroundProps"))
+	ui_mod.update_progress()
+	ui_mod.refresh_minimap_markers()
+	ui_mod.show_info_card(
+		String(marker.get_meta("title")),
+		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
+		"Yeni meclis ipucu bulundu",
+		Callable(),
+		"ankara"
+	)
+
+	if state.get_item_count("ankara_clues") >= state.get_zone_item_total("ankara_clues"):
+		set_goal("ankara_decision", "Ankara ipuçları tamamlandı. Şimdi Merkez Kararı noktasına git.")
+
+
+func _collect_sakarya_clue(marker: Node2D) -> void:
+	"""Sakarya ipucu toplama."""
+	if bool(marker.get_meta("collected")):
+		return
+
+	var marker_node: Node = _get_marker()
+	var state: Node = _get_state()
+	var ui_mod: Node = _get_ui_mod()
+	var player_mod: Node = _get_player_mod()
+
+	marker_node.mark_collected(marker)
+	state.increment_item_count("sakarya_clues")
+	ui_mod.spawn_reward_burst(marker.position, Color(0.84, 0.48, 0.32, 0.82), "reward.sakarya")
+	marker_node.hide_nearby_collection_visuals(marker.position, true, _world.get_node("Props"), _world.get_node("ForegroundProps"))
+	ui_mod.update_progress()
+	ui_mod.refresh_minimap_markers()
+	ui_mod.show_info_card(
+		String(marker.get_meta("title")),
+		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
+		"Yeni cephe ipucu bulundu",
+		Callable(),
+		"sakarya"
+	)
+
+	if state.get_item_count("sakarya_clues") >= state.get_zone_item_total("sakarya_clues"):
+		set_goal("sakarya_decision", "Sakarya ipuçları tamamlandı. Şimdi Savunma Kararı noktasına git.")
+
+
+func _collect_final_clue(marker: Node2D) -> void:
+	"""Final ipucu toplama."""
+	if bool(marker.get_meta("collected")):
+		return
+
+	var marker_node: Node = _get_marker()
+	var state: Node = _get_state()
+	var ui_mod: Node = _get_ui_mod()
+	var player_mod: Node = _get_player_mod()
+
+	marker_node.mark_collected(marker)
+	state.increment_item_count("final_clues")
+	ui_mod.spawn_reward_burst(marker.position, Color(0.95, 0.78, 0.32, 0.84), "reward.final")
+	marker_node.hide_nearby_collection_visuals(marker.position, true, _world.get_node("Props"), _world.get_node("ForegroundProps"))
+	ui_mod.update_progress()
+	ui_mod.refresh_minimap_markers()
+	ui_mod.show_info_card(
+		String(marker.get_meta("title")),
+		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
+		"Yeni cumhuriyet ipucu bulundu",
+		Callable(),
+		"final"
+	)
+
+	if state.get_item_count("final_clues") >= state.get_zone_item_total("final_clues"):
+		set_goal("final_decision", "Cumhuriyet ipuçları tamamlandı. Şimdi Gelecek Kararı noktasına git.")
 
 
 func _collect_leadership_resource(marker: Node2D) -> void:
@@ -1376,6 +1532,14 @@ func _enter_kongreler() -> void:
 	transition_to("kongreler")
 
 
+func _enter_ankara() -> void:
+	transition_to("ankara")
+
+
+func _enter_sakarya() -> void:
+	transition_to("sakarya")
+
+
 func _enter_final() -> void:
 	transition_to("final")
 
@@ -1385,7 +1549,7 @@ func _enter_final() -> void:
 # ---------------------------------------------------------------------------
 
 func finish_prototype() -> void:
-	"""Prototip sonlandırma mesajı."""
+	"""Cumhuriyet finali sonrası kapanış mesajı."""
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod != null:
-		ui_mod.update_objective("Prototip tamamlandı: sıradaki geliştirme Ankara ve Meclis dünyaları.")
+		ui_mod.update_objective("Yolculuk tamamlandı: Cumhuriyet ilan edildi ve tarih akışı başarıyla korundu.")

@@ -708,6 +708,15 @@ func update_progress() -> void:
 	elif state.current_zone == "kongreler":
 		progress = "Kongre ipuçları: %d/%d | Liderlik: %d | Destek: %d/%d" % [state.get_item_count("kongre_clues"), state.get_zone_item_total("kongre_clues"), state.leadership_points, state.built_supports, state.required_supports]
 		star_count = state.get_item_count("units") + state.get_item_count("ship_clues") + state.get_item_count("havza_clues") + state.get_item_count("amasya_clues") + state.get_item_count("kongre_clues") + state.built_supports
+	elif state.current_zone == "ankara":
+		progress = "Ankara ipuçları: %d/%d | Liderlik: %d | Destek: %d/%d" % [state.get_item_count("ankara_clues"), state.get_zone_item_total("ankara_clues"), state.leadership_points, state.built_supports, state.required_supports]
+		star_count = state.get_item_count("units") + state.get_item_count("ship_clues") + state.get_item_count("havza_clues") + state.get_item_count("amasya_clues") + state.get_item_count("kongre_clues") + state.get_item_count("ankara_clues") + state.built_supports
+	elif state.current_zone == "sakarya":
+		progress = "Sakarya ipuçları: %d/%d | Liderlik: %d | Destek: %d/%d" % [state.get_item_count("sakarya_clues"), state.get_zone_item_total("sakarya_clues"), state.leadership_points, state.built_supports, state.required_supports]
+		star_count = state.get_item_count("units") + state.get_item_count("ship_clues") + state.get_item_count("havza_clues") + state.get_item_count("amasya_clues") + state.get_item_count("kongre_clues") + state.get_item_count("ankara_clues") + state.get_item_count("sakarya_clues") + state.built_supports
+	elif state.current_zone == "final":
+		progress = "Cumhuriyet ipuçları: %d/%d | Liderlik: %d | Destek: %d/%d" % [state.get_item_count("final_clues"), state.get_zone_item_total("final_clues"), state.leadership_points, state.built_supports, state.required_supports]
+		star_count = state.get_item_count("units") + state.get_item_count("ship_clues") + state.get_item_count("havza_clues") + state.get_item_count("amasya_clues") + state.get_item_count("kongre_clues") + state.get_item_count("ankara_clues") + state.get_item_count("sakarya_clues") + state.get_item_count("final_clues") + state.built_supports
 	else:
 		progress = "Ünite notları: %d/%d" % [state.get_item_count("units"), state.get_zone_item_total("units")]
 		star_count = state.get_item_count("units")
@@ -738,6 +747,15 @@ func update_objective(text: String) -> void:
 		"kongreler":
 			title = "Zaman Yolcuları: Kongreler"
 			chip = "Kongreler"
+		"ankara":
+			title = "Zaman Yolcuları: Ankara"
+			chip = "Ankara: Meclis ve İrade"
+		"sakarya":
+			title = "Zaman Yolcuları: Sakarya"
+			chip = "Sakarya ve Büyük Taarruz"
+		"final":
+			title = "Zaman Yolcuları: Cumhuriyet"
+			chip = "Final: Cumhuriyet"
 
 	hud_bar.set_title(title)
 	hud_bar.set_chip(chip)

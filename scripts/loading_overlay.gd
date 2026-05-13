@@ -25,6 +25,8 @@ const TRANSITION_DURATION := 0.3
 
 var _target_scene: String = ""
 var _is_loading := false
+var _transition_tween: Tween
+var _progress_tween: Tween
 
 
 # ---------------------------------------------------------------------------
@@ -34,6 +36,7 @@ var _is_loading := false
 ## Yükleme ekranını gösterir ve hedef sahneyi yüklemeye başlar.
 ## target_scene: "res://scenes/world.tscn" gibi tam path.
 func present(target_scene: String) -> void:
+	_cancel_transition_tween()
 	_target_scene = target_scene
 	show()
 
@@ -44,28 +47,27 @@ func present(target_scene: String) -> void:
 	_title_label.text = "Bandırma Yolculuğu"
 
 	# Fade-in animasyonu
-	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(_dimmer, "color", Color(0.0, 0.0, 0.0, 0.70), TRANSITION_DURATION)
-	tween.tween_property(_panel, "modulate", Color.WHITE, TRANSITION_DURATION)
-	tween.tween_property(_loading_spinner, "modulate", Color.WHITE, TRANSITION_DURATION)
-	tween.tween_property(_hint_label, "modulate", Color.WHITE, TRANSITION_DURATION)
-	await tween.finished
-
-	# Threaded yükleme başlat (ileride threaded_request ile detaylandırılacak)
-	_start_loading()
+	_transition_tween = create_tween()
+	_transition_tween.finished.connect(_clear_transition_tween)
+	_transition_tween.set_parallel(true)
+	_transition_tween.tween_property(_dimmer, "color", Color(0.0, 0.0, 0.0, 0.70), TRANSITION_DURATION)
+	_transition_tween.tween_property(_panel, "modulate", Color.WHITE, TRANSITION_DURATION)
+	_transition_tween.tween_property(_loading_spinner, "modulate", Color.WHITE, TRANSITION_DURATION)
+	_transition_tween.tween_property(_hint_label, "modulate", Color.WHITE, TRANSITION_DURATION)
+	_transition_tween.tween_callback(Callable(self, "_start_loading"))
 
 
 ## Yükleme ekranını kapatır.
 func dismiss() -> void:
-	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(_dimmer, "color", Color(0.0, 0.0, 0.0, 0.0), TRANSITION_DURATION)
-	tween.tween_property(_panel, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
-	tween.tween_property(_loading_spinner, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
-	tween.tween_property(_hint_label, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
-	await tween.finished
-	hide()
+	_cancel_transition_tween()
+	_transition_tween = create_tween()
+	_transition_tween.finished.connect(_clear_transition_tween)
+	_transition_tween.set_parallel(true)
+	_transition_tween.tween_property(_dimmer, "color", Color(0.0, 0.0, 0.0, 0.0), TRANSITION_DURATION)
+	_transition_tween.tween_property(_panel, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
+	_transition_tween.tween_property(_loading_spinner, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
+	_transition_tween.tween_property(_hint_label, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
+	_transition_tween.tween_callback(Callable(self, "hide"))
 
 
 # ---------------------------------------------------------------------------
@@ -78,6 +80,11 @@ func _ready() -> void:
 	_loading_spinner.modulate = Color.TRANSPARENT
 	_hint_label.modulate = Color.TRANSPARENT
 	_dimmer.color = Color(0.0, 0.0, 0.0, 0.0)
+
+
+func _exit_tree() -> void:
+	_cancel_transition_tween()
+	_cancel_progress_tween()
 
 
 func _start_loading() -> void:
@@ -101,13 +108,34 @@ func _simulate_progress() -> void:
 	"""Yükleme çubuğunu göstermelik doldurur.
 	Not: Threaded loading gelince ResourceLoader.load_threaded_request ile
 	gerçek progress takibi yapılacak."""
-	var tween := create_tween()
-	tween.set_parallel(false)
-	tween.tween_property(_progress_bar, "value", 0.3, 0.15)
-	tween.tween_property(_progress_bar, "value", 0.6, 0.20)
-	tween.tween_property(_progress_bar, "value", 0.85, 0.25)
-	tween.tween_property(_progress_bar, "value", 1.0, 0.30)
-	await tween.finished
+	_cancel_progress_tween()
+	_progress_tween = create_tween()
+	_progress_tween.finished.connect(_clear_progress_tween)
+	_progress_tween.set_parallel(false)
+	_progress_tween.tween_property(_progress_bar, "value", 0.3, 0.15)
+	_progress_tween.tween_property(_progress_bar, "value", 0.6, 0.20)
+	_progress_tween.tween_property(_progress_bar, "value", 0.85, 0.25)
+	_progress_tween.tween_property(_progress_bar, "value", 1.0, 0.30)
+
+
+func _cancel_transition_tween() -> void:
+	if _transition_tween != null:
+		_transition_tween.kill()
+		_transition_tween = null
+
+
+func _cancel_progress_tween() -> void:
+	if _progress_tween != null:
+		_progress_tween.kill()
+		_progress_tween = null
+
+
+func _clear_transition_tween() -> void:
+	_transition_tween = null
+
+
+func _clear_progress_tween() -> void:
+	_progress_tween = null
 
 
 # ---------------------------------------------------------------------------

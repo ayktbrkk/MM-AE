@@ -24,6 +24,8 @@ func _run() -> void:
 		_failures.append("Yeni oyun akışı doğrulanamadı.")
 	if not await _validate_continue_flow():
 		_failures.append("Devam et akışı doğrulanamadı.")
+	if not await _validate_late_game_chain():
+		_failures.append("Geç oyun geçiş zinciri doğrulanamadı.")
 
 	if had_original_save:
 		_save_manager.call("save_game", original_save)
@@ -141,6 +143,73 @@ func _validate_continue_flow() -> bool:
 		ok = false
 	if markers.get_child_count() == 0:
 		_failures.append("Continue akışında zone marker'ları yeniden kurulmadı.")
+		ok = false
+
+	world.queue_free()
+	await _wait_frames(2)
+	return ok
+
+
+func _validate_late_game_chain() -> bool:
+	_save_manager.set("pending_entry_action", "start")
+	var world_scene: PackedScene = load("res://scenes/world.tscn")
+	var world := world_scene.instantiate()
+	root.add_child(world)
+	await _wait_frames(6)
+
+	var player_mod: Node = world.get_node("WorldPlayer")
+	var zone_mod: Node = world.get_node("WorldZone")
+	var wave_mod: Node = world.get_node("WorldWave")
+	var ui_mod: Node = world.get_node("WorldUI")
+	var state: Node = world.get_node("WorldState")
+	var objective_label: Label = world.get_node("CanvasLayer/HUD/HudBar/TopPanel/TopMargin/TopContent/ObjectiveLabel")
+	var ok := true
+
+	player_mod.call("choose_hero", "arda")
+	await _wait_frames(6)
+	ui_mod.call("close_dialogue")
+	await _wait_frames(2)
+
+	zone_mod.call("_setup_kongreler")
+	await _wait_frames(4)
+	while int(state.get("built_supports")) < int(state.get("required_supports")):
+		state.call("place_support")
+	wave_mod.call("start_kongre_wave")
+	await _wait_frames(1)
+	ui_mod.call("close_dialogue")
+	await _wait_frames(45)
+	if String(state.get("current_zone")) != "ankara":
+		_failures.append("Kongre sonrası Ankara geçişi çalışmadı. Mevcut zone: %s" % String(state.get("current_zone")))
+		ok = false
+
+	while int(state.get("built_supports")) < int(state.get("required_supports")):
+		state.call("place_support")
+	wave_mod.call("start_ankara_wave")
+	await _wait_frames(1)
+	ui_mod.call("close_dialogue")
+	await _wait_frames(45)
+	if String(state.get("current_zone")) != "sakarya":
+		_failures.append("Ankara sonrası Sakarya geçişi çalışmadı. Mevcut zone: %s" % String(state.get("current_zone")))
+		ok = false
+
+	while int(state.get("built_supports")) < int(state.get("required_supports")):
+		state.call("place_support")
+	wave_mod.call("start_sakarya_wave")
+	await _wait_frames(1)
+	ui_mod.call("close_dialogue")
+	await _wait_frames(45)
+	if String(state.get("current_zone")) != "final":
+		_failures.append("Sakarya sonrası Final geçişi çalışmadı. Mevcut zone: %s" % String(state.get("current_zone")))
+		ok = false
+
+	while int(state.get("built_supports")) < int(state.get("required_supports")):
+		state.call("place_support")
+	wave_mod.call("start_final_wave")
+	await _wait_frames(1)
+	ui_mod.call("close_dialogue")
+	await _wait_frames(4)
+	if objective_label.text != "Yolculuk tamamlandı: Cumhuriyet ilan edildi ve tarih akışı başarıyla korundu.":
+		_failures.append("Final kapanış objective metni güncellenmedi.")
 		ok = false
 
 	world.queue_free()

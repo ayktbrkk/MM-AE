@@ -57,6 +57,7 @@ var sfx_volume: float = 1.0:
 var _bgm_player: AudioStreamPlayer
 var _sfx_players: Array[AudioStreamPlayer] = []
 var _current_bgm_name: String = ""
+var _bgm_fade_tween: Tween
 
 # Placeholder ses cache'i — procedural sesler burada saklanir
 var _placeholder_sounds: Dictionary = {}
@@ -89,6 +90,18 @@ func _ready() -> void:
 		print("[AudioManager] assets/audio/ mevcut, ses dosyalari yuklenmeye hazir.")
 	else:
 		print("[AudioManager] assets/audio/ henuz bos. Procedural placeholder sesler kullaniliyor.")
+
+
+func _exit_tree() -> void:
+	_cancel_bgm_fade()
+	if is_instance_valid(_bgm_player):
+		_bgm_player.stop()
+		_bgm_player.stream = null
+	for player in _sfx_players:
+		if is_instance_valid(player):
+			player.stop()
+			player.stream = null
+	_placeholder_sounds.clear()
 
 
 func _ensure_audio_buses() -> void:
@@ -145,26 +158,23 @@ func get_sfx_volume() -> float:
 # ---------------------------------------------------------------------------
 func play_bgm(bgm_name: String, fade_in: float = 0.5) -> void:
 	"""BGM'yi calistir. Stream bulunamazsa procedural placeholder kullanir."""
-	if bgm_name == _current_bgm_name:
+	if bgm_name == _current_bgm_name and _bgm_player.playing:
 		return
 
 	var stream: AudioStream = _load_stream(bgm_name)
 	if not stream:
 		return
 
-	# fade_out varsa once durdur
+	_cancel_bgm_fade()
 	if _bgm_player.playing:
-		await _fade_out(_bgm_player, 0.3)
+		var tween := create_tween()
+		_bgm_fade_tween = tween
+		tween.finished.connect(_clear_bgm_fade_tween)
+		tween.tween_method(_set_bgm_volume_ratio, _current_bgm_volume_ratio(), 0.0, 0.3)
+		tween.tween_callback(Callable(self, "_start_bgm_stream").bind(stream, bgm_name, fade_in))
+		return
 
-	_bgm_player.stream = stream
-	_bgm_player.volume_db = linear_to_db(0.0)
-	_bgm_player.play()
-	_current_bgm_name = bgm_name
-	bgm_started.emit(bgm_name)
-
-	if fade_in > 0.0:
-		await _fade_in(_bgm_player, fade_in)
-	_bgm_player.volume_db = linear_to_db(bgm_volume)
+	_start_bgm_stream(stream, bgm_name, fade_in)
 
 
 func stop_bgm(fade_out: float = 0.5) -> void:
@@ -172,12 +182,15 @@ func stop_bgm(fade_out: float = 0.5) -> void:
 	if not _bgm_player.playing:
 		return
 
+	_cancel_bgm_fade()
 	if fade_out > 0.0:
-		await _fade_out(_bgm_player, fade_out)
-	_bgm_player.stop()
-	_bgm_player.stream = null
-	_current_bgm_name = ""
-	bgm_stopped.emit()
+		var tween := create_tween()
+		_bgm_fade_tween = tween
+		tween.finished.connect(_clear_bgm_fade_tween)
+		tween.tween_method(_set_bgm_volume_ratio, _current_bgm_volume_ratio(), 0.0, fade_out)
+		tween.tween_callback(Callable(self, "_stop_bgm_immediately"))
+		return
+	_stop_bgm_immediately()
 
 
 func is_bgm_playing() -> bool:
@@ -392,20 +405,55 @@ static func _generate_sweep(start_freq: float, end_freq: float, duration: float)
 # ---------------------------------------------------------------------------
 # Internal — Fade Mekanizmasi
 # ---------------------------------------------------------------------------
-func _fade_out(player: AudioStreamPlayer, duration: float) -> void:
-	"""Player volume'unu linear 0.0'a dusur."""
-	if not is_instance_valid(player):
+func _start_bgm_stream(stream: AudioStream, bgm_name: String, fade_in: float) -> void:
+	if not is_instance_valid(_bgm_player):
 		return
-	var tween := create_tween()
-	tween.tween_method(func(v: float): player.volume_db = linear_to_db(v), 1.0, 0.0, duration)
-	await tween.finished
+	_bgm_player.stop()
+	_bgm_player.stream = stream
+	_bgm_player.volume_db = linear_to_db(0.0)
+	_bgm_player.play()
+	_current_bgm_name = bgm_name
+	bgm_started.emit(bgm_name)
+	if fade_in > 0.0:
+		var tween := create_tween()
+		_bgm_fade_tween = tween
+		tween.finished.connect(_clear_bgm_fade_tween)
+		tween.tween_method(_set_bgm_volume_ratio, 0.0, bgm_volume, fade_in)
+		return
+	_set_bgm_volume_ratio(bgm_volume)
 
 
-func _fade_in(player: AudioStreamPlayer, duration: float) -> void:
-	"""Player volume'unu linear bgm_volume'a cikar."""
-	if not is_instance_valid(player):
+func _stop_bgm_immediately() -> void:
+	if not is_instance_valid(_bgm_player):
 		return
-	var target_volume := bgm_volume
-	var tween := create_tween()
-	tween.tween_method(func(v: float): player.volume_db = linear_to_db(v), 0.0, target_volume, duration)
-	await tween.finished
+	_bgm_player.stop()
+	_bgm_player.stream = null
+	_current_bgm_name = ""
+	bgm_stopped.emit()
+
+
+func _cancel_bgm_fade() -> void:
+	if _bgm_fade_tween != null:
+		_bgm_fade_tween.kill()
+		_bgm_fade_tween = null
+
+
+func _clear_bgm_fade_tween() -> void:
+	_bgm_fade_tween = null
+
+
+func _set_bgm_volume_ratio(value: float) -> void:
+	if not is_instance_valid(_bgm_player):
+		return
+	if value <= 0.0:
+		_bgm_player.volume_db = linear_to_db(0.0)
+		return
+	_bgm_player.volume_db = linear_to_db(value)
+
+
+func _current_bgm_volume_ratio() -> float:
+	if not is_instance_valid(_bgm_player) or not _bgm_player.playing:
+		return 0.0
+	if is_inf(_bgm_player.volume_db) and _bgm_player.volume_db < 0.0:
+		return 0.0
+	return db_to_linear(_bgm_player.volume_db)

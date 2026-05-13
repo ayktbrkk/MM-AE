@@ -187,9 +187,13 @@ func from_dict(data: Dictionary) -> void:
 	if data.has("current_goal_text"):
 		current_goal_text = data["current_goal_text"]
 	if data.has("collected_items"):
-		collected_items = data["collected_items"].duplicate()
+		var merged_collected := collected_items.duplicate()
+		merged_collected.merge(data["collected_items"], true)
+		collected_items = merged_collected
 	if data.has("total_items_in_zone"):
-		total_items_in_zone = data["total_items_in_zone"].duplicate()
+		var merged_totals := total_items_in_zone.duplicate()
+		merged_totals.merge(data["total_items_in_zone"], true)
+		total_items_in_zone = merged_totals
 	if data.has("leadership_points"):
 		leadership_points = data["leadership_points"]
 	if data.has("built_supports"):

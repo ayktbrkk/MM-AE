@@ -61,6 +61,39 @@ const ZONE_CONFIG: Dictionary = {
 		"dialogue_success": "%s hazır. En az %d destek kurunca ortak hedefi daha güvenli savunursun.",
 		"dialogue_built": "%s kuruldu. Dağınık yapıları ortak hedefte birleştirdin.",
 	},
+	"ankara": {
+		"panel_text": "Meclis iradesini güçlendirmek için destek kur. Liderlik puanı: %d",
+		"button_a": "Meclis Düzeni kur (1)",
+		"button_b": "Telgraf Ağı kur (1)",
+		"support_a": "Meclis Düzeni",
+		"support_b": "Telgraf Ağı",
+		"wave_kind": "ankara_wave",
+		"wave_text": "Destekler hazır. Şimdi İrade Dalgası'nı başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca Meclis'in iradesini daha güvenli taşırsın.",
+		"dialogue_built": "%s kuruldu. Meclis'in ortak iradesi güçleniyor.",
+	},
+	"sakarya": {
+		"panel_text": "Cephe düzenini güçlendirmek için destek kur. Liderlik puanı: %d",
+		"button_a": "Savunma Hattı kur (1)",
+		"button_b": "İkmal Ağı kur (1)",
+		"support_a": "Savunma Hattı",
+		"support_b": "İkmal Ağı",
+		"wave_kind": "sakarya_wave",
+		"wave_text": "Destekler hazır. Şimdi Taarruz Dalgası'nı başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca cepheyi daha güvenli savunursun.",
+		"dialogue_built": "%s kuruldu. Cephe hattı daha dirençli hale geldi.",
+	},
+	"final": {
+		"panel_text": "Cumhuriyet'in kazanımlarını geleceğe taşımak için destek kur. Liderlik puanı: %d",
+		"button_a": "Kurum Desteği kur (1)",
+		"button_b": "Gelecek Ağı kur (1)",
+		"support_a": "Kurum Desteği",
+		"support_b": "Gelecek Ağı",
+		"wave_kind": "final_wave",
+		"wave_text": "Destekler hazır. Şimdi Cumhuriyet Dalgası'nı başlat.",
+		"dialogue_success": "%s hazır. En az %d destek kurunca Cumhuriyet'i daha güvenli yarına taşırsın.",
+		"dialogue_built": "%s kuruldu. Cumhuriyet'in geleceği güçleniyor.",
+	},
 }
 
 # Varsayılan yapılandırma (bilinmeyen zone'lar için yedek)
@@ -290,7 +323,7 @@ func start_kongre_wave() -> void:
 		_world._show_dialogue(
 			"Dağınıklık Aşıldı",
 			"Delegasyon masası ve ortak hedef kürsüsü sayesinde farklı sesler tek amaçta birleşti. Kongrelerin birleştirici ruhu bu alanda güç kazandı.",
-			Callable(_world, "_finish_prototype")
+			Callable(_world, "_enter_ankara")
 		)
 	else:
 		_state.add_leadership(1)
@@ -298,6 +331,72 @@ func start_kongre_wave() -> void:
 		_world._show_dialogue(
 			"Dağınıklık Sürüyor",
 			"Temsilciler aynı hedefe yaklaşsa da bağlar henüz tam güçlenmedi. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
+			Callable()
+		)
+
+
+func start_ankara_wave() -> void:
+	"""Ankara İrade Dalgası'nı başlat."""
+	_state.increment_wave_attempts()
+	wave_started.emit("ankara")
+
+	if _state.built_supports >= _state.required_supports:
+		wave_completed.emit("ankara")
+		_world._show_dialogue(
+			"İrade Güçlendi",
+			"Meclis düzeni ve telgraf ağı sayesinde milletin iradesi tek çatı altında güvenle toplandı. Ankara artık sonraki büyük mücadeleye hazır.",
+			Callable(_world, "_enter_sakarya")
+		)
+	else:
+		_state.add_leadership(1)
+		_world._update_progress()
+		_world._show_dialogue(
+			"İrade Henüz Tam Değil",
+			"Meclis iradesi kuruluyor ama henüz tam güçlenmedi. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
+			Callable()
+		)
+
+
+func start_sakarya_wave() -> void:
+	"""Sakarya Taarruz Dalgası'nı başlat."""
+	_state.increment_wave_attempts()
+	wave_started.emit("sakarya")
+
+	if _state.built_supports >= _state.required_supports:
+		wave_completed.emit("sakarya")
+		_world._show_dialogue(
+			"Cephe Dayandı",
+			"Savunma hattı ve ikmal ağı sayesinde cephe ayakta kaldı. Sakarya'nın direnci zaferi Cumhuriyet'in eşiğine taşıdı.",
+			Callable(_world, "_enter_final")
+		)
+	else:
+		_state.add_leadership(1)
+		_world._update_progress()
+		_world._show_dialogue(
+			"Cephe Zorlanıyor",
+			"Savunma sürüyor ama düzen henüz yeterli değil. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
+			Callable()
+		)
+
+
+func start_final_wave() -> void:
+	"""Final Cumhuriyet Dalgası'nı başlat."""
+	_state.increment_wave_attempts()
+	wave_started.emit("final")
+
+	if _state.built_supports >= _state.required_supports:
+		wave_completed.emit("final")
+		_world._show_dialogue(
+			"Cumhuriyet Korundu",
+			"Kurulan kurumlar ve ortak gelecek vizyonu sayesinde Cumhuriyet'in kazanımları güvenle yarına taşındı.",
+			Callable(_world, "_finish_prototype")
+		)
+	else:
+		_state.add_leadership(1)
+		_world._update_progress()
+		_world._show_dialogue(
+			"Gelecek İçin Bir Adım Daha",
+			"Cumhuriyet'in temelleri güçlü, ama geleceği korumak için biraz daha hazırlık gerekiyor. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
 			Callable()
 		)
 

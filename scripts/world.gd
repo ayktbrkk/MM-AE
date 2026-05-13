@@ -101,11 +101,17 @@ func _ready() -> void:
 	_state.set_zone_item_total("havza_clues", 2)
 	_state.set_zone_item_total("amasya_clues", 2)
 	_state.set_zone_item_total("kongre_clues", 2)
+	_state.set_zone_item_total("ankara_clues", 2)
+	_state.set_zone_item_total("sakarya_clues", 2)
+	_state.set_zone_item_total("final_clues", 2)
 	_state.increment_item_count("units", 0)
 	_state.increment_item_count("ship_clues", 0)
 	_state.increment_item_count("havza_clues", 0)
 	_state.increment_item_count("amasya_clues", 0)
 	_state.increment_item_count("kongre_clues", 0)
+	_state.increment_item_count("ankara_clues", 0)
+	_state.increment_item_count("sakarya_clues", 0)
+	_state.increment_item_count("final_clues", 0)
 
 	# 2. Canvas katmanı
 	$CanvasLayer.layer = 10
@@ -356,6 +362,21 @@ func _enter_amasya() -> void:
 func _enter_kongreler() -> void:
 	"""Köprü: world_wave.gd → world_zone.gd._enter_kongreler()"""
 	_zone_mod._enter_kongreler()
+
+
+func _enter_ankara() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd._enter_ankara()"""
+	_zone_mod._enter_ankara()
+
+
+func _enter_sakarya() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd._enter_sakarya()"""
+	_zone_mod._enter_sakarya()
+
+
+func _enter_final() -> void:
+	"""Köprü: world_wave.gd → world_zone.gd._enter_final()"""
+	_zone_mod._enter_final()
 
 
 func _finish_prototype() -> void:
