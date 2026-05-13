@@ -50,6 +50,7 @@ var elapsed_time := 0.0
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const MIN_INTERACT_TOUCH_SIZE := 104.0
 const MIN_DIALOGUE_TOUCH_SIZE := 88.0
 
@@ -381,20 +382,20 @@ func build_minimap_hud() -> void:
 	_hud_root.add_child(minimap_panel)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 14)
+	margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_SM_PLUS)
+	margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_SM)
+	margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_SM_PLUS)
+	margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_SM_PLUS)
 	minimap_panel.add_child(margin)
 
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 8)
+	content.add_theme_constant_override("separation", _ui_tokens.SPACE_XS)
 	margin.add_child(content)
 
 	minimap_title_label = Label.new()
 	minimap_title_label.text = "Rota"
 	minimap_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	minimap_title_label.add_theme_font_size_override("font_size", 21)
+	minimap_title_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_NAV)
 	minimap_title_label.add_theme_color_override("font_color", Color(0.10, 0.14, 0.18, 0.88))
 	content.add_child(minimap_title_label)
 
@@ -581,7 +582,7 @@ func build_guidance_arrow() -> void:
 	guidance_arrow_label.custom_minimum_size = Vector2(240, 34)
 	guidance_arrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	guidance_arrow_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	guidance_arrow_label.add_theme_font_size_override("font_size", 20)
+	guidance_arrow_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
 	guidance_arrow_label.add_theme_color_override("font_color", Color(0.10, 0.14, 0.18, 0.80))
 	guidance_arrow.add_child(guidance_arrow_label)
 
@@ -630,10 +631,10 @@ func build_route_hud() -> void:
 	_hud_root.add_child(route_panel)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 14)
+	margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_SM_PLUS)
+	margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_SM)
+	margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_SM_PLUS)
+	margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_SM_PLUS)
 	route_panel.add_child(margin)
 
 	var content := VBoxContainer.new()
@@ -643,7 +644,7 @@ func build_route_hud() -> void:
 	var title := Label.new()
 	title.text = "Yolculuk"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 21)
+	title.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_NAV)
 	title.add_theme_color_override("font_color", Color(0.10, 0.14, 0.18, 0.88))
 	content.add_child(title)
 
@@ -660,7 +661,7 @@ func build_route_hud() -> void:
 		var label := Label.new()
 		label.text = String(step["label"])
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		label.add_theme_font_size_override("font_size", 18)
+		label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_SM)
 		row.add_child(label)
 
 		var area_key := String(step["area"])

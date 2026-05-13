@@ -5,7 +5,8 @@ signal choice_selected(context: String, choice: String)
 const ARDA_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
 const EDA_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
 const TAU := 2.0 * PI
-const MIN_DECISION_BUTTON_HEIGHT := 124.0
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
+const MIN_DECISION_BUTTON_HEIGHT := _ui_tokens.DECISION_CHOICE_HEIGHT
 const MIN_DECISION_BUTTON_WIDTH := 0.0
 const DECISION_PANEL_WIDTH := 920.0
 const DECISION_PANEL_HEIGHT := 1180.0
@@ -79,25 +80,25 @@ func _apply_responsive_layout() -> void:
 		minf(DECISION_PANEL_WIDTH, maxf(560.0, viewport_size.x - (56.0 if compact else 72.0))),
 		minf(DECISION_PANEL_HEIGHT, maxf(980.0, viewport_size.y - (72.0 if compact else 96.0)))
 	)
-	var side_margin := 28 if compact else 36
-	var top_margin := 26 if compact else 32
+	var side_margin := _ui_tokens.SPACE_2XL if compact else _ui_tokens.SPACE_4XL
+	var top_margin := _ui_tokens.SPACE_XL_PLUS if compact else _ui_tokens.SPACE_3XL_PLUS
 	decision_margin.add_theme_constant_override("margin_left", side_margin)
 	decision_margin.add_theme_constant_override("margin_top", top_margin)
 	decision_margin.add_theme_constant_override("margin_right", side_margin)
 	decision_margin.add_theme_constant_override("margin_bottom", top_margin)
-	decision_content.add_theme_constant_override("separation", 18 if compact else 22)
+	decision_content.add_theme_constant_override("separation", _ui_tokens.SPACE_LG if compact else _ui_tokens.SPACE_LG_PLUS)
 	character_row.custom_minimum_size.y = 400.0 if compact else 460.0
-	character_row.add_theme_constant_override("separation", 16 if compact else 22)
-	choice_row.add_theme_constant_override("separation", 14 if compact else 18)
-	chapter_label.add_theme_font_size_override("font_size", 24 if compact else 26)
-	title_label.add_theme_font_size_override("font_size", 38 if compact else 42)
-	prompt_label.add_theme_font_size_override("font_size", 26 if compact else 28)
-	arda_subtitle.add_theme_font_size_override("font_size", 22 if compact else 24)
-	eda_subtitle.add_theme_font_size_override("font_size", 22 if compact else 24)
+	character_row.add_theme_constant_override("separation", _ui_tokens.SPACE_MD if compact else _ui_tokens.SPACE_LG_PLUS)
+	choice_row.add_theme_constant_override("separation", _ui_tokens.SPACE_SM_PLUS if compact else _ui_tokens.SPACE_LG)
+	chapter_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_LG if compact else _ui_tokens.FONT_LABEL_XL)
+	title_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_HERO if compact else _ui_tokens.FONT_TITLE_XL)
+	prompt_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_XL if compact else _ui_tokens.FONT_BODY_XL)
+	arda_subtitle.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_LG if compact else _ui_tokens.FONT_BODY_LG)
+	eda_subtitle.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_LG if compact else _ui_tokens.FONT_BODY_LG)
 	arda_portrait.custom_minimum_size.y = 220.0 if compact else 270.0
 	eda_portrait.custom_minimum_size.y = 220.0 if compact else 270.0
 	for button in [arda_button, eda_button]:
-		button.add_theme_font_size_override("font_size", 30 if compact else 32)
+		button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_2XL if compact else _ui_tokens.FONT_ACTION)
 
 func _start_idle_animations() -> void:
 	# Top glow + bottom fog — sin(elapsed * 0.9), periyot 2*PI/0.9
@@ -212,10 +213,10 @@ func _apply_styles() -> void:
 func _add_panel_style(target: PanelContainer, fill: Color, border: Color, radius: int) -> void:
 	target.add_theme_stylebox_override(
 		"panel",
-		_ui_styles.panel_style(fill, border, radius, 4, Color(0.05, 0.06, 0.08, 0.22), 10, Vector2(0, 7))
+		_ui_styles.panel_style(fill, border, radius, _ui_tokens.BORDER_BOLD, Color(0.05, 0.06, 0.08, 0.22), _ui_tokens.SHADOW_SIZE_LG, _ui_tokens.SHADOW_OFFSET_LG)
 	)
 
 func _add_button_style(target: Button, fill: Color) -> void:
-	var normal := _ui_styles.button_state_style(fill, 18, fill.lightened(0.18), 3, Color(0.05, 0.06, 0.08, 0.22), 6, Vector2(0, 4))
-	var pressed := _ui_styles.button_state_style(fill.darkened(0.18), 18, fill.lightened(0.10), 3, Color(0.05, 0.06, 0.08, 0.14), 3, Vector2(0, 2))
-	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), 32, 42, 22)
+	var normal := _ui_styles.button_state_style(fill, _ui_tokens.RADIUS_MD, fill.lightened(0.18), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.22), _ui_tokens.SHADOW_SIZE_MD, _ui_tokens.SHADOW_OFFSET_MD)
+	var pressed := _ui_styles.button_state_style(fill.darkened(0.18), _ui_tokens.RADIUS_MD, fill.lightened(0.10), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.14), _ui_tokens.SHADOW_SIZE_XS, Vector2(0, 2))
+	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), _ui_tokens.FONT_ACTION, 42, _ui_tokens.SPACE_LG_PLUS)

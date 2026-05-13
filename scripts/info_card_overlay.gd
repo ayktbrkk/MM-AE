@@ -3,6 +3,7 @@ extends Control
 signal continue_pressed
 
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
@@ -161,11 +162,11 @@ func hide_overlay() -> void:
 func _apply_styles() -> void:
 	panel.add_theme_stylebox_override(
 		"panel",
-		_ui_styles.panel_style(Color(0.98, 0.95, 0.88, 0.98), Color(0.05, 0.24, 0.32), 28, 4, Color(0.05, 0.06, 0.08, 0.26), 12, Vector2(0, 8))
+		_ui_styles.panel_style(Color(0.98, 0.95, 0.88, 0.98), Color(0.05, 0.24, 0.32), _ui_tokens.RADIUS_2XL, _ui_tokens.BORDER_BOLD, Color(0.05, 0.06, 0.08, 0.26), _ui_tokens.SHADOW_SIZE_XL, _ui_tokens.SHADOW_OFFSET_XL)
 	)
 	illustration_frame.add_theme_stylebox_override(
 		"panel",
-		_ui_styles.panel_style(Color(1, 1, 1, 0.72), Color(0.90, 0.78, 0.58), 28, 4, Color(0.55, 0.35, 0.12, 0.16), 8, Vector2(0, 5))
+		_ui_styles.panel_style(Color(1, 1, 1, 0.72), Color(0.90, 0.78, 0.58), _ui_tokens.RADIUS_2XL, _ui_tokens.BORDER_BOLD, Color(0.55, 0.35, 0.12, 0.16), 8, Vector2(0, 5))
 	)
 	_apply_secondary_button_style(back_button)
 	_apply_button_style(continue_button, _colors.POP_DEEP_TURQUOISE)
@@ -177,11 +178,11 @@ func _apply_styles() -> void:
 
 
 func _apply_secondary_button_style(target: Button) -> void:
-	var normal := _ui_styles.button_state_style(Color(1, 1, 1, 0.76), 20, Color(0.05, 0.24, 0.32, 0.34), 3, Color(0.05, 0.06, 0.08, 0.14), 4, Vector2(0, 3))
-	var pressed := _ui_styles.button_state_style(Color(0.93, 0.91, 0.86, 0.96), 20, Color(0.05, 0.24, 0.32, 0.42), 3, Color(0.05, 0.06, 0.08, 0.10), 2, Vector2(0, 1))
-	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color(1, 1, 1, 1), Color(1, 1, 1, 0.62), 26)
+	var normal := _ui_styles.button_state_style(Color(1, 1, 1, 0.76), _ui_tokens.RADIUS_BASE, Color(0.05, 0.24, 0.32, 0.34), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.14), _ui_tokens.SPACE_3XS, _ui_tokens.SHADOW_OFFSET_SM)
+	var pressed := _ui_styles.button_state_style(Color(0.93, 0.91, 0.86, 0.96), _ui_tokens.RADIUS_BASE, Color(0.05, 0.24, 0.32, 0.42), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.10), _ui_tokens.SHADOW_SIZE_XS, _ui_tokens.SHADOW_OFFSET_XS)
+	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color(1, 1, 1, 1), Color(1, 1, 1, 0.62), _ui_tokens.FONT_LABEL_XL)
 
 func _apply_button_style(target: Button, fill: Color) -> void:
-	var normal := _ui_styles.button_state_style(fill, 20, fill.lightened(0.18), 3, Color(0.05, 0.06, 0.08, 0.22), 6, Vector2(0, 4))
-	var pressed := _ui_styles.button_state_style(fill.darkened(0.14), 20, fill.lightened(0.10), 3, Color(0.05, 0.06, 0.08, 0.12), 3, Vector2(0, 2))
-	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), -1, 42, 18)
+	var normal := _ui_styles.button_state_style(fill, _ui_tokens.RADIUS_BASE, fill.lightened(0.18), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.22), _ui_tokens.SHADOW_SIZE_MD, _ui_tokens.SHADOW_OFFSET_MD)
+	var pressed := _ui_styles.button_state_style(fill.darkened(0.14), _ui_tokens.RADIUS_BASE, fill.lightened(0.10), _ui_tokens.BORDER_REGULAR, Color(0.05, 0.06, 0.08, 0.12), _ui_tokens.SHADOW_SIZE_XS, Vector2(0, 2))
+	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), -1, 42, _ui_tokens.SPACE_LG)

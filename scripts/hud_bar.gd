@@ -1,6 +1,7 @@
 extends Control
 
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 # 5-kollu yildiz icon texture'i (kenney yedegi)
 static func _star_texture() -> Texture2D:
@@ -106,7 +107,7 @@ func _apply_styles() -> void:
 	top_panel.visible = false
 	_apply_panel_style(chip_panel, _colors.EDA_TEAL, Color(0.15, 0.24, 0.22), 24)
 	chip_label.add_theme_color_override("font_color", Color.WHITE)
-	chip_label.add_theme_font_size_override("font_size", 22)
+	chip_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_LG)
 	title_label.add_theme_color_override("font_color", Color(0.05, 0.10, 0.16))
 	objective_label.add_theme_color_override("font_color", Color(0.21, 0.22, 0.28))
 	progress_label.add_theme_color_override("font_color", Color(0.32, 0.34, 0.40))
@@ -115,19 +116,19 @@ func _apply_styles() -> void:
 		_apply_panel_style(status_panel, Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.94), Color(0.18, 0.28, 0.24, 0.88), 18, 3)
 	if compact_objective_label != null:
 		compact_objective_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.96))
-		compact_objective_label.add_theme_font_size_override("font_size", 22)
+		compact_objective_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_LG)
 	if compact_progress_label != null:
 		compact_progress_label.add_theme_color_override("font_color", Color(0.23, 0.27, 0.32, 0.84))
-		compact_progress_label.add_theme_font_size_override("font_size", 18)
+		compact_progress_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_SM)
 	if compact_star_label != null:
 		compact_star_label.add_theme_color_override("font_color", _colors.UI_BADGE_GOLD)
-		compact_star_label.add_theme_font_size_override("font_size", 24)
+		compact_star_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_LG)
 	if star_feedback_label != null:
 		star_feedback_label.add_theme_color_override("font_color", Color.WHITE)
-		star_feedback_label.add_theme_font_size_override("font_size", 18)
+		star_feedback_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_SM)
 	if objective_hint_label != null:
 		objective_hint_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.86))
-		objective_hint_label.add_theme_font_size_override("font_size", 20)
+		objective_hint_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
 		if objective_label.text.strip_edges() != "":
 			_show_objective_hint(objective_label.text)
 
@@ -138,7 +139,7 @@ func _build_compact_layout() -> void:
 	chip_panel.offset_top = 18.0
 	chip_panel.offset_right = 300.0
 	chip_panel.offset_bottom = 74.0
-	chip_panel.custom_minimum_size = Vector2(276, 56)
+	chip_panel.custom_minimum_size = Vector2(276, _ui_tokens.CHIP_HEIGHT)
 	chip_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chip_panel.z_index = 3
 
@@ -149,27 +150,27 @@ func _build_compact_layout() -> void:
 	status_panel.offset_top = 86.0
 	status_panel.offset_right = 700.0
 	status_panel.offset_bottom = 168.0
-	status_panel.custom_minimum_size = Vector2(676, 82)
+	status_panel.custom_minimum_size = Vector2(676, _ui_tokens.STATUS_PANEL_HEIGHT)
 	status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status_panel.z_index = 2
 	add_child(status_panel)
 
 	var status_margin := MarginContainer.new()
-	status_margin.add_theme_constant_override("margin_left", 18)
-	status_margin.add_theme_constant_override("margin_top", 12)
-	status_margin.add_theme_constant_override("margin_right", 18)
-	status_margin.add_theme_constant_override("margin_bottom", 12)
+	status_margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_LG)
+	status_margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_SM)
+	status_margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_LG)
+	status_margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_SM)
 	status_panel.add_child(status_margin)
 
 	var status_content := VBoxContainer.new()
 	status_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	status_content.add_theme_constant_override("separation", 6)
+	status_content.add_theme_constant_override("separation", _ui_tokens.SPACE_2XS)
 	status_margin.add_child(status_content)
 
 	compact_objective_label = Label.new()
 	compact_objective_label.text = objective_label.text
 	compact_objective_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	compact_objective_label.custom_minimum_size = Vector2(0, 28)
+	compact_objective_label.custom_minimum_size = Vector2(0, _ui_tokens.FONT_BODY_XL)
 	compact_objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	compact_objective_label.clip_text = false
 	compact_objective_label.max_lines_visible = 2
@@ -178,7 +179,7 @@ func _build_compact_layout() -> void:
 	compact_progress_label = Label.new()
 	compact_progress_label.text = progress_label.text
 	compact_progress_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	compact_progress_label.custom_minimum_size = Vector2(0, 24)
+	compact_progress_label.custom_minimum_size = Vector2(0, _ui_tokens.FONT_BODY_LG)
 	compact_progress_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	compact_progress_label.clip_text = false
 	compact_progress_label.max_lines_visible = 2
@@ -191,21 +192,21 @@ func _build_compact_layout() -> void:
 	star_counter_panel.offset_top = 18.0
 	star_counter_panel.offset_right = -24.0
 	star_counter_panel.offset_bottom = 74.0
-	star_counter_panel.custom_minimum_size = Vector2(144, 56)
+	star_counter_panel.custom_minimum_size = Vector2(144, _ui_tokens.CHIP_HEIGHT)
 	star_counter_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	star_counter_panel.z_index = 3
 	add_child(star_counter_panel)
 
 	var star_margin := MarginContainer.new()
-	star_margin.add_theme_constant_override("margin_left", 16)
-	star_margin.add_theme_constant_override("margin_top", 8)
-	star_margin.add_theme_constant_override("margin_right", 16)
-	star_margin.add_theme_constant_override("margin_bottom", 8)
+	star_margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_MD)
+	star_margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_XS)
+	star_margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_MD)
+	star_margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_XS)
 	star_counter_panel.add_child(star_margin)
 
 	var star_row := HBoxContainer.new()
 	star_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	star_row.add_theme_constant_override("separation", 8)
+	star_row.add_theme_constant_override("separation", _ui_tokens.SPACE_XS)
 	star_margin.add_child(star_row)
 
 	compact_star_icon = TextureRect.new()
@@ -219,7 +220,7 @@ func _build_compact_layout() -> void:
 	compact_star_label = Label.new()
 	compact_star_label.text = star_label.text
 	compact_star_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	compact_star_label.add_theme_font_size_override("font_size", 24)
+	compact_star_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_LG)
 	compact_star_label.add_theme_color_override("font_color", _colors.UI_BADGE_GOLD)
 	star_row.add_child(compact_star_label)
 
@@ -231,16 +232,16 @@ func _build_compact_layout() -> void:
 	star_feedback_panel.offset_top = 86.0
 	star_feedback_panel.offset_right = -24.0
 	star_feedback_panel.offset_bottom = 138.0
-	star_feedback_panel.custom_minimum_size = Vector2(220, 52)
+	star_feedback_panel.custom_minimum_size = Vector2(220, _ui_tokens.STAR_PANEL_HEIGHT)
 	star_feedback_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	star_feedback_panel.z_index = 2
 	add_child(star_feedback_panel)
 
 	var star_feedback_margin := MarginContainer.new()
-	star_feedback_margin.add_theme_constant_override("margin_left", 16)
-	star_feedback_margin.add_theme_constant_override("margin_top", 8)
-	star_feedback_margin.add_theme_constant_override("margin_right", 16)
-	star_feedback_margin.add_theme_constant_override("margin_bottom", 8)
+	star_feedback_margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_MD)
+	star_feedback_margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_XS)
+	star_feedback_margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_MD)
+	star_feedback_margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_XS)
 	star_feedback_panel.add_child(star_feedback_margin)
 
 	star_feedback_label = Label.new()
@@ -267,20 +268,20 @@ func _build_compact_layout() -> void:
 	add_child(objective_hint_panel)
 
 	var hint_margin := MarginContainer.new()
-	hint_margin.add_theme_constant_override("margin_left", 16)
-	hint_margin.add_theme_constant_override("margin_top", 8)
-	hint_margin.add_theme_constant_override("margin_right", 16)
-	hint_margin.add_theme_constant_override("margin_bottom", 8)
+	hint_margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_MD)
+	hint_margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_XS)
+	hint_margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_MD)
+	hint_margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_XS)
 	objective_hint_panel.add_child(hint_margin)
 
 	objective_hint_label = Label.new()
 	objective_hint_label.text = objective_label.text
 	objective_hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	objective_hint_label.custom_minimum_size = Vector2(0, 28)
+	objective_hint_label.custom_minimum_size = Vector2(0, _ui_tokens.FONT_BODY_XL)
 	objective_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	objective_hint_label.clip_text = false
 	objective_hint_label.max_lines_visible = 2
-	objective_hint_label.add_theme_font_size_override("font_size", 20)
+	objective_hint_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
 	objective_hint_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.86))
 	hint_margin.add_child(objective_hint_label)
 

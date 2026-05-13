@@ -1,12 +1,14 @@
 class_name UIStyleFactory
 extends RefCounted
 
+const _tokens := preload("res://scripts/ui_tokens.gd")
+
 
 static func panel_style(
 	fill: Color,
 	border: Color,
 	radius: int,
-	border_width := 4,
+	border_width := _tokens.BORDER_BOLD,
 	shadow_color := Color(0, 0, 0, 0),
 	shadow_size := 0,
 	shadow_offset := Vector2.ZERO,

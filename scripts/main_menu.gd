@@ -8,12 +8,13 @@ const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 
 const TAU := 2.0 * PI
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
-const MIN_PRIMARY_BUTTON_HEIGHT := 104.0
-const MIN_TOUCH_SIZE := 88.0
+const MIN_PRIMARY_BUTTON_HEIGHT := _ui_tokens.TOUCH_TARGET_PRIMARY
+const MIN_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
 const SAFE_MARGIN := 28.0
 
 @onready var dream_intro_overlay: Node = $DreamIntroOverlay
@@ -216,13 +217,13 @@ func _build_menu_layout() -> void:
 	title_label = Label.new()
 	title_label.text = "Zaman Yolcuları"
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.add_theme_font_size_override("font_size", 66)
+	title_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_DISPLAY)
 	title_group.add_child(title_label)
 
 	subtitle_label = Label.new()
 	subtitle_label.text = "Bandırma'dan başlayan tarih yolculuğu"
 	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle_label.add_theme_font_size_override("font_size", 28)
+	subtitle_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	title_group.add_child(subtitle_label)
 
 	var middle_spacer := Control.new()
@@ -238,25 +239,25 @@ func _build_menu_layout() -> void:
 	start_button = Button.new()
 	start_button.text = "Oyuna Başla"
 	start_button.custom_minimum_size = Vector2(0, 112)
-	start_button.add_theme_font_size_override("font_size", 34)
+	start_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_MD)
 	button_stack.add_child(start_button)
 
 	continue_button = Button.new()
 	continue_button.text = "Devam Et"
 	continue_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
-	continue_button.add_theme_font_size_override("font_size", 28)
+	continue_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(continue_button)
 
 	settings_button = Button.new()
 	settings_button.text = "Ayarlar"
 	settings_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
-	settings_button.add_theme_font_size_override("font_size", 28)
+	settings_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(settings_button)
 
 	exit_button = Button.new()
 	exit_button.text = "Çıkış"
 	exit_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
-	exit_button.add_theme_font_size_override("font_size", 28)
+	exit_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(exit_button)
 
 func _build_settings_overlay() -> void:
@@ -279,10 +280,10 @@ func _build_settings_overlay() -> void:
 	dimmer.add_child(settings_panel)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 30)
-	margin.add_theme_constant_override("margin_top", 28)
-	margin.add_theme_constant_override("margin_right", 30)
-	margin.add_theme_constant_override("margin_bottom", 28)
+	margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_3XL)
+	margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_2XL)
+	margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_3XL)
+	margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_2XL)
 	settings_panel.add_child(margin)
 
 	settings_container = VBoxContainer.new()
@@ -293,19 +294,19 @@ func _build_settings_overlay() -> void:
 	var title := Label.new()
 	title.text = "Ayarlar ve Bilgi"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 36)
+	title.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_LG)
 	settings_container.add_child(title)
 
 	var body := Label.new()
 	body.text = "Bu prototipte çocuk dostu, reklamsız ve hikaye odaklı bir tarih yolculuğu deneyimi kuruluyor.\n\nBaşlat ile Bandırma yolculuğuna geçebilir, Devam Et ile aynı dünyayı yeniden açabilirsin."
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body.add_theme_font_size_override("font_size", 24)
+	body.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_LG)
 	settings_container.add_child(body)
 
 	settings_close_button = Button.new()
 	settings_close_button.text = "Geri Dön"
 	settings_close_button.custom_minimum_size = Vector2(0, MIN_TOUCH_SIZE)
-	settings_close_button.add_theme_font_size_override("font_size", 28)
+	settings_close_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	settings_container.add_child(settings_close_button)
 
 func _sync_responsive_layout() -> void:
