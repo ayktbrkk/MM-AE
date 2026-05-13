@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="MMAE"
+config/version="1.0.0"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
@@ -19,6 +20,7 @@ config/icon="res://icon.svg"
 
 AudioManager="*res://scripts/audio_manager.gd"
 SaveManager="*res://scripts/save_manager.gd"
+UIAnimation="*uid://cawfyydj325or"
 
 [display]
 
@@ -27,6 +29,10 @@ window/size/viewport_height=1920
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/godot_ui_animations/plugin.cfg")
 
 [physics]
 
