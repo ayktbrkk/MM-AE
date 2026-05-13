@@ -53,6 +53,12 @@ func _ready() -> void:
 	star_icon.texture = STAR_TEXTURE
 	_build_compact_layout()
 	_apply_styles()
+	sync_layout()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED and is_node_ready():
+		sync_layout()
 
 func set_title(value: String) -> void:
 	title_label.text = value
@@ -135,10 +141,10 @@ func _apply_styles() -> void:
 func _build_compact_layout() -> void:
 	top_panel.visible = false
 	chip_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	chip_panel.offset_left = 24.0
-	chip_panel.offset_top = 18.0
-	chip_panel.offset_right = 300.0
-	chip_panel.offset_bottom = 74.0
+	chip_panel.offset_left = _ui_tokens.SAFE_AREA_SIDE_MIN
+	chip_panel.offset_top = _ui_tokens.SAFE_AREA_TOP_MIN
+	chip_panel.offset_right = chip_panel.offset_left + _ui_tokens.HUD_CHIP_WIDTH
+	chip_panel.offset_bottom = chip_panel.offset_top + _ui_tokens.CHIP_HEIGHT
 	chip_panel.custom_minimum_size = Vector2(276, _ui_tokens.CHIP_HEIGHT)
 	chip_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chip_panel.z_index = 3
@@ -146,10 +152,10 @@ func _build_compact_layout() -> void:
 	status_panel = PanelContainer.new()
 	status_panel.name = "StatusPanel"
 	status_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	status_panel.offset_left = 24.0
-	status_panel.offset_top = 86.0
-	status_panel.offset_right = 700.0
-	status_panel.offset_bottom = 168.0
+	status_panel.offset_left = _ui_tokens.SAFE_AREA_SIDE_MIN
+	status_panel.offset_top = chip_panel.offset_bottom + _ui_tokens.SPACE_SM
+	status_panel.offset_right = status_panel.offset_left + _ui_tokens.HUD_STATUS_WIDTH_MAX
+	status_panel.offset_bottom = status_panel.offset_top + _ui_tokens.STATUS_PANEL_HEIGHT
 	status_panel.custom_minimum_size = Vector2(676, _ui_tokens.STATUS_PANEL_HEIGHT)
 	status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status_panel.z_index = 2
@@ -188,10 +194,10 @@ func _build_compact_layout() -> void:
 	star_counter_panel = PanelContainer.new()
 	star_counter_panel.name = "StarCounter"
 	star_counter_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	star_counter_panel.offset_left = -168.0
-	star_counter_panel.offset_top = 18.0
-	star_counter_panel.offset_right = -24.0
-	star_counter_panel.offset_bottom = 74.0
+	star_counter_panel.offset_left = -(_ui_tokens.HUD_STAR_WIDTH + _ui_tokens.SAFE_AREA_SIDE_MIN)
+	star_counter_panel.offset_top = chip_panel.offset_top
+	star_counter_panel.offset_right = -_ui_tokens.SAFE_AREA_SIDE_MIN
+	star_counter_panel.offset_bottom = star_counter_panel.offset_top + _ui_tokens.CHIP_HEIGHT
 	star_counter_panel.custom_minimum_size = Vector2(144, _ui_tokens.CHIP_HEIGHT)
 	star_counter_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	star_counter_panel.z_index = 3
@@ -228,10 +234,10 @@ func _build_compact_layout() -> void:
 	star_feedback_panel.name = "StarFeedback"
 	star_feedback_panel.visible = false
 	star_feedback_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	star_feedback_panel.offset_left = -244.0
-	star_feedback_panel.offset_top = 86.0
-	star_feedback_panel.offset_right = -24.0
-	star_feedback_panel.offset_bottom = 138.0
+	star_feedback_panel.offset_left = -(_ui_tokens.HUD_FEEDBACK_WIDTH + _ui_tokens.SAFE_AREA_SIDE_MIN)
+	star_feedback_panel.offset_top = status_panel.offset_top
+	star_feedback_panel.offset_right = -_ui_tokens.SAFE_AREA_SIDE_MIN
+	star_feedback_panel.offset_bottom = star_feedback_panel.offset_top + _ui_tokens.STAR_PANEL_HEIGHT
 	star_feedback_panel.custom_minimum_size = Vector2(220, _ui_tokens.STAR_PANEL_HEIGHT)
 	star_feedback_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	star_feedback_panel.z_index = 2
@@ -258,10 +264,10 @@ func _build_compact_layout() -> void:
 	objective_hint_panel = PanelContainer.new()
 	objective_hint_panel.name = "ObjectiveHint"
 	objective_hint_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	objective_hint_panel.offset_left = 24.0
-	objective_hint_panel.offset_top = 178.0
-	objective_hint_panel.offset_right = 700.0
-	objective_hint_panel.offset_bottom = 238.0
+	objective_hint_panel.offset_left = _ui_tokens.SAFE_AREA_SIDE_MIN
+	objective_hint_panel.offset_top = status_panel.offset_bottom + _ui_tokens.SPACE_SM
+	objective_hint_panel.offset_right = objective_hint_panel.offset_left + _ui_tokens.HUD_STATUS_WIDTH_MAX
+	objective_hint_panel.offset_bottom = objective_hint_panel.offset_top + _ui_tokens.HUD_HINT_HEIGHT
 	objective_hint_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	objective_hint_panel.visible = false
 	objective_hint_panel.z_index = 1
@@ -290,6 +296,42 @@ func _build_compact_layout() -> void:
 	objective_hint_timer.wait_time = 3.8
 	objective_hint_timer.timeout.connect(_on_objective_hint_timeout)
 	add_child(objective_hint_timer)
+
+
+func sync_layout() -> void:
+	var viewport_size := get_viewport_rect().size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+	var side_margin := maxf(_ui_tokens.SAFE_AREA_SIDE_MIN, viewport_size.x * _ui_tokens.SAFE_AREA_SIDE_RATIO)
+	var top_margin := maxf(_ui_tokens.SAFE_AREA_TOP_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_TOP_RATIO)
+	var chip_width := maxf(220.0, minf(_ui_tokens.HUD_CHIP_WIDTH, viewport_size.x - (side_margin * 2.0) - _ui_tokens.HUD_STAR_WIDTH - _ui_tokens.SPACE_LG))
+	var status_width := maxf(320.0, minf(_ui_tokens.HUD_STATUS_WIDTH_MAX, viewport_size.x - (side_margin * 2.0) - _ui_tokens.HUD_STAR_WIDTH - _ui_tokens.SPACE_LG))
+	var chip_top := top_margin - _ui_tokens.SPACE_XS
+
+	chip_panel.offset_left = side_margin
+	chip_panel.offset_top = chip_top
+	chip_panel.offset_right = chip_panel.offset_left + chip_width
+	chip_panel.offset_bottom = chip_panel.offset_top + _ui_tokens.CHIP_HEIGHT
+
+	star_counter_panel.offset_left = -(side_margin + _ui_tokens.HUD_STAR_WIDTH)
+	star_counter_panel.offset_top = chip_top
+	star_counter_panel.offset_right = -side_margin
+	star_counter_panel.offset_bottom = star_counter_panel.offset_top + _ui_tokens.CHIP_HEIGHT
+
+	status_panel.offset_left = side_margin
+	status_panel.offset_top = chip_panel.offset_bottom + _ui_tokens.SPACE_SM
+	status_panel.offset_right = status_panel.offset_left + status_width
+	status_panel.offset_bottom = status_panel.offset_top + _ui_tokens.STATUS_PANEL_HEIGHT
+
+	objective_hint_panel.offset_left = side_margin
+	objective_hint_panel.offset_top = status_panel.offset_bottom + _ui_tokens.SPACE_SM
+	objective_hint_panel.offset_right = objective_hint_panel.offset_left + status_width
+	objective_hint_panel.offset_bottom = objective_hint_panel.offset_top + _ui_tokens.HUD_HINT_HEIGHT
+
+	star_feedback_panel.offset_left = -(side_margin + _ui_tokens.HUD_FEEDBACK_WIDTH)
+	star_feedback_panel.offset_top = status_panel.offset_top
+	star_feedback_panel.offset_right = -side_margin
+	star_feedback_panel.offset_bottom = star_feedback_panel.offset_top + _ui_tokens.STAR_PANEL_HEIGHT
 
 func _show_objective_hint(value: String) -> void:
 	if objective_hint_panel == null or objective_hint_label == null:

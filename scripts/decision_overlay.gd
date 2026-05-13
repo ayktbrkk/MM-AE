@@ -177,6 +177,14 @@ func present(config: Dictionary) -> void:
 	tween.tween_property(eda_card, "modulate:a", 1.0, 0.10)
 	tween.parallel().tween_property(eda_card, "position:y", 0.0, 0.14)
 
+
+func show_overlay(config: Dictionary = {}) -> void:
+	present(config)
+
+
+func hide_overlay() -> void:
+	visible = false
+
 func dismiss() -> void:
 	if not visible:
 		return

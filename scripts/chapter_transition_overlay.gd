@@ -4,6 +4,7 @@ signal transition_finished
 
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
+const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 
 @onready var _colors := preload("res://scripts/colors.gd")
 
@@ -16,10 +17,12 @@ const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 @onready var panel: PanelContainer = $Center/TransitionPanel
 @onready var chapter_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/ChapterLabel
 @onready var subtitle_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/SubTitle
+@onready var progress_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/ProgressLabel
 
 const TAU := 2.0 * PI
 var rift_shards: Array[Polygon2D] = []
 var _dream_mist_base_y: float
+var _transition_tween: Tween
 
 func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.CHAPTER_TRANSITION
@@ -30,6 +33,25 @@ func _ready() -> void:
 	_dream_mist_base_y = dream_mist.position.y
 	visible = false
 	_start_idle_animations()
+
+
+func _gui_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_skip_transition()
+		accept_event()
+	elif event is InputEventScreenTouch and event.pressed:
+		_skip_transition()
+		accept_event()
+
+
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel"):
+		_skip_transition()
+		get_viewport().set_input_as_handled()
 
 func _start_idle_animations() -> void:
 	# Dream mist drift — sin(elapsed * 1.4), periyot 2*PI/1.4
@@ -66,9 +88,10 @@ func _animate_rift(v: float) -> void:
 		)
 		shard.rotation = sin(v + phase) * 0.12
 
-func present(chapter: String, subtitle: String) -> void:
+func present(chapter: String, subtitle: String, progress_text := "Sahne hazırlanıyor...") -> void:
 	chapter_label.text = chapter
 	subtitle_label.text = subtitle
+	progress_label.text = progress_text
 	visible = true
 	backdrop.color = Color(0.08, 0.10, 0.16, 0.0)
 	dream_mist.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.0)
@@ -81,7 +104,9 @@ func present(chapter: String, subtitle: String) -> void:
 	panel.modulate = Color(1, 1, 1, 0.0)
 	panel.scale = Vector2(0.95, 0.95)
 	panel.position.y = 18.0
-	var tween := create_tween()
+	progress_label.modulate = Color(1, 1, 1, 0.0)
+	_transition_tween = _overlay_tween_helper.replace(self, _transition_tween, Callable(self, "_clear_transition_tween"))
+	var tween := _transition_tween
 	tween.tween_property(backdrop, "color:a", 0.76, 0.20)
 	tween.parallel().tween_property(dream_mist, "color:a", 0.18, 0.26)
 	tween.parallel().tween_property(route_line, "color:a", 0.55, 0.24)
@@ -90,6 +115,7 @@ func present(chapter: String, subtitle: String) -> void:
 	tween.parallel().tween_property(panel, "modulate:a", 1.0, 0.16)
 	tween.parallel().tween_property(panel, "scale", Vector2.ONE, 0.18)
 	tween.parallel().tween_property(panel, "position:y", 0.0, 0.18)
+	tween.parallel().tween_property(progress_label, "modulate:a", 1.0, 0.20)
 	tween.tween_property(route_dot_a, "color:a", 0.85, 0.10)
 	tween.parallel().tween_property(route_dot_a, "scale", Vector2.ONE, 0.12)
 	tween.tween_property(route_dot_b, "color:a", 0.85, 0.10)
@@ -107,9 +133,33 @@ func present(chapter: String, subtitle: String) -> void:
 		tween.parallel().tween_property(shard, "color:a", 0.0, 0.18)
 	tween.tween_callback(Callable(self, "_finish"))
 
+
+func show_overlay(config: Dictionary = {}) -> void:
+	present(
+		String(config.get("chapter", "")),
+		String(config.get("subtitle", "")),
+		String(config.get("progress_text", "Sahne hazırlanıyor..."))
+	)
+
+
+func hide_overlay() -> void:
+	_transition_tween = _overlay_tween_helper.cancel(_transition_tween)
+	visible = false
+
 func _finish() -> void:
 	visible = false
 	transition_finished.emit()
+
+
+func _skip_transition() -> void:
+	if not visible:
+		return
+	_transition_tween = _overlay_tween_helper.cancel(_transition_tween)
+	_finish()
+
+
+func _clear_transition_tween() -> void:
+	_transition_tween = null
 
 func _build_rift_fx() -> void:
 	var centers := [
@@ -143,3 +193,5 @@ func _apply_styles() -> void:
 	)
 	chapter_label.add_theme_color_override("font_color", _colors.POP_CRIMSON)
 	subtitle_label.add_theme_color_override("font_color", Color(0.30, 0.32, 0.40))
+	progress_label.add_theme_color_override("font_color", Color(0.10, 0.32, 0.42, 0.78))
+	progress_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)

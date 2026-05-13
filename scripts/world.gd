@@ -70,26 +70,11 @@ const _questions := preload("res://assets/data/questions.gd")
 @onready var foreground_props: Node2D = $ForegroundProps
 @onready var player: Node2D = $Player
 @onready var companion: Node2D = $Companion
-@onready var character_panel: PanelContainer = $CanvasLayer/HUD/CharacterPanel
-@onready var interact_button: Button = $CanvasLayer/HUD/InteractButton
-@onready var dialogue_continue: Button = $CanvasLayer/HUD/DialoguePanel/DialogueMargin/DialogueContent/DialogueContinue
-@onready var dialogue_panel: PanelContainer = $CanvasLayer/HUD/DialoguePanel
-
-# Karakter paneli alt bileşenleri (world_wave.gd _world üzerinden erişir)
-@onready var character_title: Label = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/CharacterTitle
-@onready var character_text: Label = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/CharacterText
-@onready var arda_button: Button = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/ArdaButton
-@onready var eda_button: Button = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/EdaButton
 
 # Yeni modüller (programatik olarak _ready()'de eklenecek)
 var _player_mod: Node
 var _ui_mod: Node
 var _zone_mod: Node
-
-# WorldWave modülünün _world üzerinden eriştiği state değişkenleri
-var selected_build_marker: Node2D = null
-var panel_mode: String = "character"
-
 
 # ---------------------------------------------------------------------------
 # _ready — ORCHESTRATOR KURULUMU
@@ -114,7 +99,7 @@ func _ready() -> void:
 	_state.increment_item_count("final_clues", 0)
 
 	# 2. Canvas katmanı
-	$CanvasLayer.layer = 10
+	$CanvasLayer.layer = OverlayManager.HUD_LAYER
 
 	# 3. Modülleri kur (preload + new + add_child + initialize)
 	_player_mod = WorldPlayer.new()
@@ -135,6 +120,7 @@ func _ready() -> void:
 	_ui_mod.build_minimap_hud()
 	_ui_mod.build_guidance_arrow()
 	_ui_mod.build_route_hud()
+	_ui_mod.sync_hud_layout()
 
 	# 5. Karakter görsel kurulum (Player modülü üzerinden)
 	_player_mod.build_character_choice_identity_row()
@@ -153,16 +139,18 @@ func _ready() -> void:
 	# 8. Oyun başlangıcı — karakter seçimi
 	_enter_requested_flow()
 
-	# 9. Touch boyutları
-	interact_button.custom_minimum_size = Vector2(104, 104)
-	dialogue_continue.custom_minimum_size = Vector2(88, 88)
-
-	# 10. Ses — placeholder BGM baslat (assets/audio/ bos oldugu surece procedural)
+	# 9. Ses — placeholder BGM baslat (assets/audio/ bos oldugu surece procedural)
 	AudioManager.play_bgm("BGM_EXPLORE")
 
-	# 11. Idle animasyonlarını başlat
+	# 10. Idle animasyonlarını başlat
 	_player_mod.start_idle_animations()
 	_ui_mod.start_idle_animations()
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
+
+
+func _on_viewport_size_changed() -> void:
+	if _ui_mod != null and _ui_mod.has_method("sync_hud_layout"):
+		_ui_mod.sync_hud_layout()
 
 
 func _enter_requested_flow() -> void:
@@ -187,15 +175,12 @@ func _restore_saved_game(save_data: Dictionary) -> bool:
 	_state.from_dict(save_data)
 	_player_mod.apply_hero_selection(_state.selected_character)
 	_ui_mod.panel_mode = "character"
-	panel_mode = "character"
 	_zone_mod.restore_saved_zone(_state.current_zone)
 	_restore_saved_positions(save_data)
 	_ui_mod.update_objective(_state.current_goal_text)
 	_ui_mod.update_progress()
 	_ui_mod.refresh_minimap_markers()
-	interact_button.visible = true
-	interact_button.disabled = false
-	character_panel.visible = false
+	_ui_mod.restore_world_hud_after_load()
 	return true
 
 
@@ -243,8 +228,7 @@ func _process(delta: float) -> void:
 # _physics_process — HAREKET FİZİĞİ
 # ---------------------------------------------------------------------------
 func _physics_process(delta: float) -> void:
-	if character_panel.visible or dialogue_panel.visible \
-		or _ui_mod.is_any_overlay_visible():
+	if _ui_mod.is_world_input_blocked():
 		return
 
 	_player_mod.move_player(delta)
@@ -262,21 +246,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			_ui_mod.close_dialogue()
 			get_viewport().set_input_as_handled()
 			return
-		var om: OverlayManager = _ui_mod.get_overlay_manager()
-		if om.is_visible(OverlayManager.OverlayType.EXIT_CONFIRM):
-			var exit_overlay: CanvasLayer = _ui_mod.get_overlay(OverlayManager.OverlayType.EXIT_CONFIRM)
-			exit_overlay.hide_overlay()
+		if _ui_mod.is_exit_confirm_visible():
+			_ui_mod.hide_exit_confirm()
 			get_viewport().set_input_as_handled()
 			return
-		elif not character_panel.visible and not dialogue_panel.visible \
-			and not _ui_mod.is_any_overlay_visible():
-			var exit_overlay: CanvasLayer = _ui_mod.get_overlay(OverlayManager.OverlayType.EXIT_CONFIRM)
-			exit_overlay.show_overlay()
+		elif not _ui_mod.is_world_input_blocked():
+			_ui_mod.show_exit_confirm()
 			get_viewport().set_input_as_handled()
 			return
 
-	if character_panel.visible or dialogue_panel.visible \
-		or _ui_mod.is_any_overlay_visible():
+	if _ui_mod.is_world_input_blocked():
 		return
 
 	_player_mod.handle_unhandled_input(event)
@@ -287,8 +266,11 @@ func _unhandled_input(event: InputEvent) -> void:
 # ---------------------------------------------------------------------------
 func _connect_ui() -> void:
 	"""UI buton ve overlay sinyallerini orchestrator seviyesine bağla."""
-	var arda_btn: Button = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/ArdaButton
-	var eda_btn: Button = $CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/EdaButton
+	var buttons: Array[Button] = _ui_mod.get_character_choice_buttons()
+	var arda_btn: Button = buttons[0]
+	var eda_btn: Button = buttons[1]
+	var interact_button: Button = _ui_mod.get_interact_button()
+	var dialogue_continue: Button = _ui_mod.get_dialogue_continue_button()
 
 	arda_btn.pressed.connect(_on_panel_button_pressed.bind("a"))
 	eda_btn.pressed.connect(_on_panel_button_pressed.bind("b"))
@@ -304,14 +286,8 @@ func _connect_ui() -> void:
 
 func _on_panel_button_pressed(choice: String) -> void:
 	"""Panel buton (karakter seçimi / destek kurma) routing.
-	
-	panel_mode (world_wave tarafından _world üzerinden yazılır) veya
-	_ui_mod.panel_mode (world_zone tarafından ui_mod üzerinden yazılır)
-	hangisi aktifse onu kullan.
 	"""
-	var active_mode: String = panel_mode
-	if active_mode == "character":
-		active_mode = _ui_mod.panel_mode
+	var active_mode: String = _ui_mod.panel_mode
 	if active_mode == "character":
 		_player_mod.choose_hero("eda" if choice == "b" else "arda")
 	elif active_mode == "support":
@@ -342,6 +318,7 @@ func _on_transition_finished() -> void:
 	   Diğer zone'lar kendi show_dialogue()'larını _setup_* içinde çağırır.
 	"""
 	_ui_mod.hide_overlay(OverlayManager.OverlayType.CHAPTER_TRANSITION)
+	_ui_mod.flush_post_transition_actions()
 	if _state.current_zone == "ship":
 		_zone_mod.trigger_event_chain()
 
@@ -387,35 +364,9 @@ func _finish_prototype() -> void:
 	_zone_mod.finish_prototype()
 
 
-# ---------------------------------------------------------------------------
-# WORLDWAVE BRIDGE FONKSİYONLARI
-# ---------------------------------------------------------------------------
-# world_wave.gd, _world (world.gd instance) üzerinden bu fonksiyonlara erişir.
-# R5 refactoring sonrası UI/ZONE modüllerine yönlendirme yapılır.
-
-func _show_dialogue(title: String, text: String, callback: Callable) -> void:
-	"""world_wave.gd köprüsü: _world._show_dialogue → _ui_mod.show_dialogue."""
-	_ui_mod.show_dialogue(title, text, callback)
-
-
-func _update_progress() -> void:
-	"""world_wave.gd köprüsü: _world._update_progress → _ui_mod.update_progress."""
-	_ui_mod.update_progress()
-
-
-func _refresh_minimap_markers() -> void:
-	"""world_wave.gd köprüsü: _world._refresh_minimap_markers → _ui_mod.refresh_minimap_markers."""
-	_ui_mod.refresh_minimap_markers()
-
-
 func _set_goal(kind: String, text: String) -> void:
 	"""world_wave.gd köprüsü: _world._set_goal → _zone_mod.set_goal."""
 	_zone_mod.set_goal(kind, text)
-
-
-func _spawn_reward_burst(center: Vector2, tint: Color, slot_prefix: String) -> void:
-	"""world_wave.gd köprüsü: _world._spawn_reward_burst → _ui_mod.spawn_reward_burst."""
-	_ui_mod.spawn_reward_burst(center, tint, slot_prefix)
 
 
 # ---------------------------------------------------------------------------

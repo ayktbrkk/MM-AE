@@ -4,6 +4,7 @@ signal continue_pressed
 
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
+const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
@@ -116,9 +117,7 @@ func _sparkle_rot_anim(v: float, sparkle: TextureRect, phase: float) -> void:
 	sparkle.rotation = sin(v + phase * 1.9) * 0.18
 
 func _stop_idle_animations() -> void:
-	for t in _idle_tweens:
-		if is_instance_valid(t):
-			t.kill()
+	_overlay_tween_helper.cancel_many(_idle_tweens)
 	_idle_tweens.clear()
 
 func present(config: Dictionary) -> void:
@@ -154,6 +153,10 @@ func present(config: Dictionary) -> void:
 	tween.parallel().tween_property(sparkle_b, "modulate:a", 0.58, 0.24)
 	tween.parallel().tween_property(sparkle_c, "modulate:a", 0.48, 0.26)
 	tween.finished.connect(_start_idle_animations)
+
+
+func show_overlay(config: Dictionary = {}) -> void:
+	present(config)
 
 func hide_overlay() -> void:
 	visible = false

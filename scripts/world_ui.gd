@@ -15,6 +15,7 @@ var _world: Node2D
 var panel_mode := "character"
 var current_dialogue_callback: Callable
 var _active_closeable_overlay := -1
+var _post_transition_actions: Array[Callable] = []
 
 # Minimap
 var minimap_panel: PanelContainer
@@ -56,10 +57,16 @@ const MIN_DIALOGUE_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
 
 # Overlay Manager
 var _overlay_manager: OverlayManager
+var _canvas_root: CanvasLayer
+var _overlay_host: Node
 var _hud_root: Control
 var _hud_bar: Node
 var _interact_button: Button
 var _character_panel: PanelContainer
+var _character_title: Label
+var _character_text: Label
+var _character_arda_button: Button
+var _character_eda_button: Button
 var _dialogue_panel: PanelContainer
 var _dialogue_continue_button: Button
 var _dialogue_overlay: Node
@@ -73,20 +80,31 @@ func initialize(world: Node2D) -> void:
 	_world = world
 	_cache_ui_references()
 	_apply_touch_target_defaults()
+	sync_hud_layout()
 	_setup_overlay_manager()
 
 
 func _cache_ui_references() -> void:
-	_hud_root = _world.get_node("CanvasLayer/HUD")
+	_canvas_root = _world.get_node("CanvasLayer")
+	_hud_root = _canvas_root.get_node("HUD")
 	_hud_bar = _hud_root.get_node("HudBar")
 	_interact_button = _hud_root.get_node("InteractButton")
 	_character_panel = _hud_root.get_node("CharacterPanel")
+	_character_title = _character_panel.get_node("CharacterMargin/CharacterContent/CharacterTitle")
+	_character_text = _character_panel.get_node("CharacterMargin/CharacterContent/CharacterText")
+	_character_arda_button = _character_panel.get_node("CharacterMargin/CharacterContent/ArdaButton")
+	_character_eda_button = _character_panel.get_node("CharacterMargin/CharacterContent/EdaButton")
 	_dialogue_panel = _hud_root.get_node("DialoguePanel")
 	_dialogue_continue_button = _dialogue_panel.get_node("DialogueMargin/DialogueContent/DialogueContinue")
 	_dialogue_overlay = _hud_root.get_node("DialogueOverlay")
 	_decision_overlay = _hud_root.get_node("DecisionOverlay")
 	_info_card_overlay = _hud_root.get_node("InfoCardOverlay")
 	_chapter_transition_overlay = _hud_root.get_node("ChapterTransitionOverlay")
+	_overlay_host = _canvas_root.get_node_or_null(OverlayManager.OVERLAY_HOST_NAME)
+	if _overlay_host == null:
+		_overlay_host = Node.new()
+		_overlay_host.name = OverlayManager.OVERLAY_HOST_NAME
+		_canvas_root.add_child(_overlay_host)
 
 
 func _apply_touch_target_defaults() -> void:
@@ -96,10 +114,49 @@ func _apply_touch_target_defaults() -> void:
 	_dialogue_continue_button.custom_minimum_size.y = maxf(_dialogue_continue_button.custom_minimum_size.y, MIN_DIALOGUE_TOUCH_SIZE)
 
 
+func sync_hud_layout() -> void:
+	if _world == null or _hud_root == null:
+		return
+	var viewport_size := _world.get_viewport_rect().size
+	var side_margin := maxf(_ui_tokens.SAFE_AREA_SIDE_MIN, viewport_size.x * _ui_tokens.SAFE_AREA_SIDE_RATIO)
+	var top_margin := maxf(_ui_tokens.SAFE_AREA_TOP_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_TOP_RATIO)
+	var bottom_margin := maxf(_ui_tokens.SAFE_AREA_BOTTOM_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_BOTTOM_RATIO)
+	_sync_world_panels(side_margin, top_margin, bottom_margin, viewport_size)
+	if _hud_bar != null and _hud_bar.has_method("sync_layout"):
+		_hud_bar.call("sync_layout")
+
+
+func _sync_world_panels(side_margin: float, top_margin: float, bottom_margin: float, viewport_size: Vector2) -> void:
+	var interact_height := maxf(_interact_button.custom_minimum_size.y, _ui_tokens.TOUCH_TARGET_PRIMARY)
+	_interact_button.offset_left = side_margin
+	_interact_button.offset_right = -side_margin
+	_interact_button.offset_bottom = -bottom_margin
+	_interact_button.offset_top = _interact_button.offset_bottom - interact_height
+
+	var dialogue_height := clampf(viewport_size.y * _ui_tokens.WORLD_DIALOGUE_HEIGHT_RATIO, _ui_tokens.WORLD_DIALOGUE_HEIGHT_MIN, _ui_tokens.WORLD_DIALOGUE_HEIGHT_MAX)
+	_dialogue_panel.offset_left = side_margin
+	_dialogue_panel.offset_right = -side_margin
+	_dialogue_panel.offset_bottom = _interact_button.offset_top - _ui_tokens.HUD_STACK_GAP
+	_dialogue_panel.offset_top = _dialogue_panel.offset_bottom - dialogue_height
+
+	var sidebar_top := maxf(_ui_tokens.WORLD_SIDEBAR_TOP_OFFSET, top_margin + _ui_tokens.WORLD_SIDEBAR_TOP_GAP)
+	if minimap_panel != null:
+		minimap_panel.offset_right = -side_margin
+		minimap_panel.offset_left = minimap_panel.offset_right - _ui_tokens.WORLD_MINIMAP_WIDTH
+		minimap_panel.offset_top = sidebar_top
+		minimap_panel.offset_bottom = minimap_panel.offset_top + _ui_tokens.WORLD_MINIMAP_HEIGHT
+	if route_panel != null:
+		route_panel.offset_left = side_margin
+		route_panel.offset_top = sidebar_top
+		route_panel.offset_right = route_panel.offset_left + _ui_tokens.WORLD_ROUTE_WIDTH
+		route_panel.offset_bottom = route_panel.offset_top + _ui_tokens.WORLD_ROUTE_HEIGHT
+
+
 func _setup_overlay_manager() -> void:
 	"""Overlay Manager'ı kur ve tüm overlay'leri kaydet."""
 	_overlay_manager = OverlayManager.new()
-	add_child(_overlay_manager)
+	_overlay_manager.name = "OverlayManager"
+	_overlay_host.add_child(_overlay_manager)
 
 	_overlay_manager.register_overlay(OverlayManager.OverlayType.DIALOGUE, _dialogue_overlay)
 	_overlay_manager.register_overlay(OverlayManager.OverlayType.DECISION, _decision_overlay)
@@ -117,12 +174,63 @@ func get_overlay_manager() -> OverlayManager:
 	return _overlay_manager
 
 
+func get_character_choice_buttons() -> Array[Button]:
+	return [_character_arda_button, _character_eda_button]
+
+
+func get_interact_button() -> Button:
+	return _interact_button
+
+
+func get_dialogue_continue_button() -> Button:
+	return _dialogue_continue_button
+
+
 func get_overlay(type) -> Node:
 	return _overlay_manager.get_overlay_node(type)
 
 
 func hide_overlay(type) -> void:
 	_overlay_manager.hide(type)
+
+
+func is_world_input_blocked() -> bool:
+	return _character_panel.visible or _dialogue_panel.visible or is_any_overlay_visible()
+
+
+func restore_world_hud_after_load() -> void:
+	panel_mode = "character"
+	_interact_button.visible = true
+	_interact_button.disabled = false
+	_character_panel.visible = false
+
+
+func show_support_panel(title: String, body: String, button_a_text: String, button_b_text: String) -> void:
+	panel_mode = "support"
+	_character_title.text = title
+	_character_text.text = body
+	_character_arda_button.text = button_a_text
+	_character_eda_button.text = button_b_text
+	_character_panel.visible = true
+	_interact_button.visible = false
+
+
+func hide_support_panel() -> void:
+	panel_mode = "character"
+	_character_panel.visible = false
+	_interact_button.visible = true
+
+
+func is_exit_confirm_visible() -> bool:
+	return _overlay_manager.is_visible(OverlayManager.OverlayType.EXIT_CONFIRM)
+
+
+func show_exit_confirm() -> void:
+	_overlay_manager.show(OverlayManager.OverlayType.EXIT_CONFIRM)
+
+
+func hide_exit_confirm() -> void:
+	_overlay_manager.hide(OverlayManager.OverlayType.EXIT_CONFIRM)
 
 
 func has_closeable_overlay() -> bool:
@@ -134,10 +242,15 @@ func has_closeable_overlay() -> bool:
 # ---------------------------------------------------------------------------
 
 func show_dialogue(title: String, text: String, callback: Callable, expression: String = "idle") -> void:
+	if not callback.is_valid() and _queue_after_transition(Callable(self, "_show_dialogue_now").bind(title, text, callback, expression)):
+		return
+	_show_dialogue_now(title, text, callback, expression)
+
+
+func _show_dialogue_now(title: String, text: String, callback: Callable, expression: String = "idle") -> void:
 	current_dialogue_callback = callback
 	_active_closeable_overlay = OverlayManager.OverlayType.DIALOGUE
-	_overlay_manager.show(OverlayManager.OverlayType.DIALOGUE)
-	_dialogue_overlay.present({
+	_overlay_manager.show(OverlayManager.OverlayType.DIALOGUE, {
 		"chapter": _current_chip_text(),
 		"speaker": title,
 		"text": text,
@@ -150,11 +263,16 @@ func show_dialogue(title: String, text: String, callback: Callable, expression: 
 
 
 func show_info_card(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
+	if _queue_after_transition(Callable(self, "_show_info_card_now").bind(title, text, reward_text, callback, card_kind)):
+		return
+	_show_info_card_now(title, text, reward_text, callback, card_kind)
+
+
+func _show_info_card_now(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
 	current_dialogue_callback = callback
 	_active_closeable_overlay = OverlayManager.OverlayType.INFO_CARD
 	panel_mode = "info_card"
-	_overlay_manager.show(OverlayManager.OverlayType.INFO_CARD)
-	_info_card_overlay.present({
+	_overlay_manager.show(OverlayManager.OverlayType.INFO_CARD, {
 		"tag_text": _info_tag_text(card_kind),
 		"title": title,
 		"text": text,
@@ -169,12 +287,18 @@ func show_info_card(title: String, text: String, reward_text: String, callback: 
 
 func show_decision(event_index: int, context: String) -> void:
 	"""Karar overlay'ini göster."""
+	if _queue_after_transition(Callable(self, "_show_decision_now").bind(event_index, context)):
+		return
+	_show_decision_now(event_index, context)
+
+
+func _show_decision_now(event_index: int, context: String) -> void:
+	"""Karar overlay'ini göster."""
 	var questions := preload("res://assets/data/questions.gd")
 	var event: Dictionary = questions.EVENTS[event_index]
 	_active_closeable_overlay = -1
 	panel_mode = "decision"
-	_overlay_manager.show(OverlayManager.OverlayType.DECISION)
-	_decision_overlay.present({
+	_overlay_manager.show(OverlayManager.OverlayType.DECISION, {
 		"context": context,
 		"chapter": event.get("chapter", "Karar Anı"),
 		"title": event.get("chapter", "Karar Anı") + " - Karar",
@@ -194,8 +318,12 @@ func close_dialogue() -> void:
 		_overlay_manager.hide(_active_closeable_overlay)
 	else:
 		_dialogue_panel.visible = false
-	_active_closeable_overlay = -1
-	_interact_button.disabled = false
+	var restored_overlay := _overlay_manager.get_active()
+	if restored_overlay == OverlayManager.OverlayType.DIALOGUE or restored_overlay == OverlayManager.OverlayType.INFO_CARD:
+		_active_closeable_overlay = restored_overlay
+	else:
+		_active_closeable_overlay = -1
+	_interact_button.disabled = _active_closeable_overlay >= 0
 	if current_dialogue_callback.is_valid():
 		var callback := current_dialogue_callback
 		current_dialogue_callback = Callable()
@@ -205,14 +333,34 @@ func close_dialogue() -> void:
 func show_chapter_transition(title: String, subtitle: String) -> void:
 	"""Bölüm geçiş overlay'ini göster."""
 	_active_closeable_overlay = -1
-	_overlay_manager.show(OverlayManager.OverlayType.CHAPTER_TRANSITION)
-	_chapter_transition_overlay.present(title, subtitle)
+	_overlay_manager.show(OverlayManager.OverlayType.CHAPTER_TRANSITION, {
+		"chapter": title,
+		"subtitle": subtitle,
+		"progress_text": _chapter_loading_text(title),
+	})
 	# Ses: bölüme göre bgm değiştir
 	AudioManager.play_bgm(_bgm_for_chapter(title))
 	# P1.3: Bölüm geçiş sesi
 	AudioManager.play_sfx("SFX_TRANSITION")
 	# P7: Bölüm geçişinde otomatik kaydet
 	_save_game()
+
+
+func flush_post_transition_actions() -> void:
+	if _post_transition_actions.is_empty():
+		return
+	var actions: Array[Callable] = _post_transition_actions.duplicate()
+	_post_transition_actions.clear()
+	for action in actions:
+		if action.is_valid():
+			action.call_deferred()
+
+
+func _queue_after_transition(action: Callable) -> bool:
+	if not _is_overlay_effectively_visible(OverlayManager.OverlayType.CHAPTER_TRANSITION):
+		return false
+	_post_transition_actions.append(action)
+	return true
 
 
 func _is_overlay_effectively_visible(type: int) -> bool:
@@ -365,6 +513,28 @@ func _bgm_for_chapter(chapter_title: String) -> String:
 			return "bgm_default"
 
 
+func _chapter_loading_text(chapter_title: String) -> String:
+	match chapter_title:
+		"Bandırma Vapuru":
+			return "Gemi ve rota hazırlanıyor..."
+		"Samsun Ruyasi":
+			return "Kıyı ve ilk hedefler beliriyor..."
+		"Havza Genelgesi":
+			return "Meydan ve çağrı noktaları hazırlanıyor..."
+		"Amasya Genelgesi":
+			return "Bildiri masası ve karar izi kuruluyor..."
+		"Kongreler":
+			return "Delegeler ve konuşma alanı yerleşiyor..."
+		"Ankara: Meclis ve İrade":
+			return "Meclis salonu ve rota çizgisi hazırlanıyor..."
+		"Sakarya ve Büyük Taarruz":
+			return "Cephe ve hedef hattı yükleniyor..."
+		"Final: Cumhuriyet":
+			return "Kutlama alanı ve son sahne hazırlanıyor..."
+		_:
+			return "Sahne hazırlanıyor..."
+
+
 # ---------------------------------------------------------------------------
 # MINIMAP
 # ---------------------------------------------------------------------------
@@ -421,6 +591,7 @@ func build_minimap_hud() -> void:
 	minimap_player_dot = _make_minimap_dot(Color(1.0, 1.0, 1.0, 0.96), 18.0)
 	minimap_marker_layer.add_child(minimap_player_dot)
 	refresh_minimap_markers()
+	sync_hud_layout()
 
 
 func _make_minimap_dot(color: Color, size_value: float) -> ColorRect:
@@ -668,6 +839,7 @@ func build_route_hud() -> void:
 		route_node_dots[area_key] = dot
 		route_node_labels[area_key] = label
 	update_route_hud()
+	sync_hud_layout()
 
 
 func _route_steps() -> Array:

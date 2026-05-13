@@ -4,6 +4,7 @@ class_name DreamIntroOverlay
 const TAU := 2.0 * PI
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
+const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 
 signal intro_finished
 
@@ -70,6 +71,10 @@ func present(title: String, body: String) -> void:
 	for shard in rift_shards:
 		tween.parallel().tween_property(shard, "color:a", 0.0, 0.18)
 	tween.tween_callback(_finish_intro)
+
+
+func show_overlay(config: Dictionary = {}) -> void:
+	present(String(config.get("title", "")), String(config.get("body", "")))
 
 func _start_idle_animations() -> void:
 	_stop_idle_animations()
@@ -147,9 +152,7 @@ func _tween_rift_scale() -> void:
 	_idle_tweens.append(t)
 
 func _stop_idle_animations() -> void:
-	for t in _idle_tweens:
-		if is_instance_valid(t):
-			t.kill()
+	_overlay_tween_helper.cancel_many(_idle_tweens)
 	_idle_tweens.clear()
 
 func hide_overlay() -> void:

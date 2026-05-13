@@ -32,7 +32,10 @@ enum OverlayType {
 # ---------------------------------------------------------------------------
 # SABİTLER
 # ---------------------------------------------------------------------------
+const HUD_LAYER: int = 10
 const LAYER_BASE: int = 50
+const LAYER_STEP: int = 10
+const OVERLAY_HOST_NAME := "UIOverlayHost"
 
 
 # ---------------------------------------------------------------------------
@@ -51,6 +54,8 @@ var _canvas_layers: Dictionary = {}     # OverlayType → CanvasLayer
 ## Overlay'i sisteme kaydeder, CanvasLayer'ını oluşturur ve reparent eder.
 func register_overlay(type: OverlayType, node: Node) -> void:
 	_overlay_nodes[type] = node
+	if node is Control:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_STOP
 
 	var canvas: CanvasLayer = _create_canvas_layer(type)
 	canvas.visible = false
@@ -72,6 +77,7 @@ func show(type: OverlayType, _data: Dictionary = {}) -> void:
 	if _active_overlay == type:
 		if _canvas_layers.has(type):
 			_canvas_layers[type].visible = true
+		_show_overlay_node(type, _data)
 		return
 
 	# Farklı bir overlay aktif — önce onu stack'e push'la ve gizle
@@ -85,11 +91,13 @@ func show(type: OverlayType, _data: Dictionary = {}) -> void:
 	_active_overlay = type
 	if _canvas_layers.has(type):
 		_canvas_layers[type].visible = true
+	_show_overlay_node(type, _data)
 
 
 ## Overlay'i gizler, stack'ten pop'la.
 ## Stack'te önceki overlay varsa onu geri gösterir.
 func hide(type: OverlayType) -> void:
+	_hide_overlay_node(type)
 	if _canvas_layers.has(type):
 		_canvas_layers[type].visible = false
 
@@ -119,6 +127,7 @@ func hide(type: OverlayType) -> void:
 func hide_all() -> void:
 	for type_key in _overlay_nodes.keys():
 		var overlay_type: OverlayType = type_key as OverlayType
+		_hide_overlay_node(overlay_type)
 		if _canvas_layers.has(overlay_type):
 			_canvas_layers[overlay_type].visible = false
 	_overlay_stack.clear()
@@ -151,12 +160,40 @@ func get_canvas_layer(type: OverlayType) -> CanvasLayer:
 	return null
 
 
+static func layer_for(type: OverlayType) -> int:
+	return LAYER_BASE + int(type) * LAYER_STEP
+
+
+static func canvas_name_for(type: OverlayType) -> String:
+	return "CanvasLayer_%d" % int(type)
+
+
 # ---------------------------------------------------------------------------
 # PRIVATE
 # ---------------------------------------------------------------------------
 
 func _create_canvas_layer(type: OverlayType) -> CanvasLayer:
 	var layer := CanvasLayer.new()
-	layer.layer = LAYER_BASE + int(type) * 10
-	layer.name = "CanvasLayer_%d" % int(type)
+	layer.layer = layer_for(type)
+	layer.name = canvas_name_for(type)
 	return layer
+
+
+func _show_overlay_node(type: OverlayType, data: Dictionary) -> void:
+	var node: Node = _overlay_nodes.get(type)
+	if node == null:
+		return
+	if node.has_method("show_overlay"):
+		node.call("show_overlay", data)
+	elif node is CanvasItem:
+		(node as CanvasItem).visible = true
+
+
+func _hide_overlay_node(type: OverlayType) -> void:
+	var node: Node = _overlay_nodes.get(type)
+	if node == null:
+		return
+	if node.has_method("hide_overlay"):
+		node.call("hide_overlay")
+	elif node is CanvasItem:
+		(node as CanvasItem).visible = false

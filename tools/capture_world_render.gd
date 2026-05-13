@@ -173,7 +173,9 @@ func _is_scene_ready(scene: Node, zone: String) -> bool:
 	var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
 	if dream_overlay != null and dream_overlay.visible:
 		return false
-	var chapter_transition := scene.get_node_or_null("WorldUI/OverlayManager/CanvasLayer_30/ChapterTransitionOverlay")
+	var chapter_transition := scene.get_node_or_null("CanvasLayer/UIOverlayHost/OverlayManager/CanvasLayer_30/ChapterTransitionOverlay")
+	if chapter_transition == null:
+		chapter_transition = scene.get_node_or_null("WorldUI/OverlayManager/CanvasLayer_30/ChapterTransitionOverlay")
 	if chapter_transition != null and chapter_transition.visible:
 		return false
 	if zone == "":

@@ -110,3 +110,9 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Yeni bölüm başlıyor"
 horizontal_alignment = 1
+
+[node name="ProgressLabel" type="Label" parent="Center/TransitionPanel/PanelMargin/PanelContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Sahne hazırlanıyor..."
+horizontal_alignment = 1

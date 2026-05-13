@@ -39,7 +39,7 @@ func _ready() -> void:
 # ---------------------------------------------------------------------------
 # GÖSTER / GİZLE
 # ---------------------------------------------------------------------------
-func show_overlay() -> void:
+func show_overlay(_config: Dictionary = {}) -> void:
 	visible = true
 	confirm_button.grab_focus()
 

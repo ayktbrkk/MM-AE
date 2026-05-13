@@ -13,6 +13,7 @@ signal loading_finished
 
 # Sabitler
 const TRANSITION_DURATION := 0.3
+const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 
 
 # Node referanslari
@@ -47,8 +48,7 @@ func present(target_scene: String) -> void:
 	_title_label.text = "Bandırma Yolculuğu"
 
 	# Fade-in animasyonu
-	_transition_tween = create_tween()
-	_transition_tween.finished.connect(_clear_transition_tween)
+	_transition_tween = _overlay_tween_helper.replace(self, _transition_tween, Callable(self, "_clear_transition_tween"))
 	_transition_tween.set_parallel(true)
 	_transition_tween.tween_property(_dimmer, "color", Color(0.0, 0.0, 0.0, 0.70), TRANSITION_DURATION)
 	_transition_tween.tween_property(_panel, "modulate", Color.WHITE, TRANSITION_DURATION)
@@ -57,17 +57,24 @@ func present(target_scene: String) -> void:
 	_transition_tween.tween_callback(Callable(self, "_start_loading"))
 
 
+func show_overlay(config: Dictionary = {}) -> void:
+	present(String(config.get("target_scene", "")))
+
+
 ## Yükleme ekranını kapatır.
 func dismiss() -> void:
 	_cancel_transition_tween()
-	_transition_tween = create_tween()
-	_transition_tween.finished.connect(_clear_transition_tween)
+	_transition_tween = _overlay_tween_helper.replace(self, _transition_tween, Callable(self, "_clear_transition_tween"))
 	_transition_tween.set_parallel(true)
 	_transition_tween.tween_property(_dimmer, "color", Color(0.0, 0.0, 0.0, 0.0), TRANSITION_DURATION)
 	_transition_tween.tween_property(_panel, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
 	_transition_tween.tween_property(_loading_spinner, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
 	_transition_tween.tween_property(_hint_label, "modulate", Color.TRANSPARENT, TRANSITION_DURATION)
 	_transition_tween.tween_callback(Callable(self, "hide"))
+
+
+func hide_overlay() -> void:
+	dismiss()
 
 
 # ---------------------------------------------------------------------------
@@ -109,8 +116,7 @@ func _simulate_progress() -> void:
 	Not: Threaded loading gelince ResourceLoader.load_threaded_request ile
 	gerçek progress takibi yapılacak."""
 	_cancel_progress_tween()
-	_progress_tween = create_tween()
-	_progress_tween.finished.connect(_clear_progress_tween)
+	_progress_tween = _overlay_tween_helper.replace(self, _progress_tween, Callable(self, "_clear_progress_tween"))
 	_progress_tween.set_parallel(false)
 	_progress_tween.tween_property(_progress_bar, "value", 0.3, 0.15)
 	_progress_tween.tween_property(_progress_bar, "value", 0.6, 0.20)
@@ -119,15 +125,11 @@ func _simulate_progress() -> void:
 
 
 func _cancel_transition_tween() -> void:
-	if _transition_tween != null:
-		_transition_tween.kill()
-		_transition_tween = null
+	_transition_tween = _overlay_tween_helper.cancel(_transition_tween)
 
 
 func _cancel_progress_tween() -> void:
-	if _progress_tween != null:
-		_progress_tween.kill()
-		_progress_tween = null
+	_progress_tween = _overlay_tween_helper.cancel(_progress_tween)
 
 
 func _clear_transition_tween() -> void:

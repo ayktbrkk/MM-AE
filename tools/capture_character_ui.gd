@@ -85,6 +85,9 @@ func _build_surface(surface: String) -> Node:
 		"decision":
 			var decision: Node = load("res://scenes/decision_overlay.tscn").instantiate()
 			return decision
+		"chapter_transition":
+			var chapter_transition: Node = load("res://scenes/chapter_transition_overlay.tscn").instantiate()
+			return chapter_transition
 		"choice":
 			return load("res://scenes/world.tscn").instantiate()
 		_:
@@ -144,6 +147,9 @@ func _finalize_surface(surface: String, scene: Node) -> void:
 					"arda_hint": "Merakli ve hizli",
 					"eda_hint": "Sakin ve planli"
 				})
+		"chapter_transition":
+			if scene.has_method("present"):
+				scene.call("present", "Ankara", "Meclis iradesi toplaniyor", "Sahne hazirlaniyor...")
 		"choice":
 			var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
 			if dream_overlay != null and dream_overlay is CanvasItem:

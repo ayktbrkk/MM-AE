@@ -15,7 +15,6 @@ const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 const MIN_PRIMARY_BUTTON_HEIGHT := _ui_tokens.TOUCH_TARGET_PRIMARY
 const MIN_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
-const SAFE_MARGIN := 28.0
 
 @onready var dream_intro_overlay: Node = $DreamIntroOverlay
 
@@ -312,11 +311,15 @@ func _build_settings_overlay() -> void:
 func _sync_responsive_layout() -> void:
 	var viewport_size := get_viewport_rect().size
 
-	var margin_x: float = max(SAFE_MARGIN, viewport_size.x * 0.045)
+	var margin_x: float = max(_ui_tokens.SAFE_AREA_SIDE_MIN, viewport_size.x * _ui_tokens.SAFE_AREA_SIDE_RATIO)
 	safe_area.offset_left = margin_x
 	safe_area.offset_right = -margin_x
-	safe_area.offset_top = max(28.0, viewport_size.y * 0.018)
-	safe_area.offset_bottom = -max(34.0, viewport_size.y * 0.022)
+	safe_area.offset_top = max(_ui_tokens.SAFE_AREA_TOP_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_TOP_RATIO)
+	safe_area.offset_bottom = -max(_ui_tokens.SAFE_AREA_BOTTOM_MIN, viewport_size.y * _ui_tokens.SAFE_AREA_BOTTOM_RATIO)
+
+	var compact_layout := viewport_size.x < 900.0
+	title_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_TITLE_XL if compact_layout else _ui_tokens.FONT_DISPLAY)
+	subtitle_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_XL if compact_layout else _ui_tokens.FONT_BODY_XL)
 
 	var front_y := viewport_size.y * 0.58
 	arda_sprite.size = Vector2(176, 218)

@@ -14,6 +14,7 @@ const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_
 const TAU := 2.0 * PI
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
+const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -151,8 +152,7 @@ func present(config: Dictionary) -> void:
 	panel.position.y = 18.0
 	panel.modulate = Color(1, 1, 1, 0.0)
 	body_label.visible_ratio = 0.0
-	if reveal_tween and reveal_tween.is_running():
-		reveal_tween.kill()
+	reveal_tween = _overlay_tween_helper.cancel(reveal_tween)
 	var tween := create_tween()
 	tween.tween_property(backdrop_soft, "color:a", 0.16, 0.16)
 	tween.parallel().tween_property(panel_glow, "color:a", 0.10, 0.20)
@@ -161,17 +161,21 @@ func present(config: Dictionary) -> void:
 	tween.parallel().tween_property(panel, "position:y", 0.0, 0.18)
 	tween.parallel().tween_property(left_glow, "scale", Vector2.ONE, 0.18)
 	tween.parallel().tween_property(right_glow, "scale", Vector2.ONE, 0.18)
-	reveal_tween = create_tween()
+	reveal_tween = _overlay_tween_helper.replace(self, reveal_tween)
 	var reveal_duration := clampf(float(body_label.text.length()) * 0.012, 0.28, 1.15)
 	reveal_tween.tween_property(body_label, "visible_ratio", 1.0, reveal_duration)
 
+
+func show_overlay(config: Dictionary = {}) -> void:
+	present(config)
+
 func hide_overlay() -> void:
+	reveal_tween = _overlay_tween_helper.cancel(reveal_tween)
 	visible = false
 
 func _advance_or_continue() -> void:
 	if body_label.visible_ratio < 0.98:
-		if reveal_tween and reveal_tween.is_running():
-			reveal_tween.kill()
+		reveal_tween = _overlay_tween_helper.cancel(reveal_tween)
 		body_label.visible_ratio = 1.0
 		return
 	continue_pressed.emit()

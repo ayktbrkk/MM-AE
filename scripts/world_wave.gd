@@ -14,6 +14,7 @@ signal wave_completed(wave_id: String)
 signal support_node_placed(node_type: String, position: Vector2)
 
 var _world: Node = null
+var _selected_build_marker: Node2D = null
 
 # Zone yapılandırması — DRY: Tüm zone-specific metin ve değerler tek merkezde
 const ZONE_CONFIG: Dictionary = {
@@ -136,6 +137,39 @@ func setup(world_ref: Node) -> void:
 	_world = world_ref
 
 
+func _get_ui_mod() -> WorldUI:
+	if _world == null:
+		return null
+	for child in _world.get_children():
+		if child is WorldUI:
+			return child
+	return null
+
+
+func _show_dialogue(title: String, text: String, callback: Callable) -> void:
+	var ui_mod := _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.show_dialogue(title, text, callback)
+
+
+func _update_progress() -> void:
+	var ui_mod := _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.update_progress()
+
+
+func _refresh_minimap_markers() -> void:
+	var ui_mod := _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.refresh_minimap_markers()
+
+
+func _spawn_reward_burst(center: Vector2, tint: Color, slot_prefix: String) -> void:
+	var ui_mod := _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.spawn_reward_burst(center, tint, slot_prefix)
+
+
 # ---------------------------------------------------------------------------
 # PUBLIC API — Support panel
 # ---------------------------------------------------------------------------
@@ -146,27 +180,21 @@ func show_support_panel(marker: Node2D) -> void:
 		return
 
 	if bool(marker.get_meta("built", false)):
-		_world._show_dialogue(
+		_show_dialogue(
 			"Destek Hazır",
 			"Bu noktaya zaten bir destek kuruldu. Başka bir noktayı güçlendirebilirsin.",
 			Callable()
 		)
 		return
 
-	_world.selected_build_marker = marker
-	_world.panel_mode = "support"
-	_world.character_title.text = String(marker.get_meta("title"))
+	_selected_build_marker = marker
 
 	var zone: String = _state.current_zone
 	var lp: int = _state.leadership_points
 	var cfg: Dictionary = _get_zone_config(zone)
-
-	_world.character_text.text = cfg.panel_text % lp
-	_world.arda_button.text = cfg.button_a
-	_world.eda_button.text = cfg.button_b
-
-	_world.character_panel.visible = true
-	_world.interact_button.visible = false
+	var ui_mod := _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.show_support_panel(String(marker.get_meta("title")), cfg.panel_text % lp, cfg.button_a, cfg.button_b)
 
 
 func build_support(choice: String) -> void:
@@ -174,22 +202,22 @@ func build_support(choice: String) -> void:
 	if _world == null:
 		return
 
-	_world.character_panel.visible = false
-	_world.interact_button.visible = true
-	_world.panel_mode = "character"
+	var ui_mod := _get_ui_mod()
+	if ui_mod != null:
+		ui_mod.hide_support_panel()
 
-	if _world.selected_build_marker == null:
+	if _selected_build_marker == null:
 		return
 
 	if _state.leadership_points <= 0:
-		_world._show_dialogue(
+		_show_dialogue(
 			"Puan Yetmedi",
 			"Bu prototip affedici: çevredeki Liderlik Notu veya Cesaret Rozeti gibi kaynakları toplayıp tekrar deneyebilirsin.",
 			Callable()
 		)
 		return
 
-	var marker: Node2D = _world.selected_build_marker
+	var marker: Node2D = _selected_build_marker
 	var zone: String = _state.current_zone
 	var cfg: Dictionary = _get_zone_config(zone)
 
@@ -207,11 +235,11 @@ func build_support(choice: String) -> void:
 	marker.modulate = Color(0.70, 1.0, 0.70, 1.0)
 
 	_add_built_support_visual(marker, support_name)
-	_world._spawn_reward_burst(marker.position, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.92), "reward.support")
-	_world.selected_build_marker = null
+	_spawn_reward_burst(marker.position, Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.92), "reward.support")
+	_selected_build_marker = null
 
-	_world._update_progress()
-	_world._refresh_minimap_markers()
+	_update_progress()
+	_refresh_minimap_markers()
 
 	support_node_placed.emit(support_name, marker.position)
 
@@ -221,7 +249,7 @@ func build_support(choice: String) -> void:
 
 	# ZONE_CONFIG'ten başarı diyalog metnini al
 	var dialogue_text: String = _success_text_for_zone(zone, support_name)
-	_world._show_dialogue("Destek Kuruldu", dialogue_text, Callable())
+	_show_dialogue("Destek Kuruldu", dialogue_text, Callable())
 
 
 # ---------------------------------------------------------------------------
@@ -237,15 +265,15 @@ func start_confusion_wave() -> void:
 		wave_started.emit("samsun")
 		if _state.built_supports >= _state.required_supports:
 			wave_completed.emit("samsun")
-			_world._show_dialogue(
+			_show_dialogue(
 				"Dalga Aşıldı",
 				"Gözlem noktaları ve bağlantı ağları sayesinde Samsun rüyasındaki ilk adımlar planlı ilerledi. Kararsızlık dalgası aşıldı: Havza rotası açılıyor.",
 				Callable(_world, "_enter_havza")
 			)
 		else:
 			_state.add_leadership(1)
-			_world._update_progress()
-			_world._show_dialogue(
+			_update_progress()
+			_show_dialogue(
 				"Dalga Çok Güçlü",
 				"Kararsızlık dalgası Milli İrade Merkezi'ni zorladı. +1 liderlik puanı kazandın. En az %d destek kurup yeniden dene." % _state.required_supports,
 				Callable()
@@ -254,15 +282,15 @@ func start_confusion_wave() -> void:
 		wave_started.emit("confusion")
 		if _state.built_supports >= _state.required_supports:
 			wave_completed.emit("confusion")
-			_world._show_dialogue(
+			_show_dialogue(
 				"Dalga Aşıldı",
 				"Destekler sayesinde kararsızlık dalgası aşıldı.",
 				Callable()
 			)
 		else:
 			_state.add_leadership(1)
-			_world._update_progress()
-			_world._show_dialogue(
+			_update_progress()
+			_show_dialogue(
 				"Dalga Çok Güçlü",
 				"Kararsızlık dalgası güçlü kaldı. +1 liderlik puanı aldın. En az %d destek kurmayı dene." % _state.required_supports,
 				Callable()
@@ -276,15 +304,15 @@ func start_havza_wave() -> void:
 
 	if _state.built_supports >= _state.required_supports:
 		wave_completed.emit("havza")
-		_world._show_dialogue(
+		_show_dialogue(
 			"Sessizlik Aşıldı",
 			"Meydan düzeni ve telgraf desteği sayesinde halk korkuya kapılmadan ortak ses çıkarabildi. Havza Genelgesi'nin örgütlü ruhu bu alanda hissedildi.",
 			Callable(_world, "_enter_amasya")
 		)
 	else:
 		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
+		_update_progress()
+		_show_dialogue(
 			"Sessizlik Güçlü Kaldı",
 			"Halkın sesi dağınık kaldı ama oyun bitmedi. +1 liderlik puanı aldın. Bir destek daha kurup sessizlik dalgasını yeniden dene.",
 			Callable()
@@ -298,15 +326,15 @@ func start_amasya_wave() -> void:
 
 	if _state.built_supports >= _state.required_supports:
 		wave_completed.emit("amasya")
-		_world._show_dialogue(
+		_show_dialogue(
 			"Tereddüt Aşıldı",
 			"Yazım masası ve temsilci halkası sayesinde ortak bildiri netleşti. Amasya'da milletin geleceğini yine milletin azim ve kararı belirler fikri güç kazandı.",
 			Callable(_world, "_enter_kongreler")
 		)
 	else:
 		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
+		_update_progress()
+		_show_dialogue(
 			"Tereddüt Sürüyor",
 			"Fikirler birleşmeye başladı ama ortak cümle henüz tam güçlenmedi. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
 			Callable()
@@ -320,15 +348,15 @@ func start_kongre_wave() -> void:
 
 	if _state.built_supports >= _state.required_supports:
 		wave_completed.emit("kongre")
-		_world._show_dialogue(
+		_show_dialogue(
 			"Dağınıklık Aşıldı",
 			"Delegasyon masası ve ortak hedef kürsüsü sayesinde farklı sesler tek amaçta birleşti. Kongrelerin birleştirici ruhu bu alanda güç kazandı.",
 			Callable(_world, "_enter_ankara")
 		)
 	else:
 		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
+		_update_progress()
+		_show_dialogue(
 			"Dağınıklık Sürüyor",
 			"Temsilciler aynı hedefe yaklaşsa da bağlar henüz tam güçlenmedi. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
 			Callable()
@@ -342,15 +370,15 @@ func start_ankara_wave() -> void:
 
 	if _state.built_supports >= _state.required_supports:
 		wave_completed.emit("ankara")
-		_world._show_dialogue(
+		_show_dialogue(
 			"İrade Güçlendi",
 			"Meclis düzeni ve telgraf ağı sayesinde milletin iradesi tek çatı altında güvenle toplandı. Ankara artık sonraki büyük mücadeleye hazır.",
 			Callable(_world, "_enter_sakarya")
 		)
 	else:
 		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
+		_update_progress()
+		_show_dialogue(
 			"İrade Henüz Tam Değil",
 			"Meclis iradesi kuruluyor ama henüz tam güçlenmedi. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
 			Callable()
@@ -364,15 +392,15 @@ func start_sakarya_wave() -> void:
 
 	if _state.built_supports >= _state.required_supports:
 		wave_completed.emit("sakarya")
-		_world._show_dialogue(
+		_show_dialogue(
 			"Cephe Dayandı",
 			"Savunma hattı ve ikmal ağı sayesinde cephe ayakta kaldı. Sakarya'nın direnci zaferi Cumhuriyet'in eşiğine taşıdı.",
 			Callable(_world, "_enter_final")
 		)
 	else:
 		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
+		_update_progress()
+		_show_dialogue(
 			"Cephe Zorlanıyor",
 			"Savunma sürüyor ama düzen henüz yeterli değil. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
 			Callable()
@@ -386,15 +414,15 @@ func start_final_wave() -> void:
 
 	if _state.built_supports >= _state.required_supports:
 		wave_completed.emit("final")
-		_world._show_dialogue(
+		_show_dialogue(
 			"Cumhuriyet Korundu",
 			"Kurulan kurumlar ve ortak gelecek vizyonu sayesinde Cumhuriyet'in kazanımları güvenle yarına taşındı.",
 			Callable(_world, "_finish_prototype")
 		)
 	else:
 		_state.add_leadership(1)
-		_world._update_progress()
-		_world._show_dialogue(
+		_update_progress()
+		_show_dialogue(
 			"Gelecek İçin Bir Adım Daha",
 			"Cumhuriyet'in temelleri güçlü, ama geleceği korumak için biraz daha hazırlık gerekiyor. +1 liderlik puanı aldın. Bir destek daha kurup yeniden dene.",
 			Callable()

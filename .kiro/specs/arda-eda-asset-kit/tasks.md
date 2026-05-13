@@ -145,9 +145,9 @@ Bu faz, mevcut asset ve flow düzeltmelerinin üstüne oyun içi UI'ı daha tuta
 
 ### Faz 1 — Overlay Mimarisi ve Katman Temizliği
 
-- [ ] 10. Overlay katmanlarını tek standartta topla
-  - [ ] 10.1 `DialogueOverlay`, `DecisionOverlay`, `InfoCardOverlay`, `ChapterTransitionOverlay`, `HudBar` için tek layer hiyerarşisi tanımla
-  - [ ] 10.2 `CanvasLayer/HUD` ve overlay node yerleşimini tutarlı hale getir
+- [x] 10. Overlay katmanlarını tek standartta topla
+  - [x] 10.1 `DialogueOverlay`, `DecisionOverlay`, `InfoCardOverlay`, `ChapterTransitionOverlay`, `HudBar` için tek layer hiyerarşisi tanımla
+  - [x] 10.2 `CanvasLayer/HUD` ve overlay node yerleşimini tutarlı hale getir
   - [x] 10.3 `scripts/world_ui.gd` içindeki overlay aç/kapat akışını `OverlayManager` merkezli sadeleştir
   - [x] 10.4 `current_overlay_kind` string dispatch yüzeyini azalt veya kaldır
 
@@ -159,10 +159,10 @@ Bu faz, mevcut asset ve flow düzeltmelerinin üstüne oyun içi UI'ı daha tuta
   - [x] 11.3 `DecisionOverlay` seçenek yüksekliklerini 9:16 portrait kullanımına göre normalize et
   - [x] 11.4 `InfoCardOverlay` için görünür bir kapat/geri aksiyonu ekle
 
-- [ ] 12. Responsive güvenli alan düzenlemesi yap
-  - [ ] 12.1 Ana menü, HUD ve overlay spacing değerlerini ortak safe-area sabitlerine bağla
-  - [ ] 12.2 Küçük ekranlarda taşan başlık ve chip alanlarını dengele
-  - [ ] 12.3 World HUD içinde alt ve üst bölgelerde sabit margin sistemi kur
+- [x] 12. Responsive güvenli alan düzenlemesi yap
+  - [x] 12.1 Ana menü, HUD ve overlay spacing değerlerini ortak safe-area sabitlerine bağla
+  - [x] 12.2 Küçük ekranlarda taşan başlık ve chip alanlarını dengele
+  - [x] 12.3 World HUD içinde alt ve üst bölgelerde sabit margin sistemi kur
 
 ### Faz 3 — HUD ve Geri Bildirim Sistemi
 
@@ -171,10 +171,10 @@ Bu faz, mevcut asset ve flow düzeltmelerinin üstüne oyun içi UI'ı daha tuta
   - [x] 13.2 Kaynak toplama ve doğru karar anlarında HUD micro-feedback göster
   - [x] 13.3 Bölgeye göre HUD vurgu renklerini `colors.gd` ve `world_ui.gd` üzerinden standartlaştır
 
-- [ ] 14. Loading ve geçiş yüzeylerini güçlendir
-  - [ ] 14.1 Bölüm geçişlerinde kısa loading durumu veya progress hissi ekle
-  - [ ] 14.2 Transition sırasında tıklanabilir alan kilidini merkezi hale getir
-  - [ ] 14.3 Zincirlenen overlay geçişlerinde skip/fast-forward davranışını belirle
+- [x] 14. Loading ve geçiş yüzeylerini güçlendir
+  - [x] 14.1 Bölüm geçişlerinde kısa loading durumu veya progress hissi ekle
+  - [x] 14.2 Transition sırasında tıklanabilir alan kilidini merkezi hale getir
+  - [x] 14.3 Zincirlenen overlay geçişlerinde skip/fast-forward davranışını belirle
 
 ### Faz 4 — Görsel Sistem ve Kod Sağlığı
 
@@ -187,14 +187,14 @@ Bu faz, mevcut asset ve flow düzeltmelerinin üstüne oyun içi UI'ı daha tuta
     - [x] 15.3.3 Kalan overlay/world yüzeylerinde sabit boyut ve spacing sayılarını token sistemine tamamla
 
 - [ ] 16. UI kodunu daha küçük modüllere ayır
-  - [ ] 16.1 `world.gd` içindeki kalan UI sorumluluklarını `world_ui.gd` içine tamamla
-  - [ ] 16.2 Overlay scene script'lerinde ortak davranışları helper katmana taşı
-  - [ ] 16.3 UI için tek giriş noktası ve tek görünürlük sözleşmesi tanımla
+  - [x] 16.1 `world.gd` içindeki kalan UI sorumluluklarını `world_ui.gd` içine tamamla
+  - [x] 16.2 Overlay scene script'lerinde ortak davranışları helper katmana taşı
+  - [x] 16.3 UI için tek giriş noktası ve tek görünürlük sözleşmesi tanımla
 
 ### Faz 5 — Doğrulama ve Kabul Kriterleri
 
 - [ ] 17. UI doğrulama checklist'i oluştur ve uygula
-  - [ ] 17.1 Ana menü, diyalog, karar, bilgi kartı ve chapter transition için ekran görüntüsü checklist'i çıkar
-  - [ ] 17.2 1080x1920 portrait üzerinde hit area, crop ve overlap kontrolü yap
-  - [ ] 17.3 Geri tuşu, overlay stack ve save/continue akışını UI regressions açısından tekrar doğrula
+  - [x] 17.1 Ana menü, diyalog, karar, bilgi kartı ve chapter transition için ekran görüntüsü checklist'i çıkar
+  - [x] 17.2 1080x1920 portrait üzerinde hit area, crop ve overlap kontrolü yap
+  - [x] 17.3 Geri tuşu, overlay stack ve save/continue akışını UI regressions açısından tekrar doğrula
   - [x] 17.4 Gerekirse `tools/capture_character_ui.gd` ve ilgili capture script'lerini UI regression yüzeyi olarak genişlet
