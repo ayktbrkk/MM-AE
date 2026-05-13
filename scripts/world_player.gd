@@ -13,6 +13,7 @@
 class_name WorldPlayer
 extends Node
 
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const PLAYER_SPEED := 430.0
 const INTERACT_DISTANCE := 150.0
 
@@ -107,9 +108,9 @@ func build_character_choice_identity_row() -> void:
 
 	var row := HBoxContainer.new()
 	row.name = "CharacterIdentityRow"
-	row.custom_minimum_size = Vector2(0, 220)
+	row.custom_minimum_size = Vector2(0, _ui_tokens.CHARACTER_IDENTITY_ROW_HEIGHT)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_theme_constant_override("separation", 24)
+	row.add_theme_constant_override("separation", _ui_tokens.SPACE_XL)
 	character_content.add_child(row)
 
 	var arda_btn: Button = _world.get_node("CanvasLayer/HUD/CharacterPanel/CharacterMargin/CharacterContent/ArdaButton")
@@ -123,40 +124,40 @@ func _create_character_identity_card(card_name: String, character_name: String, 
 	"""Tek bir karakter kimlik kartı oluştur."""
 	var card := PanelContainer.new()
 	card.name = card_name
-	card.custom_minimum_size = Vector2(0, 220)
+	card.custom_minimum_size = Vector2(0, _ui_tokens.CHARACTER_IDENTITY_ROW_HEIGHT)
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.set_meta("identity_accent", accent)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_SM_PLUS)
+	margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_SM)
+	margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_SM_PLUS)
+	margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_SM)
 	card.add_child(margin)
 
 	var column := VBoxContainer.new()
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 6)
+	column.add_theme_constant_override("separation", _ui_tokens.SPACE_2XS)
 	margin.add_child(column)
 
 	var circle := PanelContainer.new()
 	circle.name = "IdentityCircle"
-	circle.custom_minimum_size = Vector2(156, 156)
+	circle.custom_minimum_size = Vector2(_ui_tokens.CHARACTER_IDENTITY_CIRCLE_SIZE, _ui_tokens.CHARACTER_IDENTITY_CIRCLE_SIZE)
 	circle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	circle.set_meta("identity_accent", accent)
 	column.add_child(circle)
 
 	var circle_margin := MarginContainer.new()
-	circle_margin.add_theme_constant_override("margin_left", 8)
-	circle_margin.add_theme_constant_override("margin_top", 8)
-	circle_margin.add_theme_constant_override("margin_right", 8)
-	circle_margin.add_theme_constant_override("margin_bottom", 8)
+	circle_margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_XS)
+	circle_margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_XS)
+	circle_margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_XS)
+	circle_margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_XS)
 	circle.add_child(circle_margin)
 
 	var portrait := TextureRect.new()
 	portrait.name = "Portrait"
 	portrait.texture = texture
-	portrait.custom_minimum_size = Vector2(140, 140)
+	portrait.custom_minimum_size = Vector2(_ui_tokens.CHARACTER_IDENTITY_PORTRAIT_SIZE, _ui_tokens.CHARACTER_IDENTITY_PORTRAIT_SIZE)
 	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.set_meta("character_choice_portrait", true)
@@ -166,7 +167,7 @@ func _create_character_identity_card(card_name: String, character_name: String, 
 	name_label.name = "Name"
 	name_label.text = character_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 24)
+	name_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_LG)
 	name_label.add_theme_color_override("font_color", Color(0.13, 0.15, 0.20, 0.96))
 	column.add_child(name_label)
 
@@ -174,7 +175,7 @@ func _create_character_identity_card(card_name: String, character_name: String, 
 	descriptor_label.name = "Descriptor"
 	descriptor_label.text = descriptor
 	descriptor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	descriptor_label.add_theme_font_size_override("font_size", 20)
+	descriptor_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
 	descriptor_label.add_theme_color_override("font_color", Color(0.20, 0.26, 0.30, 0.78))
 	column.add_child(descriptor_label)
 
@@ -470,15 +471,15 @@ func _build_companion_reaction_label() -> void:
 	companion_reaction_label = Label.new()
 	companion_reaction_label.name = "CompanionReaction"
 	companion_reaction_label.position = Vector2(-185, -150)
-	companion_reaction_label.custom_minimum_size = Vector2(370, 86)
+	companion_reaction_label.custom_minimum_size = _ui_tokens.COMPANION_REACTION_SIZE
 	companion_reaction_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	companion_reaction_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	companion_reaction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	companion_reaction_label.add_theme_font_size_override("font_size", 21)
+	companion_reaction_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_NAV)
 	companion_reaction_label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.78, 0.94))
 	companion_reaction_label.add_theme_color_override("font_shadow_color", Color(0.03, 0.05, 0.08, 0.62))
-	companion_reaction_label.add_theme_constant_override("shadow_offset_x", 2)
-	companion_reaction_label.add_theme_constant_override("shadow_offset_y", 2)
+	companion_reaction_label.add_theme_constant_override("shadow_offset_x", _ui_tokens.SHADOW_OFFSET_TIGHT.x)
+	companion_reaction_label.add_theme_constant_override("shadow_offset_y", _ui_tokens.SHADOW_OFFSET_TIGHT.y)
 	companion_reaction_label.z_index = 35
 	companion_reaction_label.visible = false
 	companion_node.add_child(companion_reaction_label)

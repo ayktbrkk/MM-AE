@@ -3,6 +3,7 @@ class_name DreamIntroOverlay
 
 const TAU := 2.0 * PI
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 signal intro_finished
 
@@ -165,12 +166,12 @@ func _sync_layout() -> void:
 	center_wrap.offset_top = 0.0
 	center_wrap.offset_right = 0.0
 	center_wrap.offset_bottom = 0.0
-	var panel_width: float = min(viewport_size.x - 88.0, 760.0)
+	var panel_width: float = min(viewport_size.x - _ui_tokens.DREAM_PANEL_SIDE_MARGIN, _ui_tokens.DREAM_PANEL_MAX_WIDTH)
 	panel.custom_minimum_size = Vector2(panel_width, 0.0)
 	glow.offset_left = -panel_width * 0.60
 	glow.offset_right = panel_width * 0.60
-	glow.offset_top = -min(viewport_size.y * 0.24, 420.0)
-	glow.offset_bottom = min(viewport_size.y * 0.24, 420.0)
+	glow.offset_top = -min(viewport_size.y * 0.24, _ui_tokens.DREAM_GLOW_MAX_HEIGHT)
+	glow.offset_bottom = min(viewport_size.y * 0.24, _ui_tokens.DREAM_GLOW_MAX_HEIGHT)
 
 func _finish_intro() -> void:
 	hide_overlay()
@@ -205,7 +206,7 @@ func _build_rift_fx() -> void:
 func _apply_styles() -> void:
 	panel.add_theme_stylebox_override(
 		"panel",
-		_ui_styles.panel_style(Color(0.97, 0.94, 0.86, 0.95), _colors.POP_DEEP_TURQUOISE, 30, 4, Color(0.03, 0.05, 0.08, 0.30), 12, Vector2(0, 8))
+		_ui_styles.panel_style(Color(0.97, 0.94, 0.86, 0.95), _colors.POP_DEEP_TURQUOISE, _ui_tokens.RADIUS_3XL, _ui_tokens.BORDER_BOLD, Color(0.03, 0.05, 0.08, 0.30), _ui_tokens.SHADOW_SIZE_XL, _ui_tokens.SHADOW_OFFSET_XL)
 	)
 	title_label.add_theme_color_override("font_color", _colors.POP_CRIMSON)
 	body_label.add_theme_color_override("font_color", Color(0.19, 0.21, 0.28))

@@ -58,12 +58,18 @@ var _bgm_player: AudioStreamPlayer
 var _sfx_players: Array[AudioStreamPlayer] = []
 var _current_bgm_name: String = ""
 var _bgm_fade_tween: Tween
+var _audio_disabled := false
 
 # Placeholder ses cache'i — procedural sesler burada saklanir
 var _placeholder_sounds: Dictionary = {}
 
 
 func _ready() -> void:
+	_audio_disabled = DisplayServer.get_name() == "headless"
+	if _audio_disabled:
+		print("[AudioManager] Headless doğrulamada ses kurulumu atlandı.")
+		return
+
 	# Ses bus'larini olustur (Editor'de otomatik olusmadiysa)
 	_ensure_audio_buses()
 
@@ -93,6 +99,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if _audio_disabled:
+		return
 	_cancel_bgm_fade()
 	if is_instance_valid(_bgm_player):
 		_bgm_player.stop()
@@ -135,6 +143,9 @@ func _ensure_audio_buses() -> void:
 # ---------------------------------------------------------------------------
 func set_bgm_volume(value: float) -> void:
 	"""BGM ses seviyesini 0.0-1.0 arasinda ayarla."""
+	if _audio_disabled:
+		bgm_volume = clampf(value, 0.0, 1.0)
+		return
 	bgm_volume = value
 
 
@@ -145,6 +156,9 @@ func get_bgm_volume() -> float:
 
 func set_sfx_volume(value: float) -> void:
 	"""SFX ses seviyesini 0.0-1.0 arasinda ayarla."""
+	if _audio_disabled:
+		sfx_volume = clampf(value, 0.0, 1.0)
+		return
 	sfx_volume = value
 
 
@@ -158,6 +172,8 @@ func get_sfx_volume() -> float:
 # ---------------------------------------------------------------------------
 func play_bgm(bgm_name: String, fade_in: float = 0.5) -> void:
 	"""BGM'yi calistir. Stream bulunamazsa procedural placeholder kullanir."""
+	if _audio_disabled:
+		return
 	if bgm_name == _current_bgm_name and _bgm_player.playing:
 		return
 
@@ -179,6 +195,8 @@ func play_bgm(bgm_name: String, fade_in: float = 0.5) -> void:
 
 func stop_bgm(fade_out: float = 0.5) -> void:
 	"""BGM'yi durdur. fade_out saniyede sessizlesir."""
+	if _audio_disabled:
+		return
 	if not _bgm_player.playing:
 		return
 
@@ -194,6 +212,8 @@ func stop_bgm(fade_out: float = 0.5) -> void:
 
 
 func is_bgm_playing() -> bool:
+	if _audio_disabled:
+		return false
 	return _bgm_player.playing
 
 
@@ -202,6 +222,8 @@ func is_bgm_playing() -> bool:
 # ---------------------------------------------------------------------------
 func play_sfx(sfx_name: String, volume_ratio: float = 1.0) -> void:
 	"""Ses efektini calistir. Bos havuza sahip player bulur."""
+	if _audio_disabled:
+		return
 	var stream: AudioStream = _load_stream(sfx_name)
 	if not stream:
 		return

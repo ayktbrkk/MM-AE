@@ -3,6 +3,7 @@ extends Control
 signal transition_finished
 
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 @onready var _colors := preload("res://scripts/colors.gd")
 
@@ -138,7 +139,7 @@ func _build_rift_fx() -> void:
 func _apply_styles() -> void:
 	panel.add_theme_stylebox_override(
 		"panel",
-		_ui_styles.panel_style(Color(0.97, 0.94, 0.86, 0.96), _colors.POP_DEEP_TURQUOISE, 26, 4, Color(0.04, 0.05, 0.08, 0.28), 12, Vector2(0, 8))
+		_ui_styles.panel_style(Color(0.97, 0.94, 0.86, 0.96), _colors.POP_DEEP_TURQUOISE, _ui_tokens.RADIUS_XL, _ui_tokens.BORDER_BOLD, Color(0.04, 0.05, 0.08, 0.28), _ui_tokens.SHADOW_SIZE_XL, _ui_tokens.SHADOW_OFFSET_XL)
 	)
 	chapter_label.add_theme_color_override("font_color", _colors.POP_CRIMSON)
 	subtitle_label.add_theme_color_override("font_color", Color(0.30, 0.32, 0.40))

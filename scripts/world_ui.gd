@@ -51,8 +51,8 @@ const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
-const MIN_INTERACT_TOUCH_SIZE := 104.0
-const MIN_DIALOGUE_TOUCH_SIZE := 88.0
+const MIN_INTERACT_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_PRIMARY
+const MIN_DIALOGUE_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
 
 # Overlay Manager
 var _overlay_manager: OverlayManager
@@ -400,12 +400,12 @@ func build_minimap_hud() -> void:
 	content.add_child(minimap_title_label)
 
 	var map_frame := PanelContainer.new()
-	map_frame.custom_minimum_size = Vector2(246, 208)
+	map_frame.custom_minimum_size = _ui_tokens.MINIMAP_FRAME_SIZE
 	_add_panel_style(map_frame, Color(0.08, 0.25, 0.30, 0.64), Color(1.0, 0.84, 0.42, 0.60), 12)
 	content.add_child(map_frame)
 
 	minimap_marker_layer = Control.new()
-	minimap_marker_layer.custom_minimum_size = Vector2(220, 182)
+	minimap_marker_layer.custom_minimum_size = _ui_tokens.MINIMAP_MARKER_LAYER_SIZE
 	minimap_marker_layer.clip_contents = true
 	map_frame.add_child(minimap_marker_layer)
 
@@ -579,7 +579,7 @@ func build_guidance_arrow() -> void:
 
 	guidance_arrow_label = Label.new()
 	guidance_arrow_label.position = Vector2(-120, 44)
-	guidance_arrow_label.custom_minimum_size = Vector2(240, 34)
+	guidance_arrow_label.custom_minimum_size = _ui_tokens.GUIDANCE_LABEL_SIZE
 	guidance_arrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	guidance_arrow_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	guidance_arrow_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
@@ -638,7 +638,7 @@ func build_route_hud() -> void:
 	route_panel.add_child(margin)
 
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 9)
+	content.add_theme_constant_override("separation", _ui_tokens.SPACE_XS)
 	margin.add_child(content)
 
 	var title := Label.new()
@@ -650,12 +650,12 @@ func build_route_hud() -> void:
 
 	for step in _route_steps():
 		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 9)
+		row.add_theme_constant_override("separation", _ui_tokens.SPACE_XS)
 		content.add_child(row)
 
 		var dot := ColorRect.new()
-		dot.custom_minimum_size = Vector2(22, 22)
-		dot.size = Vector2(22, 22)
+		dot.custom_minimum_size = Vector2(_ui_tokens.ROUTE_NODE_DOT_SIZE, _ui_tokens.ROUTE_NODE_DOT_SIZE)
+		dot.size = Vector2(_ui_tokens.ROUTE_NODE_DOT_SIZE, _ui_tokens.ROUTE_NODE_DOT_SIZE)
 		row.add_child(dot)
 
 		var label := Label.new()

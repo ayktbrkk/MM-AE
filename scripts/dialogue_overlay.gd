@@ -13,6 +13,7 @@ const EDA_HAPPY_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda
 const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_thinking.svg")
 const TAU := 2.0 * PI
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -181,12 +182,12 @@ func _apply_styles() -> void:
 		_ui_styles.panel_style(
 			Color(0.97, 0.94, 0.86, 0.94),
 			Color(0.28, 0.23, 0.19),
-			22,
-			4,
+			_ui_tokens.RADIUS_LG,
+			_ui_tokens.BORDER_BOLD,
 			Color(0, 0, 0, 0),
 			0,
 			Vector2.ZERO,
-			{"top_left": 28, "top_right": 28, "bottom_left": 22, "bottom_right": 22}
+			{"top_left": _ui_tokens.RADIUS_2XL, "top_right": _ui_tokens.RADIUS_2XL, "bottom_left": _ui_tokens.RADIUS_LG, "bottom_right": _ui_tokens.RADIUS_LG}
 		)
 	)
 	chapter_label.add_theme_color_override("font_color", _colors.POP_DEEP_TURQUOISE)

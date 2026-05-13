@@ -181,10 +181,10 @@ Bu faz, mevcut asset ve flow düzeltmelerinin üstüne oyun içi UI'ı daha tuta
 - [ ] 15. Tekrarlayan UI stillerini ortak tema sistemine taşı
   - [x] 15.1 `main_menu.gd` ve `world.gd/world_ui.gd` içindeki tekrarlı `StyleBoxFlat` kurulumlarını envanterle
   - [x] 15.2 Ortak button/panel/chip stilleri için tema helper veya `Theme.tres` tabanı oluştur
-  - [ ] 15.3 Font boyutu, radius, padding ve renk sabitlerini ortak isimlendirmeyle topla
+  - [x] 15.3 Font boyutu, radius, padding ve renk sabitlerini ortak isimlendirmeyle topla
     - [x] 15.3.1 `ui_tokens.gd` ile ortak font/radius/spacing/touch token setini oluştur
     - [x] 15.3.2 Tokenları `main_menu.gd`, `hud_bar.gd`, `decision_overlay.gd`, `info_card_overlay.gd` ve `world_ui.gd` içine yay
-    - [ ] 15.3.3 Kalan overlay/world yüzeylerinde sabit boyut ve spacing sayılarını token sistemine tamamla
+    - [x] 15.3.3 Kalan overlay/world yüzeylerinde sabit boyut ve spacing sayılarını token sistemine tamamla
 
 - [ ] 16. UI kodunu daha küçük modüllere ayır
   - [ ] 16.1 `world.gd` içindeki kalan UI sorumluluklarını `world_ui.gd` içine tamamla

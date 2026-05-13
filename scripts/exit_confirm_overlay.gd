@@ -12,6 +12,7 @@ signal exit_confirmed
 signal exit_cancelled
 
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
 
 # ---------------------------------------------------------------------------
@@ -67,7 +68,7 @@ func _apply_styles() -> void:
 	# Panel stili
 	panel.add_theme_stylebox_override(
 		"panel",
-		_ui_styles.panel_style(_colors.DESIGN_CREAM_PAPER, _colors.DESIGN_DEEP_NAVY, 28, 4, Color(0.02, 0.03, 0.05, 0.30), 12, Vector2(0, 8))
+		_ui_styles.panel_style(_colors.DESIGN_CREAM_PAPER, _colors.DESIGN_DEEP_NAVY, _ui_tokens.RADIUS_2XL, _ui_tokens.BORDER_BOLD, Color(0.02, 0.03, 0.05, 0.30), _ui_tokens.SHADOW_SIZE_XL, _ui_tokens.SHADOW_OFFSET_XL)
 	)
 
 	# Buton stilleri
@@ -76,7 +77,7 @@ func _apply_styles() -> void:
 
 
 func _style_button(button: Button, base_color: Color, font_color: Color) -> void:
-	var normal := _ui_styles.button_state_style(base_color, 22, Color(0, 0, 0, 0), 0, Color(0.02, 0.03, 0.05, 0.20), 6, Vector2(0, 4))
-	var hover := _ui_styles.button_state_style(base_color.lightened(0.08), 22, Color(0, 0, 0, 0), 0, Color(0.02, 0.03, 0.05, 0.26), 8, Vector2(0, 5))
-	var pressed := _ui_styles.button_state_style(base_color.darkened(0.10), 22)
-	_ui_styles.apply_button_style(button, normal, pressed, hover, null, font_color, Color(1, 1, 1, 0.62), 30)
+	var normal := _ui_styles.button_state_style(base_color, _ui_tokens.RADIUS_LG, Color(0, 0, 0, 0), 0, Color(0.02, 0.03, 0.05, 0.20), _ui_tokens.SHADOW_SIZE_MD, _ui_tokens.SHADOW_OFFSET_MD)
+	var hover := _ui_styles.button_state_style(base_color.lightened(0.08), _ui_tokens.RADIUS_LG, Color(0, 0, 0, 0), 0, Color(0.02, 0.03, 0.05, 0.26), _ui_tokens.SHADOW_SIZE_LG, Vector2(0, 5))
+	var pressed := _ui_styles.button_state_style(base_color.darkened(0.10), _ui_tokens.RADIUS_LG)
+	_ui_styles.apply_button_style(button, normal, pressed, hover, null, font_color, Color(1, 1, 1, 0.62), _ui_tokens.FONT_BODY_2XL)
