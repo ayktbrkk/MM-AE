@@ -847,7 +847,7 @@ func _add_ankara_toy_world_frame() -> void:
 	)
 
 
-func _add_ankara_steppe_backdrop(world_root: Node) -> void:
+func _add_ankara_steppe_backdrop(_world_root: Node) -> void:
 	"""Ankara steppe arkaplanı — sıcak tepe silüetleri."""
 	_add_backdrop_band(
 		[_textures.BG_FLAT_HILLS_1_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE, _textures.BG_FLAT_HILLS_2_TEXTURE],
@@ -1221,7 +1221,7 @@ func _add_sakarya_toy_world_frame() -> void:
 	)
 
 
-func _add_sakarya_battle_backdrop(world_root: Node) -> void:
+func _add_sakarya_battle_backdrop(_world_root: Node) -> void:
 	"""Sakarya savas arkaplani — karanlik tepe siluetleri."""
 	_add_backdrop_band(
 		[_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE],
@@ -1603,7 +1603,7 @@ func _add_final_toy_world_frame() -> void:
 	)
 
 
-func _add_final_dawn_backdrop(world_root: Node) -> void:
+func _add_final_dawn_backdrop(_world_root: Node) -> void:
 	"""Final seher vakti arkaplani — sicak tepe siluetleri."""
 	_add_backdrop_band(
 		[_textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_POINTY_MOUNTAINS_TEXTURE, _textures.BG_FLAT_MOUNTAIN_2_TEXTURE],
@@ -1871,7 +1871,7 @@ func _decorate_ship(world_root: Node) -> void:
 # SAMSUN RIFT DEKORASYON
 # ============================================================
 
-func _decorate_samsun_diorama_pilot(world_root: Node) -> void:
+func _decorate_samsun_diorama_pilot(_world_root: Node) -> void:
 	_add_backdrop_band([_textures.BG_FLAT_HILLS_1_TEXTURE, _textures.BG_FLAT_MOUNTAIN_1_TEXTURE, _textures.BG_FLAT_HILLS_2_TEXTURE], 430.0, Vector2(1.02, 1.02), Color(0.58, 0.92, 1.0, 0.17), "samsun.diorama_horizon", -7)
 	_add_distant_town_band(590.0, Color(0.96, 0.94, 0.78, 0.16), "samsun.diorama_town")
 	_add_location_sign("Samsun", "Patikayı izle", Vector2(556, 300), 488.0, Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.78), "samsun.location_sign")

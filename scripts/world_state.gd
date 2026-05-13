@@ -3,9 +3,6 @@ extends Node
 # Yalnızca oyun durumu yönetimi
 # orchestrator (world.gd) sinyallerle haberleşir
 
-@onready var _colors := preload("res://scripts/colors.gd")
-@onready var _questions := preload("res://assets/data/questions.gd")
-
 signal state_changed(key: String, value: Variant)
 
 # === TEMEL STATE ===
@@ -37,15 +34,6 @@ var required_supports: int = 2
 
 # Dalga deneme sayısı (world.gd'den taşındı: wave_attempts)
 var wave_attempts: int = 0
-
-# === YENİ STATE DEĞİŞKENLERİ ===
-var _active_markers: Dictionary = {}
-var _zone_marker_count: Dictionary = {}
-var _gathered_names: Array[String] = []
-var _unit_notes_collected: Array[String] = []
-var _item_discovered: Dictionary = {}
-var _interacted_markers: Dictionary = {}
-var _support_nodes: Dictionary = {}
 
 # === SETTER'LAR ===
 

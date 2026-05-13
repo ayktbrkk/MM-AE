@@ -170,15 +170,15 @@ func _build_rift_fx() -> void:
 	]
 	for index in range(centers.size()):
 		var shard := Polygon2D.new()
-		var size := Vector2(24 + (index % 2) * 10, 70 + (index % 3) * 14)
+		var shard_size := Vector2(24 + (index % 2) * 10, 70 + (index % 3) * 14)
 		shard.position = centers[index]
 		shard.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.0)
 		shard.z_index = 4
 		shard.polygon = PackedVector2Array([
-			Vector2(0, -size.y * 0.5),
-			Vector2(size.x * 0.42, 0),
-			Vector2(0, size.y * 0.5),
-			Vector2(-size.x * 0.42, 0),
+			Vector2(0, -shard_size.y * 0.5),
+			Vector2(shard_size.x * 0.42, 0),
+			Vector2(0, shard_size.y * 0.5),
+			Vector2(-shard_size.x * 0.42, 0),
 		])
 		shard.set_meta("base_position", shard.position)
 		shard.set_meta("phase", float(index) * 0.83)

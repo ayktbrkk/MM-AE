@@ -50,9 +50,6 @@ var CEL_OUTLINE: Color:
 # -----------------------------------------------------------------------------
 # Sinyaller
 # -----------------------------------------------------------------------------
-signal marker_activated(marker_id: String)
-signal marker_collected(marker_id: String)
-signal support_requested(support_type: String)
 signal markers_spawned(area_key: String)
 
 # -----------------------------------------------------------------------------

@@ -7,7 +7,6 @@ const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 static func _star_texture() -> Texture2D:
 	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	image.fill(Color.TRANSPARENT)
-	var center := Vector2i(16, 16)
 	for y in 32:
 		for x in 32:
 			var dx := float(x - 16)

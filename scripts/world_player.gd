@@ -478,8 +478,8 @@ func _build_companion_reaction_label() -> void:
 	companion_reaction_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_NAV)
 	companion_reaction_label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.78, 0.94))
 	companion_reaction_label.add_theme_color_override("font_shadow_color", Color(0.03, 0.05, 0.08, 0.62))
-	companion_reaction_label.add_theme_constant_override("shadow_offset_x", _ui_tokens.SHADOW_OFFSET_TIGHT.x)
-	companion_reaction_label.add_theme_constant_override("shadow_offset_y", _ui_tokens.SHADOW_OFFSET_TIGHT.y)
+	companion_reaction_label.add_theme_constant_override("shadow_offset_x", int(_ui_tokens.SHADOW_OFFSET_TIGHT.x))
+	companion_reaction_label.add_theme_constant_override("shadow_offset_y", int(_ui_tokens.SHADOW_OFFSET_TIGHT.y))
 	companion_reaction_label.z_index = 35
 	companion_reaction_label.visible = false
 	companion_node.add_child(companion_reaction_label)

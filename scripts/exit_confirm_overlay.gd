@@ -19,7 +19,6 @@ const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 # @ONREADY — SAHNE AĞACI REFERANSLARI
 # ---------------------------------------------------------------------------
 @onready var _colors := preload("res://scripts/colors.gd")
-@onready var _textures := preload("res://scripts/textures.gd")
 @onready var dimmer: ColorRect = $Dimmer
 @onready var panel: PanelContainer = $Center/Panel
 @onready var confirm_button: Button = $Center/Panel/Margin/VBox/ConfirmButton

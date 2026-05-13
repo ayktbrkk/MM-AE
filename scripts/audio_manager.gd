@@ -316,8 +316,8 @@ func _guess_frequency(sound_name: String) -> float:
 		var hash_val: int = abs(sound_name.hash())
 		return 150.0 + float(hash_val % 150)
 	# SFX'ler icin 400-900Hz arasi
-	var hash_val: int = abs(sound_name.hash())
-	return 400.0 + float(hash_val % 500)
+	var sfx_hash_val: int = abs(sound_name.hash())
+	return 400.0 + float(sfx_hash_val % 500)
 
 
 # ---------------------------------------------------------------------------
@@ -340,7 +340,7 @@ static func _generate_tone(frequency: float, duration: float, loop: bool = false
 	var data := PackedByteArray()
 	data.resize(total_samples * 2)  # 16-bit = 2 bytes per sample
 
-	var fade_samples: int = mini(200, total_samples / 4)
+	var fade_samples: int = mini(200, int(total_samples / 4.0))
 
 	for i in range(total_samples):
 		var t: float = float(i) / float(sample_rate)

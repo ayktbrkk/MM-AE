@@ -309,7 +309,7 @@ func _handle_portal_interaction(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_samsun_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_samsun_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Samsun karar kontrolü — tüm ipuçları toplanmış mı?"""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
@@ -326,7 +326,7 @@ func _handle_samsun_decision_check(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_havza_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_havza_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Havza karar kontrolü."""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
@@ -343,7 +343,7 @@ func _handle_havza_decision_check(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_amasya_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_amasya_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Amasya karar kontrolü."""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
@@ -360,7 +360,7 @@ func _handle_amasya_decision_check(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_kongre_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_kongre_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Kongre karar kontrolü."""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
@@ -377,7 +377,7 @@ func _handle_kongre_decision_check(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_ankara_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_ankara_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Ankara karar kontrolü."""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
@@ -394,7 +394,7 @@ func _handle_ankara_decision_check(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_sakarya_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_sakarya_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Sakarya karar kontrolü."""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
@@ -411,7 +411,7 @@ func _handle_sakarya_decision_check(marker: Node2D, player_mod: Node) -> void:
 		)
 
 
-func _handle_final_decision_check(marker: Node2D, player_mod: Node) -> void:
+func _handle_final_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 	"""Final karar kontrolü."""
 	var state: Node = _get_state()
 	var ui_mod: Node = _get_ui_mod()
