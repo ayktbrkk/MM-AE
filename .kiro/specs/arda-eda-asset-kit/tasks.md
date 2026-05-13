@@ -136,3 +136,62 @@ Uygulama dili: **SVG asset üretimi + GDScript 2.0 doğrulama yüzeyi**
   ]
 }
 ```
+
+---
+
+## Sonraki Faz: UI Geliştirme Planı
+
+Bu faz, mevcut asset ve flow düzeltmelerinin üstüne oyun içi UI'ı daha tutarlı, daha okunabilir ve mobil hedefe daha uygun hale getirmeyi amaçlar. Öncelik sırası: önce overlay mimarisi ve touch güvenliği, sonra HUD/geri bildirim, en son görsel sistem ve polish.
+
+### Faz 1 — Overlay Mimarisi ve Katman Temizliği
+
+- [ ] 10. Overlay katmanlarını tek standartta topla
+  - [ ] 10.1 `DialogueOverlay`, `DecisionOverlay`, `InfoCardOverlay`, `ChapterTransitionOverlay`, `HudBar` için tek layer hiyerarşisi tanımla
+  - [ ] 10.2 `CanvasLayer/HUD` ve overlay node yerleşimini tutarlı hale getir
+  - [ ] 10.3 `scripts/world_ui.gd` içindeki overlay aç/kapat akışını `OverlayManager` merkezli sadeleştir
+  - [ ] 10.4 `current_overlay_kind` string dispatch yüzeyini azalt veya kaldır
+
+### Faz 2 — Touch ve Mobil Okunabilirlik
+
+- [ ] 11. Kritik buton hedeflerini mobil boyuta çek
+  - [ ] 11.1 `InteractButton` için minimum hit area değerini büyüt
+  - [ ] 11.2 `DialogueContinue` için tek elle rahat kullanılabilir buton alanı tasarla
+  - [ ] 11.3 `DecisionOverlay` seçenek yüksekliklerini 9:16 portrait kullanımına göre normalize et
+  - [ ] 11.4 `InfoCardOverlay` için görünür bir kapat/geri aksiyonu ekle
+
+- [ ] 12. Responsive güvenli alan düzenlemesi yap
+  - [ ] 12.1 Ana menü, HUD ve overlay spacing değerlerini ortak safe-area sabitlerine bağla
+  - [ ] 12.2 Küçük ekranlarda taşan başlık ve chip alanlarını dengele
+  - [ ] 12.3 World HUD içinde alt ve üst bölgelerde sabit margin sistemi kur
+
+### Faz 3 — HUD ve Geri Bildirim Sistemi
+
+- [ ] 13. HUD'u bağlam duyarlı hale getir
+  - [ ] 13.1 Hedef/progress değiştiğinde kısa geri bildirim animasyonu ekle
+  - [ ] 13.2 Kaynak toplama ve doğru karar anlarında HUD micro-feedback göster
+  - [ ] 13.3 Bölgeye göre HUD vurgu renklerini `colors.gd` ve `world_ui.gd` üzerinden standartlaştır
+
+- [ ] 14. Loading ve geçiş yüzeylerini güçlendir
+  - [ ] 14.1 Bölüm geçişlerinde kısa loading durumu veya progress hissi ekle
+  - [ ] 14.2 Transition sırasında tıklanabilir alan kilidini merkezi hale getir
+  - [ ] 14.3 Zincirlenen overlay geçişlerinde skip/fast-forward davranışını belirle
+
+### Faz 4 — Görsel Sistem ve Kod Sağlığı
+
+- [ ] 15. Tekrarlayan UI stillerini ortak tema sistemine taşı
+  - [ ] 15.1 `main_menu.gd` ve `world.gd/world_ui.gd` içindeki tekrarlı `StyleBoxFlat` kurulumlarını envanterle
+  - [ ] 15.2 Ortak button/panel/chip stilleri için tema helper veya `Theme.tres` tabanı oluştur
+  - [ ] 15.3 Font boyutu, radius, padding ve renk sabitlerini ortak isimlendirmeyle topla
+
+- [ ] 16. UI kodunu daha küçük modüllere ayır
+  - [ ] 16.1 `world.gd` içindeki kalan UI sorumluluklarını `world_ui.gd` içine tamamla
+  - [ ] 16.2 Overlay scene script'lerinde ortak davranışları helper katmana taşı
+  - [ ] 16.3 UI için tek giriş noktası ve tek görünürlük sözleşmesi tanımla
+
+### Faz 5 — Doğrulama ve Kabul Kriterleri
+
+- [ ] 17. UI doğrulama checklist'i oluştur ve uygula
+  - [ ] 17.1 Ana menü, diyalog, karar, bilgi kartı ve chapter transition için ekran görüntüsü checklist'i çıkar
+  - [ ] 17.2 1080x1920 portrait üzerinde hit area, crop ve overlap kontrolü yap
+  - [ ] 17.3 Geri tuşu, overlay stack ve save/continue akışını UI regressions açısından tekrar doğrula
+  - [ ] 17.4 Gerekirse `tools/capture_character_ui.gd` ve ilgili capture script'lerini UI regression yüzeyi olarak genişlet
