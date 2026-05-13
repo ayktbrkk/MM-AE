@@ -9,6 +9,7 @@ const MIN_DECISION_BUTTON_HEIGHT := 124.0
 const MIN_DECISION_BUTTON_WIDTH := 0.0
 const DECISION_PANEL_WIDTH := 920.0
 const DECISION_PANEL_HEIGHT := 1180.0
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -209,37 +210,12 @@ func _apply_styles() -> void:
 	prompt_label.add_theme_color_override("font_color", Color(0.23, 0.24, 0.30))
 
 func _add_panel_style(target: PanelContainer, fill: Color, border: Color, radius: int) -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = fill
-	style.border_color = border
-	style.set_border_width_all(4)
-	style.set_corner_radius_all(radius)
-	style.shadow_color = Color(0.05, 0.06, 0.08, 0.22)
-	style.shadow_size = 10
-	style.shadow_offset = Vector2(0, 7)
-	target.add_theme_stylebox_override("panel", style)
+	target.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(fill, border, radius, 4, Color(0.05, 0.06, 0.08, 0.22), 10, Vector2(0, 7))
+	)
 
 func _add_button_style(target: Button, fill: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = fill
-	normal.set_corner_radius_all(18)
-	normal.border_color = fill.lightened(0.18)
-	normal.set_border_width_all(3)
-	normal.shadow_color = Color(0.05, 0.06, 0.08, 0.22)
-	normal.shadow_size = 6
-	normal.shadow_offset = Vector2(0, 4)
-	var pressed := StyleBoxFlat.new()
-	pressed.bg_color = fill.darkened(0.18)
-	pressed.set_corner_radius_all(18)
-	pressed.border_color = fill.lightened(0.10)
-	pressed.set_border_width_all(3)
-	pressed.shadow_color = Color(0.05, 0.06, 0.08, 0.14)
-	pressed.shadow_size = 3
-	pressed.shadow_offset = Vector2(0, 2)
-	target.add_theme_stylebox_override("normal", normal)
-	target.add_theme_stylebox_override("hover", normal)
-	target.add_theme_stylebox_override("pressed", pressed)
-	target.add_theme_color_override("font_color", Color.WHITE)
-	target.add_theme_font_size_override("font_size", 32)
-	target.add_theme_constant_override("icon_max_width", 42)
-	target.add_theme_constant_override("h_separation", 22)
+	var normal := _ui_styles.button_state_style(fill, 18, fill.lightened(0.18), 3, Color(0.05, 0.06, 0.08, 0.22), 6, Vector2(0, 4))
+	var pressed := _ui_styles.button_state_style(fill.darkened(0.18), 18, fill.lightened(0.10), 3, Color(0.05, 0.06, 0.08, 0.14), 3, Vector2(0, 2))
+	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), 32, 42, 22)

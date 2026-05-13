@@ -41,6 +41,7 @@ var companion_accessory: Node2D
 # Texture/colors sabitleri (merkezi dosyalardan)
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 
 
 func initialize(world: Node2D) -> void:
@@ -660,21 +661,17 @@ func _apply_character_identity_styles() -> void:
 		if card_node is PanelContainer:
 			var card := card_node as PanelContainer
 			var accent: Color = card.get_meta("identity_accent", Color(1, 1, 1, 0.35))
-			var card_style := StyleBoxFlat.new()
-			card_style.bg_color = Color(1.0, 0.96, 0.86, 0.70)
-			card_style.border_color = Color(accent.r, accent.g, accent.b, 0.68)
-			card_style.set_border_width_all(3)
-			card_style.set_corner_radius_all(18)
-			card.add_theme_stylebox_override("panel", card_style)
+			card.add_theme_stylebox_override(
+				"panel",
+				_ui_styles.panel_style(Color(1.0, 0.96, 0.86, 0.70), Color(accent.r, accent.g, accent.b, 0.68), 18, 3)
+			)
 
 			var circle := card.find_child("IdentityCircle", true, false)
 			if circle is PanelContainer:
-				var circle_style := StyleBoxFlat.new()
-				circle_style.bg_color = accent
-				circle_style.border_color = Color(accent.r, accent.g, accent.b, 0.86)
-				circle_style.set_border_width_all(4)
-				circle_style.set_corner_radius_all(999)
-				(circle as PanelContainer).add_theme_stylebox_override("panel", circle_style)
+				(circle as PanelContainer).add_theme_stylebox_override(
+					"panel",
+					_ui_styles.panel_style(accent, Color(accent.r, accent.g, accent.b, 0.86), 999, 4)
+				)
 
 
 # ---------------------------------------------------------------------------

@@ -49,6 +49,7 @@ var elapsed_time := 0.0
 
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const MIN_INTERACT_TOUCH_SIZE := 104.0
 const MIN_DIALOGUE_TOUCH_SIZE := 88.0
 
@@ -950,30 +951,14 @@ func apply_ui_styles() -> void:
 
 
 func _add_panel_style(panel: PanelContainer, fill: Color, border: Color, radius: int) -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = fill
-	style.border_color = border
-	style.set_border_width_all(4)
-	style.set_corner_radius_all(radius)
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override("panel", _ui_styles.panel_style(fill, border, radius))
 
 
 func _add_button_style(button: Button, fill: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = fill
-	normal.set_corner_radius_all(16)
-	var pressed := StyleBoxFlat.new()
-	pressed.bg_color = fill.darkened(0.14)
-	pressed.set_corner_radius_all(16)
-	var disabled := StyleBoxFlat.new()
-	disabled.bg_color = Color(0.42, 0.42, 0.42, 0.55)
-	disabled.set_corner_radius_all(16)
-	button.add_theme_stylebox_override("normal", normal)
-	button.add_theme_stylebox_override("hover", normal)
-	button.add_theme_stylebox_override("pressed", pressed)
-	button.add_theme_stylebox_override("disabled", disabled)
-	button.add_theme_color_override("font_color", Color.WHITE)
-	button.add_theme_color_override("font_disabled_color", Color(1, 1, 1, 0.62))
+	var normal := _ui_styles.button_state_style(fill, 16)
+	var pressed := _ui_styles.button_state_style(fill.darkened(0.14), 16)
+	var disabled := _ui_styles.button_state_style(Color(0.42, 0.42, 0.42, 0.55), 16)
+	_ui_styles.apply_button_style(button, normal, pressed, null, disabled)
 
 
 # ---------------------------------------------------------------------------

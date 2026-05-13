@@ -2,6 +2,8 @@ extends Control
 
 signal transition_finished
 
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+
 @onready var _colors := preload("res://scripts/colors.gd")
 
 @onready var backdrop: ColorRect = $Backdrop
@@ -134,14 +136,9 @@ func _build_rift_fx() -> void:
 		rift_shards.append(shard)
 
 func _apply_styles() -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.97, 0.94, 0.86, 0.96)
-	style.border_color = _colors.POP_DEEP_TURQUOISE
-	style.set_border_width_all(4)
-	style.set_corner_radius_all(26)
-	style.shadow_color = Color(0.04, 0.05, 0.08, 0.28)
-	style.shadow_size = 12
-	style.shadow_offset = Vector2(0, 8)
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(Color(0.97, 0.94, 0.86, 0.96), _colors.POP_DEEP_TURQUOISE, 26, 4, Color(0.04, 0.05, 0.08, 0.28), 12, Vector2(0, 8))
+	)
 	chapter_label.add_theme_color_override("font_color", _colors.POP_CRIMSON)
 	subtitle_label.add_theme_color_override("font_color", Color(0.30, 0.32, 0.40))

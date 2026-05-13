@@ -7,6 +7,7 @@ signal settings_pressed
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 
 const TAU := 2.0 * PI
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
@@ -363,27 +364,21 @@ func _apply_secondary_button_style(button: Button) -> void:
 	button.add_theme_color_override("font_color", cream)
 
 func _make_button_style(fill: Color, border: Color, radius: int, shadow: bool) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = fill
-	style.border_color = border
-	style.set_border_width_all(4)
-	style.set_corner_radius_all(radius)
-	if shadow:
-		style.shadow_color = Color(0.02, 0.03, 0.05, 0.26)
-		style.shadow_size = 10
-		style.shadow_offset = Vector2(0, 7)
-	return style
+	return _ui_styles.button_state_style(
+		fill,
+		radius,
+		border,
+		4,
+		Color(0.02, 0.03, 0.05, 0.26) if shadow else Color(0, 0, 0, 0),
+		10 if shadow else 0,
+		Vector2(0, 7) if shadow else Vector2.ZERO
+	)
 
 func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radius: int) -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = fill
-	style.border_color = border
-	style.set_border_width_all(4)
-	style.set_corner_radius_all(radius)
-	style.shadow_color = Color(0.02, 0.03, 0.05, 0.30)
-	style.shadow_size = 12
-	style.shadow_offset = Vector2(0, 8)
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(fill, border, radius, 4, Color(0.02, 0.03, 0.05, 0.30), 12, Vector2(0, 8))
+	)
 
 func _on_start_pressed() -> void:
 	if is_transitioning:

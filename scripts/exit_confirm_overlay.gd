@@ -11,6 +11,8 @@ extends CanvasLayer
 signal exit_confirmed
 signal exit_cancelled
 
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+
 
 # ---------------------------------------------------------------------------
 # @ONREADY — SAHNE AĞACI REFERANSLARI
@@ -63,15 +65,10 @@ func _on_cancel_pressed() -> void:
 # ---------------------------------------------------------------------------
 func _apply_styles() -> void:
 	# Panel stili
-	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = _colors.DESIGN_CREAM_PAPER
-	panel_style.border_color = _colors.DESIGN_DEEP_NAVY
-	panel_style.set_border_width_all(4)
-	panel_style.set_corner_radius_all(28)
-	panel_style.shadow_color = Color(0.02, 0.03, 0.05, 0.30)
-	panel_style.shadow_size = 12
-	panel_style.shadow_offset = Vector2(0, 8)
-	panel.add_theme_stylebox_override("panel", panel_style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(_colors.DESIGN_CREAM_PAPER, _colors.DESIGN_DEEP_NAVY, 28, 4, Color(0.02, 0.03, 0.05, 0.30), 12, Vector2(0, 8))
+	)
 
 	# Buton stilleri
 	_style_button(confirm_button, _colors.DESIGN_SUNSET_GOLD, _colors.DESIGN_STORY_INK)
@@ -79,26 +76,7 @@ func _apply_styles() -> void:
 
 
 func _style_button(button: Button, base_color: Color, font_color: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = base_color
-	normal.set_corner_radius_all(22)
-	normal.shadow_color = Color(0.02, 0.03, 0.05, 0.20)
-	normal.shadow_size = 6
-	normal.shadow_offset = Vector2(0, 4)
-	button.add_theme_stylebox_override("normal", normal)
-
-	var hover := StyleBoxFlat.new()
-	hover.bg_color = base_color.lightened(0.08)
-	hover.set_corner_radius_all(22)
-	hover.shadow_color = Color(0.02, 0.03, 0.05, 0.26)
-	hover.shadow_size = 8
-	hover.shadow_offset = Vector2(0, 5)
-	button.add_theme_stylebox_override("hover", hover)
-
-	var pressed := StyleBoxFlat.new()
-	pressed.bg_color = base_color.darkened(0.10)
-	pressed.set_corner_radius_all(22)
-	button.add_theme_stylebox_override("pressed", pressed)
-
-	button.add_theme_color_override("font_color", font_color)
-	button.add_theme_font_size_override("font_size", 30)
+	var normal := _ui_styles.button_state_style(base_color, 22, Color(0, 0, 0, 0), 0, Color(0.02, 0.03, 0.05, 0.20), 6, Vector2(0, 4))
+	var hover := _ui_styles.button_state_style(base_color.lightened(0.08), 22, Color(0, 0, 0, 0), 0, Color(0.02, 0.03, 0.05, 0.26), 8, Vector2(0, 5))
+	var pressed := _ui_styles.button_state_style(base_color.darkened(0.10), 22)
+	_ui_styles.apply_button_style(button, normal, pressed, hover, null, font_color, Color(1, 1, 1, 0.62), 30)

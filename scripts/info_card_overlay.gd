@@ -2,6 +2,8 @@ extends Control
 
 signal continue_pressed
 
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -157,24 +159,14 @@ func hide_overlay() -> void:
 	_stop_idle_animations()
 
 func _apply_styles() -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.98, 0.95, 0.88, 0.98)
-	style.border_color = Color(0.05, 0.24, 0.32)
-	style.set_border_width_all(4)
-	style.set_corner_radius_all(28)
-	style.shadow_color = Color(0.05, 0.06, 0.08, 0.26)
-	style.shadow_size = 12
-	style.shadow_offset = Vector2(0, 8)
-	panel.add_theme_stylebox_override("panel", style)
-	var frame_style := StyleBoxFlat.new()
-	frame_style.bg_color = Color(1, 1, 1, 0.72)
-	frame_style.border_color = Color(0.90, 0.78, 0.58)
-	frame_style.set_border_width_all(4)
-	frame_style.set_corner_radius_all(28)
-	frame_style.shadow_color = Color(0.55, 0.35, 0.12, 0.16)
-	frame_style.shadow_size = 8
-	frame_style.shadow_offset = Vector2(0, 5)
-	illustration_frame.add_theme_stylebox_override("panel", frame_style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(Color(0.98, 0.95, 0.88, 0.98), Color(0.05, 0.24, 0.32), 28, 4, Color(0.05, 0.06, 0.08, 0.26), 12, Vector2(0, 8))
+	)
+	illustration_frame.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(Color(1, 1, 1, 0.72), Color(0.90, 0.78, 0.58), 28, 4, Color(0.55, 0.35, 0.12, 0.16), 8, Vector2(0, 5))
+	)
 	_apply_secondary_button_style(back_button)
 	_apply_button_style(continue_button, _colors.POP_DEEP_TURQUOISE)
 	tag_label.add_theme_color_override("font_color", Color(0.02, 0.44, 0.56))
@@ -185,47 +177,11 @@ func _apply_styles() -> void:
 
 
 func _apply_secondary_button_style(target: Button) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(1, 1, 1, 0.76)
-	normal.set_corner_radius_all(20)
-	normal.border_color = Color(0.05, 0.24, 0.32, 0.34)
-	normal.set_border_width_all(3)
-	normal.shadow_color = Color(0.05, 0.06, 0.08, 0.14)
-	normal.shadow_size = 4
-	normal.shadow_offset = Vector2(0, 3)
-	var pressed := StyleBoxFlat.new()
-	pressed.bg_color = Color(0.93, 0.91, 0.86, 0.96)
-	pressed.set_corner_radius_all(20)
-	pressed.border_color = Color(0.05, 0.24, 0.32, 0.42)
-	pressed.set_border_width_all(3)
-	pressed.shadow_color = Color(0.05, 0.06, 0.08, 0.10)
-	pressed.shadow_size = 2
-	pressed.shadow_offset = Vector2(0, 1)
-	target.add_theme_stylebox_override("normal", normal)
-	target.add_theme_stylebox_override("hover", normal)
-	target.add_theme_stylebox_override("pressed", pressed)
-	target.add_theme_font_size_override("font_size", 26)
+	var normal := _ui_styles.button_state_style(Color(1, 1, 1, 0.76), 20, Color(0.05, 0.24, 0.32, 0.34), 3, Color(0.05, 0.06, 0.08, 0.14), 4, Vector2(0, 3))
+	var pressed := _ui_styles.button_state_style(Color(0.93, 0.91, 0.86, 0.96), 20, Color(0.05, 0.24, 0.32, 0.42), 3, Color(0.05, 0.06, 0.08, 0.10), 2, Vector2(0, 1))
+	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color(1, 1, 1, 1), Color(1, 1, 1, 0.62), 26)
 
 func _apply_button_style(target: Button, fill: Color) -> void:
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = fill
-	normal.set_corner_radius_all(20)
-	normal.border_color = fill.lightened(0.18)
-	normal.set_border_width_all(3)
-	normal.shadow_color = Color(0.05, 0.06, 0.08, 0.22)
-	normal.shadow_size = 6
-	normal.shadow_offset = Vector2(0, 4)
-	var pressed := StyleBoxFlat.new()
-	pressed.bg_color = fill.darkened(0.14)
-	pressed.set_corner_radius_all(20)
-	pressed.border_color = fill.lightened(0.10)
-	pressed.set_border_width_all(3)
-	pressed.shadow_color = Color(0.05, 0.06, 0.08, 0.12)
-	pressed.shadow_size = 3
-	pressed.shadow_offset = Vector2(0, 2)
-	target.add_theme_stylebox_override("normal", normal)
-	target.add_theme_stylebox_override("hover", normal)
-	target.add_theme_stylebox_override("pressed", pressed)
-	target.add_theme_color_override("font_color", Color.WHITE)
-	target.add_theme_constant_override("icon_max_width", 42)
-	target.add_theme_constant_override("h_separation", 18)
+	var normal := _ui_styles.button_state_style(fill, 20, fill.lightened(0.18), 3, Color(0.05, 0.06, 0.08, 0.22), 6, Vector2(0, 4))
+	var pressed := _ui_styles.button_state_style(fill.darkened(0.14), 20, fill.lightened(0.10), 3, Color(0.05, 0.06, 0.08, 0.12), 3, Vector2(0, 2))
+	_ui_styles.apply_button_style(target, normal, pressed, null, null, Color.WHITE, Color(1, 1, 1, 0.62), -1, 42, 18)

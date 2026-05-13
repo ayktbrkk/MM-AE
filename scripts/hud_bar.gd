@@ -1,5 +1,7 @@
 extends Control
 
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
+
 # 5-kollu yildiz icon texture'i (kenney yedegi)
 static func _star_texture() -> Texture2D:
 	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
@@ -346,13 +348,8 @@ func _pulse_panel(target: Control, peak_scale: float) -> void:
 	tween.tween_property(target, "scale", Vector2.ONE, 0.18)
 
 func _apply_panel_style(panel: PanelContainer, fill: Color, border: Color, radius: int, border_width := 4) -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = fill
-	style.border_color = border
-	style.set_border_width_all(border_width)
-	style.set_corner_radius_all(radius)
-	style.shadow_color = Color(0.03, 0.05, 0.08, 0.22)
-	style.shadow_size = 5
-	style.shadow_offset = Vector2(0, 3)
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(fill, border, radius, border_width, Color(0.03, 0.05, 0.08, 0.22), 5, Vector2(0, 3))
+	)
 

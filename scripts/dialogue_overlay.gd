@@ -12,6 +12,7 @@ const EDA_IDLE_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_
 const EDA_HAPPY_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_happy.svg")
 const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_thinking.svg")
 const TAU := 2.0 * PI
+const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var _textures := preload("res://scripts/textures.gd")
 
@@ -175,15 +176,19 @@ func _advance_or_continue() -> void:
 	continue_pressed.emit()
 
 func _apply_styles() -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.97, 0.94, 0.86, 0.94)
-	style.border_color = Color(0.28, 0.23, 0.19)
-	style.set_border_width_all(4)
-	style.corner_radius_top_left = 28
-	style.corner_radius_top_right = 28
-	style.corner_radius_bottom_left = 22
-	style.corner_radius_bottom_right = 22
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(
+			Color(0.97, 0.94, 0.86, 0.94),
+			Color(0.28, 0.23, 0.19),
+			22,
+			4,
+			Color(0, 0, 0, 0),
+			0,
+			Vector2.ZERO,
+			{"top_left": 28, "top_right": 28, "bottom_left": 22, "bottom_right": 22}
+		)
+	)
 	chapter_label.add_theme_color_override("font_color", _colors.POP_DEEP_TURQUOISE)
 	name_label.add_theme_color_override("font_color", Color(0.17, 0.18, 0.24))
 	body_label.add_theme_color_override("default_color", Color(0.20, 0.21, 0.27))
