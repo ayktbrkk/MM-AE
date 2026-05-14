@@ -182,3 +182,19 @@ ui.world.setup.final.transition.body,29 Ekim 1923 — Milletin zaferi
 ui.world.setup.final.dialogue.title,Final: Cumhuriyet
 ui.world.setup.final.dialogue.body,"{hero} şimdi tarihin en önemli anlarından birindedir. 29 Ekim 1923'te Cumhuriyet ilan edilmiştir. Millet, bağımsızlığını kazanmış, yeni bir devletin temelleri atılmıştır. Şimdi sıra, bu mirası anlamak ve geleceğe taşımaktadır."
 ui.world.unbuilt.transition.body,Bu bolum henuz insa edilmedi
+ui.world.companion.samsun.observe,Eda: Önce çevredeki izleri okuyalım.
+ui.world.companion.samsun.telegraph,Eda: Telgraf, haberleri güvenli taşımak için önemli.
+ui.world.companion.samsun.people,Arda: İnsanları birlikte düşünmeye çağırmak daha güçlü.
+ui.world.companion.samsun.core,Eda: Gözlem ve bağlantı birlikte güç olur.
+ui.world.companion.ankara.observe,Eda: Önce Meclis çevresindeki izleri okuyalım.
+ui.world.companion.ankara.telegraph,Eda: Telgraf, Ankara'ya gelen haberleri güvenli taşımak için önemli.
+ui.world.companion.ankara.people,Arda: Halkın iradesini Meclis'te buluşturmak en güçlü yol.
+ui.world.companion.ankara.core,Eda: Gözlem ve birlik, Meclis'in temelidir.
+ui.world.companion.sakarya.observe,Eda: Önce karargâh çevresindeki izleri okuyalım.
+ui.world.companion.sakarya.telegraph,Eda: Telgraf, cephe haberlerini güvenli taşımak için önemli.
+ui.world.companion.sakarya.people,Arda: Cephedeki askerlerin moralini yüksek tutmak en önemli görev.
+ui.world.companion.sakarya.core,Eda: Strateji ve birlik, zaferin anahtarıdır.
+ui.world.companion.final.observe,Eda: Meclis binası... İşte burası, tarih burada yazıldı.
+ui.world.companion.final.telegraph,Eda: Zafer, sadece savaşla değil, bilgiyle de kazanılır.
+ui.world.companion.final.people,Arda: Gelecek bizim... Bunu unutmamalıyız.
+ui.world.companion.final.core,Eda: Cumhuriyet, en büyük mirasımız. Onu korumak bizim görevimiz.

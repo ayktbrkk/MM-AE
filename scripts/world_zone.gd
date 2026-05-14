@@ -1012,10 +1012,10 @@ func _setup_ankara_after_build() -> void:
 	builder.add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
-	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, "Eda: Önce Meclis çevresindeki izleri okuyalım.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, "Eda: Telgraf, Ankara'ya gelen haberleri güvenli taşımak için önemli.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, "Arda: Halkın iradesini Meclis'te buluşturmak en güçlü yol.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, "Eda: Gözlem ve birlik, Meclis'in temelidir.", "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.ankara.observe", "Eda: Önce Meclis çevresindeki izleri okuyalım."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.ankara.telegraph", "Eda: Telgraf, Ankara'ya gelen haberleri güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.ankara.people", "Arda: Halkın iradesini Meclis'te buluşturmak en güçlü yol."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.ankara.core", "Eda: Gözlem ve birlik, Meclis'in temelidir."), "interactables.companion_reaction_spot")
 
 
 func _setup_sakarya() -> void:
@@ -1074,10 +1074,10 @@ func _setup_sakarya_after_build() -> void:
 	builder.add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
-	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, "Eda: Önce karargâh çevresindeki izleri okuyalım.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, "Eda: Telgraf, cephe haberlerini güvenli taşımak için önemli.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, "Arda: Cephedeki askerlerin moralini yüksek tutmak en önemli görev.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, "Eda: Strateji ve birlik, zaferin anahtarıdır.", "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.sakarya.observe", "Eda: Önce karargâh çevresindeki izleri okuyalım."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.sakarya.telegraph", "Eda: Telgraf, cephe haberlerini güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.sakarya.people", "Arda: Cephedeki askerlerin moralini yüksek tutmak en önemli görev."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.sakarya.core", "Eda: Strateji ve birlik, zaferin anahtarıdır."), "interactables.companion_reaction_spot")
 
 
 func _setup_final() -> void:
@@ -1136,10 +1136,10 @@ func _setup_final_after_build() -> void:
 	builder.add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
-	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, "Eda: Meclis binası... İşte burası, tarih burada yazıldı.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, "Eda: Zafer, sadece savaşla değil, bilgiyle de kazanılır.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, "Arda: Gelecek bizim... Bunu unutmamalıyız.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, "Eda: Cumhuriyet, en büyük mirasımız. Onu korumak bizim görevimiz.", "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.final.observe", "Eda: Meclis binası... İşte burası, tarih burada yazıldı."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.final.telegraph", "Eda: Zafer, sadece savaşla değil, bilgiyle de kazanılır."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.final.people", "Arda: Gelecek bizim... Bunu unutmamalıyız."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.final.core", "Eda: Cumhuriyet, en büyük mirasımız. Onu korumak bizim görevimiz."), "interactables.companion_reaction_spot")
 
 
 func _setup_player_position(player_pos: Vector2, companion_pos: Vector2) -> Vector2:
@@ -1178,10 +1178,10 @@ func _setup_samsun_rift_after_build() -> void:
 	builder.add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
-	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, "Eda: Önce çevredeki izleri okuyalım.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, "Eda: Telgraf, haberleri güvenli taşımak için önemli.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, "Arda: İnsanları birlikte düşünmeye çağırmak daha güçlü.", "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, "Eda: Gözlem ve bağlantı birlikte güç olur.", "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.samsun.observe", "Eda: Önce çevredeki izleri okuyalım."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.samsun.telegraph", "Eda: Telgraf, haberleri güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.samsun.people", "Arda: İnsanları birlikte düşünmeye çağırmak daha güçlü."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.samsun.core", "Eda: Gözlem ve bağlantı birlikte güç olur."), "interactables.companion_reaction_spot")
 
 
 func _setup_unbuilt_zone(zone: String) -> void:
