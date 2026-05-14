@@ -67,15 +67,15 @@ func set_objective(value: String, show_hint := true) -> void:
 	objective_label.text = value
 	if compact_objective_label != null:
 		compact_objective_label.text = value
-	if value == _last_objective:
-		return
-	_last_objective = value
 	if show_hint:
 		_show_objective_hint(value)
 	elif objective_hint_panel != null:
 		objective_hint_panel.visible = false
 		if objective_hint_timer != null:
 			objective_hint_timer.stop()
+	if value == _last_objective:
+		return
+	_last_objective = value
 	_pulse_panel(status_panel, 1.02)
 
 func set_progress(value: String) -> void:

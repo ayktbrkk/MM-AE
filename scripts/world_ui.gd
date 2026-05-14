@@ -672,7 +672,7 @@ func update_minimap() -> void:
 		return
 	var state: Node = _world.get_node("WorldState")
 	var player_node: Node2D = _world.get_node("Player")
-	var hide_panel: bool = state.current_zone == "room" or state.current_zone == "ship" or state.current_zone == "samsun_rift"
+	var hide_panel: bool = state.current_zone == "room" or state.current_zone == "ship" or state.current_zone == "samsun_rift" or state.current_zone == "ankara" or state.current_zone == "sakarya" or state.current_zone == "final"
 	minimap_panel.visible = not hide_panel
 	if not minimap_panel.visible:
 		return
@@ -734,6 +734,12 @@ func _minimap_title() -> String:
 			return "Havza Haritası"
 		"amasya":
 			return "Amasya Haritası"
+		"ankara":
+			return "Ankara Haritası"
+		"sakarya":
+			return "Sakarya Haritası"
+		"final":
+			return "Cumhuriyet Haritası"
 		"kongreler":
 			return "Kongre Haritası"
 		_:
@@ -869,7 +875,7 @@ func _sync_location_sign_visibility(objective_hint_visible: bool) -> void:
 	if _world == null:
 		return
 	var state: Node = _world.get_node("WorldState")
-	var should_hide_location_sign: bool = objective_hint_visible or state.current_zone == "samsun_rift"
+	var should_hide_location_sign: bool = objective_hint_visible or not _should_show_objective_hint(state.current_zone)
 	var foreground_props := _world.get_node_or_null("ForegroundProps")
 	if foreground_props == null:
 		return
@@ -961,7 +967,7 @@ func update_route_hud() -> void:
 	if route_panel == null:
 		return
 	var state: Node = _world.get_node("WorldState")
-	var hide_panel: bool = state.current_zone == "room" or state.current_zone == "samsun_rift"
+	var hide_panel: bool = state.current_zone == "room" or state.current_zone == "samsun_rift" or state.current_zone == "ankara" or state.current_zone == "sakarya" or state.current_zone == "final"
 	route_panel.visible = not hide_panel
 	if not route_panel.visible:
 		return
@@ -1058,8 +1064,12 @@ func update_objective(text: String) -> void:
 
 	_hud_bar.set_title(title)
 	_hud_bar.set_chip(chip)
-	_hud_bar.set_objective(text, state.current_zone != "samsun_rift")
+	_hud_bar.set_objective(text, _should_show_objective_hint(state.current_zone))
 	_update_area_theme()
+
+
+func _should_show_objective_hint(zone: String) -> bool:
+	return not ["samsun_rift", "ankara", "sakarya", "final"].has(zone)
 
 
 # ---------------------------------------------------------------------------

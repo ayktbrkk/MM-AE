@@ -178,8 +178,8 @@ func _spawn_sakarya_markers(world_root: Node) -> void:
 	_add_marker("sakarya_clue", "Cephe Telgrafı", Vector2(1210, 1550), "Cepheden gelen telgraflar, sabır ve düzenli savunmanın zaferi hazırladığını gösterir.", world_root)
 	_add_marker("npc", "Cephe Rehberi", Vector2(800, 760), "Sakarya'da doğru iş, geri çekilmeden çok topyekun savunma ruhunu canlı tutmaktır.", world_root)
 	_add_marker("sakarya_decision", "Savunma Kararı", Vector2(800, 1000), "Hazır olduğunda savunma stratejisini belirle.", world_root)
-	_add_marker("build_spot", "Karargah Destek Noktası", Vector2(360, 820), "Karargah düzenini güçlendirmek için buraya destek kurabilirsin.", world_root)
-	_add_marker("build_spot", "Telgraf Destek Noktası", Vector2(1190, 820), "Cephe haberlerini güvenli taşımak için buraya destek kurabilirsin.", world_root)
+	_add_marker("build_spot", "Karargah Destek Noktası", Vector2(470, 980), "Karargah düzenini güçlendirmek için buraya destek kurabilirsin.", world_root)
+	_add_marker("build_spot", "Telgraf Destek Noktası", Vector2(1080, 980), "Cephe haberlerini güvenli taşımak için buraya destek kurabilirsin.", world_root)
 	_add_marker("build_spot", "Cephe Destek Noktası", Vector2(530, 1500), "Savunma hattını güçlendirmek için buraya destek kurabilirsin.", world_root)
 	_add_marker("sakarya_wave", "Taarruz Dalgası", Vector2(820, 1500), "Hazır olduğunda Taarruz Dalgası'nı başlat.", world_root)
 
@@ -187,12 +187,12 @@ func _spawn_sakarya_markers(world_root: Node) -> void:
 func _spawn_final_markers(world_root: Node) -> void:
 	var state: Node = world_root.get_node("WorldState")
 	state.set_zone("final")
-	_add_marker("final_clue", "Cumhuriyet Notu", Vector2(360, 620), "Cumhuriyet, egemenliğin kayıtsız şartsız millete ait olduğunu ilan eder.", world_root)
-	_add_marker("final_clue", "Gelecek Defteri", Vector2(1210, 1550), "Yeni devletin geleceği, bilime, eğitime ve ortak yurttaşlık bilincine dayanacaktır.", world_root)
+	_add_marker("final_clue", "Cumhuriyet Notu", Vector2(620, 900), "Cumhuriyet, egemenliğin kayıtsız şartsız millete ait olduğunu ilan eder.", world_root)
+	_add_marker("final_clue", "Gelecek Defteri", Vector2(1080, 1490), "Yeni devletin geleceği, bilime, eğitime ve ortak yurttaşlık bilincine dayanacaktır.", world_root)
 	_add_marker("npc", "Cumhuriyet Rehberi", Vector2(800, 760), "Buradaki son adım, kazanılan bağımsızlığı geleceğe taşıyacak vizyonu anlamaktır.", world_root)
 	_add_marker("final_decision", "Gelecek Kararı", Vector2(800, 1000), "Hazır olduğunda Cumhuriyet'in geleceğini nasıl koruyacağına karar ver.", world_root)
-	_add_marker("build_spot", "Meclis Destek Noktası", Vector2(360, 820), "Cumhuriyet kurumlarını güçlendirmek için buraya destek kurabilirsin.", world_root)
-	_add_marker("build_spot", "Zafer Destek Noktası", Vector2(1190, 820), "Kazanımları görünür kılmak için buraya destek kurabilirsin.", world_root)
+	_add_marker("build_spot", "Meclis Destek Noktası", Vector2(470, 980), "Cumhuriyet kurumlarını güçlendirmek için buraya destek kurabilirsin.", world_root)
+	_add_marker("build_spot", "Zafer Destek Noktası", Vector2(1080, 980), "Kazanımları görünür kılmak için buraya destek kurabilirsin.", world_root)
 	_add_marker("build_spot", "Gelecek Destek Noktası", Vector2(530, 1500), "Cumhuriyet'i geleceğe taşımak için buraya destek kurabilirsin.", world_root)
 	_add_marker("final_wave", "Cumhuriyet Dalgası", Vector2(820, 1500), "Hazır olduğunda Cumhuriyet Dalgası'nı başlat.", world_root)
 

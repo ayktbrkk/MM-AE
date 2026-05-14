@@ -43,8 +43,8 @@ Kural:
 | P2 | tamamlandi | Teknik art sozlesmesi, token sahipligi ve pipeline akisi yazildi | P3 onayi bekleniyor |
 | P3 | tamamlandi | Bandirma destek-prop temizlik ve kompozisyon sakinlestirme turu kapatildi, temiz capture sabitlendi | P4 kontrast kalibrasyonu |
 | P4 | tamamlandi | Bandirma HUD, guidance/marker, kisa kopya, capture contract ve location sign de-stack kalibrasyonu `bandirma_world_p4_hud.png` ile tekrar uretilebilir sekilde dogrulandi | P5 rollout onayi |
-| P5 | devam ediyor | Samsun ikinci slice'i kapatildiktan sonra Ankara ilk rollout probe'u alindi; ust HUD bandina giren support/guide anchor'lari asagi cekilerek yenilenen `ankara_world_p5_probe.png` capture'inda ust kart yigisi ve merkez reaction baskisi azaltildi | Ankara icin ikinci mikro kompozisyon veya sonraki hedef zone karari |
-| P6 | bekliyor | Kabul/regression paketi son dalga | P3-P5 sonrasi |
+| P5 | tamamlandi | Samsun benchmark kontrati eklendi; Ankara'da yan HUD footprint'i bastirildi, Sakarya'da support kartlari iceri cekildi ve Final'de hem support hem clue anchor'lari iceri alinip rollout capture'lari okunur ara ritme tasindi | P6 kabul kapisi |
+| P6 | tamamlandi | `verify_samsun_benchmark_contract`, `verify_p5_late_zone_benchmark_contract`, `verify_capture_world_render_contract` ve parse check ayni acceptance turunda yesile dondu | Sonraki world-art dalgasi veya commit/push |
 | P7 | tamamlandi | Android export audit tablosu ve eksik config listesi yazildi | P8 checklist uygulamasina giris |
 | P8 | tamamlandi | Android smoke checklist dosyasi ve akış matrisi yazildi | P9 safe-area/system bar uygulamasina giris |
 | P9 | tamamlandi | 1080x1920 accepted baseline'lar yenilendi ve UI regression suite tekrar yesile dondu | P10 lifecycle veya P11 cihaz gozlemi |
@@ -56,7 +56,7 @@ Kural:
 
 - Tamamlanan ilk paket: `P1`
 - Tamamlanan ikinci paket: `P2`
-- Aktif world art paketi: `P5` onayi bekleniyor
+- Aktif world art paketi: acceptance turu kapandi
 - Tamamlanan Android audit paketi: `P7`
 - Tamamlanan Android checklist paketi: `P8`
 - Aktif Android lifecycle paketi: `P10`

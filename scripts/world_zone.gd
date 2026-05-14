@@ -977,7 +977,7 @@ func _setup_ankara() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("ankara_clue", _world_text("ui.world.setup.ankara.goal", "Ankara açıldı. İpuçlarını topla, doğru kararı ver ve Meclis'in iradesini kur."))
+	set_goal("ankara_clue", _world_text("ui.world.setup.ankara.goal", "İki Meclis izini topla. Sonra merkezi seç."))
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition(
 		_world_text("ui.world.setup.ankara.transition.title", "Ankara: Meclis ve İrade"),
@@ -1039,7 +1039,7 @@ func _setup_sakarya() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("sakarya_clue", _world_text("ui.world.setup.sakarya.goal", "Sakarya açıldı. İpuçlarını topla, doğru kararı ver ve Büyük Taarruz'u başlat."))
+	set_goal("sakarya_clue", _world_text("ui.world.setup.sakarya.goal", "İki cephe izini topla. Sonra savunmayı seç."))
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition(
 		_world_text("ui.world.setup.sakarya.transition.title", "Sakarya ve Büyük Taarruz"),
@@ -1067,8 +1067,8 @@ func _setup_sakarya_after_build() -> void:
 	builder.add_historical_landmark(Vector2(530, 1500), "people", "Cephe", "sakarya.front_node")
 	builder.add_prop_cluster(Vector2(530, 1500), "people", "sakarya.front_landmark")
 
-	builder.add_strategy_node(Vector2(360, 820), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
-	builder.add_strategy_node(Vector2(1190, 820), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(470, 980), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(1080, 980), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(530, 1500), "Birlik", _colors.POP_GOLD, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(820, 1500), "Dalga", Color(0.68, 0.40, 1.0), "fx.rift_focus_ring")
 
@@ -1076,7 +1076,7 @@ func _setup_sakarya_after_build() -> void:
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
 	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.sakarya.observe", "Eda: Önce karargâh çevresindeki izleri okuyalım."), "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.sakarya.telegraph", "Eda: Telgraf, cephe haberlerini güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1080, 980), 210.0, _world_text("ui.world.companion.sakarya.telegraph", "Eda: Telgraf, cephe haberlerini güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
 	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.sakarya.people", "Arda: Cephedeki askerlerin moralini yüksek tutmak en önemli görev."), "interactables.companion_reaction_spot")
 	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.sakarya.core", "Eda: Strateji ve birlik, zaferin anahtarıdır."), "interactables.companion_reaction_spot")
 
@@ -1101,7 +1101,7 @@ func _setup_final() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("final_clue", _world_text("ui.world.setup.final.goal", "Cumhuriyet açıldı. İpuçlarını topla, doğru kararı ver ve zaferi tamamla."))
+	set_goal("final_clue", _world_text("ui.world.setup.final.goal", "İki Cumhuriyet izini topla. Sonra zaferi tamamla."))
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition(
 		_world_text("ui.world.setup.final.transition.title", "Final: Cumhuriyet"),
@@ -1129,16 +1129,16 @@ func _setup_final_after_build() -> void:
 	builder.add_historical_landmark(Vector2(530, 1500), "people", "Gelecek", "final.future_node")
 	builder.add_prop_cluster(Vector2(530, 1500), "people", "final.future_landmark")
 
-	builder.add_strategy_node(Vector2(360, 820), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
-	builder.add_strategy_node(Vector2(1190, 820), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(470, 980), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(1080, 980), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(530, 1500), "Birlik", _colors.POP_GOLD, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(820, 1500), "Dalga", Color(0.90, 0.75, 0.30), "fx.rift_focus_ring")
 
-	builder.add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
-	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
+	builder.add_prop_cluster(Vector2(620, 900), "discovery", "world_props.prop_cluster")
+	builder.add_prop_cluster(Vector2(1080, 1490), "discovery", "world_props.prop_cluster")
 
-	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.final.observe", "Eda: Meclis binası... İşte burası, tarih burada yazıldı."), "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.final.telegraph", "Eda: Zafer, sadece savaşla değil, bilgiyle de kazanılır."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(620, 900), 200.0, _world_text("ui.world.companion.final.observe", "Eda: Meclis binası... İşte burası, tarih burada yazıldı."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1080, 980), 210.0, _world_text("ui.world.companion.final.telegraph", "Eda: Zafer, sadece savaşla değil, bilgiyle de kazanılır."), "interactables.companion_reaction_spot")
 	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.final.people", "Arda: Gelecek bizim... Bunu unutmamalıyız."), "interactables.companion_reaction_spot")
 	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.final.core", "Eda: Cumhuriyet, en büyük mirasımız. Onu korumak bizim görevimiz."), "interactables.companion_reaction_spot")
 

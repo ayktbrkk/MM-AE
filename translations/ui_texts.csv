@@ -166,17 +166,17 @@ ui.world.setup.kongre.transition.title,Kongreler
 ui.world.setup.kongre.transition.body,Farklı sesleri ortak hedefte buluştur
 ui.world.setup.kongre.dialogue.title,Kongreler
 ui.world.setup.kongre.dialogue.body,"{hero} şimdi büyük bir kongre salonundadır. Herkesin sesi farklıdır ama doğru iş, bu sesleri tek bir amaçta buluşturmaktır."
-ui.world.setup.ankara.goal,Ankara açıldı. İpuçlarını topla, doğru kararı ver ve Meclis'in iradesini kur.
+ui.world.setup.ankara.goal,İki Meclis izini topla. Sonra merkezi seç.
 ui.world.setup.ankara.transition.title,Ankara: Meclis ve İrade
 ui.world.setup.ankara.transition.body,Iradenin gücünü Meclis'te bul
 ui.world.setup.ankara.dialogue.title,Ankara: Meclis ve İrade
 ui.world.setup.ankara.dialogue.body,"{hero} şimdi sıcak bir bozkırın ortasında, yeni kurulmakta olan bir meclisin eşiğindedir. Burada doğru iş, milletin iradesini tek bir çatı altında toplamak ve tarihe yön vermektir."
-ui.world.setup.sakarya.goal,Sakarya açıldı. İpuçlarını topla, doğru kararı ver ve Büyük Taarruz'u başlat.
+ui.world.setup.sakarya.goal,İki cephe izini topla. Sonra savunmayı seç.
 ui.world.setup.sakarya.transition.title,Sakarya ve Büyük Taarruz
 ui.world.setup.sakarya.transition.body,Vatan savunmasında son kale
 ui.world.setup.sakarya.dialogue.title,Sakarya ve Büyük Taarruz
 ui.world.setup.sakarya.dialogue.body,"{hero} şimdi savaşın tam ortasındadır. Düşman Ankara'ya doğru ilerlerken, herkes umudunu korumaya çalışmaktadır. Burada doğru iş, vatanın her karış toprağını savunmak ve zaferi getirecek kararları vermektir."
-ui.world.setup.final.goal,Cumhuriyet açıldı. İpuçlarını topla, doğru kararı ver ve zaferi tamamla.
+ui.world.setup.final.goal,İki Cumhuriyet izini topla. Sonra zaferi tamamla.
 ui.world.setup.final.transition.title,Final: Cumhuriyet
 ui.world.setup.final.transition.body,29 Ekim 1923 — Milletin zaferi
 ui.world.setup.final.dialogue.title,Final: Cumhuriyet
