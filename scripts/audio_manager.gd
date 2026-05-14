@@ -59,6 +59,7 @@ var _sfx_players: Array[AudioStreamPlayer] = []
 var _current_bgm_name: String = ""
 var _bgm_fade_tween: Tween
 var _audio_disabled := false
+var _app_paused := false
 
 # Placeholder ses cache'i — procedural sesler burada saklanir
 var _placeholder_sounds: Dictionary = {}
@@ -215,6 +216,22 @@ func is_bgm_playing() -> bool:
 	if _audio_disabled:
 		return false
 	return _bgm_player.playing
+
+
+func set_app_paused(paused: bool) -> void:
+	if _audio_disabled or _app_paused == paused:
+		_app_paused = paused
+		return
+	_app_paused = paused
+	if is_instance_valid(_bgm_player):
+		_bgm_player.stream_paused = paused
+	for player in _sfx_players:
+		if is_instance_valid(player):
+			player.stream_paused = paused
+
+
+func is_app_paused() -> bool:
+	return _app_paused
 
 
 # ---------------------------------------------------------------------------

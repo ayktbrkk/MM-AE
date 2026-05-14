@@ -52,6 +52,7 @@ var is_transitioning := false
 var _exit_dialog: CanvasLayer
 var _arda_base_y: float
 var _eda_base_y: float
+var _app_is_backgrounded := false
 
 class MenuBackdrop:
 	extends Control
@@ -143,7 +144,7 @@ func _ready() -> void:
 	dream_intro_overlay.intro_finished.connect(_open_world)
 	_loading_overlay = LOADING_OVERLAY_SCENE.instantiate()
 	add_child(_loading_overlay)
-	continue_button.disabled = not SaveManager.has_save()
+	_refresh_continue_button_state()
 	_configure_focus_navigation()
 	_refresh_menu_focus()
 	# P2-13: Çıkış onay diyalogu
@@ -160,11 +161,22 @@ func _ready() -> void:
 	_start_idle_animations()
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_RESIZED and is_node_ready():
-		_sync_responsive_layout()
+	match what:
+		NOTIFICATION_RESIZED:
+			if is_node_ready():
+				_sync_responsive_layout()
+		NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT:
+			_handle_application_pause()
+		NOTIFICATION_APPLICATION_RESUMED, NOTIFICATION_APPLICATION_FOCUS_IN:
+			_handle_application_resume()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
+		var transition_active: bool = bool(is_transitioning) or (dream_intro_overlay != null and dream_intro_overlay.visible) or (_loading_overlay != null and _loading_overlay.has_method("has_active_request") and _loading_overlay.has_active_request())
+		if transition_active:
+			_cancel_pending_world_transition()
+			get_viewport().set_input_as_handled()
+			return
 		if _exit_dialog.visible:
 			_exit_dialog.hide_overlay()
 			_refresh_menu_focus(exit_button)
@@ -456,6 +468,50 @@ func _set_menu_enabled(enabled: bool) -> void:
 	exit_button.disabled = not enabled
 	if enabled and not settings_overlay.visible:
 		_refresh_menu_focus()
+
+
+func _refresh_continue_button_state() -> void:
+	if continue_button == null:
+		return
+	continue_button.disabled = is_transitioning or not SaveManager.has_save()
+
+
+func _handle_application_pause() -> void:
+	if _app_is_backgrounded:
+		return
+	_app_is_backgrounded = true
+	if (dream_intro_overlay != null and dream_intro_overlay.visible) or (_loading_overlay != null and _loading_overlay.has_method("has_active_request") and _loading_overlay.has_active_request()):
+		_cancel_pending_world_transition()
+	if settings_overlay != null and settings_overlay.visible:
+		_hide_settings_overlay()
+	if _exit_dialog != null and _exit_dialog.visible:
+		_exit_dialog.hide_overlay()
+	if AudioManager != null and AudioManager.has_method("set_app_paused"):
+		AudioManager.set_app_paused(true)
+
+
+func _handle_application_resume() -> void:
+	if not _app_is_backgrounded:
+		return
+	_app_is_backgrounded = false
+	_refresh_continue_button_state()
+	_sync_responsive_layout()
+	if not settings_overlay.visible and (_exit_dialog == null or not _exit_dialog.visible):
+		_refresh_menu_focus()
+	if AudioManager != null and AudioManager.has_method("set_app_paused"):
+		AudioManager.set_app_paused(false)
+
+
+func _cancel_pending_world_transition() -> void:
+	is_transitioning = false
+	_pending_world_load_request = {}
+	if dream_intro_overlay != null and dream_intro_overlay.has_method("hide_overlay"):
+		dream_intro_overlay.hide_overlay()
+	if _loading_overlay != null and _loading_overlay.has_method("cancel_pending_request"):
+		_loading_overlay.cancel_pending_request()
+	elif _loading_overlay != null and _loading_overlay.visible:
+		_loading_overlay.hide_overlay()
+	_set_menu_enabled(true)
 
 func _open_world() -> void:
 	if _loading_overlay != null:

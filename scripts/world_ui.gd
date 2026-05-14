@@ -32,6 +32,7 @@ var route_node_labels: Dictionary = {}
 # Guidance
 var guidance_arrow: Node2D
 var guidance_arrow_icon: Sprite2D
+var guidance_arrow_label_panel: PanelContainer
 var guidance_arrow_label: Label
 
 # Atmosphere
@@ -755,7 +756,7 @@ func build_guidance_arrow() -> void:
 
 	var plate := Polygon2D.new()
 	plate.name = "GuidancePlate"
-	plate.color = Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.62)
+	plate.color = Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.92)
 	plate.polygon = PackedVector2Array([
 		Vector2(-46, -34),
 		Vector2(46, -34),
@@ -766,21 +767,61 @@ func build_guidance_arrow() -> void:
 	])
 	guidance_arrow.add_child(plate)
 
+	var plate_outline := Polygon2D.new()
+	plate_outline.name = "GuidancePlateOutline"
+	plate_outline.color = Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.76)
+	plate_outline.polygon = PackedVector2Array([
+		Vector2(-52, -40),
+		Vector2(52, -40),
+		Vector2(64, 0),
+		Vector2(52, 40),
+		Vector2(-52, 40),
+		Vector2(-64, 0),
+	])
+	guidance_arrow.add_child(plate_outline)
+	guidance_arrow.move_child(plate_outline, 0)
+
 	guidance_arrow_icon = Sprite2D.new()
 	guidance_arrow_icon.texture = _textures.GAME_ARROW_UP_TEXTURE
 	guidance_arrow_icon.scale = Vector2(0.62, 0.62)
-	guidance_arrow_icon.modulate = Color(1, 1, 1, 0.94)
+	guidance_arrow_icon.modulate = Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.96)
 	guidance_arrow_icon.z_index = 1
 	guidance_arrow.add_child(guidance_arrow_icon)
 
+	guidance_arrow_label_panel = PanelContainer.new()
+	guidance_arrow_label_panel.name = "GuidanceLabelPanel"
+	guidance_arrow_label_panel.position = Vector2(-140, 44)
+	guidance_arrow_label_panel.custom_minimum_size = _ui_tokens.GUIDANCE_LABEL_SIZE
+	guidance_arrow_label_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guidance_arrow_label_panel.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(
+			Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.94),
+			Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.58),
+			18,
+			3,
+			Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.22),
+			6,
+			Vector2(0, 3)
+		)
+	)
+	guidance_arrow.add_child(guidance_arrow_label_panel)
+
+	var guidance_margin := MarginContainer.new()
+	guidance_margin.add_theme_constant_override("margin_left", _ui_tokens.SPACE_SM)
+	guidance_margin.add_theme_constant_override("margin_top", _ui_tokens.SPACE_XS)
+	guidance_margin.add_theme_constant_override("margin_right", _ui_tokens.SPACE_SM)
+	guidance_margin.add_theme_constant_override("margin_bottom", _ui_tokens.SPACE_XS)
+	guidance_arrow_label_panel.add_child(guidance_margin)
+
 	guidance_arrow_label = Label.new()
-	guidance_arrow_label.position = Vector2(-120, 44)
-	guidance_arrow_label.custom_minimum_size = _ui_tokens.GUIDANCE_LABEL_SIZE
 	guidance_arrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	guidance_arrow_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	guidance_arrow_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_MD)
-	guidance_arrow_label.add_theme_color_override("font_color", Color(0.10, 0.14, 0.18, 0.80))
-	guidance_arrow.add_child(guidance_arrow_label)
+	guidance_arrow_label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.96))
+	guidance_arrow_label.add_theme_color_override("font_outline_color", Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.26))
+	guidance_arrow_label.add_theme_constant_override("outline_size", 1)
+	guidance_margin.add_child(guidance_arrow_label)
 
 
 func update_guidance_arrow() -> void:
@@ -790,24 +831,54 @@ func update_guidance_arrow() -> void:
 	var player_node: Node2D = _world.get_node("Player")
 	var marker_mod: Node = _world.get_node("WorldMarker")
 	var markers: Node2D = _world.get_node("Markers")
+	var objective_hint_visible := is_objective_hint_visible()
+	_sync_location_sign_visibility(objective_hint_visible)
 
 	if state.current_zone == "samsun_rift":
-		guidance_arrow.visible = false
+		_hide_guidance_arrow()
 		return
 	var blocked := is_world_input_blocked()
 	var target_marker: Node2D = marker_mod.get_guidance_marker(markers, state.current_goal_kind)
 	if blocked or target_marker == null:
-		guidance_arrow.visible = false
+		_hide_guidance_arrow()
 		return
 	var direction := target_marker.global_position - player_node.global_position
 	var distance := direction.length()
 	if distance < 150.0 * 1.45:
-		guidance_arrow.visible = false
+		_hide_guidance_arrow()
 		return
 	guidance_arrow.visible = true
 	guidance_arrow.scale = Vector2.ONE * (1.0 + 0.05 * sin(elapsed_time * 4.0))
 	guidance_arrow_icon.rotation = direction.angle() + (PI * 0.5)
+	if guidance_arrow_label_panel != null:
+		guidance_arrow_label_panel.visible = not objective_hint_visible
 	guidance_arrow_label.text = String(target_marker.get_meta("title", "Hedef"))
+
+
+func _hide_guidance_arrow() -> void:
+	guidance_arrow.visible = false
+	if guidance_arrow_label_panel != null:
+		guidance_arrow_label_panel.visible = false
+
+
+func is_objective_hint_visible() -> bool:
+	return _hud_bar != null and _hud_bar.has_method("is_objective_hint_visible") and _hud_bar.is_objective_hint_visible()
+
+
+func _sync_location_sign_visibility(objective_hint_visible: bool) -> void:
+	if _world == null:
+		return
+	var state: Node = _world.get_node("WorldState")
+	var should_hide_location_sign: bool = objective_hint_visible or state.current_zone == "samsun_rift"
+	var foreground_props := _world.get_node_or_null("ForegroundProps")
+	if foreground_props == null:
+		return
+	for child in foreground_props.get_children():
+		if not child.has_meta("asset_slot"):
+			continue
+		var slot_id := String(child.get_meta("asset_slot", ""))
+		if slot_id.contains("location_sign"):
+			(child as CanvasItem).visible = not should_hide_location_sign
 
 
 # ---------------------------------------------------------------------------
@@ -987,7 +1058,7 @@ func update_objective(text: String) -> void:
 
 	_hud_bar.set_title(title)
 	_hud_bar.set_chip(chip)
-	_hud_bar.set_objective(text)
+	_hud_bar.set_objective(text, state.current_zone != "samsun_rift")
 	_update_area_theme()
 
 
@@ -1253,6 +1324,15 @@ func _save_game() -> void:
 	var save_manager := get_node_or_null("/root/SaveManager")
 	if save_manager != null:
 		save_manager.call("save_game", save_data)
+
+
+func persist_runtime_state() -> void:
+	_save_game()
+
+
+func dismiss_background_transients() -> void:
+	if is_exit_confirm_visible():
+		hide_exit_confirm()
 
 
 # ---------------------------------------------------------------------------

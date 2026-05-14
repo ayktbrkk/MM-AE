@@ -12,6 +12,7 @@ const EDA_IDLE_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_
 const EDA_HAPPY_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_happy.svg")
 const EDA_THINKING_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_thinking.svg")
 const TAU := 2.0 * PI
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _rich_text := preload("res://scripts/rich_text_utils.gd")
 const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
@@ -40,6 +41,7 @@ const EDA_EXPRESSIONS := {
 @onready var panel_glow: ColorRect = $PanelGlow
 @onready var stage_light_left: ColorRect = $PortraitLayer/StageLightLeft
 @onready var stage_light_right: ColorRect = $PortraitLayer/StageLightRight
+@onready var bottom_area: MarginContainer = $BottomArea
 @onready var panel: PanelContainer = $BottomArea/DialoguePanel
 @onready var chapter_label: Label = $BottomArea/DialoguePanel/DialogueMargin/DialogueContent/HeaderRow/HeaderText/ChapterLabel
 @onready var name_label: Label = $BottomArea/DialoguePanel/DialogueMargin/DialogueContent/HeaderRow/HeaderText/NameLabel
@@ -64,6 +66,7 @@ func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.DIALOGUE
 
 func _ready() -> void:
+	get_viewport().size_changed.connect(_sync_layout)
 	left_portrait.texture = ARDA_IDLE_TEXTURE
 	right_portrait.texture = EDA_IDLE_TEXTURE
 	continue_icon.texture = _textures.CONTINUE_ICON
@@ -79,8 +82,14 @@ func _ready() -> void:
 	body_label.text = _rich_text.sanitize(_ui_text.text(_ui_text.DIALOGUE_DEFAULT_BODY, "Hikaye metni burada görünür."))
 	continue_label.text = _ui_text.text(_ui_text.DIALOGUE_CONTINUE, "Dokun ve devam et")
 	_apply_styles()
+	_sync_layout()
 	hide_overlay()
 	_start_idle_animations()
+
+
+func _exit_tree() -> void:
+	if get_viewport().size_changed.is_connected(_sync_layout):
+		get_viewport().size_changed.disconnect(_sync_layout)
 
 func _gui_input(event: InputEvent) -> void:
 	if not visible:
@@ -97,6 +106,55 @@ func _input(event: InputEvent) -> void:
 	if _matches_action(event, &"ui_accept") or _matches_action(event, &"ui_cancel"):
 		_advance_or_continue()
 		get_viewport().set_input_as_handled()
+
+
+func _sync_layout() -> void:
+	var viewport_size := get_viewport_rect().size
+	var safe_rect := _gui_frame.safe_area_rect(viewport_size)
+	var panel_height := minf(492.0, maxf(340.0, safe_rect.size.y * 0.27))
+	var bottom_margin := viewport_size.y - safe_rect.end.y
+	var portrait_width := minf(190.0, maxf(158.0, safe_rect.size.x * 0.22))
+	var portrait_height := portrait_width * 1.26
+	var portrait_bottom := bottom_area.offset_top + 104.0
+	var portrait_top := portrait_bottom - portrait_height
+	var left_inset := safe_rect.position.x + 26.0
+	var right_inset := (viewport_size.x - safe_rect.end.x) + 26.0
+	bottom_area.offset_left = safe_rect.position.x
+	bottom_area.offset_right = -(viewport_size.x - safe_rect.end.x)
+	bottom_area.offset_bottom = -bottom_margin
+	bottom_area.offset_top = bottom_area.offset_bottom - panel_height
+	panel_glow.offset_bottom = bottom_area.offset_bottom
+	panel_glow.offset_top = bottom_area.offset_top - 90.0
+	left_portrait.offset_left = left_inset
+	left_portrait.offset_right = left_inset + portrait_width
+	left_portrait.offset_top = portrait_top
+	left_portrait.offset_bottom = portrait_bottom
+	right_portrait.offset_right = -right_inset
+	right_portrait.offset_left = right_portrait.offset_right - portrait_width
+	right_portrait.offset_top = portrait_top
+	right_portrait.offset_bottom = portrait_bottom
+	left_glow.offset_left = left_portrait.offset_left - 20.0
+	left_glow.offset_right = left_portrait.offset_right + 20.0
+	left_glow.offset_top = left_portrait.offset_top + 10.0
+	left_glow.offset_bottom = left_portrait.offset_bottom
+	right_glow.offset_left = right_portrait.offset_left - 20.0
+	right_glow.offset_right = right_portrait.offset_right + 20.0
+	right_glow.offset_top = right_portrait.offset_top + 10.0
+	right_glow.offset_bottom = right_portrait.offset_bottom
+	stage_light_left.offset_left = left_portrait.offset_left - 28.0
+	stage_light_left.offset_right = left_portrait.offset_right + 8.0
+	stage_light_left.offset_top = left_portrait.offset_top - 38.0
+	stage_light_left.offset_bottom = left_portrait.offset_bottom + 8.0
+	stage_light_right.offset_left = right_portrait.offset_left - 8.0
+	stage_light_right.offset_right = right_portrait.offset_right + 28.0
+	stage_light_right.offset_top = right_portrait.offset_top - 38.0
+	stage_light_right.offset_bottom = right_portrait.offset_bottom + 8.0
+	left_portrait_base_position = left_portrait.position
+	right_portrait_base_position = right_portrait.position
+	left_glow_base_position = left_glow.position
+	right_glow_base_position = right_glow.position
+	stage_light_left_base_position = stage_light_left.position
+	stage_light_right_base_position = stage_light_right.position
 
 func _start_idle_animations() -> void:
 	# Portreler ve glow'lar — sin(elapsed * 2.0), periyot PI

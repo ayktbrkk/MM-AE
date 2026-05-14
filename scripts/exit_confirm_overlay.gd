@@ -11,6 +11,7 @@ extends CanvasLayer
 signal exit_confirmed
 signal exit_cancelled
 
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 
@@ -20,6 +21,7 @@ const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 # ---------------------------------------------------------------------------
 @onready var _colors := preload("res://scripts/colors.gd")
 @onready var dimmer: ColorRect = $Dimmer
+@onready var center: CenterContainer = $Center
 @onready var panel: PanelContainer = $Center/Panel
 @onready var confirm_button: Button = $Center/Panel/Margin/VBox/ConfirmButton
 @onready var cancel_button: Button = $Center/Panel/Margin/VBox/CancelButton
@@ -32,6 +34,8 @@ func _ready() -> void:
 	_apply_styles()
 	confirm_button.pressed.connect(_on_confirm_pressed)
 	cancel_button.pressed.connect(_on_cancel_pressed)
+	get_viewport().size_changed.connect(_sync_layout)
+	_sync_layout()
 	visible = false
 
 
@@ -58,6 +62,23 @@ func _on_confirm_pressed() -> void:
 func _on_cancel_pressed() -> void:
 	exit_cancelled.emit()
 	hide_overlay()
+
+
+func _exit_tree() -> void:
+	if get_viewport().size_changed.is_connected(_sync_layout):
+		get_viewport().size_changed.disconnect(_sync_layout)
+
+
+func _sync_layout() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	dimmer.offset_left = 0.0
+	dimmer.offset_top = 0.0
+	dimmer.offset_right = viewport_size.x
+	dimmer.offset_bottom = viewport_size.y
+	var safe_rect := _gui_frame.apply_safe_area_offsets(center, viewport_size)
+	var panel_width := minf(maxf(420.0, safe_rect.size.x), 680.0)
+	var panel_height := minf(maxf(300.0, safe_rect.size.y * 0.30), 460.0)
+	panel.custom_minimum_size = Vector2(panel_width, panel_height)
 
 
 # ---------------------------------------------------------------------------

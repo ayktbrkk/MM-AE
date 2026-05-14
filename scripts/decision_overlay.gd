@@ -5,6 +5,7 @@ signal choice_selected(context: String, choice: String)
 const ARDA_TEXTURE := preload("res://assets/art/characters/arda/portrait_arda_idle.svg")
 const EDA_TEXTURE := preload("res://assets/art/characters/eda/portrait_eda_idle.svg")
 const TAU := 2.0 * PI
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_focus := preload("res://scripts/ui_focus_helper.gd")
 const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
@@ -20,6 +21,7 @@ const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 @onready var backdrop: ColorRect = $Backdrop
 @onready var top_glow: ColorRect = $TopGlow
 @onready var bottom_fog: ColorRect = $BottomFog
+@onready var center: CenterContainer = $Center
 @onready var panel: PanelContainer = $Center/DecisionPanel
 @onready var decision_margin: MarginContainer = $Center/DecisionPanel/DecisionMargin
 @onready var decision_content: VBoxContainer = $Center/DecisionPanel/DecisionMargin/DecisionContent
@@ -52,6 +54,7 @@ func get_overlay_type() -> int:
 
 func _ready() -> void:
 	resized.connect(_apply_responsive_layout)
+	get_viewport().size_changed.connect(_apply_responsive_layout)
 	_apply_touch_target_layout()
 	_apply_responsive_layout()
 	_apply_styles()
@@ -79,6 +82,11 @@ func _ready() -> void:
 	_start_idle_animations()
 
 
+func _exit_tree() -> void:
+	if get_viewport().size_changed.is_connected(_apply_responsive_layout):
+		get_viewport().size_changed.disconnect(_apply_responsive_layout)
+
+
 func _apply_touch_target_layout() -> void:
 	for button in [arda_button, eda_button]:
 		button.custom_minimum_size.x = maxf(button.custom_minimum_size.x, MIN_DECISION_BUTTON_WIDTH)
@@ -91,10 +99,15 @@ func _apply_touch_target_layout() -> void:
 
 func _apply_responsive_layout() -> void:
 	var viewport_size := get_viewport_rect().size
+	var safe_rect := _gui_frame.safe_area_rect(viewport_size)
+	center.offset_left = safe_rect.position.x
+	center.offset_top = safe_rect.position.y
+	center.offset_right = -(viewport_size.x - safe_rect.end.x)
+	center.offset_bottom = -(viewport_size.y - safe_rect.end.y)
 	var compact := viewport_size.x <= 960.0 or viewport_size.y <= 1280.0
 	panel.custom_minimum_size = Vector2(
-		minf(DECISION_PANEL_WIDTH, maxf(560.0, viewport_size.x - (56.0 if compact else 72.0))),
-		minf(DECISION_PANEL_HEIGHT, maxf(980.0, viewport_size.y - (72.0 if compact else 96.0)))
+		minf(DECISION_PANEL_WIDTH, maxf(560.0, safe_rect.size.x - (56.0 if compact else 72.0))),
+		minf(DECISION_PANEL_HEIGHT, maxf(980.0, safe_rect.size.y - (72.0 if compact else 96.0)))
 	)
 	var side_margin := _ui_tokens.SPACE_2XL if compact else _ui_tokens.SPACE_4XL
 	var top_margin := _ui_tokens.SPACE_XL_PLUS if compact else _ui_tokens.SPACE_3XL_PLUS

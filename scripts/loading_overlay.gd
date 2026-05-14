@@ -18,10 +18,12 @@ const THREADED_TYPE_HINT := "PackedScene"
 const THREADED_INITIAL_PROGRESS := 0.05
 const THREADED_CACHE_MODE := ResourceLoader.CACHE_MODE_IGNORE
 const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 
 
 # Node referanslari
 @onready var _dimmer: ColorRect = $Dimmer
+@onready var _center_container: CenterContainer = $CenterContainer
 @onready var _panel: PanelContainer = $CenterContainer/Panel
 @onready var _progress_bar: TextureProgressBar = $CenterContainer/Panel/Margin/VBox/ProgressBar
 @onready var _hint_label: Label = $CenterContainer/Panel/Margin/VBox/HintLabel
@@ -33,6 +35,8 @@ var _pending_entry_action := ""
 var _overlay_title := DEFAULT_TITLE
 var _staged_hint_text := ""
 var _is_loading := false
+var _is_draining_canceled_request := false
+var _canceled_scene := ""
 var _threaded_status := ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
 var _threaded_progress := 0.0
 var _transition_tween: Tween
@@ -96,6 +100,30 @@ func get_loading_request() -> Dictionary:
 	}
 
 
+func has_active_request() -> bool:
+	return _is_loading or not _target_scene.is_empty() or _transition_tween != null
+
+
+func has_background_drain() -> bool:
+	return _is_draining_canceled_request
+
+
+func cancel_pending_request() -> void:
+	_cancel_transition_tween()
+	_cancel_progress_tween()
+	if _is_loading and not _target_scene.is_empty():
+		_canceled_scene = _target_scene
+		_is_draining_canceled_request = true
+	_is_loading = false
+	set_process(_is_draining_canceled_request)
+	hide()
+	_panel.modulate = Color.TRANSPARENT
+	_loading_spinner.modulate = Color.TRANSPARENT
+	_hint_label.modulate = Color.TRANSPARENT
+	_dimmer.color = Color(0.0, 0.0, 0.0, 0.0)
+	_clear_request_state()
+
+
 ## Yükleme ekranını kapatır.
 func dismiss() -> void:
 	_cancel_transition_tween()
@@ -109,6 +137,9 @@ func dismiss() -> void:
 
 
 func hide_overlay() -> void:
+	if has_active_request():
+		cancel_pending_request()
+		return
 	dismiss()
 
 
@@ -119,6 +150,8 @@ func hide_overlay() -> void:
 func _ready() -> void:
 	hide()
 	set_process(false)
+	get_viewport().size_changed.connect(_sync_layout)
+	_sync_layout()
 	_panel.modulate = Color.TRANSPARENT
 	_loading_spinner.modulate = Color.TRANSPARENT
 	_hint_label.modulate = Color.TRANSPARENT
@@ -129,12 +162,27 @@ func _exit_tree() -> void:
 	set_process(false)
 	_cancel_transition_tween()
 	_cancel_progress_tween()
+	if get_viewport().size_changed.is_connected(_sync_layout):
+		get_viewport().size_changed.disconnect(_sync_layout)
+
+
+func _sync_layout() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	_dimmer.offset_left = 0.0
+	_dimmer.offset_top = 0.0
+	_dimmer.offset_right = viewport_size.x
+	_dimmer.offset_bottom = viewport_size.y
+	var safe_rect := _gui_frame.apply_safe_area_offsets(_center_container, viewport_size)
+	var panel_width := minf(maxf(420.0, safe_rect.size.x), 640.0)
+	var panel_height := minf(maxf(320.0, safe_rect.size.y * 0.26), 420.0)
+	_panel.custom_minimum_size = Vector2(panel_width, panel_height)
 
 
 func _process(_delta: float) -> void:
-	if not _is_loading:
-		return
-	_advance_threaded_loading()
+	if _is_loading:
+		_advance_threaded_loading()
+	if _is_draining_canceled_request:
+		_advance_canceled_request_drain()
 
 
 func _start_loading() -> void:
@@ -160,20 +208,21 @@ func _begin_threaded_load_request() -> bool:
 	return true
 
 
-func _read_threaded_load_snapshot() -> Dictionary:
+func _read_threaded_load_snapshot(scene_path: String = _target_scene, update_primary_progress := true) -> Dictionary:
 	var progress: Array = []
-	var status := ResourceLoader.load_threaded_get_status(_target_scene, progress)
+	var status := ResourceLoader.load_threaded_get_status(scene_path, progress)
 	var sampled_progress := _threaded_progress
 	if progress.size() > 0:
 		sampled_progress = clampf(float(progress[0]), 0.0, 1.0)
 	if status == ResourceLoader.THREAD_LOAD_LOADED:
 		sampled_progress = 1.0
-	_threaded_status = status
-	_threaded_progress = maxf(_threaded_progress, sampled_progress)
-	_set_progress_value(_threaded_progress)
+	if update_primary_progress:
+		_threaded_status = status
+		_threaded_progress = maxf(_threaded_progress, sampled_progress)
+		_set_progress_value(_threaded_progress)
 	return {
 		"status": status,
-		"progress": _threaded_progress,
+		"progress": maxf(_threaded_progress, sampled_progress) if update_primary_progress else sampled_progress,
 	}
 
 
@@ -203,6 +252,26 @@ func _advance_threaded_loading() -> void:
 	_fail_loading("[LoadingOverlay] Threaded load basarisiz: %s (status %d)" % [_target_scene, status])
 
 
+func _advance_canceled_request_drain() -> void:
+	if _canceled_scene.is_empty():
+		_finish_canceled_request_drain()
+		return
+	var snapshot := _read_threaded_load_snapshot(_canceled_scene, false)
+	var status := int(snapshot.get("status", ResourceLoader.THREAD_LOAD_INVALID_RESOURCE))
+	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		return
+	if status == ResourceLoader.THREAD_LOAD_LOADED:
+		ResourceLoader.load_threaded_get(_canceled_scene)
+	_finish_canceled_request_drain()
+
+
+func _finish_canceled_request_drain() -> void:
+	_is_draining_canceled_request = false
+	_canceled_scene = ""
+	if not _is_loading:
+		set_process(false)
+
+
 func _complete_scene_change(packed_scene: PackedScene) -> void:
 	_set_progress_value(1.0)
 	var result := get_tree().change_scene_to_packed(packed_scene)
@@ -220,7 +289,7 @@ func _fail_loading(message: String) -> void:
 
 func _finish_loading_cycle(_success: bool) -> void:
 	_is_loading = false
-	set_process(false)
+	set_process(_is_draining_canceled_request)
 	loading_finished.emit()
 	_clear_request_state()
 

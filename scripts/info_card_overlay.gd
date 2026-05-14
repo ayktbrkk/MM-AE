@@ -3,6 +3,7 @@ extends Control
 signal continue_pressed
 
 const _rich_text := preload("res://scripts/rich_text_utils.gd")
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_focus := preload("res://scripts/ui_focus_helper.gd")
 const _ui_text := preload("res://scripts/ui_text.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
@@ -17,6 +18,7 @@ const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 @onready var sparkle_a: TextureRect = $SparkleA
 @onready var sparkle_b: TextureRect = $SparkleB
 @onready var sparkle_c: TextureRect = $SparkleC
+@onready var center: CenterContainer = $Center
 @onready var panel: PanelContainer = $Center/InfoCard
 @onready var tag_label: Label = $Center/InfoCard/CardMargin/CardContent/TagLabel
 @onready var title_label: Label = $Center/InfoCard/CardMargin/CardContent/TitleLabel
@@ -38,6 +40,7 @@ func get_overlay_type() -> int:
 func _ready() -> void:
 	icon_texture.texture = _textures.BADGE_TEXTURE
 	reward_star.texture = _textures.STAR_TEXTURE
+	get_viewport().size_changed.connect(_sync_layout)
 	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
 		sparkle.texture = _textures.STAR_TEXTURE
 		sparkle.modulate = Color(1, 1, 1, 0.0)
@@ -51,9 +54,28 @@ func _ready() -> void:
 	continue_button.icon_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_styles()
 	_configure_focus_navigation()
+	_sync_layout()
 	back_button.pressed.connect(_emit_continue)
 	continue_button.pressed.connect(_emit_continue)
 	visible = false
+
+
+func _exit_tree() -> void:
+	if get_viewport().size_changed.is_connected(_sync_layout):
+		get_viewport().size_changed.disconnect(_sync_layout)
+
+
+func _sync_layout() -> void:
+	var viewport_size := get_viewport_rect().size
+	var safe_rect := _gui_frame.safe_area_rect(viewport_size)
+	center.offset_left = safe_rect.position.x
+	center.offset_top = safe_rect.position.y
+	center.offset_right = -(viewport_size.x - safe_rect.end.x)
+	center.offset_bottom = -(viewport_size.y - safe_rect.end.y)
+	panel.custom_minimum_size = Vector2(
+		minf(900.0, maxf(520.0, safe_rect.size.x - 72.0)),
+		minf(980.0, maxf(760.0, safe_rect.size.y - 96.0))
+	)
 
 
 func _input(event: InputEvent) -> void:

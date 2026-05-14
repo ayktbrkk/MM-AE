@@ -92,3 +92,5 @@ Bu komut:
 - baseline olarak `artifacts/renders/ui_checklist/` altindaki PNG'leri kullanir
 - piksel diff ciktisini `artifacts/renders/ui_regression_diffs/` altina yazar
 - oran esigi ve kanal delta esigi asilirsa hata ile cikar
+
+Intentional layout veya safe-area degisikliklerinden sonra yeni capture seti dogru kabul ediliyorsa `artifacts/renders/ui_regression_current/` altindaki ilgili PNG'ler `artifacts/renders/ui_checklist/` altina kopyalanarak accepted baseline yenilenmelidir; aksi halde suite topluca stale baseline farklariyla kirmiziya dusebilir.

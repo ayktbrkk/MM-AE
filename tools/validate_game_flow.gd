@@ -24,6 +24,8 @@ func _run() -> void:
 		_failures.append("Yeni oyun akışı doğrulanamadı.")
 	if not await _validate_continue_flow():
 		_failures.append("Devam et akışı doğrulanamadı.")
+	if not await _validate_bandirma_loop():
+		_failures.append("Bandırma loop akışı doğrulanamadı.")
 	if not await _validate_late_game_chain():
 		_failures.append("Geç oyun geçiş zinciri doğrulanamadı.")
 
@@ -150,6 +152,74 @@ func _validate_continue_flow() -> bool:
 	return ok
 
 
+func _validate_bandirma_loop() -> bool:
+	_save_manager.set("pending_entry_action", "start")
+	var world_scene: PackedScene = load("res://scenes/world.tscn")
+	var world := world_scene.instantiate()
+	root.add_child(world)
+	await _wait_frames(6)
+
+	var player_mod: Node = world.get_node("WorldPlayer")
+	var zone_mod: Node = world.get_node("WorldZone")
+	var state: Node = world.get_node("WorldState")
+	var markers: Node = world.get_node("Markers")
+	var ui_mod: Node = world.get_node("WorldUI")
+	var decision_overlay: Node = ui_mod.get_overlay(OverlayManager.OverlayType.DECISION)
+	var ok := true
+
+	player_mod.call("choose_hero", "eda")
+	await _wait_frames(6)
+	ui_mod.call("close_dialogue")
+	await _wait_frames(2)
+
+	zone_mod.call("_setup_bandirma")
+	await _wait_frames(100)
+	_hide_all_overlays(ui_mod)
+	await _wait_frames(2)
+	if String(state.get("current_zone")) != "ship":
+		_failures.append("Bandırma setup ship zone'una geçmedi.")
+		ok = false
+	if int(state.get_item_count("ship_clues")) != 0:
+		_failures.append("Bandırma başlangıcında gemi ipuçları sıfırlanmadı.")
+		ok = false
+
+	for marker in markers.get_children():
+		if marker is Node2D and String(marker.get_meta("kind", "")) == "ship_clue":
+			zone_mod.call("_collect_ship_clue", marker)
+			_hide_all_overlays(ui_mod)
+			await _wait_frames(2)
+
+	if int(state.get_item_count("ship_clues")) != int(state.get_zone_item_total("ship_clues")):
+		_failures.append("Bandırma ipuçları toplandıktan sonra sayaç tamamlanmadı.")
+		ok = false
+	if String(state.get("current_goal_kind")) != "decision":
+		_failures.append("Bandırma ipuçları tamamlanınca hedef decision olmadı.")
+		ok = false
+
+	var decision_marker: Node2D = null
+	for marker in markers.get_children():
+		if marker is Node2D and String(marker.get_meta("kind", "")) == "decision":
+			decision_marker = marker
+			break
+	if decision_marker == null:
+		_failures.append("Bandırma karar marker'ı bulunamadı.")
+		ok = false
+	else:
+		zone_mod.call("_handle_samsun_decision_check", decision_marker, player_mod)
+		await _wait_frames(4)
+		var overlay_manager = ui_mod.get("_overlay_manager")
+		var decision_is_visible := false
+		if overlay_manager != null and overlay_manager.has_method("is_effectively_visible"):
+			decision_is_visible = bool(overlay_manager.call("is_effectively_visible", OverlayManager.OverlayType.DECISION))
+		if decision_overlay == null or not decision_is_visible:
+			_failures.append("Samsun Kararı marker'ı karar overlay'ini açmadı.")
+			ok = false
+
+	world.queue_free()
+	await _wait_frames(2)
+	return ok
+
+
 func _validate_late_game_chain() -> bool:
 	_save_manager.set("pending_entry_action", "start")
 	var world_scene: PackedScene = load("res://scenes/world.tscn")
@@ -220,3 +290,9 @@ func _validate_late_game_chain() -> bool:
 func _wait_frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+
+func _hide_all_overlays(ui_mod: Node) -> void:
+	var overlay_manager = ui_mod.get("_overlay_manager")
+	if overlay_manager != null and overlay_manager.has_method("hide_all"):
+		overlay_manager.call("hide_all")

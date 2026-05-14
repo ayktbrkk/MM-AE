@@ -75,6 +75,7 @@ const _questions := preload("res://assets/data/questions.gd")
 var _player_mod: Node
 var _ui_mod: Node
 var _zone_mod: Node
+var _app_is_backgrounded := false
 
 # ---------------------------------------------------------------------------
 # _ready — ORCHESTRATOR KURULUMU
@@ -149,6 +150,37 @@ func _ready() -> void:
 
 
 func _on_viewport_size_changed() -> void:
+	if _ui_mod != null and _ui_mod.has_method("sync_hud_layout"):
+		_ui_mod.sync_hud_layout()
+
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT:
+			_handle_application_pause()
+		NOTIFICATION_APPLICATION_RESUMED, NOTIFICATION_APPLICATION_FOCUS_IN:
+			_handle_application_resume()
+
+
+func _handle_application_pause() -> void:
+	if _app_is_backgrounded:
+		return
+	_app_is_backgrounded = true
+	if _ui_mod != null:
+		if _ui_mod.has_method("dismiss_background_transients"):
+			_ui_mod.dismiss_background_transients()
+		if _ui_mod.has_method("persist_runtime_state"):
+			_ui_mod.persist_runtime_state()
+	if AudioManager != null and AudioManager.has_method("set_app_paused"):
+		AudioManager.set_app_paused(true)
+
+
+func _handle_application_resume() -> void:
+	if not _app_is_backgrounded:
+		return
+	_app_is_backgrounded = false
+	if AudioManager != null and AudioManager.has_method("set_app_paused"):
+		AudioManager.set_app_paused(false)
 	if _ui_mod != null and _ui_mod.has_method("sync_hud_layout"):
 		_ui_mod.sync_hud_layout()
 

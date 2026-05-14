@@ -225,6 +225,76 @@ Next required extension:
 - contrast should feel gentle, never harsh
 - use bright saturation only for rewards, choices, and interactive emphasis
 
+## World Art Technical Contract
+
+This section is the reusable production contract for the world-art upgrade wave. It exists so pilot and rollout work can happen without re-deciding outline, contrast, import, or token ownership on each zone.
+
+### Source Of Truth
+
+| Decision Area | Owner File | Notes |
+|------|------|------|
+| world palette, shadow, theme grouping | `scripts/colors.gd` | `POP_*`, `ART_*`, `SHADOW_*`, `THEME_*` families |
+| spacing, border, safe area, readable UI scale | `scripts/ui_tokens.gd` | `BORDER_*`, `SPACE_*`, `SAFE_AREA_*`, `FONT_*` |
+| zone audit and pilot order | `docs/WORLD_ART_UPGRADE_PLAN.md` | Bandirma pilot, Samsun second wave |
+| historical/art reference direction | `docs/ART_ANALYSIS.md` | paper diorama style guide and palette notes |
+
+### Asset Role Model
+
+Every new world asset must be designed for one primary role:
+
+- Background mood: sky, sea, distant town silhouettes, fog, hill masses.
+- Playable path: readable ground ribbon that tells the player where to move next.
+- Landmark: one scene-defining ship, building, congress hall, frontline structure, or finale symbol.
+- Foreground frame: edge silhouettes that add depth without covering the player, markers, or action affordances.
+- Marker support: small accent props that help active-node focus without becoming a second landmark.
+
+Do not combine landmark and foreground duties into the same noisy shape. If an asset tries to do both jobs, split it.
+
+### SVG And Paper Diorama Rules
+
+1. Keep one master vector source per production asset under `assets/art/`; capture PNGs remain review artifacts, not source.
+2. Preserve the original SVG `viewBox` and aspect ratio during export; scale in builder/layout code, not by rewriting proportions in multiple files.
+3. Use 2-4 visible fill layers plus one optional shadow plate for world props so the result reads as paper cutout instead of flat placeholder.
+4. Use dark ink-like outlines only on landmark and foreground assets. Background masses should use softer edges or no hard stroke.
+5. Target `stroke-width: 8-18` for readable paper-diorama outlines on major world props, consistent with the current art analysis guide.
+6. Keep paper-shadow opacity in the `0.2-0.3` band so depth is visible but not muddy.
+7. When a new SVG is added to a preloaded path, commit the matching `.svg.import` file and run `--headless --import --path .` before parse validation.
+
+### Contrast Contract
+
+World art must defer to gameplay readability. Use the following contract instead of hardcoded per-scene guesses:
+
+| Visual Role | Token Source | Contract |
+|------|------|------|
+| world background mass | `THEME_*["bg"]` | background stays calmer and less bright than the active gameplay cue |
+| active landmark / key highlight | `THEME_*["accent"]` | only one strong accent family should dominate a zone focus at a time |
+| panel / card / readable paper surface | `THEME_*["panel"]`, `DESIGN_CREAM_PAPER`, `ART_CREAM_LIGHT` | text and buttons should sit on paper surfaces, not raw scenery |
+| deep shadow / separation | `SHADOW_WARM`, `SHADOW_COOL`, `PAPER_SHADOW` | shadows separate planes, not paint large black masses |
+| text / icon ink | `DESIGN_STORY_INK` | default readable dark tone for labels and world-adjacent copy |
+
+### Collision Warnings
+
+- `RIFT_BLUE` is reserved for time-travel, dream energy, and rift emphasis. Do not use it as a generic terrain fill.
+- `POP_CRIMSON` and `POP_GOLD` should not compete at equal weight in the same focal area; one must be primary and the other secondary.
+- Character bodies, companion bubbles, and world markers must not sit directly on the same hue-value family as the zone accent behind them.
+- If a world background needs brighter contrast to read, lift the panel or marker surface first instead of saturating the entire scene.
+
+### Standard Production Flow
+
+1. Start from the relevant zone audit in `docs/WORLD_ART_UPGRADE_PLAN.md`.
+2. Choose the target theme family from `scripts/colors.gd`; do not invent new inline colors in builder or overlay code.
+3. Produce or update the SVG asset with the role model and outline rules above.
+4. Add or update import metadata, then run `--headless --import --path .` if a new SVG asset enters the repo.
+5. Validate parse safety with `--headless --check-only --path . --quit`.
+6. Capture the affected zone and compare against the audit goals before opening the next zone.
+
+### Done Definition For Pilot And Rollout
+
+- A new asset uses existing token ownership instead of scene-local hardcoded colors.
+- Landmark, path, and foreground roles remain readable at portrait mobile size.
+- Character/UI readability is still intact on top of the updated world art.
+- Import and parse validation have been rerun after the asset landed.
+
 ## Lighting And Atmosphere
 
 ### Lighting Rules

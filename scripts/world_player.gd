@@ -231,11 +231,17 @@ func setup_character_outlines() -> void:
 
 func _setup_character_outlines() -> void:
 	"""Karakter outline'larını ve aksesuarlarını kur."""
+	var player_node: Node2D = _world.get_node("Player")
+	var companion_node: Node2D = _world.get_node("Companion")
+	var player_sprite: Sprite2D = _world.get_node("Player/PlayerSprite")
+	var companion_sprite: Sprite2D = _world.get_node("Companion/CompanionSprite")
 	player_outline = null
 	companion_outline = null
 	_remove_duplicate_character_sprites()
-	var player_node: Node2D = _world.get_node("Player")
-	var companion_node: Node2D = _world.get_node("Companion")
+	_clear_character_adornments(player_node, player_sprite)
+	_clear_character_adornments(companion_node, companion_sprite)
+	player_outline = _create_character_outline(player_node, player_sprite, 1.18, 0.76)
+	companion_outline = _create_character_outline(companion_node, companion_sprite, 1.16, 0.72)
 	player_accessory = _create_period_accessory(player_node, true)
 	companion_accessory = _create_period_accessory(companion_node, false)
 	_sync_character_outline_textures()
@@ -259,6 +265,16 @@ func _remove_duplicate_character_sprites_in(root: Node) -> void:
 				sprite.queue_free()
 				continue
 		_remove_duplicate_character_sprites_in(child)
+
+
+func _clear_character_adornments(parent: Node2D, sprite: Sprite2D) -> void:
+	var outline_name := "%sOutline" % sprite.name
+	var existing_outline := parent.get_node_or_null(outline_name)
+	if existing_outline != null:
+		existing_outline.queue_free()
+	var existing_accessory := parent.get_node_or_null("PeriodAccessory")
+	if existing_accessory != null:
+		existing_accessory.queue_free()
 
 
 func _create_character_outline(parent: Node2D, sprite: Sprite2D, scale_boost: float, alpha: float) -> Sprite2D:
@@ -476,8 +492,10 @@ func _build_companion_reaction_label() -> void:
 	companion_reaction_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	companion_reaction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	companion_reaction_label.add_theme_font_size_override("font_size", _ui_tokens.FONT_LABEL_NAV)
-	companion_reaction_label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.78, 0.94))
-	companion_reaction_label.add_theme_color_override("font_shadow_color", Color(0.03, 0.05, 0.08, 0.62))
+	companion_reaction_label.add_theme_color_override("font_color", Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.98))
+	companion_reaction_label.add_theme_color_override("font_shadow_color", Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.72))
+	companion_reaction_label.add_theme_color_override("font_outline_color", Color(_colors.CEL_OUTLINE.r, _colors.CEL_OUTLINE.g, _colors.CEL_OUTLINE.b, 0.88))
+	companion_reaction_label.add_theme_constant_override("outline_size", 3)
 	companion_reaction_label.add_theme_constant_override("shadow_offset_x", int(_ui_tokens.SHADOW_OFFSET_TIGHT.x))
 	companion_reaction_label.add_theme_constant_override("shadow_offset_y", int(_ui_tokens.SHADOW_OFFSET_TIGHT.y))
 	companion_reaction_label.z_index = 35

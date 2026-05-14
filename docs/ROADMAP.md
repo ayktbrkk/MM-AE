@@ -89,6 +89,10 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 
 > 📝 Bu aşama sonraki sprint'ler için — mevcut prototip yeterli.
 
+Ana yurutme plani:
+
+- `docs/EXECUTION_PACKAGES_PLAN.md`
+
 ### Art Pillars
 - Paper diorama stili (kalın outline, organik path)
 - 4 renk paleti
@@ -120,20 +124,12 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 - [ ] Kart E: Kontrast ve okunurluk kalibrasyonu
 - [ ] Kart F: Regression ve kabul paketi
 
-### Onerilen Siralama
 
-| Kart | Oncelik | Efor | Bagimlilik |
-|------|---------|------|------------|
-| Kart A | P0 | S | Yok |
-| Kart B | P0 | S-M | Kart A |
-| Kart C | P1 | M-L | Kart A, Kart B |
-| Kart E | P1 | S-M | Kart C |
-| Kart D | P1 | M | Kart C |
-| Kart F | P2 | S | Kart C, Kart D, Kart E |
 
 ### Ilk Yurutme Paketi
 
 - [ ] Issue 10A: World Art Audit ve Hedef Kalite Panosu
+- [ ] Calisma dosyasi: `docs/WORLD_ART_UPGRADE_PLAN.md`
 - [ ] Issue 10B: Asset Pipeline Standardizasyonu
 
 ## Phase 7 — Education & Safety ✅
@@ -156,18 +152,22 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 
 > 📝 Teknik temel hazir; sonraki odak export'u release davranisina tasimak.
 
+Ana yurutme plani:
+
+- `docs/EXECUTION_PACKAGES_PLAN.md`
+
 ### Release Polish Backlog'u
 
 - [ ] Export ve package metadata checklist'ini netlestir
 - [ ] Safe-area, system bar ve portrait cihaz davranisini cihaz-ustu smoke-test ile dogrula
-- [ ] Start, continue, loading, exit confirm ve save/load akislari icin Android smoke checklist'i olustur
+- [x] Start, continue, loading, exit confirm ve save/load akislari icin Android smoke checklist'i olustur
 - [ ] Fiziksel cihaz veya emulator uzerinde temel performans gozlemi yap
 - [ ] Release APK icin tekrar edilebilir kontrol listesi hazirla
 
 ### Sprint Kartlari
 
-- [ ] Kart A: Export config audit
-- [ ] Kart B: Mobil UX smoke checklist
+- [x] Kart A: Export config audit
+- [x] Kart B: Mobil UX smoke checklist
 - [ ] Kart C: Safe-area ve system bar polish
 - [ ] Kart D: Navigation ve app lifecycle sertlestirme
 - [ ] Kart E: Performans ve cihaz gozlemi
@@ -186,7 +186,7 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 
 ### Ilk Yurutme Paketi
 
-- [ ] Issue 11A: Export Config Audit
+- [x] Issue 11A: Export Config Audit
 - [ ] Issue 11B: Mobil UX Smoke Checklist
 
 ---

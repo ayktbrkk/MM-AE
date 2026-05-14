@@ -450,13 +450,13 @@ func _add_bandirma_paper_asset_layer(world_root: Node) -> void:
 	_add_paper_cutout_asset(
 		world_root, _textures.BANDIRMA_PAPER_CABIN_WALL_TEXTURE,
 		Vector2(800, 590), Vector2(1.08, 1.08),
-		Color(1, 1, 1, 0.88), -14,
+		Color(1, 1, 1, 0.76), -14,
 		"paperworld.bandirma_cabin_wall", Vector2.ZERO, -4.0
 	)
 	_add_paper_cutout_asset(
 		world_root, _textures.BANDIRMA_PAPER_SEA_WINDOW_TEXTURE,
 		Vector2(1160, 1290), Vector2(0.92, 0.92),
-		Color(1, 1, 1, 0.78), -13,
+		Color(1, 1, 1, 0.68), -13,
 		"paperworld.bandirma_sea_window", Vector2.ZERO, -6.0
 	)
 	_add_paper_cutout_asset(
@@ -479,32 +479,32 @@ func _add_bandirma_paper_asset_layer(world_root: Node) -> void:
 	)
 	_add_paper_cutout_asset(
 		world_root, _textures.BANDIRMA_PAPER_UNIFORM_STAND_TEXTURE,
-		Vector2(455, 535), Vector2(0.82, 0.82),
-		Color(1, 1, 1, 0.88), -6,
+		Vector2(455, 535), Vector2(0.74, 0.74),
+		Color(1, 1, 1, 0.72), -6,
 		"paperworld.bandirma_uniform_stand", Vector2.ZERO, 1.0
 	)
 	_add_paper_cutout_asset(
 		world_root, _textures.BANDIRMA_PAPER_MAP_TABLE_TEXTURE,
-		Vector2(690, 1170), Vector2(0.90, 0.90),
-		Color(1, 1, 1, 0.92), -5,
+		Vector2(690, 1170), Vector2(0.82, 0.82),
+		Color(1, 1, 1, 0.80), -5,
 		"paperworld.bandirma_map_table", Vector2.ZERO, 2.0
 	)
 	_add_paper_cutout_asset(
 		world_root, _textures.BANDIRMA_PAPER_COMPASS_TEXTURE,
-		Vector2(1020, 1370), Vector2(0.72, 0.72),
-		Color(1, 1, 1, 0.88), -3,
+		Vector2(1020, 1370), Vector2(0.64, 0.64),
+		Color(1, 1, 1, 0.74), -3,
 		"paperworld.bandirma_compass", Vector2.ZERO, 3.5
 	)
 	_add_paper_cutout_asset(
 		world_root, _textures.BANDIRMA_PAPER_TELEGRAPH_PROPS_TEXTURE,
-		Vector2(1110, 1510), Vector2(0.82, 0.82),
-		Color(1, 1, 1, 0.84), -2,
+		Vector2(1110, 1510), Vector2(0.76, 0.76),
+		Color(1, 1, 1, 0.74), -2,
 		"paperworld.bandirma_telegraph_props", Vector2.ZERO, 4.0
 	)
 	_add_foreground_paper_cutout_asset(
 		_textures.BANDIRMA_PAPER_FOREGROUND_FRAME_TEXTURE,
 		Vector2(800, 1835), Vector2(1.10, 1.10),
-		Color(1, 1, 1, 0.90), 4,
+		Color(1, 1, 1, 0.82), 4,
 		"paperworld.bandirma_foreground_frame", 14.0
 	)
 
@@ -1844,26 +1844,14 @@ func _add_final_environment() -> void:
 
 func _decorate_ship(world_root: Node) -> void:
 	_add_toy_world_frame(Color(0.08, 0.24, 0.32, 0.22), Color(0.72, 0.88, 1.0, 0.09))
-	_add_location_sign("Bandırma", "Rotayı oku", Vector2(535, 280), 440.0, Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.82), "ship.location_sign")
+	_add_location_sign("Bandırma", "Rotayı oku", Vector2(650, 250), 320.0, Color(_colors.POP_DEEP_TURQUOISE.r, _colors.POP_DEEP_TURQUOISE.g, _colors.POP_DEEP_TURQUOISE.b, 0.78), "ship.location_sign")
 	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(150, 150), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.24), 24, 0.02, false, -6)
 	_add_soft_blob(world_root, Vector2(1260, 350), Vector2(245, 190), Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.10), 24, 0.06, false, -7)
 	_add_light_pool(world_root, Vector2(830, 1260), Vector2(340, 140), Color(1.0, 0.78, 0.42, 0.13))
 	_add_light_pool(world_root, Vector2(1160, 1300), Vector2(230, 460), Color(0.42, 0.76, 0.94, 0.12))
 	_add_water_glints(Vector2(1090, 1120), 4, Vector2(12, 68), Color(0.78, 0.98, 1.0, 0.24))
-	_add_path_ribbon([Vector2(420, 650), Vector2(700, 860), Vector2(860, 1240), Vector2(1160, 1470)], 28.0, Color(0.92, 0.68, 0.38, 0.26), -1)
-	_add_story_banner(Vector2(470, 910), Vector2(390, 126), Color(0.94, 0.86, 0.66, 0.84), Color(0.52, 0.34, 0.20, 0.82), "Rotayı oku, acele etme")
-	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(380, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_left")
-	_add_kenney_prop(_textures.BLOCK_FENCE_DOUBLE_TEXTURE, Vector2(1060, 1120), Vector2(1.18, 1.18), Color(0.72, 0.92, 1.0, 0.34), true, "ship.rail_right")
-	_add_kenney_npc(_textures.BLOCK_CHARACTER_MAN_TEXTURE, Vector2(520, 1188), Vector2(0.92, 0.92), Color(0.92, 0.96, 1.0, 0.62), "ship.deck_helper", "rota")
-	_add_kenney_npc(_textures.BLOCK_CHARACTER_WOMAN_TEXTURE, Vector2(1180, 1248), Vector2(0.86, 0.86), Color(0.90, 1.0, 0.96, 0.56), "ship.watch_helper", "liman")
-	_add_strategy_card(_textures.BOARD_CARD_GREEN_TEXTURE, Vector2(730, 1130), Vector2(0.44, 0.44), Color(0.92, 1.0, 0.88, 0.76), "Harita", "ship.route_card")
-	_add_strategy_token(_textures.BOARD_CHIP_BLUE_TEXTURE, Vector2(1114, 1390), Vector2(0.44, 0.44), Color(0.84, 0.98, 1.0, 0.80), "ship.navigation_token")
 	_add_decorative_speckles(Rect2(Vector2(250, 420), Vector2(1040, 1140)), Color(1.0, 0.86, 0.55, 0.06), 8)
-	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(300, 150), Vector2(0.96, 0.96), Color(1, 1, 1, 0.22))
-	_add_sprite_prop(_textures.CLOUD_TEXTURE_ALT, Vector2(1220, 170), Vector2(0.88, 0.88), Color(1, 1, 1, 0.22))
-	_add_sprite_prop(_textures.CLOUD_TEXTURE, Vector2(840, 120), Vector2(0.74, 0.74), Color(1, 1, 1, 0.18))
-	_add_sprite_prop(_textures.SMOKE_TEXTURE, Vector2(1010, 450), Vector2(0.78, 0.78), Color(0.85, 0.92, 1.0, 0.22))
-	_add_sprite_prop(_textures.SMOKE_TEXTURE, Vector2(1180, 1460), Vector2(0.56, 0.56), Color(0.88, 0.94, 1.0, 0.18))
+	_add_asset_slot_prop("interactables.companion_reaction_spot", Vector2(780, 1108), Vector2(124, 68), Color(1.0, 0.90, 0.62, 0.08), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.12), "", true)
 	_add_mote_cluster(Vector2(1140, 1160), Color(0.78, 0.92, 1.0, 0.14), 4)
 
 
@@ -1892,7 +1880,7 @@ func _decorate_samsun_diorama_pilot(_world_root: Node) -> void:
 
 	_add_samsun_node_shadow(Vector2(360, 820), Vector2(140, 38), "samsun.harbor_node_shadow")
 	_add_samsun_node_shadow(Vector2(1190, 820), Vector2(140, 38), "samsun.telegraph_node_shadow")
-	_add_samsun_node_shadow(Vector2(530, 1500), Vector2(150, 42), "samsun.people_node_shadow")
+	_add_samsun_node_shadow(Vector2(430, 1560), Vector2(150, 42), "samsun.people_node_shadow")
 
 	_add_asset_slot_prop("interactables.companion_reaction_spot", Vector2(730, 1160), Vector2(150, 86), Color(1.0, 0.90, 0.62, 0.34), Color(_colors.RIFT_BLUE.r, _colors.RIFT_BLUE.g, _colors.RIFT_BLUE.b, 0.30), "Fark et", true)
 
@@ -2914,23 +2902,26 @@ func add_companion_reaction_spot(center: Vector2, radius: float, text: String, s
 # ============================================================
 
 func _add_samsun_foreground_silhouettes() -> void:
-	var silhouette := Color("#1A2A3A")
-	_add_samsun_silhouette_rect(Vector2(0, 0), Vector2(90, WORLD_SIZE.y), silhouette, "world_props.samsun_left_frame")
-	_add_samsun_silhouette_rect(Vector2(WORLD_SIZE.x - 90, 0), Vector2(90, WORLD_SIZE.y), silhouette, "world_props.samsun_right_frame")
-	_add_samsun_silhouette_rect(Vector2(0, 0), Vector2(200, 60), silhouette, "world_props.samsun_top_left_frame")
-	_add_samsun_silhouette_rect(Vector2(WORLD_SIZE.x - 200, 0), Vector2(200, 60), silhouette, "world_props.samsun_top_right_frame")
+	var silhouette := Color(0.10, 0.18, 0.24, 0.76)
+	_add_samsun_silhouette_rect(Vector2(0, 0), Vector2(64, WORLD_SIZE.y), silhouette, "world_props.samsun_left_frame")
+	_add_samsun_silhouette_rect(Vector2(WORLD_SIZE.x - 64, 0), Vector2(64, WORLD_SIZE.y), silhouette, "world_props.samsun_right_frame")
+	_add_samsun_silhouette_rect(Vector2(0, 0), Vector2(160, 50), silhouette, "world_props.samsun_top_left_frame")
+	_add_samsun_silhouette_rect(Vector2(WORLD_SIZE.x - 160, 0), Vector2(160, 50), silhouette, "world_props.samsun_top_right_frame")
 	_add_samsun_silhouette_ellipse(Vector2(42, 108), Vector2(72, 54), silhouette, "world_props.samsun_left_crown_a")
 	_add_samsun_silhouette_ellipse(Vector2(84, 178), Vector2(58, 46), silhouette, "world_props.samsun_left_crown_b")
 	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 42, 108), Vector2(72, 54), silhouette, "world_props.samsun_right_crown_a")
 	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 84, 178), Vector2(58, 46), silhouette, "world_props.samsun_right_crown_b")
-	_add_samsun_silhouette_ellipse(Vector2(70, 1840), Vector2(190, 110), Color(0.10, 0.17, 0.22, 0.86), "world_props.samsun_front_left_hill")
-	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 70, 1805), Vector2(210, 130), Color(0.10, 0.17, 0.22, 0.78), "world_props.samsun_front_right_hill")
-	_add_samsun_silhouette_ellipse(Vector2(230, 1950), Vector2(260, 104), Color(0.10, 0.17, 0.22, 0.70), "world_props.samsun_front_left_ground")
-	_add_samsun_silhouette_ellipse(Vector2(1320, 1960), Vector2(300, 115), Color(0.10, 0.17, 0.22, 0.68), "world_props.samsun_front_right_ground")
+	_add_samsun_silhouette_ellipse(Vector2(78, 1828), Vector2(172, 96), Color(0.10, 0.17, 0.22, 0.72), "world_props.samsun_front_left_hill")
+	_add_samsun_silhouette_ellipse(Vector2(WORLD_SIZE.x - 76, 1792), Vector2(196, 116), Color(0.10, 0.17, 0.22, 0.68), "world_props.samsun_front_right_hill")
+	_add_samsun_silhouette_ellipse(Vector2(248, 1940), Vector2(228, 92), Color(0.10, 0.17, 0.22, 0.58), "world_props.samsun_front_left_ground")
+	_add_samsun_silhouette_ellipse(Vector2(1292, 1948), Vector2(268, 102), Color(0.10, 0.17, 0.22, 0.54), "world_props.samsun_front_right_ground")
 	_add_samsun_edge_reeds(Vector2(118, 1520), -1.0, "world_props.samsun_left_reeds")
 	_add_samsun_edge_reeds(Vector2(WORLD_SIZE.x - 126, 1480), 1.0, "world_props.samsun_right_reeds")
 	_add_samsun_edge_reeds(Vector2(165, 1870), -1.0, "world_props.samsun_front_left_reeds")
 	_add_samsun_edge_reeds(Vector2(WORLD_SIZE.x - 174, 1885), 1.0, "world_props.samsun_front_right_reeds")
+	_add_soft_blob(_cached_world_root, Vector2(228, 1876), Vector2(214, 116), Color(0.90, 0.80, 0.54, 0.16), 24, 0.04, true, 4)
+	_add_soft_blob(_cached_world_root, Vector2(1390, 1886), Vector2(238, 128), Color(0.86, 0.74, 0.48, 0.14), 24, 0.04, true, 4)
+	_add_soft_blob(_cached_world_root, Vector2(804, 2060), Vector2(402, 112), Color(0.94, 0.88, 0.68, 0.10), 28, 0.03, true, 4)
 	_add_soft_blob(_cached_world_root, Vector2(70, 1220), Vector2(142, 360), Color(0.07, 0.12, 0.16, 0.18), 22, 0.03, true, 4)
 	_add_soft_blob(_cached_world_root, Vector2(WORLD_SIZE.x - 70, 1260), Vector2(150, 390), Color(0.07, 0.12, 0.16, 0.16), 22, 0.03, true, 4)
 
@@ -3029,9 +3020,9 @@ func _add_samsun_support_paths() -> void:
 	], "world_tiles.samsun_path_to_telegraph")
 	_add_samsun_path_branch([
 		Vector2(800, 1000),
-		Vector2(690, 1170),
-		Vector2(580, 1340),
-		Vector2(530, 1500),
+		Vector2(650, 1190),
+		Vector2(520, 1385),
+		Vector2(430, 1560),
 	], "world_tiles.samsun_path_to_people")
 
 
@@ -3068,7 +3059,7 @@ func _add_samsun_path_branch(points: Array, slot_id: String) -> void:
 func _add_samsun_landmark_pads() -> void:
 	_add_samsun_paper_pad(Vector2(360, 820), Vector2(245, 116), Color(0.96, 0.91, 0.83, 0.30), Color(0.35, 0.55, 0.58, 0.18), "world_tiles.samsun_harbor_pad")
 	_add_samsun_paper_pad(Vector2(1190, 820), Vector2(245, 116), Color(0.96, 0.91, 0.83, 0.28), Color(0.24, 0.42, 0.52, 0.18), "world_tiles.samsun_telegraph_pad")
-	_add_samsun_paper_pad(Vector2(530, 1500), Vector2(265, 122), Color(0.96, 0.91, 0.83, 0.30), Color(0.60, 0.38, 0.24, 0.16), "world_tiles.samsun_people_pad")
+	_add_samsun_paper_pad(Vector2(430, 1560), Vector2(265, 122), Color(0.96, 0.91, 0.83, 0.30), Color(0.60, 0.38, 0.24, 0.16), "world_tiles.samsun_people_pad")
 	_add_samsun_paper_pad(Vector2(800, 1000), Vector2(280, 176), Color(0.62, 0.83, 0.78, 0.18), Color(0.96, 0.91, 0.83, 0.16), "world_tiles.samsun_rift_pad")
 
 
@@ -3134,11 +3125,11 @@ func _add_samsun_paper_pad(center: Vector2, radius: Vector2, fill: Color, edge: 
 func _add_samsun_light_pools() -> void:
 	_add_soft_blob(_cached_world_root, Vector2(360, 820), Vector2(200, 150), Color(0.95, 0.75, 0.39, 0.06), 28, 0.03, false, -11)
 	_add_soft_blob(_cached_world_root, Vector2(800, 1000), Vector2(150, 118), Color(0.62, 0.83, 0.78, 0.10), 28, 0.03, false, -11)
-	_add_soft_blob(_cached_world_root, Vector2(530, 1500), Vector2(120, 92), Color(0.96, 0.91, 0.83, 0.07), 26, 0.03, false, -11)
+	_add_soft_blob(_cached_world_root, Vector2(430, 1560), Vector2(120, 92), Color(0.96, 0.91, 0.83, 0.07), 26, 0.03, false, -11)
 
 
 func _add_samsun_wave_gate() -> void:
-	var center := Vector2(820, 1500)
+	var center := Vector2(930, 1490)
 	_add_samsun_paper_pad(center, Vector2(188, 78), Color(0.62, 0.83, 0.78, 0.15), Color(0.68, 0.40, 1.0, 0.18), "world_tiles.samsun_wave_start_pad")
 	for index in range(2):
 		var ring := Line2D.new()
@@ -3309,9 +3300,9 @@ func _add_samsun_paper_asset_layer() -> void:
 	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_VISTA_FLAGS_TEXTURE, Vector2(800, 900), Vector2(0.98, 0.98), Color(1, 1, 1, 0.76), -4, "paperworld.samsun_vista_flags", Vector2(1.4, 0.25), 4.5)
 	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_HARBOR_TEXTURE, Vector2(360, 760), Vector2(0.86, 0.86), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_harbor_landmark", Vector2.ZERO, 4.0)
 	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_TELEGRAPH_TEXTURE, Vector2(1190, 770), Vector2(0.78, 0.78), Color(1, 1, 1, 0.88), -3, "paperworld.samsun_telegraph_landmark", Vector2.ZERO, 4.0)
-	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_PEOPLE_TEXTURE, Vector2(530, 1455), Vector2(0.78, 0.78), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_people_plaza", Vector2.ZERO, 5.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_PEOPLE_TEXTURE, Vector2(430, 1560), Vector2(0.78, 0.78), Color(1, 1, 1, 0.90), -3, "paperworld.samsun_people_plaza", Vector2.ZERO, 5.0)
 	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_RIFT_TEXTURE, Vector2(800, 980), Vector2(0.72, 0.72), Color(1, 1, 1, 0.90), -2, "paperworld.samsun_rift_core", Vector2.ZERO, 5.0)
-	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_WAVE_GATE_TEXTURE, Vector2(820, 1478), Vector2(0.76, 0.76), Color(1, 1, 1, 0.86), -2, "paperworld.samsun_wave_gate", Vector2.ZERO, 5.0)
+	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_WAVE_GATE_TEXTURE, Vector2(930, 1490), Vector2(0.76, 0.76), Color(1, 1, 1, 0.86), -2, "paperworld.samsun_wave_gate", Vector2.ZERO, 5.0)
 	# Dekoratif pusula — sağ üst köşede harita hissi
 	_add_paper_cutout_asset(_cached_world_root, _textures.SAMSUN_PAPER_MAP_COMPASS_TEXTURE, Vector2(1280, 240), Vector2(0.48, 0.48), Color(1, 1, 1, 0.34), 2, "paperworld.samsun_map_compass", Vector2(-0.6, 0.2), 12.0)
 	_add_foreground_paper_cutout_asset(_textures.SAMSUN_PAPER_FOREGROUND_FRAME_TEXTURE, Vector2(800, 1835), Vector2(1.34, 1.34), Color(1, 1, 1, 0.88), 4, "paperworld.samsun_foreground_frame", 18.0)
@@ -3332,13 +3323,13 @@ func _add_samsun_harbor_identity() -> void:
 func _add_samsun_node_identity_details() -> void:
 	_add_samsun_landmark_symbols()
 	_add_samsun_telegraph_detail(Vector2(1190, 820))
-	_add_samsun_people_plaza(Vector2(530, 1500))
+	_add_samsun_people_plaza(Vector2(430, 1560))
 	_add_samsun_rift_focus_rings(Vector2(800, 1000))
 
 
 func _add_samsun_landmark_symbols() -> void:
 	_add_samsun_harbor_symbol(Vector2(360, 820))
-	_add_samsun_people_symbol(Vector2(530, 1500))
+	_add_samsun_people_symbol(Vector2(430, 1560))
 	_add_samsun_signal_symbol(Vector2(1190, 820))
 
 

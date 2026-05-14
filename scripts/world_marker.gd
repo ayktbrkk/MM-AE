@@ -98,10 +98,10 @@ func _spawn_room_markers(world_root: Node) -> void:
 func _spawn_ship_markers(world_root: Node) -> void:
 	var state: Node = world_root.get_node("WorldState")
 	state.set_zone("ship")
-	_add_marker("ship_clue", "Üniforma", Vector2(520, 650), "Üniforma {hero}'ya tam olur. Bu rüya, tarihsel sorumlulukları anlaması için kurulmuş gibidir.", world_root)
-	_add_marker("ship_clue", "Harita Masası", Vector2(850, 1260), "Haritada Samsun, Havza, Amasya ve Ankara işaretlidir. Yolculuk bir ünite sırasına dönüşür.", world_root)
-	_add_marker("npc", "Güvertedeki Öğrenci", Vector2(1070, 1160), "Limana yaklaşırken herkes heyecanlı. Önce ne yapılacağına karar vermeden çevreyi iyi okumak gerekir.", world_root)
-	_add_marker("decision", "Samsun Kararı", Vector2(1160, 1470), "Samsun'a çıkınca ilk karar verilecek.", world_root)
+	_add_marker("ship_clue", "Üniforma", Vector2(520, 650), "Üniforma {hero}'ya tam olur. Bu yolculuk sorumlulukla başlar.", world_root)
+	_add_marker("ship_clue", "Harita Masası", Vector2(850, 1260), "Haritada Samsun parlıyor. İlk adım orada atılacak.", world_root)
+	_add_marker("npc", "Güvertedeki Öğrenci", Vector2(1070, 1160), "Limana yaklaşırken önce çevreyi oku, sonra karar ver.", world_root)
+	_add_marker("decision", "Samsun Kararı", Vector2(1160, 1470), "Hazırsan Samsun'daki ilk adımı seç.", world_root)
 
 
 func _spawn_samsun_rift_markers(world_root: Node) -> void:
@@ -111,8 +111,8 @@ func _spawn_samsun_rift_markers(world_root: Node) -> void:
 	_add_marker("resource", "Cesaret Çiçeği", Vector2(1210, 1550), "Rüyada parlayan bir çiçek buldun. Zorlanırsan yeniden denemek için liderlik puanı +1.", world_root)
 	_add_marker("build_spot", "Liman Destek Noktası", Vector2(360, 820), "Liman tarafını güçlendirmek için buraya bir destek kurabilirsin.", world_root)
 	_add_marker("build_spot", "Telgraf Destek Noktası", Vector2(1190, 820), "Haberleşmeyi güçlendirmek için buraya bir destek kurabilirsin.", world_root)
-	_add_marker("build_spot", "Halk Destek Noktası", Vector2(530, 1500), "Halkın bilinçli katılımı için buraya bir destek kurabilirsin.", world_root)
-	_add_marker("wave_start", "Kararsızlık Dalgası", Vector2(820, 1500), "Hazır olduğunda kararsızlık dalgasını başlat.", world_root)
+	_add_marker("build_spot", "Halk Destek Noktası", Vector2(430, 1560), "Halkın bilinçli katılımı için buraya bir destek kurabilirsin.", world_root)
+	_add_marker("wave_start", "Kararsızlık Dalgası", Vector2(930, 1490), "Hazır olduğunda kararsızlık dalgasını başlat.", world_root)
 
 
 func _spawn_havza_markers(world_root: Node) -> void:
@@ -163,10 +163,10 @@ func _spawn_ankara_markers(world_root: Node) -> void:
 	state.set_zone("ankara")
 	_add_marker("ankara_clue", "Meclis Notu", Vector2(360, 620), "Meclis'in açılışı, milletin iradesini tek çatı altında toplamanın en güçlü adımıdır.", world_root)
 	_add_marker("ankara_clue", "Telgraf Defteri", Vector2(1210, 1550), "Telgraf kayıtları, kararların hızlı ve güvenli biçimde tüm Anadolu'ya ulaştığını gösterir.", world_root)
-	_add_marker("npc", "Ankara Rehberi", Vector2(800, 760), "Burada doğru iş, Meclis'i yalnızca bina olarak değil, milletin ortak iradesi olarak kurmaktır.", world_root)
-	_add_marker("ankara_decision", "Merkez Kararı", Vector2(800, 1000), "Hazır olduğunda Meclis'in merkez gücünü nasıl kuracağına karar ver.", world_root)
-	_add_marker("build_spot", "Meclis Destek Noktası", Vector2(360, 820), "Meclis çevresindeki düzeni güçlendirmek için buraya destek kurabilirsin.", world_root)
-	_add_marker("build_spot", "Telgraf Destek Noktası", Vector2(1190, 820), "Haberleşmeyi güvenceye almak için buraya destek kurabilirsin.", world_root)
+	_add_marker("npc", "Ankara Rehberi", Vector2(700, 990), "Burada doğru iş, Meclis'i yalnızca bina olarak değil, milletin ortak iradesi olarak kurmaktır.", world_root)
+	_add_marker("ankara_decision", "Merkez Kararı", Vector2(960, 1120), "Hazır olduğunda Meclis'in merkez gücünü nasıl kuracağına karar ver.", world_root)
+	_add_marker("build_spot", "Meclis Destek Noktası", Vector2(520, 1180), "Meclis çevresindeki düzeni güçlendirmek için buraya destek kurabilirsin.", world_root)
+	_add_marker("build_spot", "Telgraf Destek Noktası", Vector2(1030, 1180), "Haberleşmeyi güvenceye almak için buraya destek kurabilirsin.", world_root)
 	_add_marker("build_spot", "Halk Destek Noktası", Vector2(530, 1500), "Millet iradesini bir araya getirmek için buraya destek kurabilirsin.", world_root)
 	_add_marker("ankara_wave", "İrade Dalgası", Vector2(820, 1500), "Hazır olduğunda İrade Dalgası'nı başlat.", world_root)
 
@@ -332,7 +332,7 @@ func _add_marker(kind: String, marker_name: String, marker_position: Vector2, te
 	# Etiket dis cercevesi
 	var label_outline := Polygon2D.new()
 	label_outline.position = Vector2(-174, 36)
-	label_outline.color = Color(0.16, 0.14, 0.12, 0.34)
+	label_outline.color = Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.48)
 	label_outline.polygon = _rounded_rect_points(Vector2(348, 104), 18.0)
 	marker.add_child(label_outline)
 	marker.set_meta("label_outline_node", label_outline)
@@ -341,7 +341,7 @@ func _add_marker(kind: String, marker_name: String, marker_position: Vector2, te
 	# Etiket zemini
 	var label_plate := Polygon2D.new()
 	label_plate.position = Vector2(-170, 40)
-	label_plate.color = Color(DESIGN_CREAM_PAPER.r, DESIGN_CREAM_PAPER.g, DESIGN_CREAM_PAPER.b, 0.96)
+	label_plate.color = Color(DESIGN_CREAM_PAPER.r, DESIGN_CREAM_PAPER.g, DESIGN_CREAM_PAPER.b, 0.985)
 	label_plate.polygon = _rounded_rect_points(Vector2(340, 96), 16.0)
 	marker.add_child(label_plate)
 	marker.set_meta("label_plate_node", label_plate)
@@ -362,7 +362,7 @@ func _add_marker(kind: String, marker_name: String, marker_position: Vector2, te
 	label_icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label_icon.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label_icon.add_theme_font_size_override("font_size", 26)
-	label_icon.add_theme_color_override("font_color", Color(0.12, 0.10, 0.08, 0.96))
+	label_icon.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.98))
 	marker.add_child(label_icon)
 	marker.set_meta("label_icon_node", label_icon)
 
@@ -375,7 +375,7 @@ func _add_marker(kind: String, marker_name: String, marker_position: Vector2, te
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_font_size_override("font_size", 26)
-	label.add_theme_color_override("font_color", Color(0.12, 0.13, 0.17))
+	label.add_theme_color_override("font_color", Color(_colors.DESIGN_STORY_INK.r, _colors.DESIGN_STORY_INK.g, _colors.DESIGN_STORY_INK.b, 0.98))
 	marker.add_child(label)
 	marker.set_meta("label_node", label)
 
@@ -387,7 +387,9 @@ func _add_marker(kind: String, marker_name: String, marker_position: Vector2, te
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status_label.add_theme_font_size_override("font_size", 16)
-	status_label.add_theme_color_override("font_color", Color(0.98, 0.94, 0.78, 0.92))
+	status_label.add_theme_color_override("font_color", Color(_colors.DESIGN_CREAM_PAPER.r, _colors.DESIGN_CREAM_PAPER.g, _colors.DESIGN_CREAM_PAPER.b, 0.98))
+	status_label.add_theme_color_override("font_outline_color", Color(CEL_OUTLINE.r, CEL_OUTLINE.g, CEL_OUTLINE.b, 0.88))
+	status_label.add_theme_constant_override("outline_size", 2)
 	marker.add_child(status_label)
 	marker.set_meta("status_label_node", status_label)
 
@@ -660,7 +662,7 @@ func _marker_color(kind: String) -> Color:
 		"decision":
 			return Color(POP_CRIMSON.r, POP_CRIMSON.g, POP_CRIMSON.b, 1.0)
 		"ship_clue":
-			return Color(0.26, 0.72, 1.0)
+			return Color(_colors.POP_TURQUOISE.r, _colors.POP_TURQUOISE.g, _colors.POP_TURQUOISE.b, 1.0)
 		"havza_clue":
 			return Color(0.96, 0.84, 0.30)
 		"amasya_clue":

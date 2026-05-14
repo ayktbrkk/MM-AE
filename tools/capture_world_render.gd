@@ -173,9 +173,7 @@ func _is_scene_ready(scene: Node, zone: String) -> bool:
 	var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
 	if dream_overlay != null and dream_overlay.visible:
 		return false
-	var chapter_transition := scene.get_node_or_null("CanvasLayer/UIOverlayHost/OverlayManager/CanvasLayer_30/ChapterTransitionOverlay")
-	if chapter_transition == null:
-		chapter_transition = scene.get_node_or_null("WorldUI/OverlayManager/CanvasLayer_30/ChapterTransitionOverlay")
+	var chapter_transition := find_chapter_transition_overlay(scene)
 	if chapter_transition != null and chapter_transition.visible:
 		return false
 	if zone == "":
@@ -185,6 +183,17 @@ func _is_scene_ready(scene: Node, zone: String) -> bool:
 		return false
 	var expected_zone := "ship" if zone == "bandirma" else zone
 	return String(state.get("current_zone")) == expected_zone
+
+
+static func find_chapter_transition_overlay(scene: Node) -> Node:
+	var world_ui := scene.get_node_or_null("WorldUI")
+	if world_ui != null:
+		var overlay_manager = world_ui.get("_overlay_manager")
+		if overlay_manager != null and overlay_manager.has_method("get_overlay_node"):
+			var overlay_node = overlay_manager.call("get_overlay_node", OverlayManager.OverlayType.CHAPTER_TRANSITION)
+			if overlay_node != null:
+				return overlay_node as Node
+	return scene.find_child("ChapterTransitionOverlay", true, false)
 
 
 func _apply_clean_export(scene: Node) -> void:

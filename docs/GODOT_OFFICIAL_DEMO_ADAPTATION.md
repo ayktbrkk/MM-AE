@@ -695,6 +695,10 @@ Bu nottan sonra en dogrudan uygulanabilir iki is:
 
 Bu bolum, yukaridaki referans notunu dogrudan uygulanabilir backlog'a cevirir. Her gorev tek bir cikti, hedef dosya grubu ve dogrulama adimi ile takip edilmelidir.
 
+Ana yurutme plani:
+
+- `docs/EXECUTION_PACKAGES_PLAN.md`
+
 ### Gorev 1 - Ortak Safe-Area ve Content Frame Temeli
 
 Durum: tamamlandi
@@ -1117,6 +1121,10 @@ Hazir issue/task taslaklari:
 
 #### Issue 10A - World Art Audit ve Hedef Kalite Panosu
 
+Calisma dosyasi:
+
+- `docs/WORLD_ART_UPGRADE_PLAN.md`
+
 Amac:
 
 - Kritik 5 zone icin mevcut gorunumu, hedef kalite referansini ve replacement risklerini tek yerde toplamak.
@@ -1185,6 +1193,55 @@ Kabul kriterleri:
 Dis kapsam:
 
 - Bu issue tek basina pilot zone replacement yapmaz.
+
+P2 cikisi - teknik standardizasyon v1:
+
+Bu issue artik yalnizca backlog notu degil; `P2` icin uygulanacak teknik kararlar asagida sabitlenmistir.
+
+##### Sahiplik haritasi
+
+| Karar | Sahip dosya | Not |
+|------|-------------|-----|
+| world palette ve zone tema aileleri | `scripts/colors.gd` | `POP_*`, `ART_*`, `SHADOW_*`, `THEME_*` |
+| UI border, spacing, safe area, okunurluk boyutlari | `scripts/ui_tokens.gd` | `BORDER_*`, `SPACE_*`, `SAFE_AREA_*`, `FONT_*` |
+| pilot sirasi ve zone riskleri | `docs/WORLD_ART_UPGRADE_PLAN.md` | Bandirma pilot, Samsun ikinci dalga |
+| stil ve teknik sozlesme | `docs/VISUAL_DESIGN_SYSTEM.md` | `World Art Technical Contract` bolumu |
+
+##### Sabit teknik kararlar
+
+1. Yeni world art asset'leri `assets/art/` altinda tek master kaynak mantigiyla tutulur; capture PNG'leri kaynak asset yerine gecmez.
+2. SVG oranlari dosya icinde korunur; tekrar oran yazmak yerine builder tarafinda olcek uygulanir.
+3. Landmark ve foreground asset'leri koyu outline kullanir; arka plan kitleleri ayni agirlikta outline kullanmaz.
+4. Paper diorama hissi icin 2-4 fill katmani ve en fazla bir shadow plate hedeflenir.
+5. Yeni SVG preload akisa giriyorsa `.svg.import` dosyasi ile birlikte teslim edilir ve `--headless --import --path .` calistirilir.
+6. Parse guvenligi her asset dalgasindan sonra `--headless --check-only --path . --quit` ile kontrol edilir.
+
+##### Renk ve kontrast karar listesi
+
+- Bandirma ve benzeri sicak deniz/seyahat bolgeleri `THEME_BANDIRMA` ailesine bagli kalir.
+- Rift ve zaman-enerjisi odakli bolgeler `THEME_SAMSUN` ile calisir; `RIFT_BLUE` yalnizca rift/dream vurgu icin kullanilir.
+- Town/civic bolgeler `THEME_TOWN` panel ve toprak tonlarina dayanir.
+- Kongre, savas ve final agirliki tasiyan bolgeler `THEME_CONGRESS`, `ART_WAR_NAVY`, `ART_CRIMSON_BROWN`, `ART_CHESTNUT` etrafinda standardize edilir.
+- UI ve karakter okunurlugu icin metin/ikon tarafinda varsayilan koyu ton `DESIGN_STORY_INK` olarak kalir.
+- `POP_CRIMSON` ile `POP_GOLD` ayni odakta esit agirlikta kullanilmaz; biri ana vurgu, digeri ikincil vurgu olur.
+
+##### Kisa pipeline akisi
+
+1. Zone audit hedefini oku.
+2. `scripts/colors.gd` icinden tema/token ailesini sec.
+3. Asset'i paper-diorama rol modeliyle uret veya guncelle.
+4. Import metadata'sini kontrol et.
+5. Import ve parse dogrulamasini kos.
+6. Capture al ve audit hedefiyle karsilastir.
+
+##### P3 giris kosulu netlestirme
+
+`P3` ancak su durumda baslar:
+
+- pilot zone `Bandirma` olarak korunuyorsa,
+- kullanilacak renk/token ailesi onceden secilmisse,
+- outline/import/kontrast kurallari bu issue'dan okunabiliyorsa,
+- capture once/sonra karsilastirma noktasi belli ise.
 
 ### Gorev 11 - Android Release Polish
 
@@ -1322,6 +1379,16 @@ Dis kapsam:
 
 - Bu issue cihaz-ustu smoke test veya UI polish yapmaz.
 
+Cikis dosyasi:
+
+- `docs/ANDROID_EXPORT_AUDIT.md`
+
+P7 sonucu:
+
+- Android export audit tamamlandi.
+- Debug build ile release build arasindaki ana farkin signing ve operasyonel checklist eksigi oldugu yazili hale getirildi.
+- P8, P9 ve P12 icin teknik giris riskleri tek belgeye indirildi.
+
 #### Issue 11B - Mobil UX Smoke Checklist
 
 Amac:
@@ -1354,3 +1421,29 @@ Kabul kriterleri:
 Dis kapsam:
 
 - Bu issue tek basina system bar polish veya performans optimizasyonu yapmaz.
+
+Cikis dosyasi:
+
+- `docs/ANDROID_RELEASE_CHECKLIST.md`
+
+P8 sonucu:
+
+- Android smoke checklist tamamlandi.
+- Start, continue, loading, exit confirm, settings, ses ve lifecycle yuzeyleri tek matriste toplandi.
+- P9 ve P10 icin hangi notlarin aktarilacagi checklist sonunda netlestirildi.
+
+P9 ilk uygulama notu:
+
+- `loading_overlay.gd` ve `exit_confirm_overlay.gd` ilk safe-area uyarlama slice'inda `GUIFrame` ile viewport insetlerine baglandi.
+- `dialogue_overlay.gd` de ayni safe-area kontratina baglandi ve dar portrait capture ile ilk dogrulama alindi.
+- Dialogue overlay'in portre, glow ve stage-light katmani da panel ile ayni safe-area rect'e gore yeniden yerlestirildi ve capture yenilendi.
+- Dialogue overlay icin `1080x1920` portrait capture da alindi; gorsel sonuc beklenen yone giderken tam UI regression suite accepted baseline'lar safe-area onceki yerlesiminde kaldigi icin kirmiziya dustu.
+- `artifacts/renders/ui_regression_current/` seti accepted baseline olarak `artifacts/renders/ui_checklist/` altina yenilenince tam UI regression suite yeniden yesile dondu; safe-area slice'i artik regression acisindan stabilize edildi.
+- Sonraki adim cihaz-ustu veya hedef capture davranisi ile diger overlay yuzeylerinin ayni kontrata uydugunu teyit etmek.
+
+P10 ilk uygulama notu:
+
+- `world.gd` application pause/focus-out aldiginda `WorldUI.persist_runtime_state()` uzerinden autosave yapip exit-confirm gibi gecici overlay'leri temizliyor.
+- `main_menu.gd` pause/focus-out sirasinda settings ve exit-confirm overlay'lerini kapatiyor; resume'da continue butonu durumu ve layout yeniden senkronlaniyor.
+- `audio_manager.gd` icine eklenen app-pause kontrati ile world/menu lifecycle verifier'i (`tools/verify_app_lifecycle_contract.gd`) yesil dondu.
+- Ikinci P10 slice'inda menu dream-intro gecisi app background olursa iptal edilip butonlar tekrar etkinlestiriliyor; verifier bu yarim-transition durumunu da kapsiyor.

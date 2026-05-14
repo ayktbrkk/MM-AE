@@ -319,7 +319,8 @@ func _handle_samsun_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		ui_mod.show_dialogue(
 			_world_text("ui.world.decision_gate.samsun.title", "Karar İçin Hazır Değilsin"),
 			_world_text("ui.world.decision_gate.samsun.body", "Önce kamaradaki üniformayı ve harita masasını incele."),
-			Callable()
+			Callable(),
+			"thinking"
 		)
 
 
@@ -482,7 +483,7 @@ func _collect_ship_clue(marker: Node2D) -> void:
 	)
 
 	if state.get_item_count("ship_clues") >= state.get_zone_item_total("ship_clues"):
-		set_goal("decision", _world_text("ui.world.collect.ship.goal_complete", "Gemi ipuçları tamamlandı. Güvertedeki Samsun Kararı işaretine git."))
+		set_goal("decision", _world_text("ui.world.collect.ship.goal_complete", "Samsun Kararı işaretine git."))
 
 
 func _collect_havza_clue(marker: Node2D) -> void:
@@ -813,7 +814,7 @@ func _setup_bandirma() -> void:
 	# P10-FIX: State zone'u güncelle — _on_transition_finished()'da
 	# _state.current_zone == "ship" kontrolünün çalışması için.
 	state.enter_zone("ship")
-	set_goal("ship_clue", _world_text("ui.world.setup.ship.goal", "Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele."))
+	set_goal("ship_clue", _world_text("ui.world.setup.ship.goal", "Üniformayı ve harita masasını incele."))
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition(
 		_world_text("ui.world.setup.ship.transition.title", "Bandırma Vapuru"),
@@ -996,7 +997,7 @@ func _setup_ankara_after_build() -> void:
 	if builder == null or player_mod == null:
 		return
 
-	builder.add_strategy_node(Vector2(800, 1000), "Milli İrade", _colors.POP_GOLD, "ankara.rift_core")
+	builder.add_strategy_node(Vector2(960, 1120), "Milli İrade", _colors.POP_GOLD, "ankara.rift_core")
 	builder.add_historical_landmark(Vector2(360, 820), "harbor", "Meclis", "ankara.meclis_node")
 	builder.add_prop_cluster(Vector2(360, 820), "meeting", "ankara.meclis_landmark")
 	builder.add_historical_landmark(Vector2(1190, 820), "telegraph", "Telgraf", "ankara.telegraph_node")
@@ -1004,8 +1005,8 @@ func _setup_ankara_after_build() -> void:
 	builder.add_historical_landmark(Vector2(530, 1500), "people", "Halk", "ankara.people_node")
 	builder.add_prop_cluster(Vector2(530, 1500), "people", "ankara.people_landmark")
 
-	builder.add_strategy_node(Vector2(360, 820), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
-	builder.add_strategy_node(Vector2(1190, 820), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(520, 1180), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(1030, 1180), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(530, 1500), "Birlik", _colors.POP_GOLD, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(820, 1500), "Dalga", Color(0.68, 0.40, 1.0), "fx.rift_focus_ring")
 
@@ -1013,9 +1014,9 @@ func _setup_ankara_after_build() -> void:
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
 	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.ankara.observe", "Eda: Önce Meclis çevresindeki izleri okuyalım."), "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.ankara.telegraph", "Eda: Telgraf, Ankara'ya gelen haberleri güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(1030, 1180), 200.0, _world_text("ui.world.companion.ankara.telegraph", "Eda: Telgraf, Ankara'ya gelen haberleri güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
 	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.ankara.people", "Arda: Halkın iradesini Meclis'te buluşturmak en güçlü yol."), "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.ankara.core", "Eda: Gözlem ve birlik, Meclis'in temelidir."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(980, 1140), 170.0, _world_text("ui.world.companion.ankara.core", "Eda: Gözlem ve birlik, Meclis'in temelidir."), "interactables.companion_reaction_spot")
 
 
 func _setup_sakarya() -> void:
@@ -1152,7 +1153,7 @@ func _setup_player_position(player_pos: Vector2, companion_pos: Vector2) -> Vect
 
 
 func _samsun_intro_goal_text() -> String:
-	return _world_text("ui.world.setup.samsun.goal", "Samsun Rüyası açıldı. Önce 2 liderlik izi topla, sonra Liman, Telgraf ve Halk çevresindeki 2 destek noktası kur.")
+	return _world_text("ui.world.setup.samsun.goal", "İki liderlik izi topla. Sonra iki destek kur.")
 
 
 func _setup_samsun_rift_after_build() -> void:
@@ -1167,21 +1168,21 @@ func _setup_samsun_rift_after_build() -> void:
 	builder.add_prop_cluster(Vector2(360, 820), "harbor", "samsun.harbor_landmark")
 	builder.add_historical_landmark(Vector2(1190, 820), "telegraph", "Telgraf", "samsun.telegraph_node")
 	builder.add_prop_cluster(Vector2(1190, 820), "telegraph", "samsun.telegraph_landmark")
-	builder.add_historical_landmark(Vector2(530, 1500), "people", "Halk", "samsun.people_node")
-	builder.add_prop_cluster(Vector2(530, 1500), "people", "samsun.people_landmark")
+	builder.add_historical_landmark(Vector2(430, 1560), "people", "Halk", "samsun.people_node")
+	builder.add_prop_cluster(Vector2(430, 1560), "people", "samsun.people_landmark")
 
 	builder.add_strategy_node(Vector2(360, 820), "Destek", _colors.POP_TURQUOISE, "interactables.strategy_node")
 	builder.add_strategy_node(Vector2(1190, 820), "Haber", _colors.RIFT_BLUE, "interactables.strategy_node")
-	builder.add_strategy_node(Vector2(530, 1500), "Birlik", _colors.POP_GOLD, "interactables.strategy_node")
-	builder.add_strategy_node(Vector2(820, 1500), "Dalga", Color(0.68, 0.40, 1.0), "fx.rift_focus_ring")
+	builder.add_strategy_node(Vector2(430, 1560), "Birlik", _colors.POP_GOLD, "interactables.strategy_node")
+	builder.add_strategy_node(Vector2(930, 1490), "Dalga", Color(0.68, 0.40, 1.0), "fx.rift_focus_ring")
 
 	builder.add_prop_cluster(Vector2(360, 620), "discovery", "world_props.prop_cluster")
 	builder.add_prop_cluster(Vector2(1210, 1550), "discovery", "world_props.prop_cluster")
 
 	player_mod.add_companion_reaction_spot(Vector2(360, 620), 210.0, _world_text("ui.world.companion.samsun.observe", "Eda: Önce çevredeki izleri okuyalım."), "interactables.companion_reaction_spot")
 	player_mod.add_companion_reaction_spot(Vector2(1190, 820), 230.0, _world_text("ui.world.companion.samsun.telegraph", "Eda: Telgraf, haberleri güvenli taşımak için önemli."), "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(530, 1500), 230.0, _world_text("ui.world.companion.samsun.people", "Arda: İnsanları birlikte düşünmeye çağırmak daha güçlü."), "interactables.companion_reaction_spot")
-	player_mod.add_companion_reaction_spot(Vector2(800, 1000), 240.0, _world_text("ui.world.companion.samsun.core", "Eda: Gözlem ve bağlantı birlikte güç olur."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(430, 1560), 220.0, _world_text("ui.world.companion.samsun.people", "Arda: İnsanları birlikte düşünmeye çağırmak daha güçlü."), "interactables.companion_reaction_spot")
+	player_mod.add_companion_reaction_spot(Vector2(950, 980), 170.0, _world_text("ui.world.companion.samsun.core", "Eda: Gözlem ve bağlantı birlikte güç olur."), "interactables.companion_reaction_spot")
 
 
 func _setup_unbuilt_zone(zone: String) -> void:
@@ -1348,7 +1349,8 @@ func _answer_ankara_decision(choice: String) -> void:
 		ui_mod.show_dialogue(
 			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
-			Callable()
+			Callable(),
+			"thinking"
 		)
 
 

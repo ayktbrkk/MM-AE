@@ -2,6 +2,7 @@ extends Control
 
 signal transition_finished
 
+const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
@@ -14,6 +15,7 @@ const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 @onready var route_dot_a: ColorRect = $RouteLayer/RouteDotA
 @onready var route_dot_b: ColorRect = $RouteLayer/RouteDotB
 @onready var route_dot_c: ColorRect = $RouteLayer/RouteDotC
+@onready var center: CenterContainer = $Center
 @onready var panel: PanelContainer = $Center/TransitionPanel
 @onready var chapter_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/ChapterLabel
 @onready var subtitle_label: Label = $Center/TransitionPanel/PanelMargin/PanelContent/SubTitle
@@ -32,8 +34,28 @@ func _ready() -> void:
 	_apply_styles()
 	_build_rift_fx()
 	_dream_mist_base_y = dream_mist.position.y
+	get_viewport().size_changed.connect(_sync_layout)
+	_sync_layout()
 	visible = false
 	_start_idle_animations()
+
+
+func _exit_tree() -> void:
+	if get_viewport().size_changed.is_connected(_sync_layout):
+		get_viewport().size_changed.disconnect(_sync_layout)
+
+
+func _sync_layout() -> void:
+	var viewport_size := get_viewport_rect().size
+	var safe_rect := _gui_frame.safe_area_rect(viewport_size)
+	center.offset_left = safe_rect.position.x
+	center.offset_top = safe_rect.position.y
+	center.offset_right = -(viewport_size.x - safe_rect.end.x)
+	center.offset_bottom = -(viewport_size.y - safe_rect.end.y)
+	panel.custom_minimum_size = Vector2(
+		minf(760.0, maxf(420.0, safe_rect.size.x - 96.0)),
+		minf(280.0, maxf(220.0, safe_rect.size.y * 0.24))
+	)
 
 
 func _gui_input(event: InputEvent) -> void:

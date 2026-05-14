@@ -63,14 +63,19 @@ func _notification(what: int) -> void:
 func set_title(value: String) -> void:
 	title_label.text = value
 
-func set_objective(value: String) -> void:
+func set_objective(value: String, show_hint := true) -> void:
 	objective_label.text = value
 	if compact_objective_label != null:
 		compact_objective_label.text = value
 	if value == _last_objective:
 		return
 	_last_objective = value
-	_show_objective_hint(value)
+	if show_hint:
+		_show_objective_hint(value)
+	elif objective_hint_panel != null:
+		objective_hint_panel.visible = false
+		if objective_hint_timer != null:
+			objective_hint_timer.stop()
 	_pulse_panel(status_panel, 1.02)
 
 func set_progress(value: String) -> void:
@@ -94,6 +99,10 @@ func set_star_count(value: int) -> void:
 	_pulse_panel(star_counter_panel, 1.04)
 	if previous_count >= 0 and value > previous_count:
 		_show_star_feedback(value - previous_count)
+
+
+func is_objective_hint_visible() -> bool:
+	return objective_hint_panel != null and objective_hint_panel.visible
 
 func apply_theme(top_fill: Color, top_border: Color, chip_fill: Color, chip_border: Color, accent_fill := _colors.UI_BADGE_GOLD) -> void:
 	_theme_accent = accent_fill

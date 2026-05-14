@@ -129,7 +129,7 @@ ui.world.decision_gate.final.body,Önce Cumhuriyet notunu ve gelecek defterini i
 ui.world.collect.unit.badge,Yeni tarih notu bulundu
 ui.world.collect.unit.goal_complete,Tüm üniteler toplandı. Çalışma masasındaki Tarih Kitabı'na git.
 ui.world.collect.ship.badge,Yeni gemi ipucu bulundu
-ui.world.collect.ship.goal_complete,Gemi ipuçları tamamlandı. Güvertedeki Samsun Kararı işaretine git.
+ui.world.collect.ship.goal_complete,Samsun Kararı işaretine git.
 ui.world.collect.havza.badge,Yeni genelge ipucu bulundu
 ui.world.collect.havza.goal_complete,Havza ipuçları tamamlandı. Şimdi Havza Çağrısı noktasına git.
 ui.world.collect.amasya.badge,Yeni bildiri ipucu bulundu
@@ -143,10 +143,10 @@ ui.world.collect.sakarya.goal_complete,Sakarya ipuçları tamamlandı. Şimdi Sa
 ui.world.collect.final.badge,Yeni cumhuriyet ipucu bulundu
 ui.world.collect.final.goal_complete,Cumhuriyet ipuçları tamamlandı. Şimdi Gelecek Kararı noktasına git.
 ui.world.collect.support.badge,Liderlik puani +1
-ui.world.setup.ship.goal,Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele.
+ui.world.setup.ship.goal,Üniformayı ve harita masasını incele.
 ui.world.setup.ship.transition.title,Bandırma Vapuru
 ui.world.setup.ship.transition.body,Gece yolculugu basliyor
-ui.world.setup.samsun.goal,Samsun Rüyası açıldı. Önce 2 liderlik izi topla, sonra Liman, Telgraf ve Halk çevresindeki 2 destek noktası kur.
+ui.world.setup.samsun.goal,İki liderlik izi topla. Sonra iki destek kur.
 ui.world.setup.samsun.transition.title,Samsun Ruyasi
 ui.world.setup.samsun.transition.body,Kararlarini stratejiyle destekle
 ui.world.setup.samsun.dialogue.title,Samsun Rüyası
