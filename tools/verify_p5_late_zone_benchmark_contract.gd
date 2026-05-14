@@ -49,6 +49,7 @@ func _validate_zone(zone: String, setup_method: String) -> void:
 	_assert_true(not goal_text.contains("açıldı"), "%s intro goal should describe the next action, not announce the mode." % zone)
 	_assert_true(not bool(ui_mod.call("is_objective_hint_visible")), "%s should not duplicate the HUD objective in a hint panel." % zone)
 	_assert_true(not _has_visible_location_sign(world), "%s should not stack a location sign under the HUD objective." % zone)
+	_assert_guidance_label_hidden(world, "%s should keep guidance visual-only in benchmark captures." % zone)
 	_assert_named_canvas_hidden(world, "RoutePanel", "%s route HUD should stay hidden in P5 benchmark captures." % zone)
 	_assert_named_canvas_hidden(world, "MinimapPanel", "%s minimap should stay hidden in P5 benchmark captures." % zone)
 	if zone == "final":
@@ -87,6 +88,14 @@ func _assert_named_canvas_hidden(root_node: Node, node_name: String, message: St
 		return
 	if found is CanvasItem:
 		_assert_true(not bool((found as CanvasItem).visible), message)
+
+
+func _assert_guidance_label_hidden(world: Node, message: String) -> void:
+	var label_panel := world.get_node_or_null("Player/GuidanceArrow/GuidanceLabelPanel")
+	if label_panel == null:
+		return
+	if label_panel is CanvasItem:
+		_assert_true(not bool((label_panel as CanvasItem).visible), message)
 
 
 func _assert_true(condition: bool, message: String) -> void:

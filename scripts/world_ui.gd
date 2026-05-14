@@ -857,7 +857,7 @@ func update_guidance_arrow() -> void:
 	guidance_arrow.scale = Vector2.ONE * (1.0 + 0.05 * sin(elapsed_time * 4.0))
 	guidance_arrow_icon.rotation = direction.angle() + (PI * 0.5)
 	if guidance_arrow_label_panel != null:
-		guidance_arrow_label_panel.visible = not objective_hint_visible
+		guidance_arrow_label_panel.visible = not objective_hint_visible and _should_show_objective_hint(state.current_zone)
 	guidance_arrow_label.text = String(target_marker.get_meta("title", "Hedef"))
 
 
