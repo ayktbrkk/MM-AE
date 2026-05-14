@@ -35,3 +35,150 @@ ui.info.default.body,Kısa ve anlaşılır tarih bilgisi burada görünür.
 ui.info.default.reward,Yeni tarih yıldızı kazandın
 ui.info.back,Kapat
 ui.info.continue,Devam Et
+story.event.000.chapter,Giriş: Sınav Gecesi
+story.event.000.unit,Hazırlık
+story.event.000.location,Öğrenci Odası
+story.event.000.speaker,Anlatıcı
+story.event.000.story,"{hero}, yarınki tarih sınavına çalışmak yerine tabletinde oyun oynar. Masasının üzerindeki kitabın kapağı arada gözüne ilişir. İçten içe çalışması gerektiğini bilir ama oyunun başından kalkamaz."
+story.event.000.info,"Bu bölüm oyunun eğitim kurgusunu başlatır: sınava çalışmayan öğrenci, tarihsel kararların içine düşerek öğrenir."
+story.event.001.chapter,Giriş: Sınav Gecesi
+story.event.001.unit,Hazırlık
+story.event.001.location,Öğrenci Odası
+story.event.001.speaker,{hero}
+story.event.001.story,"Saat ilerler. {hero} yatağına uzanır, ışığı kapatacakken kitabıyla göz göze gelir. Okuma lambasını yakar ve sorumlu olduğu üniteleri hızlıca okumaya başlar. Satırlar bulanıklaşır, gözleri kapanır."
+story.event.001.info,Kitaptaki üniteler birazdan oyun bölümlerine dönüşecek.
+story.event.002.chapter,Giriş: Bandırma Vapuru
+story.event.002.unit,Milli Mücadeleye Hazırlık
+story.event.002.location,Bandırma Vapuru Kamarası
+story.event.002.speaker,Anlatıcı
+story.event.002.story,"{hero} gözlerini açtığında dalga sesleri duyar. Küçük bir kamaradadır. Yatağın başında ona tam uyan bir asker üniforması asılıdır. Aynaya baktığında hâlâ kendisidir, ama artık tarih kitabının içindedir."
+story.event.002.info,"Oyuncu tarihsel bir kişinin yerine geçmez; tarihsel durumun sorumluluğunu taşıyan öğrenci karakter olarak karar verir."
+story.event.003.chapter,Bölüm 1: Samsun'a Çıkış
+story.event.003.unit,19 Mayıs 1919
+story.event.003.location,Samsun Limanı
+story.event.003.speaker,Anlatıcı
+story.event.003.story,"Gemi Samsun açıklarına yanaşır. {hero} güverteye çıktığında, Karadeniz'in mavi suları ve yeşil yamaçlarla kaplı bir şehir görür. Ama her şey göründüğü kadar huzurlu değildir. Şehirde yabancı askerler vardır, halk endişeli ve tedirgindir."
+story.event.003.info,"19 Mayıs 1919'da Mustafa Kemal Paşa, 9. Ordu Müfettişi olarak Samsun'a çıktı. Bu tarih, Milli Mücadele'nin fiilen başladığı gün olarak kabul edilir."
+story.event.004.chapter,Bölüm 1: Samsun'a Çıkış
+story.event.004.unit,İlk Adım
+story.event.004.location,Samsun Limanı
+story.event.004.speaker,Güvertedeki Subay
+story.event.004.story,"""Hoş geldin, yolcu!"" der gülümseyerek. ""Burası Samsun. Vatanın kurtuluş yolculuğu burada başlıyor. Etrafına iyi bak. Görecek çok şey var."" Subay, {hero}'nun omzuna hafifçe vurur ve görevinin önemini hissettirir."
+story.event.004.info,"Mustafa Kemal Paşa, Samsun'a çıktığında önce şehrin durumunu gözlemledi. İşgallerin halk üzerindeki etkisini yerinde görmek istiyordu."
+story.event.005.chapter,Bölüm 1: Samsun'a Çıkış
+story.event.005.unit,İlk Karar
+story.event.005.location,Bandırma Vapuru Güvertesi
+story.event.005.speaker,Güvertedeki Öğrenci Asker
+story.event.005.story,"Gemi limana yaklaşırken güvertedeki herkes endişelidir. Birileri hızlıca halka seslenmeyi önerir. {hero}, ilk kararını vermek zorundadır. Ne yapmalı?"
+story.event.005.option_a,Karaya çıkar çıkmaz plansızca herkese seslen.
+story.event.005.option_b,Önce durumu gözlemle ve güvenilir kişilerle bağlantı kur.
+story.event.005.retry,"İlk adım önemli ama plansız bir çıkış hem görevi hem insanları riske atabilir. Önce durumu anlamak, sonra harekete geçmek gerekir."
+story.event.005.info,"Samsun'a çıkış, Milli Mücadele'nin başlangıcıdır. Mustafa Kemal Paşa, önce şehrin durumunu gözlemlemiş, güvenilir kişilerle temas kurmuş ve örgütlü hareket etmiştir."
+story.event.006.chapter,Bölüm 1: Samsun'a Çıkış
+story.event.006.unit,İlk Temas
+story.event.006.location,Samsun Şehir Merkezi
+story.event.006.speaker,{hero}
+story.event.006.story,"{hero} şehirde dolaşırken bir kahvehanede toplanan ileri gelenlerle karşılaşır. Kimisi çekingen, kimisi cesurdur. {hero}, Milli Mücadele fikrini ilk kime açmalıdır?"
+story.event.006.option_a,Güvendiğin birkaç kişiyle özel olarak konuş.
+story.event.006.option_b,Kahvehanedeki herkese açıkça seslen.
+story.event.006.retry,"Herkesin içinde konuşmak cesurca olabilir ama düşman casusları da dinliyor olabilir. Önce güvenilir bir çekirdek oluşturmak daha akıllıca."
+story.event.006.info,"Mustafa Kemal Paşa, Samsun'da önce güvendiği kişilerle görüştü. Haberleşme ve örgütlenme, gizlilik içinde yürütülmesi gereken hassas süreçlerdi."
+ui.world.decision.retry_title,Bir Daha Düşünelim
+ui.world.samsun.success.title,Doğru Karar
+ui.world.samsun.success.badge,Tarih yildizi kazandin
+ui.world.havza.success.goal,Havza çağrısı doğru yapıldı. En az iki destek kur ve Sessizlik Dalgası'nı başlat.
+ui.world.havza.success.title,Doğru Çağrı
+ui.world.havza.success.badge,Halk destegi acildi
+ui.world.amasya.success.goal,Amasya kararı doğru kuruldu. En az iki destek kur ve Tereddüt Çemberi'ni başlat.
+ui.world.amasya.success.title,Doğru Bildiri
+ui.world.amasya.success.badge,Bildiri guclendi
+ui.world.kongre.success.goal,Kongre kararı doğru kuruldu. En az iki destek kur ve Dağınıklık Dalgası'nı başlat.
+ui.world.kongre.success.title,Doğru Birleşim
+ui.world.kongre.success.badge,Birlesik hedef acildi
+ui.world.ankara.21.goal,Merkez seçimi doğru yapıldı. En az iki destek kur ve Meclis'in açılışını başlat.
+ui.world.ankara.21.title,Doğru Merkez
+ui.world.ankara.21.badge,Stratejik merkez acildi
+ui.world.ankara.23.goal,Meclis iradesi doğru kuruldu. En az iki destek kur ve İrade Dalgası'nı başlat.
+ui.world.ankara.23.title,Doğru İrade
+ui.world.ankara.23.badge,Meclis guclendi
+ui.world.sakarya.25.goal,Savunma stratejisi doğru seçildi. En az iki destek kur ve Büyük Taarruz'u başlat.
+ui.world.sakarya.25.title,Doğru Strateji
+ui.world.sakarya.25.badge,Savunma basarili
+ui.world.sakarya.27.goal,Zafer sonrası karar doğru verildi. En az iki destek kur ve Cumhuriyet Dalgası'nı başlat.
+ui.world.sakarya.27.title,Doğru Karar
+ui.world.sakarya.27.badge,Zafer kazanildi
+ui.world.final.29.goal,Gelecek vizyonu doğru anlaşıldı. En az iki destek kur ve Cumhuriyet Dalgası'nı tamamla.
+ui.world.final.29.title,Doğru Vizyon
+ui.world.final.29.badge,Cumhuriyet anlasildi
+ui.world.portal.locked.title,Kitap Henüz Açılmadı
+ui.world.portal.locked.body,Bandırma Vapuru'na geçmeden önce üç ünite notunu da toplamalısın.
+ui.world.decision_gate.samsun.title,Karar İçin Hazır Değilsin
+ui.world.decision_gate.samsun.body,Önce kamaradaki üniformayı ve harita masasını incele.
+ui.world.decision_gate.havza.title,Çağrı İçin Hazır Değilsin
+ui.world.decision_gate.havza.body,Önce genelge metnini ve telgraf defterini incele.
+ui.world.decision_gate.amasya.title,Bildiri İçin Hazır Değilsin
+ui.world.decision_gate.amasya.body,Önce toplantı notunu ve bildiri taslağını incele.
+ui.world.decision_gate.kongre.title,Kongre İçin Hazır Değilsin
+ui.world.decision_gate.kongre.body,Önce temsil listesini ve ortak karar taslağını incele.
+ui.world.decision_gate.ankara.title,Meclis İçin Hazır Değilsin
+ui.world.decision_gate.ankara.body,Önce Meclis notunu ve telgraf defterini incele.
+ui.world.decision_gate.sakarya.title,Savunma İçin Hazır Değilsin
+ui.world.decision_gate.sakarya.body,Önce karargah notunu ve cephe telgrafını incele.
+ui.world.decision_gate.final.title,Cumhuriyet İçin Hazır Değilsin
+ui.world.decision_gate.final.body,Önce Cumhuriyet notunu ve gelecek defterini incele.
+ui.world.collect.unit.badge,Yeni tarih notu bulundu
+ui.world.collect.unit.goal_complete,Tüm üniteler toplandı. Çalışma masasındaki Tarih Kitabı'na git.
+ui.world.collect.ship.badge,Yeni gemi ipucu bulundu
+ui.world.collect.ship.goal_complete,Gemi ipuçları tamamlandı. Güvertedeki Samsun Kararı işaretine git.
+ui.world.collect.havza.badge,Yeni genelge ipucu bulundu
+ui.world.collect.havza.goal_complete,Havza ipuçları tamamlandı. Şimdi Havza Çağrısı noktasına git.
+ui.world.collect.amasya.badge,Yeni bildiri ipucu bulundu
+ui.world.collect.amasya.goal_complete,Amasya ipuçları tamamlandı. Şimdi Amasya Kararı noktasına git.
+ui.world.collect.kongre.badge,Yeni kongre ipucu bulundu
+ui.world.collect.kongre.goal_complete,Kongre ipuçları tamamlandı. Şimdi Kongre Kararı noktasına git.
+ui.world.collect.ankara.badge,Yeni meclis ipucu bulundu
+ui.world.collect.ankara.goal_complete,Ankara ipuçları tamamlandı. Şimdi Merkez Kararı noktasına git.
+ui.world.collect.sakarya.badge,Yeni cephe ipucu bulundu
+ui.world.collect.sakarya.goal_complete,Sakarya ipuçları tamamlandı. Şimdi Savunma Kararı noktasına git.
+ui.world.collect.final.badge,Yeni cumhuriyet ipucu bulundu
+ui.world.collect.final.goal_complete,Cumhuriyet ipuçları tamamlandı. Şimdi Gelecek Kararı noktasına git.
+ui.world.collect.support.badge,Liderlik puani +1
+ui.world.setup.ship.goal,Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele.
+ui.world.setup.ship.transition.title,Bandırma Vapuru
+ui.world.setup.ship.transition.body,Gece yolculugu basliyor
+ui.world.setup.samsun.goal,Samsun Rüyası açıldı. Önce 2 liderlik izi topla, sonra Liman, Telgraf ve Halk çevresindeki 2 destek noktası kur.
+ui.world.setup.samsun.transition.title,Samsun Ruyasi
+ui.world.setup.samsun.transition.body,Kararlarini stratejiyle destekle
+ui.world.setup.samsun.dialogue.title,Samsun Rüyası
+ui.world.setup.samsun.dialogue.body,"Ekranın kenarları bulutlanır. {hero} Samsun kıyısında küçük bir rüya haritasına iner. Liman, Telgraf ve Halk noktaları parlıyor: önce izleri oku, sonra iki destek kur."
+ui.world.setup.havza.goal,Havza açıldı. İpuçlarını topla, doğru çağrıyı seç ve sessizlik dalgasını aş.
+ui.world.setup.havza.transition.title,Havza Genelgesi
+ui.world.setup.havza.transition.body,Halkin ortak sesini bul
+ui.world.setup.havza.dialogue.title,Havza Genelgesi
+ui.world.setup.havza.dialogue.body,"{hero} bu kez sakin ama gergin bir kasaba meydanında belirir. İnsanlar ne yapacaklarını bilmiyor gibidir. Onları ortak ve bilinçli tepkiye hazırlamak gerekir."
+ui.world.setup.amasya.goal,Amasya açıldı. İpuçlarını topla, doğru bildiriyi seç ve tereddüt çemberini aş.
+ui.world.setup.amasya.transition.title,Amasya Genelgesi
+ui.world.setup.amasya.transition.body,Milletin kararini cümleye dönüştür
+ui.world.setup.amasya.dialogue.title,Amasya Genelgesi
+ui.world.setup.amasya.dialogue.body,"{hero} şimdi loş bir toplantı evindedir. Fikirler havada asılı gibidir. Burada doğru iş, ortak iradeyi açık ve cesur bir bildiride birleştirmektir."
+ui.world.setup.kongre.goal,Kongreler açıldı. İpuçlarını topla, doğru birleşimi seç ve dağınıklık dalgasını aş.
+ui.world.setup.kongre.transition.title,Kongreler
+ui.world.setup.kongre.transition.body,Farklı sesleri ortak hedefte buluştur
+ui.world.setup.kongre.dialogue.title,Kongreler
+ui.world.setup.kongre.dialogue.body,"{hero} şimdi büyük bir kongre salonundadır. Herkesin sesi farklıdır ama doğru iş, bu sesleri tek bir amaçta buluşturmaktır."
+ui.world.setup.ankara.goal,Ankara açıldı. İpuçlarını topla, doğru kararı ver ve Meclis'in iradesini kur.
+ui.world.setup.ankara.transition.title,Ankara: Meclis ve İrade
+ui.world.setup.ankara.transition.body,Iradenin gücünü Meclis'te bul
+ui.world.setup.ankara.dialogue.title,Ankara: Meclis ve İrade
+ui.world.setup.ankara.dialogue.body,"{hero} şimdi sıcak bir bozkırın ortasında, yeni kurulmakta olan bir meclisin eşiğindedir. Burada doğru iş, milletin iradesini tek bir çatı altında toplamak ve tarihe yön vermektir."
+ui.world.setup.sakarya.goal,Sakarya açıldı. İpuçlarını topla, doğru kararı ver ve Büyük Taarruz'u başlat.
+ui.world.setup.sakarya.transition.title,Sakarya ve Büyük Taarruz
+ui.world.setup.sakarya.transition.body,Vatan savunmasında son kale
+ui.world.setup.sakarya.dialogue.title,Sakarya ve Büyük Taarruz
+ui.world.setup.sakarya.dialogue.body,"{hero} şimdi savaşın tam ortasındadır. Düşman Ankara'ya doğru ilerlerken, herkes umudunu korumaya çalışmaktadır. Burada doğru iş, vatanın her karış toprağını savunmak ve zaferi getirecek kararları vermektir."
+ui.world.setup.final.goal,Cumhuriyet açıldı. İpuçlarını topla, doğru kararı ver ve zaferi tamamla.
+ui.world.setup.final.transition.title,Final: Cumhuriyet
+ui.world.setup.final.transition.body,29 Ekim 1923 — Milletin zaferi
+ui.world.setup.final.dialogue.title,Final: Cumhuriyet
+ui.world.setup.final.dialogue.body,"{hero} şimdi tarihin en önemli anlarından birindedir. 29 Ekim 1923'te Cumhuriyet ilan edilmiştir. Millet, bağımsızlığını kazanmış, yeni bir devletin temelleri atılmıştır. Şimdi sıra, bu mirası anlamak ve geleceğe taşımaktadır."
+ui.world.unbuilt.transition.body,Bu bolum henuz insa edilmedi

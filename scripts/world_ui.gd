@@ -329,7 +329,7 @@ func show_decision(event_index: int, context: String) -> void:
 func _show_decision_now(event_index: int, context: String) -> void:
 	"""Karar overlay'ini göster."""
 	var questions := preload("res://assets/data/questions.gd")
-	var event: Dictionary = questions.EVENTS[event_index]
+	var event: Dictionary = questions.localized_event(event_index, _current_hero_name())
 	panel_mode = "decision"
 	_overlay_manager.show(OverlayManager.OverlayType.DECISION, {
 		"context": context,
@@ -343,6 +343,15 @@ func _show_decision_now(event_index: int, context: String) -> void:
 	_character_panel.visible = false
 	# P1.3: Karar acilinca gecis sesi
 	_play_transition_sfx()
+
+
+func _current_hero_name() -> String:
+	if _world == null:
+		return ""
+	var player_mod: Node = _world.get_node_or_null("WorldPlayer")
+	if player_mod == null:
+		return ""
+	return String(player_mod.get("hero_name"))
 
 
 func close_dialogue() -> void:

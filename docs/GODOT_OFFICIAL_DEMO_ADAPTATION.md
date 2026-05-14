@@ -773,7 +773,10 @@ Ilerleme notu:
 - `scripts/ui_text.gd` ile anahtar + Turkce fallback katmani eklendi.
 - `translations/ui_texts.csv` ve `project.godot` uzerinden ilk resmi Godot translation zinciri acildi.
 - `main_menu`, `dialogue_overlay`, `decision_overlay` ve `info_card_overlay` icindeki sabit UI metinleri anahtar tabanli hale getirildi.
-- `questions.gd` icindeki hikaye/veri metinleri bu gorevin disinda tutularak sonraki localization genisletmesine birakildi.
+- `assets/data/questions.gd` icine key-or-raw event resolver eklendi; giris ve ilk Samsun event metinleri translation key'lerine tasindi, kalan event'ler ise ham fallback ile calismaya devam ediyor.
+- `assets/data/questions.gd` artik key alanı yazilmamis event'ler icin de `story.event.%03d.<field>` adlandirmasini runtime'da uretiyor; boylece tum hikaye verisi tek-locale Turkce akis korunurken ayni key semasina baglandi.
+- `world_zone.gd` icindeki karar geri bildirim basliklari, odul etiketleri ve ilgili goal kopyalari `ui_texts.csv` uzerinden tek kaynaga toplandi; bu degisiklik gercek coklu dil acmadan yalnizca metin kaynagini merkezilestiriyor.
+- `tools/verify_questions_localization.gd` ile key'li eventler ve ham fallback eventler icin headless localization dogrulamasi eklendi.
 
 Amac:
 

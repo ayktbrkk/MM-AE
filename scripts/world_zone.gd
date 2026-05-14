@@ -14,6 +14,7 @@ var _world: Node2D
 const _textures := preload("res://scripts/textures.gd")
 const _colors := preload("res://scripts/colors.gd")
 const _questions := preload("res://assets/data/questions.gd")
+const _ui_text := preload("res://scripts/ui_text.gd")
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 
 # ---------------------------------------------------------------------------
@@ -108,7 +109,7 @@ func _handle_event(event_index: int) -> void:
 	geçmez — onlar doğrudan _show_samsun_decision() vb. ile yönetilir.
 	Bu fonksiyon sadece chain üzerinden gelen event'ler için çalışır.
 	"""
-	var event_data: Dictionary = _questions.EVENTS[event_index]
+	var event_data: Dictionary = _questions.localized_event(event_index, _current_hero_name())
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -117,11 +118,6 @@ func _handle_event(event_index: int) -> void:
 		"story":
 			var speaker: String = event_data.get("speaker", "Anlatıcı")
 			var text: String = event_data.get("story", "")
-			var player_mod: Node = _get_player_mod()
-			if player_mod != null and "{hero}" in text:
-				text = text.replace("{hero}", player_mod.hero_name)
-			if "{hero}" in speaker:
-				speaker = speaker.replace("{hero}", player_mod.hero_name if player_mod != null else "Arda")
 			# Story event — dialogue göster, callback ile zinciri devam ettir
 			ui_mod.show_dialogue(speaker, text, Callable(self, "_on_event_dialogue_closed"))
 		
@@ -304,8 +300,8 @@ func _handle_portal_interaction(marker: Node2D, player_mod: Node) -> void:
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Kitap Henüz Açılmadı",
-			"Bandırma Vapuru'na geçmeden önce üç ünite notunu da toplamalısın.",
+			_world_text("ui.world.portal.locked.title", "Kitap Henüz Açılmadı"),
+			_world_text("ui.world.portal.locked.body", "Bandırma Vapuru'na geçmeden önce üç ünite notunu da toplamalısın."),
 			Callable()
 		)
 
@@ -321,8 +317,8 @@ func _handle_samsun_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_samsun_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Karar İçin Hazır Değilsin",
-			"Önce kamaradaki üniformayı ve harita masasını incele.",
+			_world_text("ui.world.decision_gate.samsun.title", "Karar İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.samsun.body", "Önce kamaradaki üniformayı ve harita masasını incele."),
 			Callable()
 		)
 
@@ -338,8 +334,8 @@ func _handle_havza_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_havza_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Çağrı İçin Hazır Değilsin",
-			"Önce genelge metnini ve telgraf defterini incele.",
+			_world_text("ui.world.decision_gate.havza.title", "Çağrı İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.havza.body", "Önce genelge metnini ve telgraf defterini incele."),
 			Callable()
 		)
 
@@ -355,8 +351,8 @@ func _handle_amasya_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_amasya_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Bildiri İçin Hazır Değilsin",
-			"Önce toplantı notunu ve bildiri taslağını incele.",
+			_world_text("ui.world.decision_gate.amasya.title", "Bildiri İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.amasya.body", "Önce toplantı notunu ve bildiri taslağını incele."),
 			Callable()
 		)
 
@@ -372,8 +368,8 @@ func _handle_kongre_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_kongre_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Kongre İçin Hazır Değilsin",
-			"Önce temsil listesini ve ortak karar taslağını incele.",
+			_world_text("ui.world.decision_gate.kongre.title", "Kongre İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.kongre.body", "Önce temsil listesini ve ortak karar taslağını incele."),
 			Callable()
 		)
 
@@ -389,8 +385,8 @@ func _handle_ankara_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_ankara_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Meclis İçin Hazır Değilsin",
-			"Önce Meclis notunu ve telgraf defterini incele.",
+			_world_text("ui.world.decision_gate.ankara.title", "Meclis İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.ankara.body", "Önce Meclis notunu ve telgraf defterini incele."),
 			Callable()
 		)
 
@@ -406,8 +402,8 @@ func _handle_sakarya_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_sakarya_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Savunma İçin Hazır Değilsin",
-			"Önce karargah notunu ve cephe telgrafını incele.",
+			_world_text("ui.world.decision_gate.sakarya.title", "Savunma İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.sakarya.body", "Önce karargah notunu ve cephe telgrafını incele."),
 			Callable()
 		)
 
@@ -423,8 +419,8 @@ func _handle_final_decision_check(_marker: Node2D, _player_mod: Node) -> void:
 		_show_final_decision()
 	else:
 		ui_mod.show_dialogue(
-			"Cumhuriyet İçin Hazır Değilsin",
-			"Önce Cumhuriyet notunu ve gelecek defterini incele.",
+			_world_text("ui.world.decision_gate.final.title", "Cumhuriyet İçin Hazır Değilsin"),
+			_world_text("ui.world.decision_gate.final.body", "Önce Cumhuriyet notunu ve gelecek defterini incele."),
 			Callable()
 		)
 
@@ -452,13 +448,13 @@ func _collect_unit(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni tarih notu bulundu",
+		_world_text("ui.world.collect.unit.badge", "Yeni tarih notu bulundu"),
 		Callable(),
 		"unit"
 	)
 
 	if state.get_item_count("units") >= state.get_zone_item_total("units"):
-		set_goal("portal", "Tüm üniteler toplandı. Çalışma masasındaki Tarih Kitabı'na git.")
+		set_goal("portal", _world_text("ui.world.collect.unit.goal_complete", "Tüm üniteler toplandı. Çalışma masasındaki Tarih Kitabı'na git."))
 
 
 func _collect_ship_clue(marker: Node2D) -> void:
@@ -480,13 +476,13 @@ func _collect_ship_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni gemi ipucu bulundu",
+		_world_text("ui.world.collect.ship.badge", "Yeni gemi ipucu bulundu"),
 		Callable(),
 		"ship"
 	)
 
 	if state.get_item_count("ship_clues") >= state.get_zone_item_total("ship_clues"):
-		set_goal("decision", "Gemi ipuçları tamamlandı. Güvertedeki Samsun Kararı işaretine git.")
+		set_goal("decision", _world_text("ui.world.collect.ship.goal_complete", "Gemi ipuçları tamamlandı. Güvertedeki Samsun Kararı işaretine git."))
 
 
 func _collect_havza_clue(marker: Node2D) -> void:
@@ -508,13 +504,13 @@ func _collect_havza_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni genelge ipucu bulundu",
+		_world_text("ui.world.collect.havza.badge", "Yeni genelge ipucu bulundu"),
 		Callable(),
 		"havza"
 	)
 
 	if state.get_item_count("havza_clues") >= state.get_zone_item_total("havza_clues"):
-		set_goal("havza_decision", "Havza ipuçları tamamlandı. Şimdi Havza Çağrısı noktasına git.")
+		set_goal("havza_decision", _world_text("ui.world.collect.havza.goal_complete", "Havza ipuçları tamamlandı. Şimdi Havza Çağrısı noktasına git."))
 
 
 func _collect_amasya_clue(marker: Node2D) -> void:
@@ -536,13 +532,13 @@ func _collect_amasya_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni bildiri ipucu bulundu",
+		_world_text("ui.world.collect.amasya.badge", "Yeni bildiri ipucu bulundu"),
 		Callable(),
 		"amasya"
 	)
 
 	if state.get_item_count("amasya_clues") >= state.get_zone_item_total("amasya_clues"):
-		set_goal("amasya_decision", "Amasya ipuçları tamamlandı. Şimdi Amasya Kararı noktasına git.")
+		set_goal("amasya_decision", _world_text("ui.world.collect.amasya.goal_complete", "Amasya ipuçları tamamlandı. Şimdi Amasya Kararı noktasına git."))
 
 
 func _collect_kongre_clue(marker: Node2D) -> void:
@@ -564,13 +560,13 @@ func _collect_kongre_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni kongre ipucu bulundu",
+		_world_text("ui.world.collect.kongre.badge", "Yeni kongre ipucu bulundu"),
 		Callable(),
 		"kongre"
 	)
 
 	if state.get_item_count("kongre_clues") >= state.get_zone_item_total("kongre_clues"):
-		set_goal("kongre_decision", "Kongre ipuçları tamamlandı. Şimdi Kongre Kararı noktasına git.")
+		set_goal("kongre_decision", _world_text("ui.world.collect.kongre.goal_complete", "Kongre ipuçları tamamlandı. Şimdi Kongre Kararı noktasına git."))
 
 
 func _collect_ankara_clue(marker: Node2D) -> void:
@@ -592,13 +588,13 @@ func _collect_ankara_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni meclis ipucu bulundu",
+		_world_text("ui.world.collect.ankara.badge", "Yeni meclis ipucu bulundu"),
 		Callable(),
 		"ankara"
 	)
 
 	if state.get_item_count("ankara_clues") >= state.get_zone_item_total("ankara_clues"):
-		set_goal("ankara_decision", "Ankara ipuçları tamamlandı. Şimdi Merkez Kararı noktasına git.")
+		set_goal("ankara_decision", _world_text("ui.world.collect.ankara.goal_complete", "Ankara ipuçları tamamlandı. Şimdi Merkez Kararı noktasına git."))
 
 
 func _collect_sakarya_clue(marker: Node2D) -> void:
@@ -620,13 +616,13 @@ func _collect_sakarya_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni cephe ipucu bulundu",
+		_world_text("ui.world.collect.sakarya.badge", "Yeni cephe ipucu bulundu"),
 		Callable(),
 		"sakarya"
 	)
 
 	if state.get_item_count("sakarya_clues") >= state.get_zone_item_total("sakarya_clues"):
-		set_goal("sakarya_decision", "Sakarya ipuçları tamamlandı. Şimdi Savunma Kararı noktasına git.")
+		set_goal("sakarya_decision", _world_text("ui.world.collect.sakarya.goal_complete", "Sakarya ipuçları tamamlandı. Şimdi Savunma Kararı noktasına git."))
 
 
 func _collect_final_clue(marker: Node2D) -> void:
@@ -648,13 +644,13 @@ func _collect_final_clue(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Yeni cumhuriyet ipucu bulundu",
+		_world_text("ui.world.collect.final.badge", "Yeni cumhuriyet ipucu bulundu"),
 		Callable(),
 		"final"
 	)
 
 	if state.get_item_count("final_clues") >= state.get_zone_item_total("final_clues"):
-		set_goal("final_decision", "Cumhuriyet ipuçları tamamlandı. Şimdi Gelecek Kararı noktasına git.")
+		set_goal("final_decision", _world_text("ui.world.collect.final.goal_complete", "Cumhuriyet ipuçları tamamlandı. Şimdi Gelecek Kararı noktasına git."))
 
 
 func _collect_leadership_resource(marker: Node2D) -> void:
@@ -676,7 +672,7 @@ func _collect_leadership_resource(marker: Node2D) -> void:
 	ui_mod.show_info_card(
 		String(marker.get_meta("title")),
 		marker_node.format_marker_text(String(marker.get_meta("text")), player_mod.hero_name),
-		"Liderlik puani +1",
+		_world_text("ui.world.collect.support.badge", "Liderlik puani +1"),
 		Callable(),
 		"support"
 	)
@@ -817,9 +813,12 @@ func _setup_bandirma() -> void:
 	# P10-FIX: State zone'u güncelle — _on_transition_finished()'da
 	# _state.current_zone == "ship" kontrolünün çalışması için.
 	state.enter_zone("ship")
-	set_goal("ship_clue", "Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele.")
+	set_goal("ship_clue", _world_text("ui.world.setup.ship.goal", "Bandırma Vapuru'nda uyan. Üniformayı ve harita masasını incele."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Bandırma Vapuru", "Gece yolculugu basliyor")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.ship.transition.title", "Bandırma Vapuru"),
+		_world_text("ui.world.setup.ship.transition.body", "Gece yolculugu basliyor")
+	)
 	# P10-FIX: Event chain chapter transition kapandıktan SONRA başlar.
 	# transition_finished sinyali world.gd _on_transition_finished()'da
 	# yakalanır, OverlayManager.hide(CHAPTER_TRANSITION) ile CanvasLayer
@@ -850,10 +849,13 @@ func _setup_samsun_rift() -> void:
 	ui_mod.start_samsun_open_world_overview()
 	set_goal("resource", _samsun_intro_goal_text())
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Samsun Ruyasi", "Kararlarini stratejiyle destekle")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.samsun.transition.title", "Samsun Ruyasi"),
+		_world_text("ui.world.setup.samsun.transition.body", "Kararlarini stratejiyle destekle")
+	)
 	ui_mod.show_dialogue(
-		"Samsun Rüyası",
-		"Ekranın kenarları bulutlanır. %s Samsun kıyısında küçük bir rüya haritasına iner. Liman, Telgraf ve Halk noktaları parlıyor: önce izleri oku, sonra iki destek kur." % player_mod.hero_name,
+		_world_text("ui.world.setup.samsun.dialogue.title", "Samsun Rüyası"),
+		_world_textf("ui.world.setup.samsun.dialogue.body", "Ekranın kenarları bulutlanır. {hero} Samsun kıyısında küçük bir rüya haritasına iner. Liman, Telgraf ve Halk noktaları parlıyor: önce izleri oku, sonra iki destek kur.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -877,12 +879,15 @@ func _setup_havza() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(760, 1180), Vector2(900, 1260))
 
-	set_goal("havza_clue", "Havza açıldı. İpuçlarını topla, doğru çağrıyı seç ve sessizlik dalgasını aş.")
+	set_goal("havza_clue", _world_text("ui.world.setup.havza.goal", "Havza açıldı. İpuçlarını topla, doğru çağrıyı seç ve sessizlik dalgasını aş."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Havza Genelgesi", "Halkin ortak sesini bul")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.havza.transition.title", "Havza Genelgesi"),
+		_world_text("ui.world.setup.havza.transition.body", "Halkin ortak sesini bul")
+	)
 	ui_mod.show_dialogue(
-		"Havza Genelgesi",
-		"%s bu kez sakin ama gergin bir kasaba meydanında belirir. İnsanlar ne yapacaklarını bilmiyor gibidir. Onları ortak ve bilinçli tepkiye hazırlamak gerekir." % player_mod.hero_name,
+		_world_text("ui.world.setup.havza.dialogue.title", "Havza Genelgesi"),
+		_world_textf("ui.world.setup.havza.dialogue.body", "{hero} bu kez sakin ama gergin bir kasaba meydanında belirir. İnsanlar ne yapacaklarını bilmiyor gibidir. Onları ortak ve bilinçli tepkiye hazırlamak gerekir.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -906,12 +911,15 @@ func _setup_amasya() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("amasya_clue", "Amasya açıldı. İpuçlarını topla, doğru bildiriyi seç ve tereddüt çemberini aş.")
+	set_goal("amasya_clue", _world_text("ui.world.setup.amasya.goal", "Amasya açıldı. İpuçlarını topla, doğru bildiriyi seç ve tereddüt çemberini aş."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Amasya Genelgesi", "Milletin kararini cümleye dönüştür")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.amasya.transition.title", "Amasya Genelgesi"),
+		_world_text("ui.world.setup.amasya.transition.body", "Milletin kararini cümleye dönüştür")
+	)
 	ui_mod.show_dialogue(
-		"Amasya Genelgesi",
-		"%s şimdi loş bir toplantı evindedir. Fikirler havada asılı gibidir. Burada doğru iş, ortak iradeyi açık ve cesur bir bildiride birleştirmektir." % player_mod.hero_name,
+		_world_text("ui.world.setup.amasya.dialogue.title", "Amasya Genelgesi"),
+		_world_textf("ui.world.setup.amasya.dialogue.body", "{hero} şimdi loş bir toplantı evindedir. Fikirler havada asılı gibidir. Burada doğru iş, ortak iradeyi açık ve cesur bir bildiride birleştirmektir.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -935,12 +943,15 @@ func _setup_kongreler() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("kongre_clue", "Kongreler açıldı. İpuçlarını topla, doğru birleşimi seç ve dağınıklık dalgasını aş.")
+	set_goal("kongre_clue", _world_text("ui.world.setup.kongre.goal", "Kongreler açıldı. İpuçlarını topla, doğru birleşimi seç ve dağınıklık dalgasını aş."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Kongreler", "Farklı sesleri ortak hedefte buluştur")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.kongre.transition.title", "Kongreler"),
+		_world_text("ui.world.setup.kongre.transition.body", "Farklı sesleri ortak hedefte buluştur")
+	)
 	ui_mod.show_dialogue(
-		"Kongreler",
-		"%s şimdi büyük bir kongre salonundadır. Herkesin sesi farklıdır ama doğru iş, bu sesleri tek bir amaçta buluşturmaktır." % player_mod.hero_name,
+		_world_text("ui.world.setup.kongre.dialogue.title", "Kongreler"),
+		_world_textf("ui.world.setup.kongre.dialogue.body", "{hero} şimdi büyük bir kongre salonundadır. Herkesin sesi farklıdır ama doğru iş, bu sesleri tek bir amaçta buluşturmaktır.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -965,12 +976,15 @@ func _setup_ankara() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("ankara_clue", "Ankara açıldı. İpuçlarını topla, doğru kararı ver ve Meclis'in iradesini kur.")
+	set_goal("ankara_clue", _world_text("ui.world.setup.ankara.goal", "Ankara açıldı. İpuçlarını topla, doğru kararı ver ve Meclis'in iradesini kur."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Ankara: Meclis ve İrade", "Iradenin gücünü Meclis'te bul")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.ankara.transition.title", "Ankara: Meclis ve İrade"),
+		_world_text("ui.world.setup.ankara.transition.body", "Iradenin gücünü Meclis'te bul")
+	)
 	ui_mod.show_dialogue(
-		"Ankara: Meclis ve İrade",
-		"%s şimdi sıcak bir bozkırın ortasında, yeni kurulmakta olan bir meclisin eşiğindedir. Burada doğru iş, milletin iradesini tek bir çatı altında toplamak ve tarihe yön vermektir." % player_mod.hero_name,
+		_world_text("ui.world.setup.ankara.dialogue.title", "Ankara: Meclis ve İrade"),
+		_world_textf("ui.world.setup.ankara.dialogue.body", "{hero} şimdi sıcak bir bozkırın ortasında, yeni kurulmakta olan bir meclisin eşiğindedir. Burada doğru iş, milletin iradesini tek bir çatı altında toplamak ve tarihe yön vermektir.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -1024,12 +1038,15 @@ func _setup_sakarya() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("sakarya_clue", "Sakarya açıldı. İpuçlarını topla, doğru kararı ver ve Büyük Taarruz'u başlat.")
+	set_goal("sakarya_clue", _world_text("ui.world.setup.sakarya.goal", "Sakarya açıldı. İpuçlarını topla, doğru kararı ver ve Büyük Taarruz'u başlat."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Sakarya ve Büyük Taarruz", "Vatan savunmasında son kale")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.sakarya.transition.title", "Sakarya ve Büyük Taarruz"),
+		_world_text("ui.world.setup.sakarya.transition.body", "Vatan savunmasında son kale")
+	)
 	ui_mod.show_dialogue(
-		"Sakarya ve Büyük Taarruz",
-		"%s şimdi savaşın tam ortasındadır. Düşman Ankara'ya doğru ilerlerken, herkes umudunu korumaya çalışmaktadır. Burada doğru iş, vatanın her karış toprağını savunmak ve zaferi getirecek kararları vermektir." % player_mod.hero_name,
+		_world_text("ui.world.setup.sakarya.dialogue.title", "Sakarya ve Büyük Taarruz"),
+		_world_textf("ui.world.setup.sakarya.dialogue.body", "{hero} şimdi savaşın tam ortasındadır. Düşman Ankara'ya doğru ilerlerken, herkes umudunu korumaya çalışmaktadır. Burada doğru iş, vatanın her karış toprağını savunmak ve zaferi getirecek kararları vermektir.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -1083,12 +1100,15 @@ func _setup_final() -> void:
 
 	player_mod.target_position = _setup_player_position(Vector2(780, 1220), Vector2(920, 1300))
 
-	set_goal("final_clue", "Cumhuriyet açıldı. İpuçlarını topla, doğru kararı ver ve zaferi tamamla.")
+	set_goal("final_clue", _world_text("ui.world.setup.final.goal", "Cumhuriyet açıldı. İpuçlarını topla, doğru kararı ver ve zaferi tamamla."))
 	ui_mod.update_progress()
-	ui_mod.show_chapter_transition("Final: Cumhuriyet", "29 Ekim 1923 — Milletin zaferi")
+	ui_mod.show_chapter_transition(
+		_world_text("ui.world.setup.final.transition.title", "Final: Cumhuriyet"),
+		_world_text("ui.world.setup.final.transition.body", "29 Ekim 1923 — Milletin zaferi")
+	)
 	ui_mod.show_dialogue(
-		"Final: Cumhuriyet",
-		"%s şimdi tarihin en önemli anlarından birindedir. 29 Ekim 1923'te Cumhuriyet ilan edilmiştir. Millet, bağımsızlığını kazanmış, yeni bir devletin temelleri atılmıştır. Şimdi sıra, bu mirası anlamak ve geleceğe taşımaktadır." % player_mod.hero_name,
+		_world_text("ui.world.setup.final.dialogue.title", "Final: Cumhuriyet"),
+		_world_textf("ui.world.setup.final.dialogue.body", "{hero} şimdi tarihin en önemli anlarından birindedir. 29 Ekim 1923'te Cumhuriyet ilan edilmiştir. Millet, bağımsızlığını kazanmış, yeni bir devletin temelleri atılmıştır. Şimdi sıra, bu mirası anlamak ve geleceğe taşımaktadır.", {"hero": player_mod.hero_name}),
 		Callable()
 	)
 
@@ -1132,7 +1152,7 @@ func _setup_player_position(player_pos: Vector2, companion_pos: Vector2) -> Vect
 
 
 func _samsun_intro_goal_text() -> String:
-	return "Samsun Rüyası açıldı. Önce 2 liderlik izi topla, sonra Liman, Telgraf ve Halk çevresindeki 2 destek noktası kur."
+	return _world_text("ui.world.setup.samsun.goal", "Samsun Rüyası açıldı. Önce 2 liderlik izi topla, sonra Liman, Telgraf ve Halk çevresindeki 2 destek noktası kur.")
 
 
 func _setup_samsun_rift_after_build() -> void:
@@ -1184,7 +1204,7 @@ func _setup_unbuilt_zone(zone: String) -> void:
 	ui_mod.update_progress()
 	ui_mod.show_chapter_transition(
 		_zone_display_name(zone),
-		"Bu bolum henuz insa edilmedi"
+		_world_text("ui.world.unbuilt.transition.body", "Bu bolum henuz insa edilmedi")
 	)
 	
 	# Event chain'i başlat — story/decision event'lerini sırayla oynat
@@ -1202,6 +1222,28 @@ func _zone_display_name(zone: String) -> String:
 			return "Final: Cumhuriyet"
 		_:
 			return zone.capitalize()
+
+
+func _current_hero_name() -> String:
+	var player_mod: Node = _get_player_mod()
+	if player_mod == null:
+		return ""
+	return String(player_mod.get("hero_name"))
+
+
+static func resolve_world_text(key: String, fallback: String, replacements: Dictionary = {}) -> String:
+	var resolved := _ui_text.text(key, fallback)
+	for replacement_key in replacements.keys():
+		resolved = resolved.replace("{%s}" % String(replacement_key), String(replacements[replacement_key]))
+	return resolved
+
+
+func _world_text(key: String, fallback: String) -> String:
+	return resolve_world_text(key, fallback)
+
+
+func _world_textf(key: String, fallback: String, replacements: Dictionary = {}) -> String:
+	return resolve_world_text(key, fallback, replacements)
 
 
 # ---------------------------------------------------------------------------
@@ -1272,7 +1314,7 @@ func _answer_ankara_decision(choice: String) -> void:
 	var event_index: int = _last_decision_event_index
 	if event_index not in [21, 23]:
 		event_index = 21  # fallback
-	var event: Dictionary = questions.EVENTS[event_index]
+	var event: Dictionary = questions.localized_event(event_index, _current_hero_name())
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1287,13 +1329,13 @@ func _answer_ankara_decision(choice: String) -> void:
 		var badge_text: String = ""
 		match event_index:
 			21:
-				goal_text = "Merkez seçimi doğru yapıldı. En az iki destek kur ve Meclis'in açılışını başlat."
-				info_title = "Doğru Merkez"
-				badge_text = "Stratejik merkez acildi"
+				goal_text = _world_text("ui.world.ankara.21.goal", "Merkez seçimi doğru yapıldı. En az iki destek kur ve Meclis'in açılışını başlat.")
+				info_title = _world_text("ui.world.ankara.21.title", "Doğru Merkez")
+				badge_text = _world_text("ui.world.ankara.21.badge", "Stratejik merkez acildi")
 			23:
-				goal_text = "Meclis iradesi doğru kuruldu. En az iki destek kur ve İrade Dalgası'nı başlat."
-				info_title = "Doğru İrade"
-				badge_text = "Meclis guclendi"
+				goal_text = _world_text("ui.world.ankara.23.goal", "Meclis iradesi doğru kuruldu. En az iki destek kur ve İrade Dalgası'nı başlat.")
+				info_title = _world_text("ui.world.ankara.23.title", "Doğru İrade")
+				badge_text = _world_text("ui.world.ankara.23.badge", "Meclis guclendi")
 		set_goal("build_spot", goal_text)
 		ui_mod.show_info_card(
 			info_title,
@@ -1304,7 +1346,7 @@ func _answer_ankara_decision(choice: String) -> void:
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)
@@ -1316,7 +1358,7 @@ func _answer_sakarya_decision(choice: String) -> void:
 	var event_index: int = _last_decision_event_index
 	if event_index not in [25, 27]:
 		event_index = 25  # fallback
-	var event: Dictionary = questions.EVENTS[event_index]
+	var event: Dictionary = questions.localized_event(event_index, _current_hero_name())
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1331,13 +1373,13 @@ func _answer_sakarya_decision(choice: String) -> void:
 		var badge_text: String = ""
 		match event_index:
 			25:
-				goal_text = "Savunma stratejisi doğru seçildi. En az iki destek kur ve Büyük Taarruz'u başlat."
-				info_title = "Doğru Strateji"
-				badge_text = "Savunma basarili"
+				goal_text = _world_text("ui.world.sakarya.25.goal", "Savunma stratejisi doğru seçildi. En az iki destek kur ve Büyük Taarruz'u başlat.")
+				info_title = _world_text("ui.world.sakarya.25.title", "Doğru Strateji")
+				badge_text = _world_text("ui.world.sakarya.25.badge", "Savunma basarili")
 			27:
-				goal_text = "Zafer sonrası karar doğru verildi. En az iki destek kur ve Cumhuriyet Dalgası'nı başlat."
-				info_title = "Doğru Karar"
-				badge_text = "Zafer kazanildi"
+				goal_text = _world_text("ui.world.sakarya.27.goal", "Zafer sonrası karar doğru verildi. En az iki destek kur ve Cumhuriyet Dalgası'nı başlat.")
+				info_title = _world_text("ui.world.sakarya.27.title", "Doğru Karar")
+				badge_text = _world_text("ui.world.sakarya.27.badge", "Zafer kazanildi")
 		set_goal("build_spot", goal_text)
 		ui_mod.show_info_card(
 			info_title,
@@ -1348,7 +1390,7 @@ func _answer_sakarya_decision(choice: String) -> void:
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)
@@ -1360,7 +1402,7 @@ func _answer_final_decision(choice: String) -> void:
 	var event_index: int = _last_decision_event_index
 	if event_index not in [29]:
 		event_index = 29  # fallback
-	var event: Dictionary = questions.EVENTS[event_index]
+	var event: Dictionary = questions.localized_event(event_index, _current_hero_name())
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1375,9 +1417,9 @@ func _answer_final_decision(choice: String) -> void:
 		var badge_text: String = ""
 		match event_index:
 			29:
-				goal_text = "Gelecek vizyonu doğru anlaşıldı. En az iki destek kur ve Cumhuriyet Dalgası'nı tamamla."
-				info_title = "Doğru Vizyon"
-				badge_text = "Cumhuriyet anlasildi"
+				goal_text = _world_text("ui.world.final.29.goal", "Gelecek vizyonu doğru anlaşıldı. En az iki destek kur ve Cumhuriyet Dalgası'nı tamamla.")
+				info_title = _world_text("ui.world.final.29.title", "Doğru Vizyon")
+				badge_text = _world_text("ui.world.final.29.badge", "Cumhuriyet anlasildi")
 		set_goal("build_spot", goal_text)
 		ui_mod.show_info_card(
 			info_title,
@@ -1388,7 +1430,7 @@ func _answer_final_decision(choice: String) -> void:
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)
@@ -1397,7 +1439,7 @@ func _answer_final_decision(choice: String) -> void:
 func _answer_samsun_decision(choice: String) -> void:
 	"""Samsun kararını değerlendir (EVENTS[5] — İlk Karar)."""
 	var questions := preload("res://assets/data/questions.gd")
-	var event: Dictionary = questions.EVENTS[5]
+	var event: Dictionary = questions.localized_event(5, _current_hero_name())
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1408,15 +1450,15 @@ func _answer_samsun_decision(choice: String) -> void:
 
 	if choice == event.get("correct", ""):
 		ui_mod.show_info_card(
-			"Doğru Karar",
+			_world_text("ui.world.samsun.success.title", "Doğru Karar"),
 			event.get("info", ""),
-			"Tarih yildizi kazandin",
+			_world_text("ui.world.samsun.success.badge", "Tarih yildizi kazandin"),
 			Callable(self, "_enter_samsun_rift"),
 			"decision"
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)
@@ -1425,7 +1467,7 @@ func _answer_samsun_decision(choice: String) -> void:
 func _answer_havza_decision(choice: String) -> void:
 	"""Havza kararını değerlendir."""
 	var questions := preload("res://assets/data/questions.gd")
-	var event: Dictionary = questions.EVENTS[4]  # EVENT_DECISION_HAVZA
+	var event: Dictionary = questions.localized_event(4, _current_hero_name())  # EVENT_DECISION_HAVZA
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1435,17 +1477,17 @@ func _answer_havza_decision(choice: String) -> void:
 	ui_mod.panel_mode = "character"
 
 	if choice == event.get("correct", ""):
-		set_goal("build_spot", "Havza çağrısı doğru yapıldı. En az iki destek kur ve Sessizlik Dalgası'nı başlat.")
+		set_goal("build_spot", _world_text("ui.world.havza.success.goal", "Havza çağrısı doğru yapıldı. En az iki destek kur ve Sessizlik Dalgası'nı başlat."))
 		ui_mod.show_info_card(
-			"Doğru Çağrı",
+			_world_text("ui.world.havza.success.title", "Doğru Çağrı"),
 			event.get("info", ""),
-			"Halk destegi acildi",
+			_world_text("ui.world.havza.success.badge", "Halk destegi acildi"),
 			Callable(),
 			"decision"
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)
@@ -1454,7 +1496,7 @@ func _answer_havza_decision(choice: String) -> void:
 func _answer_amasya_decision(choice: String) -> void:
 	"""Amasya kararını değerlendir."""
 	var questions := preload("res://assets/data/questions.gd")
-	var event: Dictionary = questions.EVENTS[5]  # EVENT_DECISION_AMASYA
+	var event: Dictionary = questions.localized_event(5, _current_hero_name())  # EVENT_DECISION_AMASYA
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1464,17 +1506,17 @@ func _answer_amasya_decision(choice: String) -> void:
 	ui_mod.panel_mode = "character"
 
 	if choice == event.get("correct", ""):
-		set_goal("build_spot", "Amasya kararı doğru kuruldu. En az iki destek kur ve Tereddüt Çemberi'ni başlat.")
+		set_goal("build_spot", _world_text("ui.world.amasya.success.goal", "Amasya kararı doğru kuruldu. En az iki destek kur ve Tereddüt Çemberi'ni başlat."))
 		ui_mod.show_info_card(
-			"Doğru Bildiri",
+			_world_text("ui.world.amasya.success.title", "Doğru Bildiri"),
 			event.get("info", ""),
-			"Bildiri guclendi",
+			_world_text("ui.world.amasya.success.badge", "Bildiri guclendi"),
 			Callable(),
 			"decision"
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)
@@ -1483,7 +1525,7 @@ func _answer_amasya_decision(choice: String) -> void:
 func _answer_kongre_decision(choice: String) -> void:
 	"""Kongre kararını değerlendir."""
 	var questions := preload("res://assets/data/questions.gd")
-	var event: Dictionary = questions.EVENTS[6]  # EVENT_DECISION_KONGRE
+	var event: Dictionary = questions.localized_event(6, _current_hero_name())  # EVENT_DECISION_KONGRE
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod == null:
 		return
@@ -1493,17 +1535,17 @@ func _answer_kongre_decision(choice: String) -> void:
 	ui_mod.panel_mode = "character"
 
 	if choice == event.get("correct", ""):
-		set_goal("build_spot", "Kongre kararı doğru kuruldu. En az iki destek kur ve Dağınıklık Dalgası'nı başlat.")
+		set_goal("build_spot", _world_text("ui.world.kongre.success.goal", "Kongre kararı doğru kuruldu. En az iki destek kur ve Dağınıklık Dalgası'nı başlat."))
 		ui_mod.show_info_card(
-			"Doğru Birleşim",
+			_world_text("ui.world.kongre.success.title", "Doğru Birleşim"),
 			event.get("info", ""),
-			"Birlesik hedef acildi",
+			_world_text("ui.world.kongre.success.badge", "Birlesik hedef acildi"),
 			Callable(),
 			"decision"
 		)
 	else:
 		ui_mod.show_dialogue(
-			"Bir Daha Düşünelim",
+			_world_text("ui.world.decision.retry_title", "Bir Daha Düşünelim"),
 			event.get("retry", ""),
 			Callable()
 		)

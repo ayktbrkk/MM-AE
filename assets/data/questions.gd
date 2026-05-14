@@ -1,5 +1,18 @@
 extends RefCounted
 
+const _ui_text := preload("res://scripts/ui_text.gd")
+const _LOCALIZABLE_FIELDS := [
+	"chapter",
+	"unit",
+	"location",
+	"speaker",
+	"story",
+	"option_a",
+	"option_b",
+	"retry",
+	"info",
+]
+
 ## =============================================
 ## BANDIRMA YOLCULUĞU — Hikaye Olayları Veritabanı
 ## =============================================
@@ -35,32 +48,50 @@ const EVENTS := [
 	# =============================================
 	{
 		"kind": "story",
+		"chapter_key": "story.event.000.chapter",
 		"chapter": "Giriş: Sınav Gecesi",
+		"unit_key": "story.event.000.unit",
 		"unit": "Hazırlık",
+		"location_key": "story.event.000.location",
 		"location": "Öğrenci Odası",
 		"mood": "room",
+		"speaker_key": "story.event.000.speaker",
 		"speaker": "Anlatıcı",
+		"story_key": "story.event.000.story",
 		"story": "{hero}, yarınki tarih sınavına çalışmak yerine tabletinde oyun oynar. Masasının üzerindeki kitabın kapağı arada gözüne ilişir. İçten içe çalışması gerektiğini bilir ama oyunun başından kalkamaz.",
+		"info_key": "story.event.000.info",
 		"info": "Bu bölüm oyunun eğitim kurgusunu başlatır: sınava çalışmayan öğrenci, tarihsel kararların içine düşerek öğrenir."
 	},
 	{
 		"kind": "story",
+		"chapter_key": "story.event.001.chapter",
 		"chapter": "Giriş: Sınav Gecesi",
+		"unit_key": "story.event.001.unit",
 		"unit": "Hazırlık",
+		"location_key": "story.event.001.location",
 		"location": "Öğrenci Odası",
 		"mood": "room",
+		"speaker_key": "story.event.001.speaker",
 		"speaker": "{hero}",
+		"story_key": "story.event.001.story",
 		"story": "Saat ilerler. {hero} yatağına uzanır, ışığı kapatacakken kitabıyla göz göze gelir. Okuma lambasını yakar ve sorumlu olduğu üniteleri hızlıca okumaya başlar. Satırlar bulanıklaşır, gözleri kapanır.",
+		"info_key": "story.event.001.info",
 		"info": "Kitaptaki üniteler birazdan oyun bölümlerine dönüşecek."
 	},
 	{
 		"kind": "story",
+		"chapter_key": "story.event.002.chapter",
 		"chapter": "Giriş: Bandırma Vapuru",
+		"unit_key": "story.event.002.unit",
 		"unit": "Milli Mücadeleye Hazırlık",
+		"location_key": "story.event.002.location",
 		"location": "Bandırma Vapuru Kamarası",
 		"mood": "ship",
+		"speaker_key": "story.event.002.speaker",
 		"speaker": "Anlatıcı",
+		"story_key": "story.event.002.story",
 		"story": "{hero} gözlerini açtığında dalga sesleri duyar. Küçük bir kamaradadır. Yatağın başında ona tam uyan bir asker üniforması asılıdır. Aynaya baktığında hâlâ kendisidir, ama artık tarih kitabının içindedir.",
+		"info_key": "story.event.002.info",
 		"info": "Oyuncu tarihsel bir kişinin yerine geçmez; tarihsel durumun sorumluluğunu taşıyan öğrenci karakter olarak karar verir."
 	},
 
@@ -73,50 +104,80 @@ const EVENTS := [
 	# =============================================
 	{
 		"kind": "story",
+		"chapter_key": "story.event.003.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
+		"unit_key": "story.event.003.unit",
 		"unit": "19 Mayıs 1919",
+		"location_key": "story.event.003.location",
 		"location": "Samsun Limanı",
 		"mood": "arrival",
+		"speaker_key": "story.event.003.speaker",
 		"speaker": "Anlatıcı",
+		"story_key": "story.event.003.story",
 		"story": "Gemi Samsun açıklarına yanaşır. {hero} güverteye çıktığında, Karadeniz'in mavi suları ve yeşil yamaçlarla kaplı bir şehir görür. Ama her şey göründüğü kadar huzurlu değildir. Şehirde yabancı askerler vardır, halk endişeli ve tedirgindir.",
+		"info_key": "story.event.003.info",
 		"info": "19 Mayıs 1919'da Mustafa Kemal Paşa, 9. Ordu Müfettişi olarak Samsun'a çıktı. Bu tarih, Milli Mücadele'nin fiilen başladığı gün olarak kabul edilir."
 	},
 	{
 		"kind": "story",
+		"chapter_key": "story.event.004.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
+		"unit_key": "story.event.004.unit",
 		"unit": "İlk Adım",
+		"location_key": "story.event.004.location",
 		"location": "Samsun Limanı",
 		"mood": "arrival",
+		"speaker_key": "story.event.004.speaker",
 		"speaker": "Güvertedeki Subay",
+		"story_key": "story.event.004.story",
 		"story": "\"Hoş geldin, yolcu!\" der gülümseyerek. \"Burası Samsun. Vatanın kurtuluş yolculuğu burada başlıyor. Etrafına iyi bak. Görecek çok şey var.\" Subay, {hero}'nun omzuna hafifçe vurur ve görevinin önemini hissettirir.",
+		"info_key": "story.event.004.info",
 		"info": "Mustafa Kemal Paşa, Samsun'a çıktığında önce şehrin durumunu gözlemledi. İşgallerin halk üzerindeki etkisini yerinde görmek istiyordu."
 	},
 	{
 		"kind": "decision",
+		"chapter_key": "story.event.005.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
+		"unit_key": "story.event.005.unit",
 		"unit": "İlk Karar",
+		"location_key": "story.event.005.location",
 		"location": "Bandırma Vapuru Güvertesi",
 		"mood": "ship",
+		"speaker_key": "story.event.005.speaker",
 		"speaker": "Güvertedeki Öğrenci Asker",
+		"story_key": "story.event.005.story",
 		"story": "Gemi limana yaklaşırken güvertedeki herkes endişelidir. Birileri hızlıca halka seslenmeyi önerir. {hero}, ilk kararını vermek zorundadır. Ne yapmalı?",
+		"option_a_key": "story.event.005.option_a",
 		"option_a": "Karaya çıkar çıkmaz plansızca herkese seslen.",
+		"option_b_key": "story.event.005.option_b",
 		"option_b": "Önce durumu gözlemle ve güvenilir kişilerle bağlantı kur.",
 		"correct": "b",
+		"retry_key": "story.event.005.retry",
 		"retry": "İlk adım önemli ama plansız bir çıkış hem görevi hem insanları riske atabilir. Önce durumu anlamak, sonra harekete geçmek gerekir.",
+		"info_key": "story.event.005.info",
 		"info": "Samsun'a çıkış, Milli Mücadele'nin başlangıcıdır. Mustafa Kemal Paşa, önce şehrin durumunu gözlemlemiş, güvenilir kişilerle temas kurmuş ve örgütlü hareket etmiştir."
 	},
 	{
 		"kind": "decision",
+		"chapter_key": "story.event.006.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
+		"unit_key": "story.event.006.unit",
 		"unit": "İlk Temas",
+		"location_key": "story.event.006.location",
 		"location": "Samsun Şehir Merkezi",
 		"mood": "city",
+		"speaker_key": "story.event.006.speaker",
 		"speaker": "{hero}",
+		"story_key": "story.event.006.story",
 		"story": "{hero} şehirde dolaşırken bir kahvehanede toplanan ileri gelenlerle karşılaşır. Kimisi çekingen, kimisi cesurdur. {hero}, Milli Mücadele fikrini ilk kime açmalıdır?",
+		"option_a_key": "story.event.006.option_a",
 		"option_a": "Güvendiğin birkaç kişiyle özel olarak konuş.",
+		"option_b_key": "story.event.006.option_b",
 		"option_b": "Kahvehanedeki herkese açıkça seslen.",
 		"correct": "a",
+		"retry_key": "story.event.006.retry",
 		"retry": "Herkesin içinde konuşmak cesurca olabilir ama düşman casusları da dinliyor olabilir. Önce güvenilir bir çekirdek oluşturmak daha akıllıca.",
+		"info_key": "story.event.006.info",
 		"info": "Mustafa Kemal Paşa, Samsun'da önce güvendiği kişilerle görüştü. Haberleşme ve örgütlenme, gizlilik içinde yürütülmesi gereken hassas süreçlerdi."
 	},
 
@@ -461,3 +522,32 @@ const EVENTS := [
 		"info": "Oyun, öğrencinin tarihsel empati kurarak öğrenmesini amaçlar. {hero} artık sadece ezberlemiş değil, anlamıştır."
 	}
 ]
+
+
+static func localized_event(event_index: int, hero_name: String = "") -> Dictionary:
+	if event_index < 0 or event_index >= EVENTS.size():
+		return {}
+	return localized_event_data(EVENTS[event_index], hero_name, event_index)
+
+
+static func localized_event_data(event_data: Dictionary, hero_name: String = "", event_index: int = -1) -> Dictionary:
+	var resolved := event_data.duplicate(true)
+	for field_name in _LOCALIZABLE_FIELDS:
+		var fallback := String(resolved.get(field_name, ""))
+		var key_name := "%s_key" % field_name
+		var translation_key := ""
+		if resolved.has(key_name):
+			translation_key = String(resolved.get(key_name, ""))
+		elif event_index >= 0 and not fallback.is_empty():
+			translation_key = event_text_key(event_index, field_name)
+		if not translation_key.is_empty():
+			resolved[field_name] = _ui_text.text(translation_key, fallback)
+		elif not fallback.is_empty():
+			resolved[field_name] = fallback
+		if not hero_name.is_empty() and resolved.get(field_name, null) is String:
+			resolved[field_name] = String(resolved[field_name]).replace("{hero}", hero_name)
+	return resolved
+
+
+static func event_text_key(event_index: int, field_name: String) -> String:
+	return "story.event.%03d.%s" % [event_index, field_name]
