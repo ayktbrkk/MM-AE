@@ -85,7 +85,7 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 - ✅ Tween-based animation (no _process loops)
 - ✅ Performance: mobile-first, no unnecessary _process
 
-## Phase 6.5 — World Art Upgrade: Toca World + Rift Riff Quality Target
+## Phase 6.5 — World Art Upgrade: Toca World + Paper Town + Dog Walk Quality Target
 
 > 📝 Bu aşama sonraki sprint'ler için — mevcut prototip yeterli.
 
@@ -103,6 +103,39 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 - [ ] 5. Full Character Pass — animation + expression
 - [ ] 6. Polish Pass — particles, lighting
 
+### Yakın Donem World Art Backlog'u
+
+- [ ] Kritik 5 zone icin art replacement sirasi cikar: Bandirma, Samsun, Ankara, Sakarya, Final
+- [ ] `world_builder.gd` kompozisyonlarini yeni asset oranlarina gore ayarla
+- [ ] Outline, golge ve vurgu kontrastini `colors.gd` ve `ui_tokens.gd` seviyesinde yeniden hizala
+- [ ] Zone once/sonra screenshot setleri ile gorsel kalite farkini dokumante et
+- [ ] UI regression capture'lari ile yeni art pass'in okunurlugu bozmadigini dogrula
+
+### Sprint Kartlari
+
+- [ ] Kart A: World art audit ve hedef kalite panosu
+- [ ] Kart B: Asset pipeline standardizasyonu
+- [ ] Kart C: Pilot zone replacement
+- [ ] Kart D: Builder kompozisyon uyarlama dalgasi
+- [ ] Kart E: Kontrast ve okunurluk kalibrasyonu
+- [ ] Kart F: Regression ve kabul paketi
+
+### Onerilen Siralama
+
+| Kart | Oncelik | Efor | Bagimlilik |
+|------|---------|------|------------|
+| Kart A | P0 | S | Yok |
+| Kart B | P0 | S-M | Kart A |
+| Kart C | P1 | M-L | Kart A, Kart B |
+| Kart E | P1 | S-M | Kart C |
+| Kart D | P1 | M | Kart C |
+| Kart F | P2 | S | Kart C, Kart D, Kart E |
+
+### Ilk Yurutme Paketi
+
+- [ ] Issue 10A: World Art Audit ve Hedef Kalite Panosu
+- [ ] Issue 10B: Asset Pipeline Standardizasyonu
+
 ## Phase 7 — Education & Safety ✅
 - ✅ Tarih bilgisi kartları (info_card_overlay)
 - ✅ Doğru/yanlış geri bildirimi (decision retry)
@@ -119,6 +152,43 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 - ✅ Feature flags (BUILT_ZONES)
 - ✅ Godot headless validation (3 tests, 0 errors)
 
+## Phase 9.5 — Android Release Polish
+
+> 📝 Teknik temel hazir; sonraki odak export'u release davranisina tasimak.
+
+### Release Polish Backlog'u
+
+- [ ] Export ve package metadata checklist'ini netlestir
+- [ ] Safe-area, system bar ve portrait cihaz davranisini cihaz-ustu smoke-test ile dogrula
+- [ ] Start, continue, loading, exit confirm ve save/load akislari icin Android smoke checklist'i olustur
+- [ ] Fiziksel cihaz veya emulator uzerinde temel performans gozlemi yap
+- [ ] Release APK icin tekrar edilebilir kontrol listesi hazirla
+
+### Sprint Kartlari
+
+- [ ] Kart A: Export config audit
+- [ ] Kart B: Mobil UX smoke checklist
+- [ ] Kart C: Safe-area ve system bar polish
+- [ ] Kart D: Navigation ve app lifecycle sertlestirme
+- [ ] Kart E: Performans ve cihaz gozlemi
+- [ ] Kart F: Release candidate checklist ve APK dogrulamasi
+
+### Onerilen Siralama
+
+| Kart | Oncelik | Efor | Bagimlilik |
+|------|---------|------|------------|
+| Kart A | P0 | S | Yok |
+| Kart B | P0 | S | Kart A |
+| Kart C | P1 | M | Kart A |
+| Kart D | P1 | M | Kart B |
+| Kart E | P1 | S-M | Kart B, Kart D |
+| Kart F | P2 | S | Kart A, Kart B, Kart C, Kart D |
+
+### Ilk Yurutme Paketi
+
+- [ ] Issue 11A: Export Config Audit
+- [ ] Issue 11B: Mobil UX Smoke Checklist
+
 ---
 
 ## Milestone Durumu
@@ -132,6 +202,7 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 | **M5: Android Build** | ✅ | APK başarıyla oluşturuldu |
 | **M6: World Art Upgrade** | 📝 | Toca World kalitesi |
 | **M7: E2E Test** | ✅ | 22/22 test geçti |
+| **M8: Android Release Polish** | 📝 | cihaz smoke test + export checklist |
 
 ## Current Prototype (v1.0 — First Milestone)
 
@@ -156,8 +227,9 @@ The game's "open world" is a **horizontal scrolling diorama** where each zone re
 - Minimum 1080×1920 portrait
 
 **Sonraki Adımlar:**
-1. Gerçek ses dosyaları (.ogg) — placeholder'ları değiştir
-2. World art upgrade (Toca World kalitesi)
-3. Achievement sistemi
+1. World art upgrade backlog'unu zone bazli replacement pass'e cevir
+2. Android release polish icin cihaz smoke test ve export checklist'i cikar
+3. Gerçek ses dosyaları (.ogg) — placeholder'ları değiştir
 4. Oyun içi tutorial
-5. Analytics entegrasyonu
+5. Achievement sistemi ve hafif meta-progression
+6. Analytics entegrasyonu

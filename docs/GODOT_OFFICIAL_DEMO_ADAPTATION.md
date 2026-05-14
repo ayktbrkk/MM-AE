@@ -688,8 +688,8 @@ Bu proje icin en mantikli uyarlama sirasi:
 
 Bu nottan sonra en dogrudan uygulanabilir iki is:
 
-1. `multiple_resolutions` demosundan esinli ortak bir safe-area/content-frame helper cikarmak
-2. `pseudolocalization` demosundan esinli UI capture regression moduna pseudo-locale varyanti eklemek
+1. World art upgrade'i mevcut builder ve SVG pipeline'ini bozmadan ikinci kalite dalgasina tasimak
+2. Android release polish icin export, cihaz davranisi ve mobil UX kontrol listesini urunlesmek
 
 ## 10. Uygulama Gorev Listesi
 
@@ -1012,3 +1012,345 @@ Dogrulama:
 
 1. Loading contract verifier temiz donmeli.
 2. Standart `--check-only` parse gate yesil kalmali.
+
+### Gorev 10 - World Art Upgrade Pass
+
+Durum: backlog
+
+Ilerleme notu:
+
+- Mevcut 9 bolge builder ve SVG pipeline'i oynanabilir prototip kalitesinde hazir.
+- Bundan sonraki is, mimariyi degistirmeden gorsel kaliteyi ikinci dalgaya tasimak.
+
+Amac:
+
+- `Phase 6.5` hedefindeki paper diorama kalite seviyesini mevcut zone akisini bozmadan gercek bir production pass'e cevirmek
+- `GodSVG` ve resmi demo referanslarini runtime'a degil asset pipeline ve layout kararlarina tasimak
+
+Hedef dosyalar:
+
+- `scripts/world_builder.gd`
+- `scripts/world.gd`
+- `scripts/world_ui.gd`
+- `scripts/colors.gd`
+- `scripts/ui_tokens.gd`
+- `assets/art/`
+- `assets/backgrounds/`
+- `artworks/`
+- gerekirse yeni `docs/WORLD_ART_UPGRADE_PLAN.md`
+
+Uygulama adimlari:
+
+1. Her zone icin mevcut builder ciktisini referans screenshot'larla envanterle: siluet, zemin, landmark, foreground ve path katmanlarini ayir.
+2. `Bandirma`, `Samsun`, `Ankara`, `Sakarya` ve `Final` icin birinci oncelikli replacement listesi cikar; hangi asset kalacak, hangisi yeniden cizilecek netlestir.
+3. SVG import ve olcek kurallarini standartlastir; outline kalinligi, golge yogunlugu ve renk paletini zone bazli degil token bazli hizala.
+4. `world_builder.gd` icindeki landmark, prop cluster ve strategy node kompozisyonlarini yeni asset oranlarina gore duzenle.
+5. Karakter ve companion siluetlerinin yeni arka planlarla kontrastini yeniden ayarla; gerekirse `colors.gd` ve `ui_tokens.gd` uzerinden vurgu degerlerini guncelle.
+6. Her buyuk art replacement sonrasinda `menu`, `dialogue`, `decision`, `info_card`, `chapter_transition` ve `completion` capture'lari ile gorsel regresyonu tekrar kontrol et.
+
+Dogrulama:
+
+1. Degisen asset ve script'lerle standart `--headless --check-only --path . --quit` temiz donmeli.
+2. UI visual regression capture'lari yeni world art ile okunurlugu bozmadigini gostermeli.
+3. En az bir zone icin once/sonra screenshot seti `artifacts/renders/` altinda karsilastirilabilir olmali.
+
+Tamamlanma olcutu:
+
+- En az kritik 5 zone'da prototip asset gorunumu yerine daha tutarli paper-diorama production kompozisyonu kullaniliyor olmali.
+- Builder kodu yeni asset oranlariyla stabil calismali; event, marker ve player routing bozulmamis olmali.
+
+Sprint/task kartlari:
+
+1. Kart A - World art audit ve hedef kalite panosu
+	Cikti: Zone bazli referans screenshot envanteri, replacement oncelik listesi, art direction notlari.
+	Kapsam: `artworks/`, `artifacts/renders/`, gerekirse yeni `docs/WORLD_ART_UPGRADE_PLAN.md`.
+	Tamamlanma sinyali: Bandirma, Samsun, Ankara, Sakarya ve Final icin once/sonra hedefleri acik yazilmis olmali.
+2. Kart B - Asset pipeline standardizasyonu
+	Cikti: SVG import olcekleri, outline/golge standartlari ve renk kontrast notlari.
+	Kapsam: `assets/art/`, `assets/backgrounds/`, `scripts/colors.gd`, `scripts/ui_tokens.gd`.
+	Tamamlanma sinyali: Yeni art uretimi icin tekrar kullanilabilir teknik kurallar dokumante edilmis olmali.
+3. Kart C - Pilot zone replacement
+	Cikti: Tek bir zone'da tam production-pass art degisimi.
+	Kapsam: once `Bandirma` veya `Samsun`; `scripts/world_builder.gd` kompozisyon guncellemeleri dahil.
+	Tamamlanma sinyali: Bir zone hem oyunda hem capture'larda yeni kalite seviyesiyle calisiyor olmali.
+4. Kart D - Builder kompozisyon uyarlama dalgasi
+	Cikti: Landmark, prop cluster ve strategy node yerlestirmelerinin yeni asset oranlarina gore yeniden ayarlanmasi.
+	Kapsam: `scripts/world_builder.gd`, gerekirse `scripts/world.gd`, `scripts/world_ui.gd`.
+	Tamamlanma sinyali: Marker, player ve overlay routing yeni art ile cakismadan calismali.
+5. Kart E - Kontrast ve okunurluk kalibrasyonu
+	Cikti: Karakter, companion ve UI vurgu renklerinin arka planla yeniden dengelenmesi.
+	Kapsam: `scripts/colors.gd`, `scripts/ui_tokens.gd`, capture checklist'i.
+	Tamamlanma sinyali: Yeni art pass sonrasi UI katmanlari ve karakterler okunakli kalmali.
+6. Kart F - Regression ve kabul paketi
+	Cikti: Once/sonra capture seti, UI regression sonucu ve kabul notu.
+	Kapsam: `artifacts/renders/`, `docs/UI_SCREENSHOT_CHECKLIST.md`, mevcut visual regression runner.
+	Tamamlanma sinyali: Art pass kabulunun tekrar edilebilir bir kontrol paketi olusmali.
+
+Onceliklendirme, efor ve bagimlilik:
+
+| Kart | Oncelik | Tahmini efor | Bagimlilik | Not |
+|------|---------|--------------|------------|-----|
+| Kart A | P0 | S | Yok | Tum art kararlarinin giris kapisi; dogrudan baslanabilir. |
+| Kart B | P0 | S-M | Kart A | Yeni SVG ve kompozisyon kararlarinin teknik standardini sabitler. |
+| Kart C | P1 | M-L | Kart A, Kart B | Ilk gercek zone replacement; risk ve kalite farki burada gorunur. |
+| Kart D | P1 | M | Kart C | Pilot zone dersleri cikmadan butun builder kompozisyonuna yaymak riskli. |
+| Kart E | P1 | S-M | Kart C | Kontrast ayari yeni art gorulmeden saglikli yapilamaz. |
+| Kart F | P2 | S | Kart C, Kart D, Kart E | Kabul ve regression paketi en sona yakin anlam kazanir. |
+
+Onerilen sira:
+
+1. Kart A
+2. Kart B
+3. Kart C
+4. Kart E
+5. Kart D
+6. Kart F
+
+Kisa gerekce:
+
+- Ilk iki kart karar ve teknik standart uretir; kod degisikligine erken girmeyi engeller.
+- Pilot zone replacement, tum zone'lara yayilmadan once kalite/caba oranini gosterir.
+- Kontrast kalibrasyonu pilot sonucunu gorunce daha az tekrar uretir.
+- Regression ve kabul paketi en sonda daha degerli hale gelir.
+
+Hazir issue/task taslaklari:
+
+#### Issue 10A - World Art Audit ve Hedef Kalite Panosu
+
+Amac:
+
+- Kritik 5 zone icin mevcut gorunumu, hedef kalite referansini ve replacement risklerini tek yerde toplamak.
+
+Kapsam:
+
+- `artworks/`
+- `artifacts/renders/`
+- mevcut zone capture'lari ve referans moodboard notlari
+- gerekirse yeni `docs/WORLD_ART_UPGRADE_PLAN.md`
+
+Yapilacaklar:
+
+1. `Bandirma`, `Samsun`, `Ankara`, `Sakarya` ve `Final` icin mevcut screenshot setlerini topla.
+2. Her zone icin `kalacak`, `yenilenecek`, `yeniden kompoze edilecek` katmanlari ayir.
+3. Referans kalite notlarini kisa maddelere indir: siluet, zemin, landmark, foreground, renk hissi.
+4. En riskli gorsel uyumsuzluklari yaz: kontrast, oran, bosluk, okunurluk, marker cakismasi.
+
+Teslimatlar:
+
+- Zone bazli audit tablosu
+- Oncelikli replacement listesi
+- Hedef kalite panosu veya yazili art-direction notu
+
+Kabul kriterleri:
+
+- Kritik 5 zone icin hangi asset veya kompozisyonun neden degisecegi acikca yazilmali.
+- Pilot zone secimi gerekcesiyle birlikte belirlenmis olmali.
+
+Dis kapsam:
+
+- Bu issue yeni asset cizimi veya builder kod degisikligi yapmaz.
+
+#### Issue 10B - Asset Pipeline Standardizasyonu
+
+Amac:
+
+- World art upgrade dalgasi icin tekrar kullanilabilir SVG, kontrast ve kompozisyon kurallarini sabitlemek.
+
+Kapsam:
+
+- `assets/art/`
+- `assets/backgrounds/`
+- `scripts/colors.gd`
+- `scripts/ui_tokens.gd`
+- varsa import/olcek notlari
+
+Yapilacaklar:
+
+1. SVG import olcek, outline ve opaklik beklentilerini yazili hale getir.
+2. Zone'lar arasi ortak renk ve golge kurallarini mevcut token yapisiyla eslestir.
+3. Character/companion/UI kontrastini etkileyen kritik renkleri listele.
+4. Yeni asset geldikce uygulanacak adimlari kisa bir pipeline haline getir.
+
+Teslimatlar:
+
+- Teknik art pipeline notu
+- Guncellenmis token/renk karar listesi
+- Yeni asset entegrasyonu icin kisa uygulama akisi
+
+Kabul kriterleri:
+
+- Yeni bir artist veya gelistirici tek belgeye bakip asset entegrasyon kurallarini anlayabilmeli.
+- Outline, golge, kontrast ve oran kararlarinin hangi dosyada kontrol edildigi net olmali.
+
+Dis kapsam:
+
+- Bu issue tek basina pilot zone replacement yapmaz.
+
+### Gorev 11 - Android Release Polish
+
+Durum: backlog
+
+Ilerleme notu:
+
+- Android debug APK uretilmis durumda; artik odak teknik olarak export almaktan release davranisini sertlestirmeye kaymali.
+- `System Bar Color Changer` ve ilgili official demo referanslari bu asamada yardimci olabilir, fakat cekirdek oyun mimarisini degistirmemeli.
+
+Amac:
+
+- Mevcut portrait Android build'i MVP debug seviyesinden daha guvenli bir release adimina tasimak
+- Mobil UX, export ayarlari, performans ve cihaz-ustu davranis icin acik bir polish backlog'u olusturmak
+
+Hedef dosyalar:
+
+- `project.godot`
+- `export_presets.cfg`
+- `scripts/main_menu.gd`
+- `scripts/world_ui.gd`
+- `scripts/loading_overlay.gd`
+- `scripts/exit_confirm_overlay.gd`
+- `scripts/audio_manager.gd`
+- `docs/UI_SCREENSHOT_CHECKLIST.md`
+- gerekirse yeni `docs/ANDROID_RELEASE_CHECKLIST.md`
+
+Uygulama adimlari:
+
+1. Android export ayarlarini gozden gecir: orientation, package metadata, splash, icon, permissions ve texture compression secimlerini belgeye bagla.
+2. Mobilde kritik akislari smoke-test listesine cevir: ilk acilis, start, continue, zone transition, exit confirm, app background/foreground donusu ve ses slider davranisi.
+3. Safe-area ve sistem cubugu davranisini menu ile world overlay'lerinde gozden gecir; gerekiyorsa Android system bar rengi ve immersive davranisi icin dar bir entegrasyon katmani ekle.
+4. Dusuk ve orta seviye cihazlar icin performans checklist'i olustur: yukleme bekleme suresi, frame drop gozlemi, buyuk overlay acilislarinda input gecikmesi.
+5. Release oncesi save/load, first-run settings ve geri tusu davranisini cihaz-ustu smoke-test haline getir.
+6. Export alinabilir tek bir release checklist'i tanimla; debug APK ile release APK arasinda fark yaratan ayarlari netlestir.
+
+Dogrulama:
+
+1. `--headless --check-only --path . --quit` ve mevcut headless verifier seti yesil kalmali.
+2. En az bir fiziksel Android cihaz veya emulatorde acilis, menuden dunyaya gecis ve geri tusu smoke testi yapilmis olmali.
+3. Export checklist'i izlenerek yeni APK tekrar uretilip acilabilmeli.
+
+Tamamlanma olcutu:
+
+- Android release davranisi yalniz "APK aliniyor" seviyesinde degil, tekrar edilebilir smoke-test ve export checklist'i ile dokumante edilmis olmali.
+- Portrait mobil UX'te kritik bloklayici sorun kalmamali: safe-area, geri tusu, loading, ses ve temel navigation akislari stabil olmali.
+
+Sprint/task kartlari:
+
+1. Kart A - Export config audit
+	Cikti: Android export metadata, icon, splash, permissions ve compression karar listesi.
+	Kapsam: `project.godot`, `export_presets.cfg`.
+	Tamamlanma sinyali: Debug ve release export farklari yazili hale gelmis olmali.
+2. Kart B - Mobil UX smoke checklist
+	Cikti: Start, continue, loading, exit confirm, save/load ve ses ayarlari icin cihaz-ustu test adimlari.
+	Kapsam: yeni `docs/ANDROID_RELEASE_CHECKLIST.md`, gerekirse `docs/UI_SCREENSHOT_CHECKLIST.md`.
+	Tamamlanma sinyali: Tekrar edilebilir Android smoke testi tek yerden okunabilir olmali.
+3. Kart C - Safe-area ve system bar polish
+	Cikti: Menu ve world tarafinda system bar/safe-area davranisinin netlestirilmesi.
+	Kapsam: `scripts/main_menu.gd`, `scripts/world_ui.gd`, gerekirse Android system bar entegrasyonu.
+	Tamamlanma sinyali: Portrait cihazlarda ust/alt alan ve sistem cubugu davranisi tutarli olmali.
+4. Kart D - Navigation ve app lifecycle sertlestirme
+	Cikti: Back button, background/foreground donusu ve first-run settings akislarinin sabitlenmesi.
+	Kapsam: `scripts/loading_overlay.gd`, `scripts/exit_confirm_overlay.gd`, `scripts/audio_manager.gd`, `scripts/world_ui.gd`.
+	Tamamlanma sinyali: Uygulama lifecycle kaynakli bloklayici navigation sorunu kalmamali.
+5. Kart E - Performans ve cihaz gozlemi
+	Cikti: Dusuk/orta seviye cihaz notlari, yukleme suresi ve input gecikmesi gozlemleri.
+	Kapsam: cihaz smoke test raporu, gerekirse loading ve overlay script ayarlari.
+	Tamamlanma sinyali: Release oncesi en az bir cihaz profili icin performans riski yazili hale gelmis olmali.
+6. Kart F - Release candidate checklist ve APK dogrulamasi
+	Cikti: Tekrar edilebilir release checklist'i ve yeniden uretilmis APK smoke sonucu.
+	Kapsam: `export_presets.cfg`, yeni release checklist dokumani, final APK notlari.
+	Tamamlanma sinyali: "yeniden build et, kur, ac, test et" akisi belgeyle birebir takip edilebilir olmali.
+
+Onceliklendirme, efor ve bagimlilik:
+
+| Kart | Oncelik | Tahmini efor | Bagimlilik | Not |
+|------|---------|--------------|------------|-----|
+| Kart A | P0 | S | Yok | Release hedefinin teknik cercevesini netlestirir. |
+| Kart B | P0 | S | Kart A | Ne test edilecegi netlesmeden cihaz smoke sureci daginik kalir. |
+| Kart C | P1 | M | Kart A | Export ve UX kararlarina gore safe-area/system bar duzeltmeleri sekillenir. |
+| Kart D | P1 | M | Kart B | Lifecycle ve navigation sorunlari smoke checklist ile daha gorunur olur. |
+| Kart E | P1 | S-M | Kart B, Kart D | Performans gozlemi once kritik navigation akisi sabitlenince daha anlamli olur. |
+| Kart F | P2 | S | Kart A, Kart B, Kart C, Kart D | Release candidate paketi en sonda toplu dogrulama icin gerekir. |
+
+Onerilen sira:
+
+1. Kart A
+2. Kart B
+3. Kart C
+4. Kart D
+5. Kart E
+6. Kart F
+
+Kisa gerekce:
+
+- Ilk iki kart release calismasini belirsizlikten cikartir ve test yuzeyini sabitler.
+- Safe-area/system bar polish, export ve smoke hedefleri tanimlanmadan erken optimize edilmemeli.
+- Navigation ve lifecycle sertlestirme, cihaz-ustu bloklayici bug riskini en hizli dusuren karttir.
+- Release candidate checklist ancak onceki kartlar kapandiginda gercek deger uretir.
+
+Hazir issue/task taslaklari:
+
+#### Issue 11A - Export Config Audit
+
+Amac:
+
+- Android release icin hangi export ayarlarinin zorunlu, hangilerinin opsiyonel oldugunu netlestirmek.
+
+Kapsam:
+
+- `project.godot`
+- `export_presets.cfg`
+- mevcut Android package/export metadata bilgileri
+
+Yapilacaklar:
+
+1. Orientation, package name, versioning, icon, splash ve permission alanlarini gozden gecir.
+2. Debug ve release export farklarini tabloya dok.
+3. Texture compression, install size ve build secenekleri icin mevcut karari yaz.
+4. Eksik veya belirsiz export ayarlarini backlog maddesine cevir.
+
+Teslimatlar:
+
+- Export config audit tablosu
+- Eksik alanlar listesi
+- Release icin gerekli minimum export ayarlari listesi
+
+Kabul kriterleri:
+
+- Bir kisi sadece audit ciktisina bakarak export tarafinda neyin eksik oldugunu gorebilmeli.
+- Debug ve release davranisini etkileyen ayarlar ayri ayri listelenmis olmali.
+
+Dis kapsam:
+
+- Bu issue cihaz-ustu smoke test veya UI polish yapmaz.
+
+#### Issue 11B - Mobil UX Smoke Checklist
+
+Amac:
+
+- Android cihaz veya emulator uzerinde tekrar edilebilir temel UX smoke testi olusturmak.
+
+Kapsam:
+
+- yeni `docs/ANDROID_RELEASE_CHECKLIST.md`
+- gerekirse `docs/UI_SCREENSHOT_CHECKLIST.md`
+- `start`, `continue`, `loading`, `exit confirm`, `save/load`, `settings` akislari
+
+Yapilacaklar:
+
+1. Kritik mobil akislari test adimlari olarak listele.
+2. Beklenen sonuc, hata semptomu ve not alani formatini belirle.
+3. Back button, background/foreground donusu ve ses slider davranisini checklist'e ekle.
+4. Checklist'i debug APK ile bir kez kuru kosu mantiginda dogrula.
+
+Teslimatlar:
+
+- Android smoke checklist dokumani
+- Kritik akislari kapsayan test adim listesi
+
+Kabul kriterleri:
+
+- Baska bir kisi checklist'i izleyerek temel mobil UX smoke testini tekrar edebilmeli.
+- Start, continue ve exit confirm gibi ana akislardan hicbiri checklist disinda kalmamis olmali.
+
+Dis kapsam:
+
+- Bu issue tek basina system bar polish veya performans optimizasyonu yapmaz.
