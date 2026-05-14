@@ -48,7 +48,7 @@ Kural:
 | P7 | tamamlandi | Android export audit tablosu ve eksik config listesi yazildi | P8 checklist uygulamasina giris |
 | P8 | tamamlandi | Android smoke checklist dosyasi ve akış matrisi yazildi | P9 safe-area/system bar uygulamasina giris |
 | P9 | tamamlandi | 1080x1920 accepted baseline'lar yenilendi ve UI regression suite tekrar yesile dondu | P10 lifecycle veya P11 cihaz gozlemi |
-| P10 | devam ediyor | World autosave + transient overlay cleanup + audio pause/resume kontratina ek olarak dream-intro pause iptali, loading overlay request cancellation/drain ve menu `ui_cancel` ile in-flight transition iptali verifier ile kapsandi; checklist'te A12/A16 cihaz kesitleri Android 12/16 matrisiyle ve kisa kosu sirasi ile somutlasti | Cihaz/emulator ustunde kisa kosu sirasini aynen kosup notlamak |
+| P10 | devam ediyor | World autosave + transient overlay cleanup + audio pause/resume kontratina ek olarak dream-intro pause iptali, loading overlay request cancellation/drain ve menu `ui_cancel` ile in-flight transition iptali verifier ile kapsandi; `run_p10_smoke_gate.ps1` parse + lifecycle + flow kapilarini tek komutta topladi | Cihaz/emulator ustunde kisa kosu sirasini aynen kosup notlamak |
 | P11 | bekliyor | Cihaz gozlemi paketi | P8 ve P10 sonrasi |
 | P12 | bekliyor | Release candidate paketi | P7-P11 sonrasi |
 

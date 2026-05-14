@@ -96,6 +96,7 @@ Bu bolum, `P10 - Lifecycle sertlestirme` kapanisina kalan cihaz/emulator teyidin
 
 - `tools/verify_app_lifecycle_contract.gd` calistirilmis ve `APP_LIFECYCLE_CONTRACT_OK` vermis olmali.
 - `tools/validate_game_flow.gd` son akista yesil olmali; bu script yeni oyun, continue, Bandirma loop ve gec oyun gecis zincirini ayri ayri tarar.
+- Windows ortaminda bu iki kapı ve parse check tek komutta `tools/run_p10_smoke_gate.ps1` ile zincirlenebilir.
 - Cihaz smoke oturumunda otomatik gate kirmiziysa once kod regresyonu temizlenmeli; cihaz notu bunun yerine gecmemeli.
 
 ### A12 Cihaz Kesitleri
@@ -124,6 +125,7 @@ Bu bolum, `P10 - Lifecycle sertlestirme` kapanisina kalan cihaz/emulator teyidin
 ### Kisa Kosu Sirasi
 
 - `verify_app_lifecycle_contract -> validate_game_flow -> A12.1 -> A12.2 -> A12.3 -> A16.1 -> A16.2 -> A16.3 -> A15 -> A16.4 -> test sonu ozeti`
+- Hazir otomatik on-kapi komutu: `./tools/run_p10_smoke_gate.ps1`
 
 ## Opsiyonel Capture Destegi
 
