@@ -594,7 +594,7 @@ Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleto
 
 ## Package 12A — First Session Commercial Polish Triage (2026-05-15)
 
-**Durum:** ✅ IMPLEMENTED
+**Durum:** ✅ VISUAL_RUNTIME_ACCEPTED
 **Branch:** mevcut branch
 
 ### Uygulanan İyileştirmeler
