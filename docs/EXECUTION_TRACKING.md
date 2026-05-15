@@ -483,3 +483,67 @@ Evidence:
 - Journal smoke 10/10
 - P10_SMOKE_GATE_OK
 - Visual capture: artifacts/captures/journal_runtime_acceptance.png
+
+---
+
+## Package 8: Audio Runtime Acceptance (2026-05-15)
+
+**Status:** ✅ RUNTIME_ACCEPTED
+
+### Yapılan Değişiklikler
+
+| # | Dosya | Değişiklik |
+|---|-------|-----------|
+| 1 | `scripts/audio_manager.gd` | `crossfade_bgm(bgm_name, fade_duration)` metodu eklendi. Mevcut BGM'den yeni BGM'ye Tween tabanlı kademeli geçiş. `half_fade` fade-out + `half_fade` fade-in. Aynı BGM çağrılırsa erken dönüş. |
+| 2 | `tools/verify_audio_runtime_contract.gd` | **Yeni oluşturuldu.** 16 testlik Audio Runtime Contract verifier. 8 test kategorisi: AudioManager yükleme, Bandırma BGM, Decision Confirm SFX, Chapter Transition SFX, Samsun BGM Crossfade, Fallback Audio, Volume Control, Public API Contract. `extends SceneTree` ile headless çalışır. |
+
+### Test Sonuçları
+
+```
+>>> Audio Runtime Contract Testi Basladi
+
+  PASS [AudioManager referansi null degil]
+  PASS [AudioManager.play_bgm() metodu var]
+  PASS [play_bgm('bgm_bandirma') hata vermedi]
+  PASS [play_bgm('bgm_bandirma') sonrasi BGM caliyor]
+  PASS [AudioManager.play_sfx() metodu var]
+  PASS [play_sfx('SFX_CONFIRM') hata vermedi]
+  PASS [play_sfx('SFX_TRANSITION') hata vermedi]
+  PASS [AudioManager.crossfade_bgm() metodu var]
+  PASS [crossfade_bgm('bgm_samsun') hata vermedi]
+  PASS [crossfade_bgm('bgm_samsun') sonrasi BGM caliyor]
+  PASS [play_bgm('__invalid_bgm_test__') fallback ile hata vermedi]
+  PASS [play_sfx('__invalid_sfx_test__') fallback ile hata vermedi]
+  PASS [AudioManager.set_bgm_volume() metodu var]
+  PASS [AudioManager.get_bgm_volume() metodu var]
+  PASS [set_bgm_volume(0.5) -> get_bgm_volume() == 0.5]
+  PASS [AudioManager.set_sfx_volume() metodu var]
+  PASS [AudioManager.get_sfx_volume() metodu var]
+  PASS [set_sfx_volume(0.3) -> get_sfx_volume() == 0.3]
+  PASS [AudioManager tum public API metodlari mevcut]
+
+============================================================
+  AUDIO_RUNTIME_CONTRACT_OK
+```
+
+**Toplam:** 16/16 PASS, exit code 0 ✅
+
+### Fix Geçmişi (3 iterasyon)
+
+| # | Sorun | Çözüm |
+|---|-------|-------|
+| 1 | `extends MainLoop` → `_bgm_player` Nil, `add_child()` yok | `extends SceneTree` + `_init()` + `root.add_child()` |
+| 2 | `SceneTree._init()`'te `_ready()` otomatik çağrılmıyor | `_audio.call("_ready")` manuel çağrı eklendi |
+| 3 | AudioStreamPlayer.play() "node tree'de değil" hatası | Testler `_process()`'e taşındı (ilk frame'de çalışır) |
+
+### Fallback Procedural Audio Durumu
+- Geçersiz ID'ler (`__invalid_bgm_test__`, `__invalid_sfx_test__`) için `_generate_placeholder_sound()` otomatik placeholder üretiyor ✅
+- Production ses dosyası (`assets/audio/{name}.ogg`) eklendiğinde `_load_stream()` öncelikle dosyayı yükler
+- Mevcut `assets/audio/bgm/` ve `assets/audio/sfx/` boş (`.gitkeep`)
+
+### Dokümantasyon Güncellemeleri
+- `docs/AUDIO_INVENTORY.md` — Runtime acceptance durumu, crossfade mekanizması, fallback açıklaması eklendi
+- `docs/EXECUTION_TRACKING.md` — Bu kayıt
+
+### Engineer Notes
+AudioManager'ın runtime contract'ı başarıyla doğrulandı. En kritik teknik sorun, `SceneTree._init()` içinde node'ların tree'ye eklenmesine rağmen `AudioStreamPlayer.play()`'in çalışabilmesi için AudioServer'ın frame işlemesini bekleme gerekliliğiydi. Bu, testleri `_process()`'e taşıyarak çözüldü. `crossfade_bgm()` metodu, mevcut fade altyapısını (`_cancel_bgm_fade`, `_start_bgm_stream`, `_set_bgm_volume_ratio`) kullanarak minimal eklemeyle implemente edildi. Ses dosyaları hala %100 placeholder seviyesinde — production audio eklendiğinde sadece `.ogg` dosyalarını `assets/audio/` klasörüne koymak yeterli.

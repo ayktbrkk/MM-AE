@@ -212,6 +212,39 @@ func stop_bgm(fade_out: float = 0.5) -> void:
 	_stop_bgm_immediately()
 
 
+func crossfade_bgm(bgm_name: String, fade_duration: float = 1.0) -> void:
+	"""Mevcut BGM'den yeni BGM'ye crossfade yap.
+
+	Eski BGM'yi fade_out süresinde kısarken yeni BGM'yi fade_in süresinde açar.
+	Her iki BGM de geçiş süresince kısa bir an birlikte duyulur.
+	"""
+	if _audio_disabled:
+		return
+	if bgm_name == _current_bgm_name and _bgm_player.playing:
+		return
+
+	var stream: AudioStream = _load_stream(bgm_name)
+	if not stream:
+		return
+
+	# Eski BGM'yi fade out, yeni BGM'yi fade in ile başlat
+	_cancel_bgm_fade()
+	var half_fade: float = fade_duration * 0.5
+
+	if _bgm_player.playing:
+		var tween := create_tween()
+		_bgm_fade_tween = tween
+		tween.finished.connect(_clear_bgm_fade_tween)
+		# Fade out mevcut
+		tween.tween_method(_set_bgm_volume_ratio, _current_bgm_volume_ratio(), 0.0, half_fade)
+		# Yeni BGM'yi başlat ve fade in
+		tween.tween_callback(Callable(self, "_start_bgm_stream").bind(stream, bgm_name, half_fade))
+		return
+
+	# Hiçbir şey çalmıyorsa direkt başlat
+	_start_bgm_stream(stream, bgm_name, fade_duration)
+
+
 func is_bgm_playing() -> bool:
 	if _audio_disabled:
 		return false

@@ -1,7 +1,38 @@
 # Ses Envanteri (Audio Inventory)
 
+## Runtime Acceptance Durumu: ✅ KABUL EDİLDİ
+- **Contract Test:** `tools/verify_audio_runtime_contract.gd` → `AUDIO_RUNTIME_CONTRACT_OK` (16/16 PASS)
+- **Kapsam:** Bandırma BGM, Decision Confirm SFX, Chapter Transition SFX, Samsun BGM Crossfade, Fallback Audio, Volume Control, Public API Contract
+- **Tarih:** 2026-05-15
+
 ## Mevcut Durum: %100 Placeholder (Procedural)
 Tüm sesler `AudioStreamWAV` ile runtime'da üretilmektedir.
+
+### AudioManager API Yetenekleri
+| Metod | Açıklama | Test Durumu |
+|-------|----------|-------------|
+| `play_bgm(bgm_name, fade_in)` | BGM oynat/geçiş yap | ✅ PASS |
+| `play_sfx(sfx_name, volume_ratio)` | SFX oynat | ✅ PASS |
+| `stop_bgm(fade_out)` | BGM'yi durdur | ✅ PASS |
+| `crossfade_bgm(bgm_name, fade_duration)` | Mevcut BGM'den yeni BGM'ye kademeli geçiş | ✅ PASS (eklendi) |
+| `is_bgm_playing()` | BGM çalıyor mu sorgula | ✅ PASS |
+| `set_bgm_volume(vol)` / `get_bgm_volume()` | BGM ses seviyesi | ✅ PASS |
+| `set_sfx_volume(vol)` / `get_sfx_volume()` | SFX ses seviyesi | ✅ PASS |
+| `set_app_paused(paused)` / `is_app_paused()` | Uygulama askıya alma | ✅ PASS (API mevcut) |
+
+### Crossfade Mekanizması
+`crossfade_bgm()` metodu (`scripts/audio_manager.gd` içinde):
+- Mevcut BGM'yi `half_fade` sürede kısar (Tween ile `linear_to_db(0.0)`)
+- Ardından yeni BGM'yi `half_fade` sürede açar
+- Varsayılan `fade_duration: float = 1.0` (0.5sn fade-out + 0.5sn fade-in)
+- Aynı BGM çağrılırsa hiçbir şey yapmaz (gereksiz geçiş engellenir)
+- `_cancel_bgm_fade()` ile önceki tween iptal edilir
+
+### Fallback Procedural Audio
+- Geçersiz/eksik ses ID'leri için `_generate_placeholder_sound()` ile frekans tabanlı placeholder üretilir
+- Frekans, ID string'inin hash'inden türetilir (deterministik)
+- Test: `play_bgm('__invalid_bgm_test__')` ve `play_sfx('__invalid_sfx_test__')` ✅ PASS
+- Production ses dosyası eklendiğinde `_load_stream()` öncelikle `assets/audio/{name}.ogg`'yi dener
 
 ## Production Audio'ya Geçiş
 `scripts/audio_manager.gd` içindeki `_load_stream()` mekanizması, 
