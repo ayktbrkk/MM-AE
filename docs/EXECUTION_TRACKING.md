@@ -594,7 +594,7 @@ Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleto
 
 ## Package 12A — First Session Commercial Polish Triage (2026-05-15)
 
-**Durum:** ✅ VISUAL_RUNTIME_ACCEPTED
+**Durum:** ✅ RUNTIME_CONTRACT_ACCEPTED / ⏳ VISUAL_PENDING
 **Branch:** mevcut branch
 
 ### Uygulanan İyileştirmeler
@@ -616,3 +616,26 @@ Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleto
 - Verify-overlay-input-contract: ✅ 3.7s
 - Verify-ui-focus-accessibility: ✅ 5.8s
 - Device-smoke: ⏭️ SKIP (ADB bağlı cihaz yok)
+
+### Görsel Kanıt (Visual Evidence)
+
+**Durum:** ⏳ VISUAL_PENDING — Gerçek özellik capture'ları üretilemedi.
+
+**PNG Capture Denemesi:** (3/3 dosya üretildi, ancak hedef overlay'ler gösterilemedi)
+- `artifacts/captures/p12a_tutorial_arrow.png` — Viewport capture başarılı, ancak TutorialController oyun akışında karakter seçiminden sonra yüklendiği için gösterilemedi
+- `artifacts/captures/p12a_dialogue_portrait_slide.png` — Viewport capture başarılı, ancak DialogueOverlay karakter seçim ekranında mevcut değil
+- `artifacts/captures/p12a_marker_collect_after.png` — Viewport capture başarılı, ancak Markers karakter seçim ekranında mevcut değil
+
+**Kısıtlama:** `capture_world_render.gd` CLI üzerinden world.tscn yüklendiğinde oyun her zaman karakter seçim ekranını gösteriyor. Overlay animasyonları (tutorial arrow, portrait slide, marker collect) ancak karakter seçimi sonrası oyun döngüsünde mevcut. Bu nedenle CLI tabanlı Viewport capture ile hedef özelliklerin PNG görüntüsü alınamıyor.
+
+**Çözüm:** Feature-specific capture'lar için Godot Editor'de world.tscn açılıp manuel olarak overlay tetiklenmeli ve Editor → Scene → Take Screenshot ile PNG kaydedilmeli. Veya oyun akışını karakter seçimini atlayacak şekilde modifiye eden bir `--skip-character-select` parametresi eklenebilir.
+
+**Silinen .md dummy dosyaları:**
+- ~~`artifacts/captures/p12a_tutorial_arrow.md`~~ (yerine PNG, dummy temizlendi)
+- ~~`artifacts/captures/p12a_dialogue_portrait_slide.md`~~ (yerine PNG, dummy temizlendi)
+- ~~`artifacts/captures/p12a_marker_collect_after.md`~~ (yerine PNG, dummy temizlendi)
+
+### Runtime Contract
+- **Sonuç:** ✅ `P12A_POLISH_RUNTIME_CONTRACT_OK` — (13/13 test geçti, korunuyor)
+- Referans: [`tools/verify_p12a_polish_runtime_contract.gd`](tools/verify_p12a_polish_runtime_contract.gd)
+- Regression: Tüm önceki test sonuçları korunuyor

@@ -15,6 +15,9 @@ var _show_journal := false
 var _journal_cards: PackedStringArray = []
 var _journal_chapters: PackedStringArray = []
 var _show_accessibility := false
+var _show_tutorial_arrow := false
+var _show_portrait_slide := false
+var _show_marker_collect := false
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -87,6 +90,12 @@ func _initialize() -> void:
 					_journal_chapters = PackedStringArray(args[index + 1].split(","))
 			"--show-accessibility":
 				_show_accessibility = true
+			"--show-tutorial-arrow":
+				_show_tutorial_arrow = true
+			"--show-portrait-slide":
+				_show_portrait_slide = true
+			"--show-marker-collect":
+				_show_marker_collect = true
 		call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
 
 func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, camera_zoom: Vector2, world_only: bool, hide_hud: bool, hide_overlays: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
@@ -136,6 +145,18 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 			await process_frame
 	if _show_accessibility:
 		_show_accessibility_panel(scene)
+		for frame in range(24):
+			await process_frame
+	if _show_tutorial_arrow:
+		_show_tutorial_arrow_overlay(scene)
+		for frame in range(24):
+			await process_frame
+	if _show_portrait_slide:
+		_show_portrait_slide_overlay(scene)
+		for frame in range(24):
+			await process_frame
+	if _show_marker_collect:
+		_show_marker_collect_animation(scene)
 		for frame in range(24):
 			await process_frame
 	for frame in range(12):
@@ -329,3 +350,76 @@ func _hide_nodes_with_meta(root_node: Node, meta_key: String) -> void:
 		(root_node as CanvasItem).visible = false
 	for child in root_node.get_children():
 		_hide_nodes_with_meta(child, meta_key)
+
+
+# ---------------------------------------------------------------------------
+# P12A — Tutorial Arrow Capture
+# ---------------------------------------------------------------------------
+func _show_tutorial_arrow_overlay(scene: Node) -> void:
+	"""world.tscn icinde tutorial callout arrow animasyonunu tetikler.
+
+	TutorialController node'unu bulur ve _start_callout_arrow_animation()
+	cagirarak animasyonlu oku gosterir.
+	"""
+	var tutorial := scene.get_node_or_null("CanvasLayer/HUD/TutorialController")
+	if tutorial == null:
+		tutorial = scene.get_node_or_null("TutorialController")
+	if tutorial == null:
+		push_error("show_tutorial_arrow: TutorialController not found")
+		return
+	if tutorial.has_method("_start_callout_arrow_animation"):
+		tutorial.call("_start_callout_arrow_animation")
+		print("  Tutorial arrow animation started.")
+	else:
+		push_error("show_tutorial_arrow: _start_callout_arrow_animation not found")
+
+
+# ---------------------------------------------------------------------------
+# P12A — Portrait Slide Capture
+# ---------------------------------------------------------------------------
+func _show_portrait_slide_overlay(scene: Node) -> void:
+	"""world.tscn icinde dialogue portrait slide-in animasyonunu tetikler.
+
+	DialogueOverlay node'unu bulur ve present() fonksiyonu ile
+	portrenin slide-in efektini gosterir.
+	"""
+	var dialogue := scene.get_node_or_null("CanvasLayer/HUD/DialogueOverlay")
+	if dialogue == null:
+		dialogue = scene.get_node_or_null("DialogueOverlay")
+	if dialogue == null:
+		push_error("show_portrait_slide: DialogueOverlay not found")
+		return
+	if dialogue.has_method("present"):
+		dialogue.call("present", {
+			"portrait": "arda",
+			"text": "Portre slide-in animasyonu testi...",
+			"speaker": "Arda"
+		})
+		print("  Portrait slide animation triggered.")
+	else:
+		push_error("show_portrait_slide: present() not found on DialogueOverlay")
+
+
+# ---------------------------------------------------------------------------
+# P12A — Marker Collect Capture
+# ---------------------------------------------------------------------------
+func _show_marker_collect_animation(scene: Node) -> void:
+	"""world.tscn icinde marker collect animasyonunu tetikler.
+
+	Ilk bulunan Markers altindaki marker'i bulur ve mark_collected()
+	cagirarak scale-down + fade-out efektini gosterir.
+	"""
+	var markers := scene.get_node_or_null("Markers")
+	if markers == null:
+		push_error("show_marker_collect: Markers node not found")
+		return
+	var first_marker: Node = null
+	for child in markers.get_children():
+		if child.has_method("mark_collected"):
+			first_marker = child
+			break
+	if first_marker == null:
+		push_error("show_marker_collect: No marker with mark_collected() found")
+		return
+	first_marker.call("mark_collected")
+	print("  Marker collect animation triggered on: %s" % first_marker.name)
