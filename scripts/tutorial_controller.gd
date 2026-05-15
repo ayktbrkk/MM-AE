@@ -63,6 +63,13 @@ var _skip_button: Button
 var _tutorial_layer: CanvasLayer
 var _elapsed: float = 0.0
 
+# P12A: Tween tabanlı ok animasyonu
+var _callout_arrow_tween: Tween
+var _arrow_bounce_amplitude := 6.0
+var _arrow_bounce_speed := 2.8
+var _arrow_alpha_min := 0.65
+var _arrow_alpha_max := 0.92
+
 # Hedef pozisyon (highlight ring'in takip edeceği nokta)
 var _target_world_pos: Vector2 = Vector2.ZERO
 var _has_target_position: bool = false
@@ -227,6 +234,11 @@ func start_tutorial() -> void:
 	if _is_active:
 		return
 	_is_active = true
+	# P12A: Erişilebilirlik değişikliklerini dinle
+	var save_manager := get_node_or_null("/root/SaveManager") as Node
+	if save_manager != null and save_manager.has_signal("accessibility_changed"):
+		if not save_manager.accessibility_changed.is_connected(_on_SaveManager_accessibility_changed):
+			save_manager.accessibility_changed.connect(_on_SaveManager_accessibility_changed)
 	_set_phase(Phase.CHOOSE_CHARACTER)
 
 
@@ -352,16 +364,23 @@ func _show_callout(text: String) -> void:
 	_callout_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	_callout_panel.offset_top = _ui_tokens.SPACE_LG + 20.0  # safe area altı
 
+	# P12A: Tween tabanlı ok bounce animasyonu (_process yerine)
+	_start_callout_arrow_animation()
+
 
 func _hide_callout() -> void:
 	_callout_panel.visible = false
 	_callout_arrow.visible = false
+	# P12A: Tween animasyonunu durdur
+	_stop_callout_arrow_animation()
 
 
 func _hide_all() -> void:
 	_hide_callout()
 	_hide_highlight()
 	_skip_button.visible = false
+	# P12A: Tween animasyonunu durdur
+	_stop_callout_arrow_animation()
 
 
 # ---------------------------------------------------------------------------
@@ -379,6 +398,8 @@ func _show_highlight(world_pos: Vector2) -> void:
 func _hide_highlight() -> void:
 	_highlight_ring.visible = false
 	_has_target_position = false
+	# P12A: Ok animasyonu highlight kapandığında da dursun
+	_stop_callout_arrow_animation()
 
 
 func _sync_highlight_position() -> void:
@@ -452,6 +473,65 @@ func _highlight_build_spot() -> void:
 
 
 # ---------------------------------------------------------------------------
+# P12A: Tween tabanlı Callout Arrow Animasyonu
+# ---------------------------------------------------------------------------
+
+func _start_callout_arrow_animation() -> void:
+	"""Callout arrow için Tween tabanlı bounce + alpha pulse animasyonu başlatır."""
+	_stop_callout_arrow_animation()
+
+	# Erişilebilirlik modu: large_text açıkken animasyon hızı yavaşlatılır
+	var speed_multiplier: float = _get_accessibility_speed_multiplier()
+	if speed_multiplier <= 0.0:
+		return  # Animasyon tamamen kapalı
+
+	var bounce_duration: float = TAU / (_arrow_bounce_speed * speed_multiplier)
+	var alpha_duration: float = TAU / (2.5 * speed_multiplier)
+
+	_callout_arrow_tween = create_tween().set_loops()
+
+	# Position bounce (y ekseninde yukarı-aşağı)
+	_callout_arrow_tween.tween_method(
+		func(v: float) -> void:
+			if _callout_arrow.visible and _has_target_position:
+				_callout_arrow.position.y = _highlight_ring.position.y - HIGHLIGHT_RING_RADIUS - 30.0 - _arrow_bounce_amplitude * sin(v),
+		0.0, TAU, bounce_duration
+	)
+
+	# Alpha pulse
+	_callout_arrow_tween.tween_method(
+		func(v: float) -> void:
+			if _callout_arrow.visible:
+				var mid := (_arrow_alpha_min + _arrow_alpha_max) * 0.5
+				var amp := (_arrow_alpha_max - _arrow_alpha_min) * 0.5
+				_callout_arrow.modulate.a = mid + amp * sin(v),
+		0.0, TAU, alpha_duration
+	)
+
+
+func _stop_callout_arrow_animation() -> void:
+	"""Callout arrow Tween animasyonunu durdurur."""
+	if _callout_arrow_tween != null:
+		_callout_arrow_tween.kill()
+		_callout_arrow_tween = null
+
+
+func _get_accessibility_speed_multiplier() -> float:
+	"""Erişilebilirlik ayarlarına göre animasyon hız çarpanını döndürür.
+	0.0 = animasyon kapalı, 0.5 = yarı hız, 1.0 = normal hız."""
+	var save_manager := get_node_or_null("/root/SaveManager") as Node
+	if save_manager == null:
+		return 1.0
+	var large_text: bool = false
+	if save_manager.has_method("get"):
+		var raw_value = save_manager.get("large_text")
+		large_text = bool(raw_value) if raw_value != null else false
+	if large_text:
+		return 0.5  # Erişilebilirlik modunda yarı hız
+	return 1.0
+
+
+# ---------------------------------------------------------------------------
 # _process — ANİMASYON GÜNCELLEME
 # ---------------------------------------------------------------------------
 
@@ -485,15 +565,16 @@ func _process(delta: float) -> void:
 			pulse.scale = Vector2(wave_scale, wave_scale)
 			pulse.color.a = 0.20 * (1.0 - wave_phase)
 
-		# Callout arrow pulse
-		if _callout_arrow.visible:
-			_callout_arrow.position.y = _highlight_ring.position.y - HIGHLIGHT_RING_RADIUS - 30.0 - 4.0 * sin(_elapsed * 3.0)
-			_callout_arrow.modulate.a = 0.70 + 0.20 * sin(_elapsed * 2.5)
-
 
 # ---------------------------------------------------------------------------
 # YARDIMCI
 # ---------------------------------------------------------------------------
+
+func _on_SaveManager_accessibility_changed() -> void:
+	"""Erişilebilirlik ayarları değiştiğinde animasyonu yeniden başlat."""
+	if _callout_arrow.visible:
+		_start_callout_arrow_animation()
+
 
 func _phase_name(phase_index: int) -> String:
 	match phase_index:

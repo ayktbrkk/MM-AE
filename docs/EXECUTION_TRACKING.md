@@ -591,3 +591,28 @@ AudioManager'ın runtime contract'ı başarıyla doğrulandı. En kritik teknik 
 
 ### Engineer Notes
 Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleton `--script` modunda yüklenmediği için contract verifier `extends MainLoop` ile FileAccess tabanlı kaynak kodu analizi yapar. `accessibility_panel.gd`'deki `Engine.has_singleton("SaveManager")` güvenlik deseni korunuyor. Capture script'i `--show-accessibility` parametresi ile main_menu.tscn'de `_on_accessibility_pressed()` çağırarak accessibility panel overlay'ini açar ve görüntüyü PNG olarak kaydeder. Mevcut tüm P10 gate'leri (parse-check, validate-game-flow, verify-app-lifecycle, verify-overlay-input-contract, verify-ui-focus-accessibility) başarıyla geçti. P10 baseline'ı (Hardening Pass sonrası FIXED) RUNTIME_ACCEPTED seviyesine yükseltildi.
+
+## Package 12A — First Session Commercial Polish Triage (2026-05-15)
+
+**Durum:** ✅ IMPLEMENTED
+**Branch:** mevcut branch
+
+### Uygulanan İyileştirmeler
+
+| ID | İyileştirme | Dosya | Detay |
+|:--:|-------------|-------|-------|
+| U03 | Tutorial animasyonlu ok/el imleci | [`scripts/tutorial_controller.gd`](scripts/tutorial_controller.gd) | `_process()` tabanlı animasyon → `Tween.set_loops()` + `tween_method()`. Erişilebilirlik modu (SaveManager.large_text) ile 0.5x hız. `_start_callout_arrow_animation()`, `_stop_callout_arrow_animation()`, `_get_accessibility_speed_multiplier()` metotları eklendi. |
+| A01 | Karakter portre slide-in animasyonu | [`scripts/dialogue_overlay.gd`](scripts/dialogue_overlay.gd) | `present()` fonksiyonunda `was_visible` kontrolü ile sadece ilk açılışta animasyon. `EASE_OUT` + `TRANS_BACK` ile 0.35s. Erişilebilirlik modunda tamamen atlanır. Idle tween çakışması önlendi. |
+| A05 | Marker orbit + collect animasyonu | [`scripts/world_marker.gd`](scripts/world_marker.gd) | `mark_collected()` → scale-down + fade-out Tween (0.22s, `EASE_IN`/`TRANS_BACK`). `"collecting"` meta flag ile feedback çakışması önlendi. |
+
+### Düzeltilen Hatalar
+- [`scripts/tutorial_controller.gd:527`](scripts/tutorial_controller.gd:527): Godot 3→4 uyumsuzluğu — `Node.get(key, default)` → `Node.get(key) + null check`
+
+### P10 Smoke Gate
+- **Sonuç:** ✅ `P10_SMOKE_GATE_OK` (6/6 gate geçti, device-smoke SKIP)
+- Parse-check: ✅ 7.6s
+- Validate-game-flow: ✅ 14.3s
+- Verify-app-lifecycle: ✅ 8.2s
+- Verify-overlay-input-contract: ✅ 3.7s
+- Verify-ui-focus-accessibility: ✅ 5.8s
+- Device-smoke: ⏭️ SKIP (ADB bağlı cihaz yok)

@@ -216,3 +216,11 @@ Package 10 moved from SMOKE_TEST_PASS → FIXED (Hardening Pass) → RUNTIME_ACC
 
 ### Engineer Notes
 SaveManager singleton --script modunda yüklenmediği için contract verifier `extends MainLoop` ile FileAccess tabanlı kaynak kodu analizi yapar. `accessibility_panel.gd`'deki `Engine.has_singleton("SaveManager")` güvenlik deseni korunuyor. Capture script'i `--show-accessibility` parametresi ile main_menu.tscn'de `_on_accessibility_pressed()` çağırarak accessibility panel overlay'ini açar. Mevcut tüm P10 gate'leri (parse-check, validate-game-flow, verify-app-lifecycle, verify-overlay-input-contract, verify-ui-focus-accessibility) başarıyla geçti.
+
+---
+
+## Package Durumu
+
+| Package | Açıklama | Durum | Tarih |
+|---------|----------|-------|-------|
+| Package 12A | First Session Polish Triage (U03, A01, A05) | ✅ IMPLEMENTED | 2026-05-15 |

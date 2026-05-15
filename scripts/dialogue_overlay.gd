@@ -62,6 +62,9 @@ var right_glow_base_position := Vector2.ZERO
 var stage_light_left_base_position := Vector2.ZERO
 var stage_light_right_base_position := Vector2.ZERO
 var _continue_row_base_x: float
+# A01: Portrait slide-in animation state
+var _idle_portraits_tween: Tween
+var _portrait_slide_tween: Tween
 
 func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.DIALOGUE
@@ -164,8 +167,8 @@ func _sync_layout() -> void:
 
 func _start_idle_animations() -> void:
 	# Portreler ve glow'lar — sin(elapsed * 2.0), periyot PI
-	var tween_portraits := create_tween().set_loops()
-	tween_portraits.tween_method(
+	_idle_portraits_tween = create_tween().set_loops()
+	_idle_portraits_tween.tween_method(
 		func(v: float) -> void:
 			left_portrait.position = left_portrait_base_position + Vector2(0.0, sin(v) * 3.0)
 			right_portrait.position = right_portrait_base_position + Vector2(0.0, sin(v + 0.8) * 3.0)
@@ -203,6 +206,8 @@ func _start_idle_animations() -> void:
 	)
 
 func present(config: Dictionary) -> void:
+	# A01: Slide-in animasyonu için overlay'in daha önce görünür olup olmadığını kontrol et
+	var was_visible := visible
 	chapter_label.text = String(config.get("chapter", _ui_text.text(_ui_text.DIALOGUE_DEFAULT_CHAPTER, "Bölüm")))
 	name_label.text = String(config.get("speaker", _ui_text.text(_ui_text.DIALOGUE_DEFAULT_SPEAKER, "Anlatıcı")))
 	body_label.text = _rich_text.sanitize(String(config.get("text", _ui_text.text(_ui_text.DIALOGUE_DEFAULT_BODY, "Hikaye metni burada görünür."))))
@@ -241,13 +246,62 @@ func present(config: Dictionary) -> void:
 	var reveal_duration := clampf(float(body_label.get_parsed_text().length()) * 0.012 * _typewriter_speed_multiplier, 0.28, 1.15)
 	reveal_tween.tween_property(body_label, "visible_ratio", 1.0, reveal_duration)
 
+	# A01: Portrait slide-in animation — sadece ilk açılışta, accessibility modunda atla
+	if not was_visible and not SaveManager.large_text:
+		_start_portrait_slide_in()
+
 
 func show_overlay(config: Dictionary = {}) -> void:
 	present(config)
 
 func hide_overlay() -> void:
 	reveal_tween = _overlay_tween_helper.cancel(reveal_tween)
+	# A01: Slide-in tween'i temizle, state sifirla
+	_portrait_slide_tween = _overlay_tween_helper.cancel(_portrait_slide_tween)
 	visible = false
+
+# ---------------------------------------------------------------------------
+# A01: Portrait slide-in animation
+# ---------------------------------------------------------------------------
+func _start_portrait_slide_in() -> void:
+	"""Karakter portrelerini soldan/sağdan EASE_OUT/TRANS_BACK ile slide-in yap."""
+	# Idle portrait tween'i gecici olarak durdur (pozisyon çakışmasını önle)
+	if _idle_portraits_tween and _idle_portraits_tween.is_valid():
+		_idle_portraits_tween.kill()
+		_idle_portraits_tween = null
+
+	# Portre ve glow'lari off-screen pozisyonlarina ata
+	var viewport_size := get_viewport_rect().size
+	var off_screen_offset := 50.0
+	left_portrait.position.x = -left_portrait.size.x - off_screen_offset
+	right_portrait.position.x = viewport_size.x + off_screen_offset
+	left_glow.position.x = -left_glow.size.x - off_screen_offset
+	right_glow.position.x = viewport_size.x + off_screen_offset
+
+	# Slide-in tween: EASE_OUT + TRANS_BACK ile 0.35s
+	_portrait_slide_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	_portrait_slide_tween.set_parallel(true)
+	_portrait_slide_tween.tween_property(left_portrait, "position:x", left_portrait_base_position.x, 0.35)
+	_portrait_slide_tween.tween_property(right_portrait, "position:x", right_portrait_base_position.x, 0.35)
+	_portrait_slide_tween.tween_property(left_glow, "position:x", left_glow_base_position.x, 0.35)
+	_portrait_slide_tween.tween_property(right_glow, "position:x", right_glow_base_position.x, 0.35)
+	_portrait_slide_tween.finished.connect(_on_portrait_slide_in_complete)
+
+
+func _on_portrait_slide_in_complete() -> void:
+	"""Slide-in tamamlaninca portrait idle animasyonunu yeniden baslat."""
+	_portrait_slide_tween = null
+	# Idle portrait tween'ini yeniden olustur (bobbing animation)
+	_idle_portraits_tween = create_tween().set_loops()
+	_idle_portraits_tween.tween_method(
+		func(v: float) -> void:
+			left_portrait.position = left_portrait_base_position + Vector2(0.0, sin(v) * 3.0)
+			right_portrait.position = right_portrait_base_position + Vector2(0.0, sin(v + 0.8) * 3.0)
+			left_glow.position = left_glow_base_position + Vector2(0.0, sin(v) * 2.0)
+			right_glow.position = right_glow_base_position + Vector2(0.0, sin(v + 0.8) * 2.0),
+		0.0, TAU, PI
+	)
+
 
 func _advance_or_continue() -> void:
 	if body_label.visible_ratio < 0.98:

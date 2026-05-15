@@ -206,6 +206,9 @@ func animate_feedback(markers_node: Node, elapsed: float, nearby: Node, current_
 	for marker in markers_node.get_children():
 		if not marker.visible:
 			continue
+		# A05: Toplama animasyonu (scale-down tween) devam eden marker'lari atla
+		if bool(marker.get_meta("collecting", false)):
+			continue
 		var phase: float = (marker.position.x + marker.position.y) * 0.01
 		var base_scale: float = 1.0 + (0.03 * sin(elapsed * 2.2 + phase))
 		var marker_kind := String(marker.get_meta("kind"))
@@ -302,8 +305,22 @@ func format_marker_text(text: String, hero_name: String) -> String:
 
 
 func mark_collected(marker: Node2D) -> void:
-	"""Marker'i toplanmis olarak isaretler ve gorunmez yapar."""
+	"""Marker'i toplanmis olarak isaretler ve olcek kuculme animasyonu ile gizler."""
 	marker.set_meta("collected", true)
+	marker.set_meta("collecting", true)
+
+	# A05: Scale-down + fade-out animasyonu
+	var tween := create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(marker, "scale", Vector2.ZERO, 0.22)
+	tween.parallel().tween_property(marker, "modulate:a", 0.0, 0.22)
+	tween.tween_callback(_on_collect_animation_done.bind(marker))
+
+
+func _on_collect_animation_done(marker: Node2D) -> void:
+	"""Toplama animasyonu tamamlaninca marker'i gizle."""
+	if not is_instance_valid(marker):
+		return
+	marker.set_meta("collecting", false)
 	marker.visible = false
 	hide_visual_tree(marker)
 
