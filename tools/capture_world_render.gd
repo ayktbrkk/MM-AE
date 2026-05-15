@@ -19,6 +19,12 @@ var _show_tutorial_arrow := false
 var _show_portrait_slide := false
 var _show_marker_collect := false
 
+## P12B: Karakter seçimini otomatik yapmak için --auto-select-hero=<arda|eda>
+var _auto_select_hero: String = ""
+
+## P12B: Karakter seçimini tamamen atlamak için --skip-character-select
+var _skip_character_select: bool = false
+
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	var output_path := DEFAULT_OUTPUT
@@ -96,8 +102,14 @@ func _initialize() -> void:
 				_show_portrait_slide = true
 			"--show-marker-collect":
 				_show_marker_collect = true
-		call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
-
+			"--skip-character-select":
+				_skip_character_select = true
+		# P12B: --auto-select-hero=<value> formatını kontrol et (tek argüman)
+		var current_arg: String = args[index]
+		if current_arg.begins_with("--auto-select-hero="):
+			_auto_select_hero = current_arg.trim_prefix("--auto-select-hero=")
+	# P12B: call_deferred for döngüsü DIŞINA taşındı — her argümanda değil, bir kere çağrılır.
+	call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
 func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, camera_zoom: Vector2, world_only: bool, hide_hud: bool, hide_overlays: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
 	var packed_scene := load(scene_path)
 	if packed_scene == null:
@@ -114,7 +126,14 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 	var scene: Node = packed_scene.instantiate()
 	viewport.add_child(scene)
 	await process_frame
-	_select_hero(scene, hero)
+
+	# P12B: Karakter seçimini yönet
+	var hero_choice: String = hero
+	if hero_choice == "" and _auto_select_hero != "":
+		hero_choice = _auto_select_hero
+	if _skip_character_select or hero_choice != "":
+		await _perform_hero_selection(scene, hero_choice, _skip_character_select)
+
 	if zone != "":
 		await _configure_world_zone(scene, zone)
 	_apply_camera_zoom(scene, camera_zoom)
@@ -190,11 +209,71 @@ func _apply_camera_zoom(scene: Node, camera_zoom: Vector2) -> void:
 
 
 func _select_hero(scene: Node, hero: String) -> void:
+	"""Karakter seçimi: WorldPlayer üzerinden choose_hero() çağırır."""
 	if hero == "":
 		return
 	var player_mod := scene.get_node_or_null("WorldPlayer")
 	if player_mod != null and player_mod.has_method("choose_hero"):
 		player_mod.call("choose_hero", hero)
+
+
+# ---------------------------------------------------------------------------
+# P12B: Karakter Seçimini Yönet
+# ---------------------------------------------------------------------------
+func _perform_hero_selection(scene: Node, hero_choice: String, skip_select: bool) -> void:
+	"""Karakter seçim akışını yönetir.
+
+	--skip-character-select: hero_choice varsayılan olarak "arda" kullanılır,
+	karakter seçim paneli atlanır ve doğrudan oyun dünyasına geçilir.
+
+	--auto-select-hero=arda|eda: normal choose_hero akışı çalıştırılır,
+	karakter seçilir, diyalog/tutorial başlatılır.
+	"""
+	if skip_select:
+		# Skip modu: karakteri doğrudan uygula, paneli gizle
+		var final_hero: String = hero_choice if hero_choice != "" else "arda"
+		var player_mod := scene.get_node_or_null("WorldPlayer")
+		if player_mod != null and player_mod.has_method("apply_hero_selection"):
+			player_mod.call("apply_hero_selection", final_hero)
+			# Karakter panelini gizle
+			var char_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
+			if char_panel != null:
+				char_panel.visible = false
+			# Identity row'u da gizle
+			if player_mod.has_method("_set_character_choice_visible"):
+				player_mod.call("_set_character_choice_visible", false)
+			print("  Character select skipped, hero set to: %s" % final_hero)
+		else:
+			push_error("skip_character_select: WorldPlayer not found or missing apply_hero_selection")
+		# Skip modunda kısa bekleme
+		for frame in range(16):
+			await process_frame
+		return
+
+	# Normal auto-select: choose_hero akışını çalıştır
+	_select_hero(scene, hero_choice)
+	# Karakter seçimi sonrası diyalog/tutorial başlayana kadar bekle
+	await _wait_for_hero_selection(scene)
+	print("  Hero selection complete: %s" % hero_choice)
+
+
+func _wait_for_hero_selection(scene: Node) -> void:
+	"""Karakter seçimi sonrası dünyanın yerleşmesini bekler.
+
+	Karakter panelinin kaybolmasını ve diyalog/tutorial başlamasını
+	bekler. Maksimum 120 frame (~2 saniye).
+	"""
+	var max_frames: int = 120
+	for frame in range(max_frames):
+		await process_frame
+		# Karakter paneli kayboldu mu kontrol et
+		var char_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
+		if char_panel == null or not char_panel.visible:
+			# Panel kayboldu — karakter seçimi tamamlanmış
+			break
+	# Ek stabilizasyon frame'leri
+	for frame in range(24):
+		await process_frame
 
 
 func _configure_world_zone(scene: Node, zone: String) -> void:
@@ -358,14 +437,16 @@ func _hide_nodes_with_meta(root_node: Node, meta_key: String) -> void:
 func _show_tutorial_arrow_overlay(scene: Node) -> void:
 	"""world.tscn icinde tutorial callout arrow animasyonunu tetikler.
 
-	TutorialController node'unu bulur ve _start_callout_arrow_animation()
-	cagirarak animasyonlu oku gosterir.
+	TutorialController node'unu bulur (WorldUI altında, world_ui.gd
+	_setup_tutorial() tarafından kurulur) ve _start_callout_arrow_animation()
+	çağırarak animasyonlu oku gösterir.
 	"""
-	var tutorial := scene.get_node_or_null("CanvasLayer/HUD/TutorialController")
+	# P12B: TutorialController WorldUI altında yaşar (world_ui.gd _setup_tutorial)
+	var tutorial := scene.get_node_or_null("WorldUI/TutorialController")
 	if tutorial == null:
-		tutorial = scene.get_node_or_null("TutorialController")
+		tutorial = scene.find_child("TutorialController", true, false)
 	if tutorial == null:
-		push_error("show_tutorial_arrow: TutorialController not found")
+		push_error("show_tutorial_arrow: TutorialController not found (searched WorldUI/TutorialController, find_child)")
 		return
 	if tutorial.has_method("_start_callout_arrow_animation"):
 		tutorial.call("_start_callout_arrow_animation")
@@ -387,6 +468,8 @@ func _show_portrait_slide_overlay(scene: Node) -> void:
 	if dialogue == null:
 		dialogue = scene.get_node_or_null("DialogueOverlay")
 	if dialogue == null:
+		dialogue = scene.find_child("DialogueOverlay", true, false)
+	if dialogue == null:
 		push_error("show_portrait_slide: DialogueOverlay not found")
 		return
 	if dialogue.has_method("present"):
@@ -406,20 +489,28 @@ func _show_portrait_slide_overlay(scene: Node) -> void:
 func _show_marker_collect_animation(scene: Node) -> void:
 	"""world.tscn icinde marker collect animasyonunu tetikler.
 
-	Ilk bulunan Markers altindaki marker'i bulur ve mark_collected()
-	cagirarak scale-down + fade-out efektini gosterir.
+	WorldMarker node'unu bulur ve mark_collected() fonksiyonunu
+	cagirarak ilk marker'in scale-down + fade-out efektini gosterir.
 	"""
+	var world_marker := scene.get_node_or_null("WorldMarker")
+	if world_marker == null:
+		push_error("show_marker_collect: WorldMarker node not found")
+		return
 	var markers := scene.get_node_or_null("Markers")
 	if markers == null:
 		push_error("show_marker_collect: Markers node not found")
 		return
 	var first_marker: Node = null
 	for child in markers.get_children():
-		if child.has_method("mark_collected"):
+		if child is Node2D:
 			first_marker = child
 			break
 	if first_marker == null:
-		push_error("show_marker_collect: No marker with mark_collected() found")
+		push_error("show_marker_collect: No marker child found under Markers")
 		return
-	first_marker.call("mark_collected")
-	print("  Marker collect animation triggered on: %s" % first_marker.name)
+	# WorldMarker.mark_collected(marker) cagir
+	if world_marker.has_method("mark_collected"):
+		world_marker.call("mark_collected", first_marker)
+		print("  Marker collect animation triggered on: %s" % first_marker.name)
+	else:
+		push_error("show_marker_collect: WorldMarker.mark_collected() not found")

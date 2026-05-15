@@ -594,7 +594,7 @@ Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleto
 
 ## Package 12A — First Session Commercial Polish Triage (2026-05-15)
 
-**Durum:** ✅ RUNTIME_CONTRACT_ACCEPTED / ⏳ VISUAL_PENDING
+**Durum:** ✅ RUNTIME_CONTRACT_ACCEPTED / ✅ VISUAL_RUNTIME_ACCEPTED
 **Branch:** mevcut branch
 
 ### Uygulanan İyileştirmeler
@@ -634,6 +634,16 @@ Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleto
 - ~~`artifacts/captures/p12a_tutorial_arrow.md`~~ (yerine PNG, dummy temizlendi)
 - ~~`artifacts/captures/p12a_dialogue_portrait_slide.md`~~ (yerine PNG, dummy temizlendi)
 - ~~`artifacts/captures/p12a_marker_collect_after.md`~~ (yerine PNG, dummy temizlendi)
+
+### Visual Capture Unlock (Package 12A-B)
+
+- `--auto-select-hero=<arda|eda>` ve `--skip-character-select` parametreleri eklendi
+- Karakter seçim ekranı bypass edilerek gerçek gameplay state'inde capture mümkün
+- PNG'ler gerçek özellikleri gösteriyor:
+  - [`artifacts/captures/p12a_tutorial_arrow.png`](artifacts/captures/p12a_tutorial_arrow.png) — Tutorial arrow animasyonu
+  - [`artifacts/captures/p12a_dialogue_portrait_slide.png`](artifacts/captures/p12a_dialogue_portrait_slide.png) — Portre slide-in animasyonu
+  - [`artifacts/captures/p12a_marker_collect_after.png`](artifacts/captures/p12a_marker_collect_after.png) — Marker collect sonrası durum
+- Kullanım: `--script tools/capture_world_render.gd -- --scene scenes/world.tscn --auto-select-hero=arda --show-tutorial-arrow`
 
 ### Runtime Contract
 - **Sonuç:** ✅ `P12A_POLISH_RUNTIME_CONTRACT_OK` — (13/13 test geçti, korunuyor)

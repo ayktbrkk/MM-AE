@@ -223,4 +223,4 @@ SaveManager singleton --script modunda yüklenmediği için contract verifier `e
 
 | Package | Açıklama | Durum | Tarih |
 |---------|----------|-------|-------|
-| Package 12A | First Session Polish Triage (U03, A01, A05) | ✅ RUNTIME_CONTRACT_ACCEPTED / ⏳ VISUAL_PENDING | 2026-05-15 |
+| Package 12A | First Session Polish Triage (U03, A01, A05) | ✅ RUNTIME_CONTRACT_ACCEPTED / ✅ VISUAL_RUNTIME_ACCEPTED | 2026-05-15 |
