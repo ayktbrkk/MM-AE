@@ -60,3 +60,7 @@ artifacts/renders/character_ui/
 artifacts/renders/flow_check/
 artifacts/renders/ui_regression_current/
 artifacts/renders/ui_regression_diffs/
+
+# Large APK extract artifact (exceeds GitHub 100MB limit)
+artifacts/apk_extract.zip
+artifacts/apk_extract/
