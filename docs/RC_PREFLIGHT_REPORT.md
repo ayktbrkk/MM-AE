@@ -18,7 +18,7 @@
 | İlk Marker (A05 collect) | ✅ | Orbit + collect animasyonu (`scale-down` + `fade-out`, 0.22s) |
 | İlk Karar | ✅ | `decision_overlay.gd` A/B seçenekleri |
 | Journal / Tarih Defteri | ✅ | `JOURNAL_RUNTIME_CONTRACT_OK` — 15/15 test geçti |
-| Audio (BGM + SFX) | ⚠️ | `AUDIO_RUNTIME_CONTRACT_OK` — 18/18 test geçti, **production dosyalar eksik** (13 placeholder ses) |
+| Audio (BGM + SFX) | ❌ | `AUDIO_RUNTIME_CONTRACT_OK` — 18/18 test geçti, **production dosyalar: 0/15 mevcut, fallback aktif** |
 | Accessibility | ✅ | `ACCESSIBILITY_RUNTIME_CONTRACT_OK` — 25/25 test geçti |
 
 ## 2. Gate Durumu
@@ -46,12 +46,13 @@
 
 | # | Blokaj | Etki | Çözüm |
 |---|--------|------|-------|
-| 1 | ❌ Production BGM dosyaları eksik (9 parça) | Orta | [`docs/AUDIO_PRODUCTION_GUIDE.md`](docs/AUDIO_PRODUCTION_GUIDE.md)参照, placeholder'lar çalışıyor |
-| 2 | ❌ Production SFX dosyaları eksik | Orta | Placeholder'lar (`AudioManager` frekans bazlı üretim) çalışıyor |
-| 3 | ⏭️ Device smoke testi yapılamadı | Düşük | ADB bağlı cihaz yok — emulator veya fiziksel cihaz gerekli |
-| 4 | ⚠️ Release keystore yapılandırması eksik | Yüksek | `export_presets.cfg`'de `keystore/release`, `keystore/release_user`, `keystore/release_password` boş |
-| 5 | ℹ️ Debug APK build script'i Godot yolu uyuşmazlığı | Düşük | Script `C:\Users\Aykut\Desktop\MM-AE-main\` yolunu arıyor, mevcut Godot proje kökünde |
-| 6 | ℹ️ Export preset'te Gradle build kapalı | Düşük | `use_gradle_build=false` — özel Android entegrasyonu gerekmiyorsa sorun yok |
+| 1 | ❌ Production BGM dosyaları eksik (9/9) | Orta | Bkz: [`docs/AUDIO_PRODUCTION_GUIDE.md`](docs/AUDIO_PRODUCTION_GUIDE.md). Önce `_load_stream()` alt klasör bug'ı düzeltilmeli |
+| 2 | ❌ Production SFX dosyaları eksik (6/6) | Orta | Bkz: [`docs/AUDIO_PRODUCTION_GUIDE.md`](docs/AUDIO_PRODUCTION_GUIDE.md). Fallback (procedural tone) aktif |
+| 3 | ❌ `_load_stream()` alt klasör desteği yok (BUG) | Yüksek | [`scripts/audio_manager.gd:294`](scripts/audio_manager.gd:294) — `res://assets/audio/{name}.{ext}` arıyor, `bgm/` ve `sfx/` alt klasörlerini yok sayıyor. Production dosyalar konsa bile bulunamaz |
+| 4 | ⏭️ Device smoke testi yapılamadı | Düşük | ADB bağlı cihaz yok — emulator veya fiziksel cihaz gerekli |
+| 5 | ❌ Release keystore yapılandırması eksik | Yüksek | Keystore şablonu hazır: [`docs/KEYSTORE_SETUP.md`](docs/KEYSTORE_SETUP.md). Kullanıcının `keytool` ile `builds/release.keystore` oluşturması gerek |
+| 6 | ℹ️ Debug APK build script'i Godot yolu uyuşmazlığı | Düşük | Script `C:\Users\Aykut\Desktop\MM-AE-main\` yolunu arıyor, mevcut Godot proje kökünde |
+| 7 | ℹ️ Export preset'te Gradle build kapalı | Düşük | `use_gradle_build=false` — özel Android entegrasyonu gerekmiyorsa sorun yok |
 
 ## 4. Android Export Durumu
 
@@ -65,8 +66,8 @@
 | Orientation | ✅ Portrait (1080×1920) |
 | Min/Target SDK | ✅ 21 / 34 |
 | Keystore (debug) | ❌ Boş (Godot varsayılan debug keystore kullanılıyor) |
-| Keystore (release) | ❌ Boş — release imzalama için zorunlu |
-| Build Scripts | ✅ `tools/build_android_debug.ps1` ve `tools/build_android_release_candidate.ps1` mevcut |
+| Keystore (release) | ❌ Boş — release imzalama için zorunlu. Şablon: [`docs/KEYSTORE_SETUP.md`](docs/KEYSTORE_SETUP.md) |
+| Build Scripts | ✅ `tools/build_android_debug.ps1` ve `tools/build_android_release_candidate.ps1` mevcut. Pipeline analizi: [`docs/ANDROID_RELEASE_CHECKLIST.md`](docs/ANDROID_RELEASE_CHECKLIST.md) |
 
 **Mevcut APK build'leri Android SDK ve export template'lerinin yüklü olduğunu ve debug export'un çalıştığını doğrulamaktadır.**
 
@@ -114,8 +115,9 @@
 
 **Şartlı Blokajlar (Release Candidate öncesi kapanması gerekenler):**
 1. **Release keystore yapılandırması** — imzalı APK için zorunlu
-2. **Production BGM/SFX dosyaları** — placeholder sesler RC için yeterli değil
-3. **Device smoke testi** — fiziksel cihazda doğrulama gerekli
+2. **Production BGM/SFX dosyaları** — placeholder sesler RC için yeterli değil (0/15 mevcut)
+3. **`_load_stream()` alt klasör bug'ı** — production dosyalar konsa bile `bgm/` ve `sfx/` alt klasörleri taranmıyor, `_load_stream()` güncellenmeli
+4. **Device smoke testi** — fiziksel cihazda doğrulama gerekli
 
 **Özet:** İlk 10 dakika oyun akışı (giriş → karakter seçimi → rüya → Bandırma → tutorial → ilk diyalog → ilk marker → ilk karar) teknik olarak RC kalitesindedir. Runtime contract'ların tamamı yeşildir. **Release Candidate statüsüne geçmek için yukarıdaki 3 blokajın kapanması yeterlidir.** Mevcut haliyle internal demo ve QA testleri için dağıtılabilir.
 
@@ -140,9 +142,10 @@
 
 ## Ek B: Kalan İşler (Release Candidate Öncesi)
 
+- [ ] **BUG:** `_load_stream()`'e `bgm/` ve `sfx/` alt klasör desteği ekle ([`scripts/audio_manager.gd:294`](scripts/audio_manager.gd:294))
 - [ ] Release keystore oluştur ve export_presets.cfg'ye ekle
-- [ ] Production BGM dosyalarını `assets/audio/bgm/` klasörüne ekle
-- [ ] Production SFX dosyalarını `assets/audio/sfx/` klasörüne ekle
+- [ ] Production BGM dosyalarını `assets/audio/` klasörüne ekle (9 dosya: bandirma, samsun, dream, menu, tension, decision, chapter_transition, victory, sakarya)
+- [ ] Production SFX dosyalarını `assets/audio/` klasörüne ekle (6 dosya: confirm, cancel, collect, page_flip, typewriter, decision_appear)
 - [ ] Fiziksel cihazda (veya emulator'de) device smoke testi yap
 - [ ] imzalı release APK build al
 - [ ] APK boyut optimizasyonu (mevcut ~150 MB)
