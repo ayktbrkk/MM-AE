@@ -54,6 +54,7 @@ var speaker_side_current := "left"
 var left_light_alpha := 0.08
 var right_light_alpha := 0.08
 var reveal_tween: Tween
+var _typewriter_speed_multiplier: float = 1.0
 var left_portrait_base_position := Vector2.ZERO
 var right_portrait_base_position := Vector2.ZERO
 var left_glow_base_position := Vector2.ZERO
@@ -67,6 +68,9 @@ func get_overlay_type() -> int:
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_sync_layout)
+	# P10: Accessibility ayarlarini yukle ve sinyali bagla
+	_apply_accessibility_settings()
+	SaveManager.accessibility_changed.connect(_on_accessibility_changed)
 	left_portrait.texture = ARDA_IDLE_TEXTURE
 	right_portrait.texture = EDA_IDLE_TEXTURE
 	continue_icon.texture = _textures.CONTINUE_ICON
@@ -80,6 +84,8 @@ func _ready() -> void:
 	chapter_label.text = _ui_text.text(_ui_text.DIALOGUE_DEFAULT_CHAPTER, "Bölüm")
 	name_label.text = _ui_text.text(_ui_text.DIALOGUE_DEFAULT_SPEAKER, "Anlatıcı")
 	body_label.text = _rich_text.sanitize(_ui_text.text(_ui_text.DIALOGUE_DEFAULT_BODY, "Hikaye metni burada görünür."))
+	# P10: Accessibility — yuksek kontrast varsayilan
+	_apply_body_label_accessibility()
 	continue_label.text = _ui_text.text(_ui_text.DIALOGUE_CONTINUE, "Dokun ve devam et")
 	_apply_styles()
 	_sync_layout()
@@ -232,7 +238,7 @@ func present(config: Dictionary) -> void:
 	tween.parallel().tween_property(left_glow, "scale", Vector2.ONE, 0.18)
 	tween.parallel().tween_property(right_glow, "scale", Vector2.ONE, 0.18)
 	reveal_tween = _overlay_tween_helper.replace(self, reveal_tween)
-	var reveal_duration := clampf(float(body_label.get_parsed_text().length()) * 0.012, 0.28, 1.15)
+	var reveal_duration := clampf(float(body_label.get_parsed_text().length()) * 0.012 * _typewriter_speed_multiplier, 0.28, 1.15)
 	reveal_tween.tween_property(body_label, "visible_ratio", 1.0, reveal_duration)
 
 
@@ -274,3 +280,41 @@ func _apply_portrait_expression(speaker_side: String, expression: String) -> voi
 	var texture_map: Dictionary = ARDA_EXPRESSIONS if speaker_side == "left" else EDA_EXPRESSIONS
 	var target_portrait: TextureRect = left_portrait if speaker_side == "left" else right_portrait
 	target_portrait.texture = texture_map.get(expression, texture_map["idle"])
+
+
+# ---------------------------------------------------------------------------
+# P10: Accessibility
+# ---------------------------------------------------------------------------
+func _apply_accessibility_settings() -> void:
+	"""Accessibility ayarlarini uygula: text speed, large text, high contrast."""
+	# Text speed
+	match SaveManager.text_speed:
+		"slow":
+			_typewriter_speed_multiplier = 2.0
+		"normal":
+			_typewriter_speed_multiplier = 1.0
+		"fast":
+			_typewriter_speed_multiplier = 0.4
+
+	# Large text
+	if SaveManager.large_text:
+		body_label.add_theme_font_size_override("font_size", 28)
+	else:
+		body_label.add_theme_font_size_override("font_size", 22)
+
+	# High contrast (body_label outline)
+	_apply_body_label_accessibility()
+
+
+func _apply_body_label_accessibility() -> void:
+	"""Body label'in yuksek kontrast / outline ayarini uygula."""
+	if SaveManager.high_contrast:
+		body_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		body_label.add_theme_constant_override("outline_size", 4)
+	else:
+		body_label.add_theme_constant_override("outline_size", 0)
+
+
+func _on_accessibility_changed() -> void:
+	"""Accessibility degisikliginde ayarlari yeniden uygula."""
+	_apply_accessibility_settings()

@@ -453,6 +453,8 @@ func _collect_unit(marker: Node2D) -> void:
 		Callable(),
 		"unit"
 	)
+	# P6: Tutorial — ilk nota dokunuldu (faz 1->2)
+	_tutorial_notify_first_note_tapped()
 
 	if state.get_item_count("units") >= state.get_zone_item_total("units"):
 		set_goal("portal", _world_text("ui.world.collect.unit.goal_complete", "Tüm üniteler toplandı. Çalışma masasındaki Tarih Kitabı'na git."))
@@ -481,6 +483,8 @@ func _collect_ship_clue(marker: Node2D) -> void:
 		Callable(),
 		"ship"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("ship_clues") >= state.get_zone_item_total("ship_clues"):
 		set_goal("decision", _world_text("ui.world.collect.ship.goal_complete", "Samsun Kararı işaretine git."))
@@ -509,6 +513,8 @@ func _collect_havza_clue(marker: Node2D) -> void:
 		Callable(),
 		"havza"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("havza_clues") >= state.get_zone_item_total("havza_clues"):
 		set_goal("havza_decision", _world_text("ui.world.collect.havza.goal_complete", "Havza ipuçları tamamlandı. Şimdi Havza Çağrısı noktasına git."))
@@ -537,6 +543,8 @@ func _collect_amasya_clue(marker: Node2D) -> void:
 		Callable(),
 		"amasya"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("amasya_clues") >= state.get_zone_item_total("amasya_clues"):
 		set_goal("amasya_decision", _world_text("ui.world.collect.amasya.goal_complete", "Amasya ipuçları tamamlandı. Şimdi Amasya Kararı noktasına git."))
@@ -565,6 +573,8 @@ func _collect_kongre_clue(marker: Node2D) -> void:
 		Callable(),
 		"kongre"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("kongre_clues") >= state.get_zone_item_total("kongre_clues"):
 		set_goal("kongre_decision", _world_text("ui.world.collect.kongre.goal_complete", "Kongre ipuçları tamamlandı. Şimdi Kongre Kararı noktasına git."))
@@ -593,6 +603,8 @@ func _collect_ankara_clue(marker: Node2D) -> void:
 		Callable(),
 		"ankara"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("ankara_clues") >= state.get_zone_item_total("ankara_clues"):
 		set_goal("ankara_decision", _world_text("ui.world.collect.ankara.goal_complete", "Ankara ipuçları tamamlandı. Şimdi Merkez Kararı noktasına git."))
@@ -621,6 +633,8 @@ func _collect_sakarya_clue(marker: Node2D) -> void:
 		Callable(),
 		"sakarya"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("sakarya_clues") >= state.get_zone_item_total("sakarya_clues"):
 		set_goal("sakarya_decision", _world_text("ui.world.collect.sakarya.goal_complete", "Sakarya ipuçları tamamlandı. Şimdi Savunma Kararı noktasına git."))
@@ -649,6 +663,8 @@ func _collect_final_clue(marker: Node2D) -> void:
 		Callable(),
 		"final"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 	if state.get_item_count("final_clues") >= state.get_zone_item_total("final_clues"):
 		set_goal("final_decision", _world_text("ui.world.collect.final.goal_complete", "Cumhuriyet ipuçları tamamlandı. Şimdi Gelecek Kararı noktasına git."))
@@ -677,6 +693,8 @@ func _collect_leadership_resource(marker: Node2D) -> void:
 		Callable(),
 		"support"
 	)
+	# P6: Tutorial — ipucu toplandı (faz 2->3)
+	_tutorial_notify_clue_collected()
 
 
 # ---------------------------------------------------------------------------
@@ -1275,6 +1293,8 @@ func _show_event_decision(event_index: int, context: String) -> void:
 	var ui_mod: Node = _get_ui_mod()
 	if ui_mod != null:
 		ui_mod.show_decision(event_index, context)
+	# P6: Tutorial — karar açıldı (faz 3->4)
+	_tutorial_notify_decision_opened()
 
 
 func _show_samsun_decision() -> void:
@@ -1628,3 +1648,35 @@ func _clear_completion_save() -> void:
 		return
 	save_manager.set("pending_entry_action", "")
 	save_manager.call("delete_save")
+
+
+# ---------------------------------------------------------------------------
+# P6: TUTORIAL YARDIMCI FONKSİYONLAR
+# ---------------------------------------------------------------------------
+
+func _tutorial_notify_first_note_tapped() -> void:
+	"""İlk nota dokunuldu — WorldUI üzerinden tutorial'a bildir."""
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod != null and ui_mod.has_method("notify_tutorial_first_note_tapped"):
+		ui_mod.notify_tutorial_first_note_tapped()
+
+
+func _tutorial_notify_clue_collected() -> void:
+	"""İpucu toplandı — WorldUI üzerinden tutorial'a bildir."""
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod != null and ui_mod.has_method("notify_tutorial_clue_collected"):
+		ui_mod.notify_tutorial_clue_collected()
+
+
+func _tutorial_notify_decision_opened() -> void:
+	"""Karar açıldı — WorldUI üzerinden tutorial'a bildir."""
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod != null and ui_mod.has_method("notify_tutorial_decision_opened"):
+		ui_mod.notify_tutorial_decision_opened()
+
+
+func _tutorial_notify_support_built() -> void:
+	"""Destek inşa edildi — WorldUI üzerinden tutorial'a bildir."""
+	var ui_mod: Node = _get_ui_mod()
+	if ui_mod != null and ui_mod.has_method("notify_tutorial_support_built"):
+		ui_mod.notify_tutorial_support_built()

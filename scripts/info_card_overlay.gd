@@ -1,6 +1,7 @@
 extends Control
 
 signal continue_pressed
+signal card_viewed(card_id: String)
 
 const _rich_text := preload("res://scripts/rich_text_utils.gd")
 const _gui_frame := preload("res://scripts/gui_frame.gd")
@@ -34,6 +35,9 @@ const _overlay_tween_helper := preload("res://scripts/overlay_tween_helper.gd")
 # Idle tween referansları
 var _idle_tweens: Array[Tween] = []
 
+# P7: Gösterilen son kart ID'si (journal kaydı için)
+var _current_card_id: String = ""
+
 func get_overlay_type() -> int:
 	return OverlayManager.OverlayType.INFO_CARD
 
@@ -41,6 +45,9 @@ func _ready() -> void:
 	icon_texture.texture = _textures.BADGE_TEXTURE
 	reward_star.texture = _textures.STAR_TEXTURE
 	get_viewport().size_changed.connect(_sync_layout)
+	# P10: Accessibility ayarlarini yukle ve sinyali bagla
+	_apply_accessibility_settings()
+	SaveManager.accessibility_changed.connect(_on_accessibility_changed)
 	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
 		sparkle.texture = _textures.STAR_TEXTURE
 		sparkle.modulate = Color(1, 1, 1, 0.0)
@@ -161,6 +168,9 @@ func _stop_idle_animations() -> void:
 
 func present(config: Dictionary) -> void:
 	_stop_idle_animations()
+
+	# P7: Kart ID'sini kaydet ve journal'a bildir
+	_current_card_id = String(config.get("card_id", ""))
 	tag_label.text = String(config.get("tag_text", _ui_text.text(_ui_text.INFO_DEFAULT_TAG, "Tarih Kartı")))
 	title_label.text = String(config.get("title", _ui_text.text(_ui_text.INFO_DEFAULT_TITLE, "Bilgi Kartı")))
 	body_label.text = _rich_text.centered(String(config.get("text", _ui_text.text(_ui_text.INFO_DEFAULT_BODY, "Kısa ve anlaşılır tarih bilgisi burada görünür."))))
@@ -168,6 +178,8 @@ func present(config: Dictionary) -> void:
 	icon_texture.texture = config.get("icon_texture", _textures.BADGE_TEXTURE)
 	icon_glow.color = Color(config.get("accent_color", Color(0.95, 0.75, 0.28, 0.18)))
 	visible = true
+	if not _current_card_id.is_empty():
+		card_viewed.emit(_current_card_id)
 	_ui_focus.grab_preferred(continue_button, [continue_button, back_button])
 	backdrop.color = Color(0.08, 0.10, 0.14, 0.0)
 	reward_halo.color = Color(_colors.POP_GOLD.r, _colors.POP_GOLD.g, _colors.POP_GOLD.b, 0.0)
@@ -238,3 +250,27 @@ func _freeze_for_capture() -> void:
 	for sparkle in [sparkle_a, sparkle_b, sparkle_c]:
 		sparkle.rotation = 0.0
 		sparkle.scale = Vector2.ONE * 0.86
+
+
+# ---------------------------------------------------------------------------
+# P10: Accessibility
+# ---------------------------------------------------------------------------
+func _apply_accessibility_settings() -> void:
+	"""Large text ve high contrast ayarlarini uygula."""
+	if SaveManager.large_text:
+		title_label.add_theme_font_size_override("font_size", 26)
+		body_label.add_theme_font_size_override("font_size", 22)
+	else:
+		title_label.add_theme_font_size_override("font_size", 20)
+		body_label.add_theme_font_size_override("font_size", 18)
+
+	if SaveManager.high_contrast:
+		body_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		body_label.add_theme_constant_override("outline_size", 3)
+	else:
+		body_label.add_theme_constant_override("outline_size", 0)
+
+
+func _on_accessibility_changed() -> void:
+	"""Accessibility degisikliginde ayarlari yeniden uygula."""
+	_apply_accessibility_settings()

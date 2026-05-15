@@ -1,5 +1,85 @@
 # Bandırma Yolculuğu — Product Roadmap
 
+## ✅ Tamamlanan Çalışmalar
+
+### Package 1: P10 Android Lifecycle Smoke Gate ✓
+- 6 gate'li smoke test pipeline
+- ADB device smoke test
+- App lifecycle contract verification
+- **Çıktı:** [`tools/run_p10_smoke_gate.ps1`](tools/run_p10_smoke_gate.ps1), [`docs/ANDROID_RELEASE_CHECKLIST.md`](docs/ANDROID_RELEASE_CHECKLIST.md)
+
+### Package 2: Repository Hygiene ✓
+- `.gitignore` güncellemesi
+- Artifact policy (artifacts/logs/)
+- Repo hygiene dokümantasyonu
+- Log temizleme aracı
+- **Çıktı:** [`docs/REPO_HYGIENE.md`](docs/REPO_HYGIENE.md), [`tools/clean_temp_logs.ps1`](tools/clean_temp_logs.ps1)
+
+### Package 3: Zone Definition Resource ✓
+- `ZoneDefinition` ve `ZoneMarkerDefinition` Resource class'ları
+- `ZoneLoader` static helper
+- `ship.tres` ve `samsun_rift.tres` örnek resource'ları
+- Zone definition contract verification tool
+- **Çıktı:** [`scripts/data/zone_definition.gd`](scripts/data/zone_definition.gd), [`scripts/data/zone_marker_definition.gd`](scripts/data/zone_marker_definition.gd), [`scripts/data/zone_loader.gd`](scripts/data/zone_loader.gd)
+
+### Package 4: Marker Visual Split ✓
+- `world_marker_visuals.gd` ayrıştırması
+- `world_marker.gd` %60 küçültme (881→349 satır)
+- **Çıktı:** [`scripts/world_marker_visuals.gd`](scripts/world_marker_visuals.gd)
+
+### Package 5: World Builder Decomposition ✓
+- `room_builder.gd` ayrıştırması
+- `world_builder.gd` 177 satır küçültme (3535→3358)
+- **Çıktı:** `scripts/world_builders/room_builder.gd`
+
+### Package 6: Tutorial Layer ✓
+- `tutorial_controller.gd` (5-phase, non-blocking)
+- Save/load entegrasyonu
+- 12 kategorili GUT testleri
+- **Çıktı:** [`scripts/tutorial_controller.gd`](scripts/tutorial_controller.gd)
+
+### Package 7: Journal / Tarih Defteri ✓
+- `journal_overlay.gd` (TabContainer: Kartlar + Bölümler)
+- 13 dosya güncellendi/oluşturuldu
+- OverlayManager entegrasyonu
+- **Çıktı:** [`scripts/journal_overlay.gd`](scripts/journal_overlay.gd), [`scenes/journal_overlay.tscn`](scenes/journal_overlay.tscn)
+
+### Package 8: Audio Infrastructure ✓
+- `assets/audio/bgm/` ve `assets/audio/sfx/` dizinleri
+- `AUDIO_INVENTORY.md` ve `AUDIO_PRODUCTION_GUIDE.md`
+- `verify_audio_production.gd` headless verification tool
+- AudioManager test güncellemeleri
+- **Çıktı:** [`docs/AUDIO_INVENTORY.md`](docs/AUDIO_INVENTORY.md), [`docs/AUDIO_PRODUCTION_GUIDE.md`](docs/AUDIO_PRODUCTION_GUIDE.md)
+
+### Package 9: Performance Gate ✓
+- `measure_world_complexity.gd` (9 zone metrik)
+- Performance gate pipeline
+- `PERFORMANCE_OBSERVATION.md` (baseline thresholds)
+- **Çıktı:** [`tools/measure_world_complexity.gd`](tools/measure_world_complexity.gd), [`docs/PERFORMANCE_OBSERVATION.md`](docs/PERFORMANCE_OBSERVATION.md)
+
+### Package 10: Accessibility ✓
+- Text speed (slow/normal/fast)
+- Large text mode
+- High contrast mode
+- Save/load persistence
+- 11 accessibility GUT testleri
+- **Çıktı:** [`test/test_accessibility.gd`](test/test_accessibility.gd), [`scenes/accessibility_panel.tscn`](scenes/accessibility_panel.tscn)
+
+### Package 11: Release Pipeline ✓
+- Android signing prosedürü
+- Debug/Release APK build script'leri
+- Version bump kuralları
+- 20+ maddelik RC checklist
+- **Çıktı:** [`tools/build_android_debug.ps1`](tools/build_android_debug.ps1), [`tools/build_android_release_candidate.ps1`](tools/build_android_release_candidate.ps1)
+
+### Package 12: Commercial Polish Backlog Grooming ✓
+- Kapsamlı polish backlog (7 kategori, 35 kart)
+- Release gate kriterleri (6 gate)
+- Güncellenmiş roadmap
+- **Çıktı:** [`docs/POLISH_BACKLOG.md`](docs/POLISH_BACKLOG.md), [`docs/RELEASE_GATES.md`](docs/RELEASE_GATES.md)
+
+---
+
 ## Core Vision
 
 "Bandırma Yolculuğu" is a **pop-history educational adventure** for 5-10 year olds, covering the Turkish War of Independence (1919-1923) through a **paper diorama open world** design.
@@ -203,6 +283,7 @@ Ana yurutme plani:
 | **M6: World Art Upgrade** | 📝 | Toca World kalitesi |
 | **M7: E2E Test** | ✅ | 22/22 test geçti |
 | **M8: Android Release Polish** | 📝 | cihaz smoke test + export checklist |
+| **M9: Infrastructure Packages** (P1-P12) | ✅ | Paket 1-12 tamamlandı |
 
 ## Current Prototype (v1.0 — First Milestone)
 
@@ -220,16 +301,70 @@ Ana yurutme plani:
 - 13 procedural placeholder ses
 - 22 E2E test (test/ klasörü)
 - Android debug APK mevcut (builds/BandirmaYolculugu_debug.apk)
+- Tutorial layer (5-phase, non-blocking)
+- Journal / Tarih Defteri (kartlar + bölümler)
+- Erişilebilirlik (text speed, large text, high contrast)
+- Resource-driven zone definitions (ship, samsun_rift)
+- P10-P11-P12 pipeline (smoke gate, performance gate, release preflight)
 
 **Gereksinimler:**
 - Godot 4.6.2
 - Android export template
 - Minimum 1080×1920 portrait
 
-**Sonraki Adımlar:**
-1. World art upgrade backlog'unu zone bazli replacement pass'e cevir
-2. Android release polish icin cihaz smoke test ve export checklist'i cikar
-3. Gerçek ses dosyaları (.ogg) — placeholder'ları değiştir
-4. Oyun içi tutorial
-5. Achievement sistemi ve hafif meta-progression
-6. Analytics entegrasyonu
+---
+
+## 🎯 Kısa Vade — MVP Release (Q2 2026)
+
+### Production Audio
+- [ ] BGM dosyalarını üret ve [`assets/audio/bgm/`](assets/audio/bgm/) klasörüne ekle
+- [ ] SFX dosyalarını üret ve [`assets/audio/sfx/`](assets/audio/sfx/) klasörüne ekle
+- [ ] [`tools/verify_audio_production.gd`](tools/verify_audio_production.gd) ile doğrula
+
+### Alpha Test
+- [ ] Dahili test grubuna APK dağıt
+- [ ] Geri bildirim topla
+- [ ] Kritik hataları düzelt
+
+### MVP Release
+- [ ] [`docs/RELEASE_GATES.md`](docs/RELEASE_GATES.md) release gates'in tamamını geç
+- [ ] [`docs/ANDROID_RELEASE_CHECKLIST.md`](docs/ANDROID_RELEASE_CHECKLIST.md) tamamla
+- [ ] İmzalı APK/AAB oluştur
+- [ ] Google Play Console'a yükle (veya sideload)
+
+---
+
+## 🚀 Orta Vade — Polish & İçerik (Q3 2026)
+
+### Polish Backlog (bkz: [`docs/POLISH_BACKLOG.md`](docs/POLISH_BACKLOG.md))
+- [ ] Animasyon iyileştirmeleri (A01-A09)
+- [ ] Görsel efektler (V01-V09)
+- [ ] Partikül sistemleri (kar, yaprak, deniz spreyi)
+- [ ] UI micro-interaction'lar (haptik, loading bar)
+
+### İçerik Zenginleştirme
+- [ ] Ek hikaye event'leri (31 → 49 event)
+- [ ] Ek collectible kartlar (tarihi figürler)
+- [ ] Replay değeri artırma (farklı karar → farklı sonuç)
+- [ ] Başarım sistemi (achievement)
+
+### Performans
+- [ ] Texture atlas kullanımı
+- [ ] Gereksiz `_process()` döngülerini temizle
+- [ ] Object pooling (marker/wave)
+- [ ] Mobile GPU instancing
+
+---
+
+## 🌟 Uzun Vade — Genişleme (Q4 2026+)
+
+- [ ] Yeni bölümler ekle (İç Anadolu, Güney Cephesi)
+- [ ] Çoklu dil desteği (İngilizce başta)
+- [ ] Voice-over (NPC selamlaşmaları, rehber)
+- [ ] Ekran okuyucu desteği (TalkBack)
+- [ ] Oyun içi screenshot/paylaşım
+- [ ] Oyun içi geri bildirim formu
+- [ ] Crash reporting (Firebase veya custom)
+- [ ] Analytics entegrasyonu (gizlilik politikası ile)
+- [ ] Rate my app prompt
+- [ ] World Art Upgrade: Toca World kalitesinde diorama

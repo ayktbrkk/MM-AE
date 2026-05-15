@@ -1,0 +1,49 @@
+[gd_resource type="Resource" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/zone_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/zone_marker_definition.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_marker_1"]
+script = ExtResource(2)
+kind = "ship_clue"
+title_key = "MARKER_SHIP_NOTE_1"
+text_key = "MARKER_SHIP_NOTE_1_TEXT"
+position = Vector2(413, 720)
+collected = false
+
+[sub_resource type="Resource" id="Resource_marker_2"]
+script = ExtResource(2)
+kind = "ship_clue"
+title_key = "MARKER_SHIP_NOTE_2"
+text_key = "MARKER_SHIP_NOTE_2_TEXT"
+position = Vector2(771, 418)
+collected = false
+
+[sub_resource type="Resource" id="Resource_marker_3"]
+script = ExtResource(2)
+kind = "npc"
+title_key = "Güvertedeki Öğrenci"
+text_key = "Limana yaklaşırken önce çevreyi oku, sonra karar ver."
+position = Vector2(1070, 1160)
+collected = false
+
+[sub_resource type="Resource" id="Resource_marker_4"]
+script = ExtResource(2)
+kind = "decision"
+title_key = "Samsun Kararı"
+text_key = "Hazırsan Samsun'daki ilk adımı seç."
+position = Vector2(1160, 1470)
+collected = false
+
+[resource]
+script = ExtResource(1)
+zone_id = "ship"
+display_title_key = "ZONE_SHIP_TITLE"
+setup_goal_key = "ZONE_SHIP_GOAL"
+goal_kind = "collect"
+item_counter_key = "ZONE_ITEM_COUNTER"
+item_total = 5
+required_supports = 2
+markers = [SubResource("Resource_marker_1"), SubResource("Resource_marker_2"), SubResource("Resource_marker_3"), SubResource("Resource_marker_4")]
+companion_spots = []
+wave_config_id = "ship_wave"

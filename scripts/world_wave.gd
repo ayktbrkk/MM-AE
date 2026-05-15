@@ -1,4 +1,5 @@
 extends Node
+class_name WorldWave
 
 # Dalga/Strateji mekaniği — Support node yerleştirme ve dalga atlatma
 # ================================================================
@@ -242,6 +243,11 @@ func build_support(choice: String) -> void:
 	_refresh_minimap_markers()
 
 	support_node_placed.emit(support_name, marker.position)
+
+	# P6: Tutorial — destek inşa edildi (faz 4->tamamlandı)
+	ui_mod = _get_ui_mod()
+	if ui_mod != null and ui_mod.has_method("notify_tutorial_support_built"):
+		ui_mod.notify_tutorial_support_built()
 
 	# Destek sayısı yeterliyse dalga hedefini göster
 	if _state.built_supports >= _state.required_supports:

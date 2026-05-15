@@ -54,6 +54,7 @@ const _gui_frame := preload("res://scripts/gui_frame.gd")
 const _ui_styles := preload("res://scripts/ui_style_factory.gd")
 const _ui_tokens := preload("res://scripts/ui_tokens.gd")
 const LOADING_OVERLAY_SCENE := preload("res://scenes/loading_overlay.tscn")
+const JOURNAL_OVERLAY_SCENE := preload("res://scenes/journal_overlay.tscn")
 const MIN_INTERACT_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_PRIMARY
 const MIN_DIALOGUE_TOUCH_SIZE := _ui_tokens.TOUCH_TARGET_MIN
 
@@ -77,6 +78,8 @@ var _info_card_overlay: Node
 var _chapter_transition_overlay: Node
 var _exit_confirm_overlay: CanvasLayer
 var _loading_overlay: CanvasLayer
+var _journal_overlay: Node
+var _journal_hud_button: Button
 
 
 func initialize(world: Node2D) -> void:
@@ -85,6 +88,7 @@ func initialize(world: Node2D) -> void:
 	_apply_touch_target_defaults()
 	sync_hud_layout()
 	_setup_overlay_manager()
+	_setup_tutorial()
 
 
 func _cache_ui_references() -> void:
@@ -108,6 +112,14 @@ func _cache_ui_references() -> void:
 		_overlay_host = Node.new()
 		_overlay_host.name = OverlayManager.OVERLAY_HOST_NAME
 		_canvas_root.add_child(_overlay_host)
+
+	# P7: Journal butonu referansı ve sinyal bağlantısı (HUD'da)
+	var hud_bar_node := _hud_root.get_node_or_null("HudBar")
+	if hud_bar_node != null:
+		_journal_hud_button = hud_bar_node.get_node_or_null("JournalButton") as Button
+		if _journal_hud_button != null:
+			if not _journal_hud_button.pressed.is_connected(_on_journal_pressed):
+				_journal_hud_button.pressed.connect(_on_journal_pressed)
 
 
 func _apply_touch_target_defaults() -> void:
@@ -155,6 +167,72 @@ func _sync_world_panels(side_margin: float, top_margin: float, bottom_margin: fl
 		route_panel.offset_bottom = route_panel.offset_top + _ui_tokens.WORLD_ROUTE_HEIGHT
 
 
+# ---------------------------------------------------------------------------
+# P6: Tutorial Controller
+# ---------------------------------------------------------------------------
+var tutorial_controller: Node
+
+
+func _setup_tutorial() -> void:
+	"""Tutorial controller'ı kur."""
+	const _TutorialController := preload("res://scripts/tutorial_controller.gd")
+	tutorial_controller = _TutorialController.new()
+	tutorial_controller.name = "TutorialController"
+	add_child(tutorial_controller)
+	tutorial_controller.initialize(_world, self)
+
+
+func is_tutorial_active() -> bool:
+	"""Tutorial aktif mi?"""
+	if tutorial_controller == null:
+		return false
+	return tutorial_controller.is_tutorial_active()
+
+
+func start_tutorial() -> void:
+	"""Yeni kayıtta tutorial'ı başlat."""
+	if tutorial_controller != null:
+		tutorial_controller.start_tutorial()
+
+
+func skip_tutorial() -> void:
+	"""Tutorial'ı geç."""
+	if tutorial_controller != null:
+		tutorial_controller.skip_tutorial()
+
+
+func notify_tutorial_character_selected() -> void:
+	"""Karakter seçildi — tutorial faz 0->1."""
+	if tutorial_controller != null:
+		tutorial_controller.notify_character_selected()
+
+
+func notify_tutorial_first_note_tapped() -> void:
+	"""İlk nota dokunuldu — tutorial faz 1->2."""
+	if tutorial_controller != null:
+		tutorial_controller.notify_first_note_tapped()
+
+
+func notify_tutorial_clue_collected() -> void:
+	"""İpucu toplandı — tutorial faz 2->3."""
+	if tutorial_controller != null:
+		tutorial_controller.notify_clue_collected()
+
+
+func notify_tutorial_decision_opened() -> void:
+	"""Karar açıldı — tutorial faz 3->4."""
+	if tutorial_controller != null:
+		tutorial_controller.notify_decision_opened()
+
+
+func notify_tutorial_support_built() -> void:
+	"""Destek inşa edildi — tutorial faz 4->tamamlandı."""
+	if tutorial_controller != null:
+		tutorial_controller.notify_support_built()
+
+
+# ---------------------------------------------------------------------------
+
 func _setup_overlay_manager() -> void:
 	"""Overlay Manager'ı kur ve tüm overlay'leri kaydet."""
 	_overlay_manager = OverlayManager.new()
@@ -174,6 +252,16 @@ func _setup_overlay_manager() -> void:
 	_exit_confirm_overlay = exit_confirm_scene.instantiate()
 	add_child(_exit_confirm_overlay)
 	_overlay_manager.register_overlay(OverlayManager.OverlayType.EXIT_CONFIRM, _exit_confirm_overlay)
+
+	# P7: Journal overlay'ini oluştur ve kaydet
+	_journal_overlay = JOURNAL_OVERLAY_SCENE.instantiate()
+	add_child(_journal_overlay)
+	_overlay_manager.register_overlay(OverlayManager.OverlayType.JOURNAL, _journal_overlay)
+
+	# P7: Bilgi kartı görüntülendiğinde journal'a kaydet
+	if _info_card_overlay != null and _info_card_overlay.has_signal("card_viewed"):
+		if not _info_card_overlay.card_viewed.is_connected(_on_info_card_viewed):
+			_info_card_overlay.card_viewed.connect(_on_info_card_viewed)
 
 
 func get_overlay_manager() -> OverlayManager:
@@ -255,6 +343,47 @@ func show_exit_confirm() -> void:
 
 func hide_exit_confirm() -> void:
 	_overlay_manager.hide(OverlayManager.OverlayType.EXIT_CONFIRM)
+
+
+# P7: Journal / Tarih Defteri Metodları
+# ---------------------------------------------------------------------------
+
+
+func show_journal(tab := "cards") -> void:
+	"""Journal overlay'ini göster."""
+	_overlay_manager.show(OverlayManager.OverlayType.JOURNAL, {"tab": tab})
+	_interact_button.disabled = true
+
+
+func hide_journal() -> void:
+	"""Journal overlay'ini gizle."""
+	_overlay_manager.hide(OverlayManager.OverlayType.JOURNAL)
+	_interact_button.disabled = has_closeable_overlay()
+
+
+func _on_journal_pressed() -> void:
+	"""HUD'daki journal butonuna tıklandığında."""
+	show_journal()
+
+
+func show_journal_button() -> void:
+	"""Journal butonunu göster."""
+	if _journal_hud_button != null:
+		_journal_hud_button.visible = true
+
+
+func hide_journal_button() -> void:
+	"""Journal butonunu gizle."""
+	if _journal_hud_button != null:
+		_journal_hud_button.visible = false
+
+
+# P7: Bilgi kartı görüntülendiğinde world_state'e kaydet
+func _on_info_card_viewed(card_id: String) -> void:
+	"""InfoCardOverlay'dan gelen card_viewed sinyalini yakala ve world_state'e kaydet."""
+	var state := _world.get_node_or_null("WorldState")
+	if state != null and state.has_method("mark_card_collected"):
+		state.mark_card_collected(card_id)
 
 
 func has_closeable_overlay() -> bool:

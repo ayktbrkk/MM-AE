@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/zone_definition.gd" id="1"]
+
+[resource]
+script = ExtResource(1)
+zone_id = "samsun_rift"
+display_title_key = "ZONE_SAMSUN_RIFT_TITLE"
+setup_goal_key = "ZONE_SAMSUN_RIFT_GOAL"
+goal_kind = "support"
+item_counter_key = "ZONE_ITEM_COUNTER"
+item_total = 7
+required_supports = 3
+markers = []
+companion_spots = []
+wave_config_id = "samsun_wave"

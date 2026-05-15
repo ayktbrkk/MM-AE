@@ -72,9 +72,9 @@ const _questions := preload("res://assets/data/questions.gd")
 @onready var companion: Node2D = $Companion
 
 # Yeni modüller (programatik olarak _ready()'de eklenecek)
-var _player_mod: Node
-var _ui_mod: Node
-var _zone_mod: Node
+var _player_mod: WorldPlayer
+var _ui_mod: WorldUI
+var _zone_mod: WorldZone
 var _app_is_backgrounded := false
 
 # ---------------------------------------------------------------------------
@@ -191,7 +191,11 @@ func _enter_requested_flow() -> void:
 	if entry_action == "continue" and SaveManager.has_save():
 		if _restore_saved_game(SaveManager.load_game()):
 			print("[World] Kayit yuklendi, akış devam ettirildi.")
+			# P6: Continue akışında tutorial başlatma (atlanır)
 			return
+	# P6: Yeni kayıt — tutorial'ı başlat (henüz tamamlanmamışsa)
+	if _state.tutorial_active:
+		_ui_mod.start_tutorial()
 	if SaveManager.has_save():
 		print("[World] Kayit bulundu. Yeni oyun karakter secim ekrani gosteriliyor.")
 	_player_mod.reset_panel_for_character_choice()
@@ -238,6 +242,8 @@ func _on_hero_chosen(hero_name: String, companion_name: String) -> void:
 	_state.set_goal("unit", intro_text)
 	_ui_mod.update_progress()
 	_ui_mod.show_dialogue(hero_name, intro_text, Callable())
+	# P6: Karakter seçildi — tutorial faz 0->1
+	_ui_mod.notify_tutorial_character_selected()
 
 
 # ---------------------------------------------------------------------------

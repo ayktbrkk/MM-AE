@@ -5,6 +5,15 @@ extends Node
 
 signal state_changed(key: String, value: Variant)
 
+# ---------------------------------------------------------------------------
+# P6: Tutorial State
+# ---------------------------------------------------------------------------
+var tutorial_active: bool:
+	get:
+		if not has_node("/root/SaveManager"):
+			return false
+		return not SaveManager.is_tutorial_completed()
+
 # === TEMEL STATE ===
 
 # Karakter seçimi (world.gd'den taşındı: hero_key)
@@ -35,6 +44,13 @@ var required_supports: int = 2
 # Dalga deneme sayısı (world.gd'den taşındı: wave_attempts)
 var wave_attempts: int = 0
 
+# ---------------------------------------------------------------------------
+# P7: Journal / Tarih Defteri State
+# ---------------------------------------------------------------------------
+var collected_card_ids: Array[String] = [] : set = _set_collected_card_ids
+var completed_chapters: Array[String] = [] : set = _set_completed_chapters
+var journal_opened_count: int = 0 : set = _set_journal_opened_count
+
 # === SETTER'LAR ===
 
 func _set_selected_character(value: String) -> void:
@@ -44,6 +60,18 @@ func _set_selected_character(value: String) -> void:
 func _set_current_zone(value: String) -> void:
 	current_zone = value
 	state_changed.emit("current_zone", value)
+
+func _set_collected_card_ids(value: Array[String]) -> void:
+	collected_card_ids = value
+	state_changed.emit("collected_card_ids", value)
+
+func _set_completed_chapters(value: Array[String]) -> void:
+	completed_chapters = value
+	state_changed.emit("completed_chapters", value)
+
+func _set_journal_opened_count(value: int) -> void:
+	journal_opened_count = value
+	state_changed.emit("journal_opened_count", value)
 
 # === STATE FONKSİYONLARI ===
 
@@ -143,7 +171,53 @@ func reset_wave_attempts() -> void:
 
 
 # ---------------------------------------------------------------------------
-# P7: Save/Load serialize / deserialize
+# P7: Journal State Yönetimi
+# ---------------------------------------------------------------------------
+
+## Kartı toplanmış olarak işaretler.
+func mark_card_collected(card_id: String) -> void:
+	if card_id in collected_card_ids:
+		return
+	collected_card_ids.append(card_id)
+	state_changed.emit("card_collected", card_id)
+
+
+## Kart daha önce toplanmış mı?
+func is_card_collected(card_id: String) -> bool:
+	return card_id in collected_card_ids
+
+
+## Bölümü tamamlanmış olarak işaretler.
+func mark_chapter_completed(chapter_id: String) -> void:
+	if chapter_id in completed_chapters:
+		return
+	completed_chapters.append(chapter_id)
+	state_changed.emit("chapter_completed", chapter_id)
+
+
+## Bölüm daha önce tamamlanmış mı?
+func is_chapter_completed(chapter_id: String) -> bool:
+	return chapter_id in completed_chapters
+
+
+## Toplanan kart sayısını döndürür.
+func get_collected_card_count() -> int:
+	return collected_card_ids.size()
+
+
+## Tamamlanan bölüm sayısını döndürür.
+func get_completed_chapter_count() -> int:
+	return completed_chapters.size()
+
+
+## Journal açılma sayısını artırır.
+func increment_journal_opened() -> void:
+	journal_opened_count += 1
+	state_changed.emit("journal_opened", journal_opened_count)
+
+
+# ---------------------------------------------------------------------------
+# P8: Save/Load serialize / deserialize
 # ---------------------------------------------------------------------------
 func to_dict() -> Dictionary:
 	"""Mevcut state'i Dictionary olarak serialize eder."""
@@ -158,6 +232,9 @@ func to_dict() -> Dictionary:
 		"built_supports": built_supports,
 		"required_supports": required_supports,
 		"wave_attempts": wave_attempts,
+		"collected_card_ids": collected_card_ids.duplicate(),
+		"completed_chapters": completed_chapters.duplicate(),
+		"journal_opened_count": journal_opened_count,
 	}
 
 
@@ -190,3 +267,9 @@ func from_dict(data: Dictionary) -> void:
 		required_supports = data["required_supports"]
 	if data.has("wave_attempts"):
 		wave_attempts = data["wave_attempts"]
+	if data.has("collected_card_ids"):
+		collected_card_ids = data["collected_card_ids"].duplicate()
+	if data.has("completed_chapters"):
+		completed_chapters = data["completed_chapters"].duplicate()
+	if data.has("journal_opened_count"):
+		journal_opened_count = data["journal_opened_count"]

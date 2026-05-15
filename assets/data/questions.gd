@@ -13,6 +13,15 @@ const _LOCALIZABLE_FIELDS := [
 	"info",
 ]
 
+## Journal'da görüntülenecek kart ID'leri.
+## Her kart, bilgi kartının `card_id` alanına karşılık gelir.
+const JOURNAL_CARD_IDS := [
+	"samsun_arrival",       # Event 3: Samsun'a Çıkış (story)
+	"samsun_first_step",    # Event 4: İlk Adım (story)
+	"samsun_first_decision",# Event 5: İlk Karar (decision)
+	"samsun_first_contact", # Event 6: İlk Temas (decision)
+]
+
 ## =============================================
 ## BANDIRMA YOLCULUĞU — Hikaye Olayları Veritabanı
 ## =============================================
@@ -104,6 +113,8 @@ const EVENTS := [
 	# =============================================
 	{
 		"kind": "story",
+		"card_id": "samsun_arrival",
+		"journal_entry": "samsun_cards",
 		"chapter_key": "story.event.003.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
 		"unit_key": "story.event.003.unit",
@@ -120,6 +131,8 @@ const EVENTS := [
 	},
 	{
 		"kind": "story",
+		"card_id": "samsun_first_step",
+		"journal_entry": "samsun_cards",
 		"chapter_key": "story.event.004.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
 		"unit_key": "story.event.004.unit",
@@ -136,6 +149,8 @@ const EVENTS := [
 	},
 	{
 		"kind": "decision",
+		"card_id": "samsun_first_decision",
+		"journal_entry": "samsun_cards",
 		"chapter_key": "story.event.005.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
 		"unit_key": "story.event.005.unit",
@@ -159,6 +174,8 @@ const EVENTS := [
 	},
 	{
 		"kind": "decision",
+		"card_id": "samsun_first_contact",
+		"journal_entry": "samsun_cards",
 		"chapter_key": "story.event.006.chapter",
 		"chapter": "Bölüm 1: Samsun'a Çıkış",
 		"unit_key": "story.event.006.unit",

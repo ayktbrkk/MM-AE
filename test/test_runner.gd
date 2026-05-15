@@ -31,6 +31,8 @@ func _ready() -> void:
 		preload("res://test/test_overlay.gd").new(),
 		preload("res://test/test_audio.gd").new(),
 		preload("res://test/test_save.gd").new(),
+		preload("res://test/test_journal.gd").new(),
+		preload("res://test/test_accessibility.gd").new(),
 	]
 
 	var passed := 0

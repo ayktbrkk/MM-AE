@@ -1,0 +1,59 @@
+﻿# P10 Gate Log
+# Gate: validate-game-flow
+# Number: 2
+# Started: 2026-05-15 09:30:19
+# Godot: C:\Users\Aykut\Documents\Godot\mmae\tools\..\Godot_v4.6.2-stable_win64_console.exe
+# Args: --path . --script res://tools/validate_game_flow.gd
+# Timeout: 45s
+#
+============================================================
+
+# Command: C:\Users\Aykut\Documents\Godot\mmae\tools\..\Godot_v4.6.2-stable_win64_console.exe --path . --script res://tools/validate_game_flow.gd > "C:\Users\Aykut\AppData\Local\Temp\tmpC2C0.tmp" 2>&1
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+D3D12 12_0 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce GTX 1650
+
+[AudioManager] 13 placeholder ses olusturuldu.
+[AudioManager] assets/audio/ mevcut, ses dosyalari yuklenmeye hazir.
+[SaveManager] Oyun yuklendi: user://savegame.json (version 1)
+[World] Kayit bulundu. Yeni oyun karakter secim ekrani gosteriliyor.
+[SaveManager] Oyun kaydedildi: user://savegame.json (0.7 KB)
+[SaveManager] Oyun yuklendi: user://savegame.json (version 1)
+[World] Kayit yuklendi, akış devam ettirildi.
+[World] Kayit bulundu. Yeni oyun karakter secim ekrani gosteriliyor.
+[SaveManager] Oyun kaydedildi: user://savegame.json (1.0 KB)
+[World] Kayit bulundu. Yeni oyun karakter secim ekrani gosteriliyor.
+[SaveManager] Oyun kaydedildi: user://savegame.json (1.0 KB)
+[SaveManager] Oyun kaydedildi: user://savegame.json (1.0 KB)
+[SaveManager] Oyun kaydedildi: user://savegame.json (1.0 KB)
+[SaveManager] Oyun kaydedildi: user://savegame.json (1.0 KB)
+[SaveManager] Oyun kaydedildi: user://savegame.json (1.0 KB)
+ERROR: Bandırma ipuçları toplandıktan sonra sayaç tamamlanmadı.
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/validate_game_flow.gd:44)
+       [1] _validate_late_game_chain (res://tools/validate_game_flow.gd:287)
+       [2] _wait_frames (res://tools/validate_game_flow.gd:292)
+ERROR: Bandırma ipuçları tamamlanınca hedef decision olmadı.
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/validate_game_flow.gd:44)
+       [1] _validate_late_game_chain (res://tools/validate_game_flow.gd:287)
+       [2] _wait_frames (res://tools/validate_game_flow.gd:292)
+ERROR: Bandırma karar marker'ı bulunamadı.
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/validate_game_flow.gd:44)
+       [1] _validate_late_game_chain (res://tools/validate_game_flow.gd:287)
+       [2] _wait_frames (res://tools/validate_game_flow.gd:292)
+ERROR: Bandırma loop akışı doğrulanamadı.
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/validate_game_flow.gd:44)
+       [1] _validate_late_game_chain (res://tools/validate_game_flow.gd:287)
+       [2] _wait_frames (res://tools/validate_game_flow.gd:292)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2641)
+ERROR: 3 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:810)
+
+# Gate finished: exit_code=0 elapsed=17,1s

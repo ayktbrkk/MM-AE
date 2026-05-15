@@ -134,3 +134,73 @@ func test_audio_manager_signals_exist() -> String:
 			return "FAIL: audio_manager.gd'de '%s' sinyali bulunamadi" % signal_name
 	
 	return "OK"
+
+
+# ---------------------------------------------------------------------------
+# Test 7: assets/audio/ dizin yapısı mevcut
+# ---------------------------------------------------------------------------
+func test_audio_directory_exists() -> String:
+	"""assets/audio/ dizin yapısını kontrol et."""
+	
+	var bgm_dir := DirAccess.open("res://assets/audio/bgm")
+	if bgm_dir == null:
+		return "FAIL: assets/audio/bgm/ dizini mevcut degil"
+	
+	var sfx_dir := DirAccess.open("res://assets/audio/sfx")
+	if sfx_dir == null:
+		return "FAIL: assets/audio/sfx/ dizini mevcut degil"
+	
+	return "OK"
+
+
+# ---------------------------------------------------------------------------
+# Test 8: AudioManager placeholder key'leri tanımlanmış
+# ---------------------------------------------------------------------------
+func test_expected_audio_keys_defined() -> String:
+	"""AudioManager'in beklenen placeholder anahtarlarini tanimladigini kontrol et."""
+	
+	var file := FileAccess.open("res://scripts/audio_manager.gd", FileAccess.READ)
+	if file == null:
+		return "FAIL: audio_manager.gd kaynak dosyasi acilamadi"
+	
+	var source_text: String = file.get_as_text()
+	file.close()
+	
+	var expected_keys: Array[String] = [
+		"BGM_MENU", "BGM_EXPLORE", "BGM_DECISION",
+		"bgm_default", "bgm_bandirma", "bgm_samsun",
+		"bgm_havza", "bgm_amasya", "bgm_kongre",
+		"SFX_CLICK", "SFX_CONFIRM", "SFX_TRANSITION",
+	]
+	
+	for key: String in expected_keys:
+		if not key in source_text:
+			return "FAIL: audio_manager.gd'de '%s' anahtari bulunamadi" % key
+	
+	return "OK"
+
+
+# ---------------------------------------------------------------------------
+# Test 9: docs/AUDIO_INVENTORY.md mevcut
+# ---------------------------------------------------------------------------
+func test_audio_inventory_document_exists() -> String:
+	"""docs/AUDIO_INVENTORY.md mevcut olmali."""
+	
+	var doc := FileAccess.open("res://docs/AUDIO_INVENTORY.md", FileAccess.READ)
+	if doc == null:
+		return "FAIL: docs/AUDIO_INVENTORY.md dosyasi bulunamadi"
+	doc.close()
+	return "OK"
+
+
+# ---------------------------------------------------------------------------
+# Test 10: docs/AUDIO_PRODUCTION_GUIDE.md mevcut
+# ---------------------------------------------------------------------------
+func test_audio_production_guide_exists() -> String:
+	"""docs/AUDIO_PRODUCTION_GUIDE.md mevcut olmali."""
+	
+	var doc := FileAccess.open("res://docs/AUDIO_PRODUCTION_GUIDE.md", FileAccess.READ)
+	if doc == null:
+		return "FAIL: docs/AUDIO_PRODUCTION_GUIDE.md dosyasi bulunamadi"
+	doc.close()
+	return "OK"

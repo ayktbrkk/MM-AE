@@ -27,6 +27,26 @@ ERROR
 godot_*.txt
 decision_test_output.txt
 
+# Root-level Godot check output logs (temporary verification artifacts)
+check_*.txt
+check_*.txt.*
+final_check_*.txt
+*_output.txt
+extension_api.json
+
+# Temporary verification logs (not accepted, use artifacts/logs/accepted/ for permanence)
+artifacts/logs/*.json
+artifacts/logs/*.csv
+artifacts/logs/*.md
+artifacts/local/
+
+# Keep accepted logs tracked
+!artifacts/logs/accepted/
+
+# Unity remnants (migration reference only, not referenced in code)
+assets/Scenes/
+assets/Settings/
+
 # OS artifacts
 Thumbs.db
 .DS_Store

@@ -39,6 +39,32 @@ const INFO_DEFAULT_REWARD := "ui.info.default.reward"
 const INFO_BACK := "ui.info.back"
 const INFO_CONTINUE := "ui.info.continue"
 
+# ---------------------------------------------------------------------------
+# P7: Journal / Tarih Defteri
+# ---------------------------------------------------------------------------
+const JOURNAL_TITLE := "ui.journal.title"
+const JOURNAL_TAB_CARDS := "ui.journal.tab.cards"
+const JOURNAL_TAB_CHAPTERS := "ui.journal.tab.chapters"
+const JOURNAL_CARDS_EMPTY := "ui.journal.cards.empty"
+const JOURNAL_CHAPTERS_EMPTY := "ui.journal.chapters.empty"
+const JOURNAL_CLOSE := "ui.journal.close"
+const JOURNAL_CARD_COUNT := "ui.journal.card.count"
+const JOURNAL_CHAPTER_COUNT := "ui.journal.chapter.count"
+const JOURNAL_BUTTON := "ui.journal.button"
+const JOURNAL_MENU_BUTTON := "ui.journal.menu.button"
+
+# ---------------------------------------------------------------------------
+# P10: Accessibility
+# ---------------------------------------------------------------------------
+const ACCESSIBILITY_TITLE := "ui.accessibility.title"
+const ACCESSIBILITY_TEXT_SPEED := "ui.accessibility.text_speed"
+const ACCESSIBILITY_TEXT_SPEED_SLOW := "ui.accessibility.text_speed.slow"
+const ACCESSIBILITY_TEXT_SPEED_NORMAL := "ui.accessibility.text_speed.normal"
+const ACCESSIBILITY_TEXT_SPEED_FAST := "ui.accessibility.text_speed.fast"
+const ACCESSIBILITY_LARGE_TEXT := "ui.accessibility.large_text"
+const ACCESSIBILITY_HIGH_CONTRAST := "ui.accessibility.high_contrast"
+
+
 static func text(key: String, fallback: String) -> String:
 	var translated := TranslationServer.translate(key)
 	if translated.is_empty() or translated == key:

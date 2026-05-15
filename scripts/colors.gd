@@ -65,6 +65,9 @@ const DESIGN_WEATHERED_WALNUT := Color("#7A5A42")
 ## Hikaye mürekkebi - koyu kontrast/metin
 const DESIGN_STORY_INK := Color("#2B2730")
 
+## Başlık rengi - koyu kahverengi vurgu (journal, info card)
+const DESIGN_HEADLINE := Color("#3d2b1f")
+
 ## Önplan koyuluk - oda/sahne derinliği
 const DESIGN_ROOM_FOREGROUND := Color("#1A2A3A")
 

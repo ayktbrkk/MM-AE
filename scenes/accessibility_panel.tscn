@@ -1,0 +1,121 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgjbxfprp2moh"]
+
+[ext_resource type="Script" path="res://scripts/accessibility_panel.gd" id="1_script"]
+
+[node name="AccessibilityPanel" type="Panel"]
+anchors_preset = 0
+offset_left = 60.0
+offset_top = 120.0
+offset_right = 560.0
+offset_bottom = 520.0
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TextSpeedRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TextSpeedLabel" type="Label" parent="VBoxContainer/TextSpeedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="SpeedButtons" type="HBoxContainer" parent="VBoxContainer/TextSpeedRow"]
+layout_mode = 2
+theme_override_constants/separation = 8
+size_flags_horizontal = 3
+
+[node name="SlowBtn" type="Button" parent="VBoxContainer/TextSpeedRow/SpeedButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+custom_minimum_size = Vector2(80, 44)
+
+[node name="NormalBtn" type="Button" parent="VBoxContainer/TextSpeedRow/SpeedButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+custom_minimum_size = Vector2(80, 44)
+
+[node name="FastBtn" type="Button" parent="VBoxContainer/TextSpeedRow/SpeedButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+custom_minimum_size = Vector2(80, 44)
+
+[node name="LargeTextRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LargeTextLabelBox" type="VBoxContainer" parent="VBoxContainer/LargeTextRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="LargeTextLabel" type="Label" parent="VBoxContainer/LargeTextRow/LargeTextLabelBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="LargeTextDesc" type="Label" parent="VBoxContainer/LargeTextRow/LargeTextLabelBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1.0)
+vertical_alignment = 1
+
+[node name="LargeTextCheck" type="CheckButton" parent="VBoxContainer/LargeTextRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 1
+
+[node name="HighContrastRow" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HighContrastLabelBox" type="VBoxContainer" parent="VBoxContainer/HighContrastRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="HighContrastLabel" type="Label" parent="VBoxContainer/HighContrastRow/HighContrastLabelBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="HighContrastDesc" type="Label" parent="VBoxContainer/HighContrastRow/HighContrastLabelBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1.0)
+vertical_alignment = 1
+
+[node name="HighContrastCheck" type="CheckButton" parent="VBoxContainer/HighContrastRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 1

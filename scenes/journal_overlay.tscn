@@ -1,0 +1,129 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4j0m3v2c5k6"]
+
+[ext_resource type="Script" path="res://scripts/journal_overlay.gd" id="1_script"]
+
+[node name="JournalOverlay" type="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.1, 0.14, 0.72)
+mouse_filter = 1
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 48.0
+offset_top = 160.0
+offset_right = -48.0
+offset_bottom = -160.0
+
+[node name="PanelMargin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="PanelVBox" type="VBoxContainer" parent="Panel/PanelMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StatsRow" type="HBoxContainer" parent="Panel/PanelMargin/PanelVBox"]
+layout_mode = 2
+
+[node name="StatsLabel" type="Label" parent="Panel/PanelMargin/PanelVBox/StatsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Kart: 0  |  Bölüm: 0"
+
+[node name="TabContainer" type="TabContainer" parent="Panel/PanelMargin/PanelVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/side_margin = 0
+tab_alignment = 0
+
+[node name="CardsTab" type="Control" parent="Panel/PanelMargin/PanelVBox/TabContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/PanelMargin/PanelVBox/TabContainer/CardsTab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Grid" type="GridContainer" parent="Panel/PanelMargin/PanelVBox/TabContainer/CardsTab/Scroll"]
+layout_mode = 2
+columns = 3
+theme_override_constants/hseparation = 8
+theme_override_constants/vseparation = 8
+
+[node name="EmptyLabel" type="Label" parent="Panel/PanelMargin/PanelVBox/TabContainer/CardsTab"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text = "Henüz hiç tarih kartı toplamadın."
+
+[node name="ChaptersTab" type="Control" parent="Panel/PanelMargin/PanelVBox/TabContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/PanelMargin/PanelVBox/TabContainer/ChaptersTab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="List" type="VBoxContainer" parent="Panel/PanelMargin/PanelVBox/TabContainer/ChaptersTab/Scroll"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EmptyLabel" type="Label" parent="Panel/PanelMargin/PanelVBox/TabContainer/ChaptersTab"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text = "Henüz hiç bölüm tamamlamadın."
+
+[node name="CloseRow" type="HBoxContainer" parent="Panel/PanelMargin/PanelVBox"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="Panel/PanelMargin/PanelVBox/CloseRow"]
+layout_mode = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 72)
+theme_override_font_sizes/font_size = 22
+text = "Kapat"

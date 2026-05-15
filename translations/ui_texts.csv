@@ -198,3 +198,28 @@ ui.world.companion.final.observe,Eda: Meclis binası... İşte burası, tarih bu
 ui.world.companion.final.telegraph,Eda: Zafer, sadece savaşla değil, bilgiyle de kazanılır.
 ui.world.companion.final.people,Arda: Gelecek bizim... Bunu unutmamalıyız.
 ui.world.companion.final.core,Eda: Cumhuriyet, en büyük mirasımız. Onu korumak bizim görevimiz.
+ui.tutorial.skip,Hızlı Geç
+ui.tutorial.phase.choose_character,Karakterini seç ve maceraya başla!
+ui.tutorial.phase.tap_note,İpucu bulmak için nota dokun!
+ui.tutorial.phase.collect_clue,İpucunu topla, tarihi öğren!
+ui.tutorial.phase.open_decision,Şimdi karar zamanı!
+ui.tutorial.phase.build_support,Desteğini inşa et!
+ui.journal.title,Tarih Defteri
+ui.journal.tab.cards,Kartlar
+ui.journal.tab.chapters,Bölümler
+ui.journal.cards.empty,Henüz hiç tarih kartı toplamadın.\nKeşfe devam et!
+ui.journal.chapters.empty,Henüz hiç bölüm tamamlamadın.\nYolculuğuna devam et!
+ui.journal.close,Kapat
+ui.journal.card.count,Kart: %d
+ui.journal.chapter.count,Bölüm: %d
+ui.journal.button,📖 Tarih Defteri
+ui.journal.menu.button,📖 Tarih Defteri
+ui.accessibility.title,Erişilebilirlik
+ui.accessibility.text_speed,Metin Hızı
+ui.accessibility.text_speed.slow,Yavaş
+ui.accessibility.text_speed.normal,Normal
+ui.accessibility.text_speed.fast,Hızlı
+ui.accessibility.large_text,Büyük Metin
+ui.accessibility.high_contrast,Yüksek Kontrast
+ui.accessibility.large_text.desc,Metinleri daha büyük göster
+ui.accessibility.high_contrast.desc,Metin okunabilirliğini artır

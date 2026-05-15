@@ -1,9 +1,7 @@
 extends Node
 
 # ---------------------------------------------------------------------------
-# save_manager.gd — P7: Save/Load sistemi
-# Autoload singleton. JSON tabanli save/load mekanizmasi.
-# ---------------------
+# save_manager.gd — P7: Save/Load sistemi + P10: Accessibility ayarlari
 # Autoload singleton. JSON tabanli save/load mekanizmasi.
 # Kayitlar user://savegame.json dosyasina yazilir.
 #
@@ -24,6 +22,41 @@ signal save_deleted()
 signal save_corrupted(path: String, error_message: String)
 signal settings_changed(key: String, value: Variant)
 
+# ---------------------------------------------------------------------------
+# P10: Accessibility ayarlari — static typing ile
+# ---------------------------------------------------------------------------
+signal accessibility_changed()
+
+var text_speed: String = "normal":
+	set(value):
+		text_speed = value
+		_emit_accessibility_changed()
+
+var large_text: bool = false:
+	set(value):
+		large_text = value
+		_emit_accessibility_changed()
+
+var high_contrast: bool = false:
+	set(value):
+		high_contrast = value
+		_emit_accessibility_changed()
+
+
+func _emit_accessibility_changed() -> void:
+	"""Accessibility degisikligini bildirir ve settings.json'a kaydeder."""
+	accessibility_changed.emit()
+	save_setting("text_speed", text_speed)
+	save_setting("large_text", large_text)
+	save_setting("high_contrast", high_contrast)
+
+
+func load_accessibility_settings() -> void:
+	"""Kayitli accessibility ayarlarini yukler."""
+	text_speed = String(load_setting("text_speed", "normal"))
+	large_text = bool(load_setting("large_text", false))
+	high_contrast = bool(load_setting("high_contrast", false))
+
 # Runtime-only scene entry hint used to distinguish new game vs continue.
 var pending_entry_action: String = ""
 
@@ -34,6 +67,12 @@ func save_game(data: Dictionary) -> bool:
 	var save_dict := data.duplicate()
 	save_dict["version"] = SAVE_VERSION
 	save_dict["timestamp"] = Time.get_unix_time_from_system()
+	# P10: Accessibility ayarlarini da kayda ekle
+	save_dict["accessibility"] = {
+		"text_speed": text_speed,
+		"large_text": large_text,
+		"high_contrast": high_contrast,
+	}
 
 	var json_string := JSON.stringify(save_dict, "\t")
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -76,6 +115,13 @@ func load_game() -> Dictionary:
 		push_error("[SaveManager] Kayit dosyasi gecersiz: version alani eksik")
 		save_corrupted.emit(SAVE_PATH, "version alani eksik")
 		return {}
+
+	# P10: Accessibility ayarlarini saveden yukle
+	var acc_data: Dictionary = data.get("accessibility", {})
+	if not acc_data.is_empty():
+		text_speed = String(acc_data.get("text_speed", text_speed))
+		large_text = bool(acc_data.get("large_text", large_text))
+		high_contrast = bool(acc_data.get("high_contrast", high_contrast))
 
 	print("[SaveManager] Oyun yuklendi: %s (version %d)" % [SAVE_PATH, data.get("version", 0)])
 	game_loaded.emit(SAVE_PATH)
@@ -165,3 +211,21 @@ func _write_settings(settings: Dictionary) -> void:
 		return
 	file.store_string(json_string)
 	file.close()
+
+
+# ---------------------------------------------------------------------------
+# P6: Tutorial State (settings.json üzerinden — kalıcı, save-cross)
+# ---------------------------------------------------------------------------
+func is_tutorial_completed() -> bool:
+	"""Tutorial daha önce tamamlandı mı / geçildi mi?"""
+	return bool(load_setting("tutorial_completed", false))
+
+
+func mark_tutorial_completed() -> void:
+	"""Tutorial'i kalıcı olarak tamamlandı/geçildi işaretle."""
+	save_setting("tutorial_completed", true)
+
+
+func reset_tutorial_state() -> void:
+	"""Tutorial state'ini sıfırla (sadece test/debug için)."""
+	save_setting("tutorial_completed", false)

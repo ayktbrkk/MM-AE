@@ -43,14 +43,14 @@ Kural:
 | P2 | tamamlandi | Teknik art sozlesmesi, token sahipligi ve pipeline akisi yazildi | P3 onayi bekleniyor |
 | P3 | tamamlandi | Bandirma destek-prop temizlik ve kompozisyon sakinlestirme turu kapatildi, temiz capture sabitlendi | P4 kontrast kalibrasyonu |
 | P4 | tamamlandi | Bandirma HUD, guidance/marker, kisa kopya, capture contract ve location sign de-stack kalibrasyonu `bandirma_world_p4_hud.png` ile tekrar uretilebilir sekilde dogrulandi | P5 rollout onayi |
-| P5 | tamamlandi | Samsun benchmark kontrati eklendi; Ankara'da yan HUD footprint'i bastirildi, Sakarya'da support kartlari iceri cekildi ve Final'de hem support hem clue anchor'lari iceri alinip rollout capture'lari okunur ara ritme tasindi | P6 kabul kapisi |
+| P5 | tamamlandi | Samsun benchmark kontrati eklendi; Ankara/Sakarya/Final icin kisa hedef metni, visual-only guidance ve location-sign de-stack `verify_p5_late_zone_benchmark_contract.gd` ile sabitlendi; Final `Cumhuriyet Notu` HUD-guvenli banda alindi | P6 kabul kapisi |
 | P6 | tamamlandi | `verify_samsun_benchmark_contract`, `verify_p5_late_zone_benchmark_contract`, `verify_capture_world_render_contract` ve parse check ayni acceptance turunda yesile dondu | Sonraki world-art dalgasi veya commit/push |
 | P7 | tamamlandi | Android export audit tablosu ve eksik config listesi yazildi | P8 checklist uygulamasina giris |
 | P8 | tamamlandi | Android smoke checklist dosyasi ve akış matrisi yazildi | P9 safe-area/system bar uygulamasina giris |
 | P9 | tamamlandi | 1080x1920 accepted baseline'lar yenilendi ve UI regression suite tekrar yesile dondu | P10 lifecycle veya P11 cihaz gozlemi |
-| P10 | devam ediyor | World autosave + transient overlay cleanup + audio pause/resume kontratina ek olarak dream-intro pause iptali, loading overlay request cancellation/drain ve menu `ui_cancel` ile in-flight transition iptali verifier ile kapsandi; `run_p10_smoke_gate.ps1` parse + lifecycle + flow kapilarini tek komutta topladi | Cihaz/emulator ustunde kisa kosu sirasini aynen kosup notlamak |
-| P11 | bekliyor | Cihaz gozlemi paketi | P8 ve P10 sonrasi |
-| P12 | bekliyor | Release candidate paketi | P7-P11 sonrasi |
+| P10 | devam ediyor | World autosave + transient overlay cleanup + audio pause/resume kontratina ek olarak dream-intro pause iptali, loading overlay request cancellation/drain ve menu `ui_cancel` ile in-flight transition iptali verifier ile kapsandi; `run_p10_smoke_gate.ps1` parse + flow + lifecycle + overlay + focus + device kapilarini 6 gate ile tek komutta topladi; Godot bulunamazsa `P10_SMOKE_GATE_SKIPPED_NO_GODOT` ile uyarip skip eder; tum verifier scriptleri Test-Path guvencesinde calisir; JSON+MD cift log ciktisi uretilir | Cihaz/emulator ustunde kisa kosu sirasini aynen kosup notlamak |
+| P11 | bekliyor | `run_p11_device_observation.ps1` cihaz bilgisi ve performans gozlem raporu iskeleti uretir hale geldi; gercek cihaz/emulator notu henuz bekleniyor | En az bir cihaz/emulator oturumunu kayda gecirmek |
+| P12 | bekliyor | `run_p12_release_preflight.ps1` debug APK, export metadata, release signing, version sync, checklist/audit ve P11/P12 kanit kayitlarini tek komutta denetler hale geldi | Release signing + version sync + final APK smoke kaydini kapatmak |
 
 ## Guncel Onay Kapisi
 
@@ -61,7 +61,7 @@ Kural:
 - Tamamlanan Android checklist paketi: `P8`
 - Aktif Android lifecycle paketi: `P10`
 - Tamamlanan Android polish paketi: `P9`
-- Beklenen kullanici komutu: `P5 devam et`, `P10 devam et`, `P11 devam et` veya `commit hazirla`
+- Beklenen kullanici komutu: `P10 devam et`, `P11 devam et`, `P12 preflight` veya `commit hazirla`
 
 ## Paket Ayrıntıları
 

@@ -26,6 +26,7 @@ enum OverlayType {
 	DREAM_INTRO,
 	EXIT_CONFIRM,
 	LOADING,  # layer 110 — en üstte
+	JOURNAL,  # layer 120 — Tarih Defteri
 }
 
 
@@ -70,6 +71,11 @@ const INPUT_CONTRACTS := {
 	OverlayType.LOADING: {
 		"blocks_world_input": true,
 		"closeable_on_cancel": false,
+		"process_mode": Node.PROCESS_MODE_ALWAYS,
+	},
+	OverlayType.JOURNAL: {
+		"blocks_world_input": true,
+		"closeable_on_cancel": true,
 		"process_mode": Node.PROCESS_MODE_ALWAYS,
 	},
 }

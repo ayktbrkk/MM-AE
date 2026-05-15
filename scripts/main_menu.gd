@@ -4,9 +4,13 @@ signal start_pressed
 signal continue_pressed
 signal settings_pressed
 
+const ACCESSIBILITY_PANEL_SCENE := preload("res://scenes/accessibility_panel.tscn")
+
 const WORLD_SCENE_PATH := "res://scenes/world.tscn"
 const WORLD_LOAD_TITLE := "Bandırma Yolculuğu"
 const LOADING_OVERLAY_SCENE := preload("res://scenes/loading_overlay.tscn")
+const JOURNAL_OVERLAY_SCENE := preload("res://scenes/journal_overlay.tscn")
+const _JournalOverlayScript := preload("res://scripts/journal_overlay.gd")
 
 const TAU := 2.0 * PI
 const _gui_frame := preload("res://scripts/gui_frame.gd")
@@ -48,6 +52,9 @@ var settings_container: VBoxContainer
 var bgm_slider: HSlider
 var sfx_slider: HSlider
 var settings_close_button: Button
+var accessibility_button: Button
+var accessibility_overlay: Control
+var accessibility_panel_instance
 var is_transitioning := false
 var _exit_dialog: CanvasLayer
 var _arda_base_y: float
@@ -137,10 +144,13 @@ func _ready() -> void:
 	_build_settings_ui()
 	# Kayitli ses ayarlarini yukle
 	_load_volume_settings()
+	# P10: Kayitli accessibility ayarlarini yukle
+	SaveManager.load_accessibility_settings()
 	start_button.pressed.connect(_on_start_pressed)
 	continue_button.pressed.connect(_on_continue_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 	settings_close_button.pressed.connect(_hide_settings_overlay)
+	accessibility_button.pressed.connect(_on_accessibility_pressed)
 	dream_intro_overlay.intro_finished.connect(_open_world)
 	_loading_overlay = LOADING_OVERLAY_SCENE.instantiate()
 	add_child(_loading_overlay)
@@ -150,6 +160,17 @@ func _ready() -> void:
 	# P2-13: Çıkış onay diyalogu
 	exit_button.pressed.connect(_on_exit_pressed)
 	_exit_dialog = preload("res://scenes/exit_confirm_overlay.tscn").instantiate()
+
+	# P7: Ana menü journal butonu
+	var journal_btn := find_child("JournalButton", true, false) as Button
+	if journal_btn != null:
+		journal_btn.pressed.connect(_on_menu_journal_pressed)
+	# Journal overlay'ini oluştur (görünmez başlasın)
+	var journal_overlay: _JournalOverlayScript = JOURNAL_OVERLAY_SCENE.instantiate() as _JournalOverlayScript
+	journal_overlay.name = "JournalOverlay"
+	add_child(journal_overlay)
+	journal_overlay.visible = false
+	journal_overlay.journal_closed.connect(_on_menu_journal_closed)
 	add_child(_exit_dialog)
 	_exit_dialog.exit_confirmed.connect(func() -> void: get_tree().quit())
 	_exit_dialog.exit_cancelled.connect(func() -> void:
@@ -177,6 +198,13 @@ func _input(event: InputEvent) -> void:
 			_cancel_pending_world_transition()
 			get_viewport().set_input_as_handled()
 			return
+		# P7: Journal açıkken kapat
+		var journal_overlay := find_child("JournalOverlay", true, false)
+		if journal_overlay != null and journal_overlay.visible:
+			journal_overlay.hide_overlay()
+			_on_menu_journal_closed()
+			get_viewport().set_input_as_handled()
+			return
 		if _exit_dialog.visible:
 			_exit_dialog.hide_overlay()
 			_refresh_menu_focus(exit_button)
@@ -184,6 +212,11 @@ func _input(event: InputEvent) -> void:
 			return
 		if settings_overlay.visible:
 			_hide_settings_overlay()
+			get_viewport().set_input_as_handled()
+			return
+		# P10: Accessibility overlay açıkken kapat
+		if accessibility_overlay != null and accessibility_overlay.visible:
+			_hide_accessibility_overlay()
 			get_viewport().set_input_as_handled()
 			return
 		# Hiçbir overlay açık değilken geri tuşu — çıkış diyalogu göster
@@ -284,11 +317,25 @@ func _build_menu_layout() -> void:
 	settings_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(settings_button)
 
+	# P10: Erişilebilirlik butonu
+	accessibility_button = Button.new()
+	accessibility_button.text = tr("Erişilebilirlik")
+	accessibility_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
+	accessibility_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
+	button_stack.add_child(accessibility_button)
+
 	exit_button = Button.new()
 	exit_button.text = _ui_text.text(_ui_text.MENU_EXIT, "Çıkış")
 	exit_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
 	exit_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
 	button_stack.add_child(exit_button)
+
+	var journal_button := Button.new()
+	journal_button.name = "JournalButton"
+	journal_button.text = _ui_text.text(_ui_text.JOURNAL_MENU_BUTTON, "📖 Tarih Defteri")
+	journal_button.custom_minimum_size = Vector2(0, MIN_PRIMARY_BUTTON_HEIGHT)
+	journal_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
+	button_stack.add_child(journal_button)
 
 func _build_settings_overlay() -> void:
 	settings_overlay = Control.new()
@@ -370,6 +417,7 @@ func _apply_styles() -> void:
 	_apply_primary_button_style(start_button)
 	_apply_secondary_button_style(continue_button)
 	_apply_secondary_button_style(settings_button)
+	_apply_secondary_button_style(accessibility_button)
 	_apply_secondary_button_style(exit_button)
 	_apply_primary_button_style(settings_close_button)
 	_apply_panel_style(settings_panel, _colors.DESIGN_CREAM_PAPER, _colors.DESIGN_DEEP_NAVY, 28)
@@ -448,10 +496,136 @@ func _hide_settings_overlay() -> void:
 	settings_overlay.visible = false
 	_refresh_menu_focus(settings_button)
 
+
+# ---------------------------------------------------------------------------
+# P10: Accessibility
+# ---------------------------------------------------------------------------
+func _build_accessibility_overlay() -> void:
+	"""Erisilebilirlik ayarlari overlay'ini olusturur (settings overlay pattern'inde)."""
+	accessibility_overlay = Control.new()
+	accessibility_overlay.name = "AccessibilityOverlay"
+	accessibility_overlay.visible = false
+	accessibility_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	accessibility_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(accessibility_overlay)
+
+	var dimmer := ColorRect.new()
+	dimmer.name = "AccessibilityDimmer"
+	dimmer.color = Color(0.04, 0.06, 0.10, 0.58)
+	dimmer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	accessibility_overlay.add_child(dimmer)
+
+	var panel_container := PanelContainer.new()
+	panel_container.name = "AccessibilityPanelContainer"
+	panel_container.set_anchors_preset(Control.PRESET_CENTER)
+	dimmer.add_child(panel_container)
+
+	# Panel stili
+	panel_container.add_theme_stylebox_override(
+		"panel",
+		_ui_styles.panel_style(_colors.DESIGN_CREAM_PAPER, _colors.DESIGN_DEEP_NAVY, 28, 4, Color(0.02, 0.03, 0.05, 0.30), 12, Vector2(0, 8))
+	)
+
+	_apply_panel_style(panel_container, _colors.DESIGN_CREAM_PAPER, _colors.DESIGN_DEEP_NAVY, 28)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_right", 24)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	panel_container.add_child(margin)
+
+	# AccessibilityPanel instance
+	accessibility_panel_instance = ACCESSIBILITY_PANEL_SCENE.instantiate()
+	accessibility_panel_instance.name = "AccessibilityPanelInstance"
+	margin.add_child(accessibility_panel_instance)
+
+	# Kapatma butonu
+	var close_button := Button.new()
+	close_button.text = _ui_text.text(_ui_text.MENU_BACK, "Geri Dön")
+	close_button.custom_minimum_size = Vector2(0, 44)
+	close_button.add_theme_font_size_override("font_size", _ui_tokens.FONT_BODY_XL)
+	close_button.pressed.connect(_hide_accessibility_overlay)
+	_apply_primary_button_style(close_button)
+
+	# Butonu panelin altina ekle (accessibility_panel_instance'in parent'ina degil, margin'e)
+	margin.add_child(close_button)
+
+	# Responsive layout
+	var safe_rect := _gui_frame.safe_area_rect(get_viewport_rect().size)
+	var panel_width: float = min(safe_rect.size.x, 600.0)
+	var panel_height: float = min(maxf(400.0, safe_rect.size.y - 64.0), 560.0)
+	panel_container.offset_left = -panel_width * 0.5
+	panel_container.offset_right = panel_width * 0.5
+	panel_container.offset_top = -panel_height * 0.5
+	panel_container.offset_bottom = panel_height * 0.5
+
+	# Focus navigation
+	_ui_focus.configure_linear([close_button], _ui_focus.AXIS_VERTICAL)
+
+
+func _on_accessibility_pressed() -> void:
+	"""Erisilebilirlik butonuna basildiginda overlay'i goster."""
+	AudioManager.play_sfx("SFX_CLICK")
+	if accessibility_overlay == null:
+		_build_accessibility_overlay()
+	# Responsive layout'u guncelle
+	var safe_rect := _gui_frame.safe_area_rect(get_viewport_rect().size)
+	var panel_container := accessibility_overlay.find_child("AccessibilityPanelContainer", true, false) as PanelContainer
+	if panel_container != null:
+		var panel_width: float = min(safe_rect.size.x, 600.0)
+		var panel_height: float = min(maxf(400.0, safe_rect.size.y - 64.0), 560.0)
+		panel_container.offset_left = -panel_width * 0.5
+		panel_container.offset_right = panel_width * 0.5
+		panel_container.offset_top = -panel_height * 0.5
+		panel_container.offset_bottom = panel_height * 0.5
+	accessibility_overlay.visible = true
+	_ui_focus.grab_preferred(accessibility_overlay.find_child("CloseButton", true, false), [accessibility_overlay.find_child("SlowBtn", true, false)])
+
+
+func _hide_accessibility_overlay() -> void:
+	"""Erisilebilirlik overlay'ini kapat."""
+	if accessibility_overlay != null:
+		accessibility_overlay.visible = false
+	_refresh_menu_focus(accessibility_button)
+
 func _on_exit_pressed() -> void:
 	"""Çıkış butonuna basıldı — onay diyalogunu göster."""
 	AudioManager.play_sfx("SFX_CLICK")
 	_exit_dialog.show_overlay()
+
+
+# P7: Ana menü journal butonuna basıldı
+func _on_menu_journal_pressed() -> void:
+	"""Ana menüdeki Tarih Defteri butonuna basıldı — save'den verileri oku ve journal'ı göster."""
+	AudioManager.play_sfx("SFX_CLICK")
+	var journal_overlay := find_child("JournalOverlay", true, false)
+	if journal_overlay == null:
+		return
+	
+	# Save'den verileri oku
+	var save_data: Dictionary = SaveManager.load_game()
+	var card_ids: Array[String] = []
+	var chapter_ids: Array[String] = []
+	if not save_data.is_empty():
+		if save_data.has("collected_card_ids"):
+			card_ids = (save_data["collected_card_ids"] as Array[String])
+		if save_data.has("completed_chapters"):
+			chapter_ids = (save_data["completed_chapters"] as Array[String])
+	
+	_set_menu_enabled(false)
+	journal_overlay.show_overlay({
+		"tab": "cards",
+		"card_ids": card_ids,
+		"chapter_ids": chapter_ids
+	})
+
+
+# P7: Journal kapatıldığında menü odaklanmasını geri ver
+func _on_menu_journal_closed() -> void:
+	"""Journal overlay'i kapatıldığında menüyü tekrar etkinleştir."""
+	_set_menu_enabled(true)
+	_refresh_menu_focus()
 
 
 func _begin_dream_intro(title: String, body: String, load_request: Dictionary) -> void:
@@ -464,9 +638,10 @@ func _set_menu_enabled(enabled: bool) -> void:
 	start_button.disabled = not enabled
 	continue_button.disabled = not enabled or not SaveManager.has_save()
 	settings_button.disabled = not enabled
+	accessibility_button.disabled = not enabled
 	settings_close_button.disabled = not enabled
 	exit_button.disabled = not enabled
-	if enabled and not settings_overlay.visible:
+	if enabled and not settings_overlay.visible and (accessibility_overlay == null or not accessibility_overlay.visible):
 		_refresh_menu_focus()
 
 
@@ -484,6 +659,8 @@ func _handle_application_pause() -> void:
 		_cancel_pending_world_transition()
 	if settings_overlay != null and settings_overlay.visible:
 		_hide_settings_overlay()
+	if accessibility_overlay != null and accessibility_overlay.visible:
+		_hide_accessibility_overlay()
 	if _exit_dialog != null and _exit_dialog.visible:
 		_exit_dialog.hide_overlay()
 	if AudioManager != null and AudioManager.has_method("set_app_paused"):
@@ -496,7 +673,7 @@ func _handle_application_resume() -> void:
 	_app_is_backgrounded = false
 	_refresh_continue_button_state()
 	_sync_responsive_layout()
-	if not settings_overlay.visible and (_exit_dialog == null or not _exit_dialog.visible):
+	if not settings_overlay.visible and (accessibility_overlay == null or not accessibility_overlay.visible) and (_exit_dialog == null or not _exit_dialog.visible):
 		_refresh_menu_focus()
 	if AudioManager != null and AudioManager.has_method("set_app_paused"):
 		AudioManager.set_app_paused(false)
@@ -662,12 +839,12 @@ func _build_settings_ui() -> void:
 
 
 func _configure_focus_navigation() -> void:
-	_ui_focus.configure_linear([start_button, continue_button, settings_button, exit_button], _ui_focus.AXIS_VERTICAL)
+	_ui_focus.configure_linear([start_button, continue_button, settings_button, accessibility_button, exit_button], _ui_focus.AXIS_VERTICAL)
 	_ui_focus.configure_linear([bgm_slider, sfx_slider, settings_close_button], _ui_focus.AXIS_VERTICAL)
 
 
 func _refresh_menu_focus(preferred: Control = null) -> void:
-	_ui_focus.grab_preferred(preferred, [start_button, continue_button, settings_button, exit_button])
+	_ui_focus.grab_preferred(preferred, [start_button, continue_button, settings_button, accessibility_button, exit_button])
 
 
 func _load_volume_settings() -> void:

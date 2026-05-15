@@ -58,6 +58,9 @@ func _ready() -> void:
 	_apply_touch_target_layout()
 	_apply_responsive_layout()
 	_apply_styles()
+	# P10: Accessibility ayarlarini yukle ve sinyali bagla
+	_apply_accessibility_settings()
+	SaveManager.accessibility_changed.connect(_on_accessibility_changed)
 	arda_portrait.texture = ARDA_TEXTURE
 	eda_portrait.texture = EDA_TEXTURE
 	arda_button.icon = _textures.CHOICE_ICON
@@ -281,3 +284,30 @@ func _freeze_for_capture() -> void:
 	eda_portrait.position.y = _eda_portrait_base_y
 	arda_glow.color.a = 0.12
 	eda_glow.color.a = 0.12
+
+
+# ---------------------------------------------------------------------------
+# P10: Accessibility
+# ---------------------------------------------------------------------------
+func _apply_accessibility_settings() -> void:
+	"""Large text ve high contrast ayarlarini karar butonlarina uygula."""
+	if SaveManager.large_text:
+		arda_button.add_theme_font_size_override("font_size", 24)
+		eda_button.add_theme_font_size_override("font_size", 24)
+	else:
+		arda_button.add_theme_font_size_override("font_size", 18)
+		eda_button.add_theme_font_size_override("font_size", 18)
+
+	if SaveManager.high_contrast:
+		arda_button.add_theme_color_override("font_outline_color", Color.BLACK)
+		eda_button.add_theme_color_override("font_outline_color", Color.BLACK)
+		arda_button.add_theme_constant_override("outline_size", 3)
+		eda_button.add_theme_constant_override("outline_size", 3)
+	else:
+		arda_button.add_theme_constant_override("outline_size", 0)
+		eda_button.add_theme_constant_override("outline_size", 0)
+
+
+func _on_accessibility_changed() -> void:
+	"""Accessibility degisikliginde ayarlari yeniden uygula."""
+	_apply_accessibility_settings()
