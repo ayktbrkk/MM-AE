@@ -163,3 +163,26 @@ Godot path düzeltildi (Desktop MM-AE-main → proje göreceli yolu). Ancak P10 
 | P10 timeout | ❌ Sonsuz timeout | ✅ ~30sn | `--headless` kaldırıldı, cmd.exe + temp file |
 | Tutorial Godot 3→4 | ❌ 10 hata | ✅ 63/63 | `FileAccess` → `load().source_code` |
 | Accessibility Smoke | ❌ SMOKE_UNRELIABLE | ✅ FIXED | SaveManager güvenli erişim + smoke test fix |
+
+---
+
+## GPT 5.5 Follow-up: Accepted Baseline + Package 7 Runtime Prep (2026-05-15)
+
+**Karar:** Acceptance Hardening Pass kabul edildi. P10 tekrar çalıştırıldı ve `P10_SMOKE_GATE_OK` üretildi.
+
+**Son P10 Kanıtı:** `artifacts/logs/p10_smoke_20260515_094948.md`  
+**Sonuç:** 5 otomatik gate PASS, `device-smoke` bilinçli SKIP.
+
+### Package 7 Devamı
+
+Journal artık smoke seviyesinin ötesinde gerçek runtime veri akışına hazırlanmıştır:
+
+- WorldState kart/bölüm ID getter'ları eklendi.
+- InfoCardOverlay üzerinden gelen `card_id`, WorldUI aracılığıyla WorldState'e kaydediliyor.
+- Runtime state, kart görüntülenince kaydediliyor.
+- Journal kart başlığı/tag verisi `questions.gd` içindeki event verisinden çözülüyor.
+- Journal smoke testi 8/8'den 10/10'a genişletildi.
+
+**Yeni Package 7 durumu:** ✅ `RUNTIME_DATA_FLOW_PREPARED`
+
+**Sonraki önerilen kabul:** Journal butonunu oyun içinde gerçek save ile açıp görsel kabul/capture almak; kart grid'i, bölüm sekmesi, stats satırı ve geri/close davranışını mobil/desktop viewport'ta kontrol etmek.

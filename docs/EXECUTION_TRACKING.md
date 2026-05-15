@@ -441,3 +441,32 @@ P12: Polish Backlog | ✅ ACCEPTED | ✅ ACCEPTED | `docs/POLISH_BACKLOG.md` + `
 | P10 timeout | ❌ Sonsuz timeout | ✅ ~30sn | `--headless` kaldırıldı, cmd.exe + temp file |
 | Tutorial Godot 3→4 | ❌ 10 hata | ✅ 63/63 | `FileAccess` → `load().source_code` |
 | Accessibility Smoke | ❌ SMOKE_UNRELIABLE | ✅ FIXED | SaveManager güvenli erişim + smoke test fix |
+
+---
+
+## Accepted Baseline + Package 7 Runtime Prep (2026-05-15)
+
+> GPT 5.5 devam turu — P10 accepted baseline sabitlendi, Package 7 Journal smoke seviyesinden runtime veri akışı seviyesine taşındı.
+
+### Baseline Kabul Kanıtı
+
+| Gate | Sonuç | Kanıt |
+|------|-------|-------|
+| P10 Smoke Gate | ✅ PASS | `artifacts/logs/p10_smoke_20260515_094948.md` |
+| P10 marker | ✅ `P10_SMOKE_GATE_OK` | 5 otomatik gate PASS, device-smoke bilinçli SKIP |
+| Journal smoke | ✅ 10/10 | `test/test_journal_smoke.gd` |
+| Tutorial contract | ✅ 63/63 | `tools/verify_tutorial_contract.gd` |
+| Accessibility smoke | ✅ 6/6 | `test/test_accessibility_smoke.gd` |
+
+### Package 7 Runtime Prep
+
+**Amaç:** Journal overlay'in yalnızca yüklenebilir olmasını değil, gerçek oyun verisiyle anlamlı kart/istatistik göstermesini sağlamak.
+
+**Yapılanlar:**
+- `scripts/world_state.gd` — `get_collected_card_ids()` ve `get_completed_chapters()` eklendi; `tutorial_active` SaveManager erişimi script-mode güvenli hale getirildi.
+- `scripts/world_ui.gd` — `show_info_card()` artık opsiyonel `card_id` taşır; info card görüntülenince kart world_state'e yazılır ve runtime state kaydedilir.
+- `scripts/world_zone.gd` — doğru decision info card'ları `card_id` değerini UI katmanına geçirir.
+- `scripts/journal_overlay.gd` — kart ve bölüm adları `questions.gd` verisinden çözümlenir; menü override verileri stats satırına yansır.
+- `test/test_journal_smoke.gd` — WorldState getter ve questions.gd kart veri eşleme kontrolleri eklendi.
+
+**Durum:** Package 7 artık `SMOKE_TEST_PASS` üzerinde, `RUNTIME_DATA_FLOW_PREPARED` seviyesinde kabul edilebilir. Tam oyuncu kabulü için sonraki adım, oyun içinde Journal butonunu gerçek save ile açıp görsel/hud kabul görüntüsü almaktır.

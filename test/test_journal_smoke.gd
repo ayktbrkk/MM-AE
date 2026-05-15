@@ -33,6 +33,8 @@ const EXPECTED_FUNCTIONS: Array[String] = [
 	"func _populate_tabs",
 	"func _populate_cards_tab",
 	"func _populate_chapters_tab",
+	"func _get_card_data",
+	"func _get_chapter_data",
 	"func _on_close_pressed",
 	"func _play_show_animation",
 	"func _play_hide_animation",
@@ -81,6 +83,8 @@ func _run_all_tests() -> void:
 	_test_required_signals()
 	_test_questions_constants()
 	_test_overlay_type_enum()
+	_test_world_state_journal_getters()
+	_test_journal_card_data_mapping()
 
 
 # ---------------------------------------------------------------------------
@@ -264,6 +268,60 @@ func _test_overlay_type_enum() -> void:
 		return
 
 	_pass("OverlayType.JOURNAL enum'unda tanimli")
+
+
+# ---------------------------------------------------------------------------
+# TEST 9: WorldState journal getter'ları
+# ---------------------------------------------------------------------------
+func _test_world_state_journal_getters() -> void:
+	"""Journal overlay'in world_state'ten okuyacağı getter'ları doğrula."""
+	var state_script: Resource = load("res://scripts/world_state.gd")
+	if state_script == null or not state_script is GDScript:
+		_fail("world_state.gd load edilemedi")
+		return
+
+	var state: Node = (state_script as GDScript).new()
+	state.mark_card_collected("samsun_first_decision")
+	state.mark_chapter_completed("samsun_cards")
+
+	if not state.has_method("get_collected_card_ids") or not state.has_method("get_completed_chapters"):
+		_fail("WorldState journal getter'lari eksik")
+		state.free()
+		return
+
+	var card_ids: Array[String] = state.get_collected_card_ids()
+	var chapter_ids: Array[String] = state.get_completed_chapters()
+	if card_ids != ["samsun_first_decision"] or chapter_ids != ["samsun_cards"]:
+		_fail("WorldState journal getter'lari beklenen ID'leri dondurmedi")
+		state.free()
+		return
+
+	state.free()
+	_pass("WorldState journal getter'lari runtime ID'lerini donduruyor")
+
+
+# ---------------------------------------------------------------------------
+# TEST 10: Journal kart veri eşlemesi
+# ---------------------------------------------------------------------------
+func _test_journal_card_data_mapping() -> void:
+	"""JournalOverlay kart ID'sinden anlamlı başlık ve tag üretebiliyor."""
+	var scene_res: Resource = load(SCENE_PATH)
+	if scene_res == null or not scene_res is PackedScene:
+		_fail("Journal scene veri esleme testi icin yuklenemedi")
+		return
+
+	var instance: Node = (scene_res as PackedScene).instantiate()
+	var card_data: Dictionary = instance.call("_get_card_data", "samsun_first_decision")
+	instance.free()
+
+	if String(card_data.get("title", "")).is_empty() or String(card_data.get("tag", "")).is_empty():
+		_fail("Journal kart veri eslemesi bos title/tag uretti")
+		return
+	if String(card_data.get("title", "")) == "First Decision":
+		_fail("Journal kart veri eslemesi fallback baslikta kaldi")
+		return
+
+	_pass("Journal kart ID'leri questions.gd verisine esleniyor")
 
 
 # ---------------------------------------------------------------------------

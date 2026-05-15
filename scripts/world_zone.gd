@@ -1476,7 +1476,8 @@ func _answer_samsun_decision(choice: String) -> void:
 			event.get("info", ""),
 			_world_text("ui.world.samsun.success.badge", "Tarih yildizi kazandin"),
 			Callable(self, "_enter_samsun_rift"),
-			"decision"
+			"decision",
+			String(event.get("card_id", ""))
 		)
 	else:
 		ui_mod.show_dialogue(
@@ -1505,7 +1506,8 @@ func _answer_havza_decision(choice: String) -> void:
 			event.get("info", ""),
 			_world_text("ui.world.havza.success.badge", "Halk destegi acildi"),
 			Callable(),
-			"decision"
+			"decision",
+			String(event.get("card_id", ""))
 		)
 	else:
 		ui_mod.show_dialogue(
@@ -1534,7 +1536,8 @@ func _answer_amasya_decision(choice: String) -> void:
 			event.get("info", ""),
 			_world_text("ui.world.amasya.success.badge", "Bildiri guclendi"),
 			Callable(),
-			"decision"
+			"decision",
+			String(event.get("card_id", ""))
 		)
 	else:
 		ui_mod.show_dialogue(
@@ -1563,7 +1566,8 @@ func _answer_kongre_decision(choice: String) -> void:
 			event.get("info", ""),
 			_world_text("ui.world.kongre.success.badge", "Birlesik hedef acildi"),
 			Callable(),
-			"decision"
+			"decision",
+			String(event.get("card_id", ""))
 		)
 	else:
 		ui_mod.show_dialogue(

@@ -10,9 +10,10 @@ signal state_changed(key: String, value: Variant)
 # ---------------------------------------------------------------------------
 var tutorial_active: bool:
 	get:
-		if not has_node("/root/SaveManager"):
+		var save_manager := get_node_or_null("/root/SaveManager")
+		if save_manager == null or not save_manager.has_method("is_tutorial_completed"):
 			return false
-		return not SaveManager.is_tutorial_completed()
+		return not bool(save_manager.call("is_tutorial_completed"))
 
 # === TEMEL STATE ===
 
@@ -205,9 +206,19 @@ func get_collected_card_count() -> int:
 	return collected_card_ids.size()
 
 
+## Toplanan kart ID'lerini döndürür.
+func get_collected_card_ids() -> Array[String]:
+	return collected_card_ids.duplicate()
+
+
 ## Tamamlanan bölüm sayısını döndürür.
 func get_completed_chapter_count() -> int:
 	return completed_chapters.size()
+
+
+## Tamamlanan bölüm ID'lerini döndürür.
+func get_completed_chapters() -> Array[String]:
+	return completed_chapters.duplicate()
 
 
 ## Journal açılma sayısını artırır.

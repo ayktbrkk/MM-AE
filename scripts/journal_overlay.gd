@@ -319,13 +319,13 @@ func _create_chapter_row(chapter_id: String) -> PanelContainer:
 func _get_card_data(card_id: String) -> Dictionary:
 	"""Kart ID'sine göre görüntülenecek veriyi döndürür."""
 	var questions := preload("res://assets/data/questions.gd")
-	# JOURNAL_CARD_IDS içinde eşleşen event indeksini bul
-	var card_ids: Array[String] = questions.JOURNAL_CARD_IDS
-	var event_index: int = card_ids.find(card_id)
-	if event_index >= 0:
-		# Asıl events indeksini bul — card_ids'deki sıra events'deki sıra ile eşleşir
-		# Özel durum: card_id "samsun_cards" gibi grup isimleri de olabilir
-		pass
+	for event_index in range(questions.EVENTS.size()):
+		var event: Dictionary = questions.localized_event(event_index)
+		if String(event.get("card_id", "")) == card_id:
+			return {
+				"title": String(event.get("unit", card_id)),
+				"tag": String(event.get("chapter", _ui_text.text(_ui_text.INFO_DEFAULT_TAG, "Tarih Kartı"))),
+			}
 
 	# Varsayılan: card_id'yi başlık olarak kullan
 	var parts: PackedStringArray = card_id.split("_")
@@ -337,7 +337,13 @@ func _get_card_data(card_id: String) -> Dictionary:
 
 func _get_chapter_data(chapter_id: String) -> Dictionary:
 	"""Bölüm ID'sine göre görüntülenecek veriyi döndürür."""
-	# Gelecekte: questions.gd EVENTS'ten chapter bilgisi çekilebilir
+	var questions := preload("res://assets/data/questions.gd")
+	for event_index in range(questions.EVENTS.size()):
+		var event: Dictionary = questions.localized_event(event_index)
+		if String(event.get("journal_entry", "")) == chapter_id:
+			return {
+				"name": String(event.get("chapter", chapter_id)),
+			}
 	return {
 		"name": chapter_id.capitalize(),
 	}
@@ -347,7 +353,10 @@ func _update_stats() -> void:
 	"""Alt bilgi satırını güncelle: toplanan kart / tamamlanan bölüm."""
 	var card_count := 0
 	var chapter_count := 0
-	if _world_state != null:
+	if not _card_ids_override.is_empty() or not _chapter_ids_override.is_empty():
+		card_count = _card_ids_override.size()
+		chapter_count = _chapter_ids_override.size()
+	elif _world_state != null:
 		if _world_state.has_method("get_collected_card_count"):
 			card_count = _world_state.get_collected_card_count()
 		if _world_state.has_method("get_completed_chapter_count"):

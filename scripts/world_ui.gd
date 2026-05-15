@@ -384,6 +384,7 @@ func _on_info_card_viewed(card_id: String) -> void:
 	var state := _world.get_node_or_null("WorldState")
 	if state != null and state.has_method("mark_card_collected"):
 		state.mark_card_collected(card_id)
+		persist_runtime_state()
 
 
 func has_closeable_overlay() -> bool:
@@ -427,13 +428,13 @@ func _show_dialogue_now(title: String, text: String, callback: Callable, express
 	_play_transition_sfx()
 
 
-func show_info_card(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
-	if _queue_after_transition(Callable(self, "_show_info_card_now").bind(title, text, reward_text, callback, card_kind)):
+func show_info_card(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource", card_id := "") -> void:
+	if _queue_after_transition(Callable(self, "_show_info_card_now").bind(title, text, reward_text, callback, card_kind, card_id)):
 		return
-	_show_info_card_now(title, text, reward_text, callback, card_kind)
+	_show_info_card_now(title, text, reward_text, callback, card_kind, card_id)
 
 
-func _show_info_card_now(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource") -> void:
+func _show_info_card_now(title: String, text: String, reward_text: String, callback: Callable, card_kind := "resource", card_id := "") -> void:
 	current_dialogue_callback = callback
 	panel_mode = "info_card"
 	_overlay_manager.show(OverlayManager.OverlayType.INFO_CARD, {
@@ -442,7 +443,8 @@ func _show_info_card_now(title: String, text: String, reward_text: String, callb
 		"text": text,
 		"reward_text": reward_text,
 		"icon_texture": _info_icon(card_kind),
-		"accent_color": _info_accent(card_kind)
+		"accent_color": _info_accent(card_kind),
+		"card_id": card_id,
 	})
 	_interact_button.disabled = true
 	# P1.3: Bilgi karti acilinca gecis sesi
