@@ -186,3 +186,11 @@ Journal artık smoke seviyesinin ötesinde gerçek runtime veri akışına hazı
 **Yeni Package 7 durumu:** ✅ `RUNTIME_DATA_FLOW_PREPARED`
 
 **Sonraki önerilen kabul:** Journal butonunu oyun içinde gerçek save ile açıp görsel kabul/capture almak; kart grid'i, bölüm sekmesi, stats satırı ve geri/close davranışını mobil/desktop viewport'ta kontrol etmek.
+
+---
+
+## Package 7 Final — Runtime Acceptance (2026-05-15)
+
+Package 7 moved from SMOKE_TEST_PASS to RUNTIME_ACCEPTED.
+No new systems were introduced.
+P10 baseline remains green.

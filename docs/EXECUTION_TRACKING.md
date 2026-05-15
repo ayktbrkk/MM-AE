@@ -470,3 +470,16 @@ P12: Polish Backlog | ✅ ACCEPTED | ✅ ACCEPTED | `docs/POLISH_BACKLOG.md` + `
 - `test/test_journal_smoke.gd` — WorldState getter ve questions.gd kart veri eşleme kontrolleri eklendi.
 
 **Durum:** Package 7 artık `SMOKE_TEST_PASS` üzerinde, `RUNTIME_DATA_FLOW_PREPARED` seviyesinde kabul edilebilir. Tam oyuncu kabulü için sonraki adım, oyun içinde Journal butonunu gerçek save ile açıp görsel/hud kabul görüntüsü almaktır.
+
+---
+
+## Package 7 Journal Runtime Acceptance (2026-05-15)
+
+Status: ✅ RUNTIME_ACCEPTED
+
+Evidence:
+- JOURNAL_RUNTIME_CONTRACT_OK
+- JOURNAL_SAVE_CONTRACT_OK
+- Journal smoke 10/10
+- P10_SMOKE_GATE_OK
+- Visual capture: artifacts/captures/journal_runtime_acceptance.png

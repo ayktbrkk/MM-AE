@@ -7,6 +7,14 @@ const DEFAULT_ZONE := ""
 const READY_FRAME_LIMIT := 240
 const DEFAULT_CAMERA_ZOOM := Vector2.ZERO
 
+## --show-journal parametresi için varsayılan kart ID'leri (virgülle ayrılmış).
+const DEFAULT_JOURNAL_CARDS_STR := "samsun_first_decision"
+const DEFAULT_JOURNAL_CHAPTERS_STR := "samsun_cards"
+
+var _show_journal := false
+var _journal_cards: PackedStringArray = []
+var _journal_chapters: PackedStringArray = []
+
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	var output_path := DEFAULT_OUTPUT
@@ -68,6 +76,14 @@ func _initialize() -> void:
 			"--hero":
 				if index + 1 < args.size():
 					hero = args[index + 1]
+			"--show-journal":
+				_show_journal = true
+			"--journal-cards":
+				if index + 1 < args.size():
+					_journal_cards = PackedStringArray(args[index + 1].split(","))
+			"--journal-chapters":
+				if index + 1 < args.size():
+					_journal_chapters = PackedStringArray(args[index + 1].split(","))
 	call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
 
 func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, camera_zoom: Vector2, world_only: bool, hide_hud: bool, hide_overlays: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
@@ -111,6 +127,10 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 		_hide_world_guides(scene)
 	if hide_actors:
 		_hide_actor_visuals(scene)
+	if _show_journal:
+		_show_journal_overlay(scene)
+		for frame in range(24):
+			await process_frame
 	for frame in range(12):
 		await process_frame
 	RenderingServer.force_draw()
@@ -208,6 +228,31 @@ func _apply_clean_export(scene: Node) -> void:
 	var character_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
 	if character_panel != null:
 		character_panel.visible = false
+
+
+func _show_journal_overlay(scene: Node) -> void:
+	"""Journal overlay'ini test verileriyle açar.
+
+	WorldUI node'unu bulur, overlay manager üzerinden JOURNAL overlay'ini
+	gösterir. Eğer kullanıcı --journal-cards veya --journal-chapters
+	belirtmemişse varsayılan test verilerini (DEFAULT_JOURNAL_CARDS,
+	DEFAULT_JOURNAL_CHAPTERS) kullanır.
+	"""
+	var world_ui := scene.get_node_or_null("WorldUI")
+	if world_ui == null:
+		push_error("show_journal: WorldUI not found")
+		return
+	var overlay_manager = world_ui.get("_overlay_manager")
+	if overlay_manager == null:
+		push_error("show_journal: overlay_manager not found")
+		return
+	var cards := _journal_cards if not _journal_cards.is_empty() else PackedStringArray(DEFAULT_JOURNAL_CARDS_STR.split(","))
+	var chapters := _journal_chapters if not _journal_chapters.is_empty() else PackedStringArray(DEFAULT_JOURNAL_CHAPTERS_STR.split(","))
+	overlay_manager.call("show", OverlayManager.OverlayType.JOURNAL, {
+		"tab": "cards",
+		"card_ids": Array(cards),
+		"chapter_ids": Array(chapters),
+	})
 
 
 func _hide_overlays(scene: Node) -> void:

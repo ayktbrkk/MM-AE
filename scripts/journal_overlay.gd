@@ -86,9 +86,13 @@ func show_overlay(config: Dictionary = {}) -> void:
 	_card_ids_override = []
 	_chapter_ids_override = []
 	if config.has("card_ids"):
-		_card_ids_override = config.get("card_ids", []) as Array[String]
+		var raw_card_ids: Array = config.get("card_ids", [])
+		for id in raw_card_ids:
+			_card_ids_override.append(id as String)
 	if config.has("chapter_ids"):
-		_chapter_ids_override = config.get("chapter_ids", []) as Array[String]
+		var raw_chapter_ids: Array = config.get("chapter_ids", [])
+		for id in raw_chapter_ids:
+			_chapter_ids_override.append(id as String)
 	
 	visible = true
 	_refresh_world_state()
