@@ -60,6 +60,9 @@ var _current_bgm_name: String = ""
 var _bgm_fade_tween: Tween
 var _audio_disabled := false
 var _app_paused := false
+var _is_android := false  # Android tespiti — native crash onlemi icin
+var _android_audio_ready := false  # Android native AudioTrack pipeline hazir mi?
+var _android_bgm_pending: Dictionary = {}  # Android'de ertelenmis BGM istegi
 
 # Placeholder ses cache'i — procedural sesler burada saklanir
 var _placeholder_sounds: Dictionary = {}
@@ -69,6 +72,20 @@ func _ready() -> void:
 	_audio_disabled = DisplayServer.get_name() == "headless"
 	if _audio_disabled:
 		print("[AudioManager] Headless doğrulamada ses kurulumu atlandı.")
+		return
+
+	# Android tespiti — native crash onlemi icin
+	_is_android = DisplayServer.get_name() == "Android"
+
+	# GECICI COZUM: Xiaomi Android 16'da Godot 4.6.2'nin native
+	# AudioTrack pipeline'i (libwilhelm.so -> AudioTrackCallback::onMoreData)
+	# SIGSEGV crash'ine neden oluyor. call_deferred, Timer ile erteleme
+	# gibi tum yontemler yetersiz kaldi. Bu bir Godot engine bug'i.
+	# Cozum: Android'de ses sistemini gecici olarak devre disi birak.
+	# Not: Godot 4.6.3+ veya custom build ile fixlenebilir.
+	if _is_android:
+		print("[AudioManager] Android tespit edildi — native AudioTrack crash onlemi icin ses devre disi.")
+		_audio_disabled = true
 		return
 
 	# Ses bus'larini olustur (Editor'de otomatik olusmadiysa)
@@ -102,6 +119,7 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if _audio_disabled:
 		return
+	_android_bgm_pending = {}
 	_cancel_bgm_fade()
 	if is_instance_valid(_bgm_player):
 		_bgm_player.stop()
@@ -478,6 +496,17 @@ static func _generate_sweep(start_freq: float, end_freq: float, duration: float)
 # Internal — Fade Mekanizmasi
 # ---------------------------------------------------------------------------
 func _start_bgm_stream(stream: AudioStream, bgm_name: String, fade_in: float) -> void:
+	if not is_instance_valid(_bgm_player):
+		return
+
+	# Android'de ses devre disi, buraya hic gelinmemeli ama guvenlik olsun
+	if _is_android and _audio_disabled:
+		return
+
+	_start_bgm_stream_impl(stream, bgm_name, fade_in)
+
+
+func _start_bgm_stream_impl(stream: AudioStream, bgm_name: String, fade_in: float) -> void:
 	if not is_instance_valid(_bgm_player):
 		return
 	_bgm_player.stop()
