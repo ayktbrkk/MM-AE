@@ -619,16 +619,18 @@ Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleto
 
 ### Görsel Kanıt (Visual Evidence)
 
-**Durum:** ⏳ VISUAL_PENDING — Gerçek özellik capture'ları üretilemedi.
+> **Historical Correction:** Bu bölüm, Package 12A-B Visual Capture Unlock öncesi geçici durumu yansıtır. Aşağıdaki "Visual Capture Unlock" bölümünde gerçek PNG capture'ları başarıyla üretilmiştir. Bu notlar, sürecin doğal seyrini belgelemek amacıyla korunmaktadır.
 
-**PNG Capture Denemesi:** (3/3 dosya üretildi, ancak hedef overlay'ler gösterilemedi)
+**Durum (önceki):** ⏳ VISUAL_PENDING — Gerçek özellik capture'ları üretilemedi. _(Package 12A-B öncesi)_
+
+**PNG Capture Denemesi (önceki):** (3/3 dosya üretildi, ancak hedef overlay'ler gösterilemedi)
 - `artifacts/captures/p12a_tutorial_arrow.png` — Viewport capture başarılı, ancak TutorialController oyun akışında karakter seçiminden sonra yüklendiği için gösterilemedi
 - `artifacts/captures/p12a_dialogue_portrait_slide.png` — Viewport capture başarılı, ancak DialogueOverlay karakter seçim ekranında mevcut değil
 - `artifacts/captures/p12a_marker_collect_after.png` — Viewport capture başarılı, ancak Markers karakter seçim ekranında mevcut değil
 
-**Kısıtlama:** `capture_world_render.gd` CLI üzerinden world.tscn yüklendiğinde oyun her zaman karakter seçim ekranını gösteriyor. Overlay animasyonları (tutorial arrow, portrait slide, marker collect) ancak karakter seçimi sonrası oyun döngüsünde mevcut. Bu nedenle CLI tabanlı Viewport capture ile hedef özelliklerin PNG görüntüsü alınamıyor.
+**Kısıtlama (önceki):** `capture_world_render.gd` CLI üzerinden world.tscn yüklendiğinde oyun her zaman karakter seçim ekranını gösteriyor. Overlay animasyonları (tutorial arrow, portrait slide, marker collect) ancak karakter seçimi sonrası oyun döngüsünde mevcut. Bu nedenle CLI tabanlı Viewport capture ile hedef özelliklerin PNG görüntüsü alınamıyor.
 
-**Çözüm:** Feature-specific capture'lar için Godot Editor'de world.tscn açılıp manuel olarak overlay tetiklenmeli ve Editor → Scene → Take Screenshot ile PNG kaydedilmeli. Veya oyun akışını karakter seçimini atlayacak şekilde modifiye eden bir `--skip-character-select` parametresi eklenebilir.
+**Çözüm (önceki):** Feature-specific capture'lar için Godot Editor'de world.tscn açılıp manuel olarak overlay tetiklenmeli ve Editor → Scene → Take Screenshot ile PNG kaydedilmeli. Veya oyun akışını karakter seçimini atlayacak şekilde modifiye eden bir `--skip-character-select` parametresi eklenebilir.
 
 **Silinen .md dummy dosyaları:**
 - ~~`artifacts/captures/p12a_tutorial_arrow.md`~~ (yerine PNG, dummy temizlendi)
