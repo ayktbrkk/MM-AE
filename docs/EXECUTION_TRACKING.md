@@ -547,3 +547,47 @@ Evidence:
 
 ### Engineer Notes
 AudioManager'ın runtime contract'ı başarıyla doğrulandı. En kritik teknik sorun, `SceneTree._init()` içinde node'ların tree'ye eklenmesine rağmen `AudioStreamPlayer.play()`'in çalışabilmesi için AudioServer'ın frame işlemesini bekleme gerekliliğiydi. Bu, testleri `_process()`'e taşıyarak çözüldü. `crossfade_bgm()` metodu, mevcut fade altyapısını (`_cancel_bgm_fade`, `_start_bgm_stream`, `_set_bgm_volume_ratio`) kullanarak minimal eklemeyle implemente edildi. Ses dosyaları hala %100 placeholder seviyesinde — production audio eklendiğinde sadece `.ogg` dosyalarını `assets/audio/` klasörüne koymak yeterli.
+
+---
+
+## Package 10: Accessibility Runtime Acceptance (2026-05-15)
+
+**Status:** ✅ RUNTIME_ACCEPTED
+
+### Yapılan Değişiklikler
+
+| # | Dosya | Değişiklik |
+|---|-------|-----------|
+| 1 | `tools/verify_accessibility_runtime_contract.gd` | **Yeni oluşturuldu.** 25 testlik Accessibility Runtime Contract verifier. 8 test kategorisi: script/scene existence (class_name), function signatures (7 adet), @onready node references (8 adet), scene load+instantiate, SaveManager property setters (text_speed, large_text, high_contrast), accessibility_changed signal + _emit_accessibility_changed, settings persistence (save_setting, load_setting, load_accessibility_settings), panel mutation methods (_on_speed_selected, _on_large_text_toggled, _on_high_contrast_toggled), dialogue overlay integration (_apply_accessibility_settings, signal connection, _on_accessibility_changed, _apply_body_label_accessibility). `extends MainLoop` ile headless çalışır, SaveManager singleton yokluğunda FileAccess tabanlı kaynak kodu analizi yapar. |
+| 2 | `tools/capture_world_render.gd` | `--show-accessibility` parametresi eklendi. main_menu.tscn'de accessibility panel overlay'ini açar. `_show_accessibility_panel()` fonksiyonu eklendi. `_is_scene_ready()` main_menu.tscn uyumu için güncellendi. |
+
+### Test Sonuçları
+
+```
+  PASS [Script dosyasi mevcut ve AccessibilityPanel class_name iceriyor]
+  PASS [Script basariyla load edildi (GDScript)]
+  PASS [Scene dosyasi mevcut]
+  PASS [PackedScene load basarili]
+  ...
+  PASS [Dialogue overlay _apply_accessibility_settings fonksiyonunda text_speed okunuyor]
+  PASS [Dialogue overlay _apply_accessibility_settings fonksiyonunda large_text okunuyor]
+  PASS [Dialogue overlay _apply_accessibility_settings fonksiyonunda high_contrast okunuyor]
+  PASS [Dialogue overlay _on_accessibility_changed tanimli]
+  PASS [Dialogue overlay _apply_body_label_accessibility tanimli]
+
+============================================================
+  ACCESSIBILITY_RUNTIME_CONTRACT_OK
+  25/25 PASS — Exit code: 0
+```
+
+**Toplam:** 25/25 PASS, exit code 0 ✅
+
+### Smoke Test
+- `test/test_accessibility_smoke.gd` — 6/6 PASS ✅
+- P10 Smoke Gate — `P10_SMOKE_GATE_OK` (5/5 PASS, 1 SKIP) ✅
+
+### Visual Capture
+- `artifacts/captures/accessibility_runtime_acceptance.png` — main_menu.tscn + accessibility panel overlay
+
+### Engineer Notes
+Accessibility runtime contract'ı başarıyla doğrulandı. SaveManager singleton `--script` modunda yüklenmediği için contract verifier `extends MainLoop` ile FileAccess tabanlı kaynak kodu analizi yapar. `accessibility_panel.gd`'deki `Engine.has_singleton("SaveManager")` güvenlik deseni korunuyor. Capture script'i `--show-accessibility` parametresi ile main_menu.tscn'de `_on_accessibility_pressed()` çağırarak accessibility panel overlay'ini açar ve görüntüyü PNG olarak kaydeder. Mevcut tüm P10 gate'leri (parse-check, validate-game-flow, verify-app-lifecycle, verify-overlay-input-contract, verify-ui-focus-accessibility) başarıyla geçti. P10 baseline'ı (Hardening Pass sonrası FIXED) RUNTIME_ACCEPTED seviyesine yükseltildi.

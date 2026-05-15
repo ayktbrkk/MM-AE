@@ -14,6 +14,7 @@ const DEFAULT_JOURNAL_CHAPTERS_STR := "samsun_cards"
 var _show_journal := false
 var _journal_cards: PackedStringArray = []
 var _journal_chapters: PackedStringArray = []
+var _show_accessibility := false
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -84,7 +85,9 @@ func _initialize() -> void:
 			"--journal-chapters":
 				if index + 1 < args.size():
 					_journal_chapters = PackedStringArray(args[index + 1].split(","))
-	call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
+			"--show-accessibility":
+				_show_accessibility = true
+		call_deferred("_capture", scene_path, output_path, viewport_size, zone, camera_zoom, world_only, hide_hud, hide_overlays, hide_markers, hide_actors, hide_world_guides, clean_export, hero)
 
 func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, zone: String, camera_zoom: Vector2, world_only: bool, hide_hud: bool, hide_overlays: bool, hide_markers: bool, hide_actors: bool, hide_world_guides: bool, clean_export: bool, hero: String) -> void:
 	var packed_scene := load(scene_path)
@@ -129,6 +132,10 @@ func _capture(scene_path: String, output_path: String, viewport_size: Vector2i, 
 		_hide_actor_visuals(scene)
 	if _show_journal:
 		_show_journal_overlay(scene)
+		for frame in range(24):
+			await process_frame
+	if _show_accessibility:
+		_show_accessibility_panel(scene)
 		for frame in range(24):
 			await process_frame
 	for frame in range(12):
@@ -190,6 +197,9 @@ func _await_capture_ready(scene: Node, zone: String) -> void:
 
 
 func _is_scene_ready(scene: Node, zone: String) -> bool:
+	# main_menu.tscn icin: zone="" ise ve WorldState yoksa hemen hazir
+	if zone == "" and scene.get_node_or_null("WorldState") == null:
+		return true
 	var dream_overlay := scene.get_node_or_null("CanvasLayer/DreamOverlay")
 	if dream_overlay != null and dream_overlay.visible:
 		return false
@@ -228,6 +238,15 @@ func _apply_clean_export(scene: Node) -> void:
 	var character_panel := scene.get_node_or_null("CanvasLayer/HUD/CharacterPanel")
 	if character_panel != null:
 		character_panel.visible = false
+
+
+func _show_accessibility_panel(scene: Node) -> void:
+	"""main_menu.tscn icinde accessibility panel overlay'ini acar."""
+	var main_menu := scene as Control
+	if main_menu == null or not main_menu.has_method("_on_accessibility_pressed"):
+		push_error("show_accessibility: main_menu not found or missing _on_accessibility_pressed")
+		return
+	main_menu.call("_on_accessibility_pressed")
 
 
 func _show_journal_overlay(scene: Node) -> void:

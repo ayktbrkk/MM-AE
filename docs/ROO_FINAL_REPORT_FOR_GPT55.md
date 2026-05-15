@@ -194,3 +194,25 @@ Journal artık smoke seviyesinin ötesinde gerçek runtime veri akışına hazı
 Package 7 moved from SMOKE_TEST_PASS to RUNTIME_ACCEPTED.
 No new systems were introduced.
 P10 baseline remains green.
+
+---
+
+## Package 10 Final — Runtime Acceptance (2026-05-15)
+
+Package 10 moved from SMOKE_TEST_PASS → FIXED (Hardening Pass) → RUNTIME_ACCEPTED.
+
+### Evidence
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Accessibility Runtime Contract | ✅ 25/25 PASS | `ACCESSIBILITY_RUNTIME_CONTRACT_OK` |
+| Accessibility Smoke Test | ✅ 6/6 PASS | `test/test_accessibility_smoke.gd` |
+| P10 Smoke Gate | ✅ `P10_SMOKE_GATE_OK` | 5/5 PASS, 1 SKIP (device-smoke) |
+| Visual Capture | ✅ `accessibility_runtime_acceptance.png` | main_menu.tscn + accessibility panel overlay |
+
+### Files Changed
+- `tools/verify_accessibility_runtime_contract.gd` — **NEW**: 25-test contract verifier (extends MainLoop, FileAccess-based analysis)
+- `tools/capture_world_render.gd` — **MODIFIED**: `--show-accessibility` parameter + `_show_accessibility_panel()` added
+
+### Engineer Notes
+SaveManager singleton --script modunda yüklenmediği için contract verifier `extends MainLoop` ile FileAccess tabanlı kaynak kodu analizi yapar. `accessibility_panel.gd`'deki `Engine.has_singleton("SaveManager")` güvenlik deseni korunuyor. Capture script'i `--show-accessibility` parametresi ile main_menu.tscn'de `_on_accessibility_pressed()` çağırarak accessibility panel overlay'ini açar. Mevcut tüm P10 gate'leri (parse-check, validate-game-flow, verify-app-lifecycle, verify-overlay-input-contract, verify-ui-focus-accessibility) başarıyla geçti.
